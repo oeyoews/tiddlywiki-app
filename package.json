@@ -2,12 +2,12 @@
   "name": "tw-wrapper",
   "version": "1.0.0",
   "description": "tiddlywiki wrapper for electron",
-  "main": "index.js",
+  "main": "./src/main/index.js",
   "scripts": {
-    "dev": "electron ./src/main.js",
+    "dev": "electron ./src/main/index.js",
     "build": "electron-builder"
   },
-  "keywords": [],
+  "keywords": ["tiddlywiki"],
   "author": "",
   "license": "ISC",
   "dependencies": {
