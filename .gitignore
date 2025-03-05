@@ -2,3 +2,4 @@ node_modules/
 output/
 src/wiki/tiddlers/
 builder*.yaml
+release
