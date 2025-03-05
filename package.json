@@ -1,0 +1,23 @@
+{
+  "name": "tw-wrapper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "electron ./src/main.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^35.0.0",
+    "electron-store": "^10.0.1",
+    "get-port": "^7.1.0",
+    "tiddlywiki": "5.3.6"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "electron"
+    ]
+  }
+}
