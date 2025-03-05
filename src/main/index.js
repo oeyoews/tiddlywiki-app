@@ -1,4 +1,4 @@
-const {shell, app, BrowserWindow,BrowserView, dialog, Menu } = require("electron");
+const {crashReporter, shell, app, BrowserWindow,BrowserView, dialog, Menu } = require("electron");
 const path = require("path");
 const fs = require("fs");
 const { TiddlyWiki } = require("tiddlywiki");
@@ -8,6 +8,25 @@ let wikiPath = path.join(__dirname, "wiki"); // 默认 wiki 文件夹路径
 let currentServer = null;
 
 const DEFAULT_PORT = 8080;
+// 在 app.whenReady() 之前添加崩溃报告配置
+crashReporter.start({
+  productName: 'TiddlyWiki Wrapper',
+  companyName: 'TW Wrapper',
+  submitURL: '', // 本地使用不需要提交
+  uploadToServer: false,
+  ignoreSystemCrashHandler: false,
+});
+
+// 添加未捕获异常处理
+process.on('uncaughtException', (error) => {
+  console.error('未捕获的异常：', error);
+  dialog.showErrorBox('应用错误', `发生未捕获的异常：${error.message}`);
+});
+
+process.on('unhandledRejection', (reason) => {
+  console.error('未处理的 Promise 拒绝：', reason);
+  dialog.showErrorBox('应用错误', `发生未处理的 Promise 拒绝：${reason}`);
+});
 
 async function buildWiki() {
   try {
@@ -78,7 +97,7 @@ function createWindow() {
     width: 1400,
     height: 800,
     webPreferences: {
-      nodeIntegration: false,
+      nodeIntegration: true,
       contextIsolation: true,
       webSecurity: false,
     },
@@ -95,7 +114,7 @@ function createWindow() {
   // 创建主内容视图
   const mainView = new BrowserView({
     webPreferences: {
-      nodeIntegration: false,
+      nodeIntegration: true,
       contextIsolation: true,
       webSecurity: false,
     },
