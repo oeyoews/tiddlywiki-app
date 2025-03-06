@@ -9,7 +9,7 @@ const {
 } = require('electron');
 const path = require('path');
 const fs = require('fs');
-const { TiddlyWiki } = require('tiddlywiki');
+const { TiddlyWiki }= require('tiddlywiki');
 const { Conf: Config } = require('electron-conf');
 const getPorts = require('get-port').default;
 const preload = path.join(__dirname, '../preload/index.js');
@@ -165,6 +165,13 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1400,
     height: 800,
+    // frame: false,
+    // titleBarStyle: 'hidden',
+    // titleBarOverlay: {
+    //   color: 'transparent',
+    //   symbolColor: 'transparent',
+    //   height: 10,
+    // },
     webPreferences: {
       preload,
       nodeIntegration: false,
