@@ -10,11 +10,11 @@
   "keywords": [
     "tiddlywiki"
   ],
-  "type": "module",
+  "type": "commonjs",
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "electron-store": "^10.0.1",
+    "electron-conf": "^1.2.1",
     "tiddlywiki": "5.3.6"
   },
   "pnpm": {
