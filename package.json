@@ -1,7 +1,7 @@
 {
-  "name": "tw-wrapper",
+  "name": "tiddlywiki-app",
   "version": "1.0.0",
-  "description": "tiddlywiki wrapper for electron",
+  "description": "🌟 一个基于 Electron 的 TiddlyWiki 桌面应用，提供更丝滑的 TiddlyWiki 使用体验。",
   "main": "./src/main/index.js",
   "scripts": {
     "dev": "electron ./src/main/index.js",
@@ -12,7 +12,7 @@
   ],
   "type": "commonjs",
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "electron-conf": "^1.2.1",
     "get-port": "^7.1.0",

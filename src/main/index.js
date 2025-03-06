@@ -28,14 +28,14 @@ async function showWikiInfo() {
   const info = await dialog.showMessageBox({
     type: 'info',
     title: '关于 Wiki',
-    message: 'TiddlyWiki Wrapper',
+    message: 'TiddlyWiki App',
     detail: `当前 Wiki 路径：${wikiPath}\n运行端口：${currentPort || '未启动'}`,
   });
 }
 
 function createTray() {
   tray = new Tray(iconPath);
-  tray.setToolTip('TiddlyWiki Wrapper');
+  tray.setToolTip('TiddlyWiki App');
 
   const contextMenu = Menu.buildFromTemplate([
     {
