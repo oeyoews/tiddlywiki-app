@@ -46,8 +46,9 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            release/**/tiddlywiki-app_*.exe
-            release/**/tiddlywiki-app_*.dmg
-            release/**/tiddlywiki-app_*.AppImage
+            release/**/tiddlywiki-app_**.exe
+            release/**/tiddlywiki-app_**.dmg
+            release/**/tiddlywiki-app_**.AppImage
+            release/**/tiddlywiki-app_**.deb
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
