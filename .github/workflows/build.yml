@@ -8,7 +8,7 @@ on:
       - 'v*.*.*' # 只有 vX.X.X 形式的 tag 触发
 
 jobs:
-  release:
+  build:
     name: build and release electron app
     runs-on: ${{ matrix.os }}
 
@@ -53,20 +53,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
-      # - name: upload artifacts
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: ${{ matrix.os }}
-      #     path: release/tiddlywiki-app_*.*
-
-      - name: release
-        uses: softprops/action-gh-release@v0.1.14
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          files: |
-            release/**/tiddlywiki-app_**.exe
-            release/**/tiddlywiki-app_**.dmg
-            release/**/tiddlywiki-app_**.AppImage
-            release/**/tiddlywiki-app_**.deb
-        env:
-          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+ release:
+  - name: release
+    uses: softprops/action-gh-release@v0.1.14
+    if: startsWith(github.ref, 'refs/tags/')
+    with:
+      files: |
+        release/**/tiddlywiki-app_**.exe
+        release/**/tiddlywiki-app_**.dmg
+        release/**/tiddlywiki-app_**.AppImage
+        release/**/tiddlywiki-app_**.deb
+    env:
+      GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
