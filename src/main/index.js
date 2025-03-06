@@ -1,3 +1,5 @@
+const { setupAutoUpdater, checkForUpdates } =  require('./update');
+
 const {
   ipcMain,
   shell,
@@ -53,6 +55,10 @@ function createTray() {
       },
     },
     { type: 'separator' },
+    {
+      label: '检查更新',
+      click: () => checkForUpdates()
+    },
     {
       label: '关于',
       click: showWikiInfo,
@@ -303,6 +309,10 @@ function createWindow() {
           click: () => mainWindow.webContents.openDevTools({ mode: 'right' }),
         },
         {
+          label: '检查更新',
+          click: () => checkForUpdates()
+        },
+        {
           label: '关于',
           click: showWikiInfo,
         },
@@ -371,4 +381,14 @@ app.on('window-all-closed', () => {
 // 添加 before-quit 事件处理
 app.on('before-quit', () => {
   app.isQuitting = true;
+});
+
+app.whenReady().then(() => {
+    // 设置自动更新
+    setupAutoUpdater();
+
+    // 注册更新检查事件
+    ipcMain.handle('check-for-updates', () => {
+        checkForUpdates();
+    });
 });
