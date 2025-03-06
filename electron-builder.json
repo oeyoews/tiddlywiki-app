@@ -1,6 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
-  "appId": "YourAppID",
+  "appId": "tiddlywiki.app",
   "asar": true,
   "directories": {
     "output": "release/${version}"
@@ -16,7 +16,10 @@
     ]
   },
   "linux": {
-    "target": ["AppImage", "deb"],
+    "target": [
+      "AppImage",
+      "deb"
+    ],
     "category": "Utility"
   },
   "win": {
@@ -38,6 +41,6 @@
   "publish": {
     "provider": "generic",
     "channel": "latest",
-    "url": "https://github.com/electron-vite/electron-vite-react/releases/download/v0.9.9/"
+    "url": "https://github.com/oeyoews/tiddlywiki-app/releases/download/v1.0.0"
   }
 }
