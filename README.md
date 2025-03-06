@@ -21,6 +21,10 @@
 
 下载并安装最新版本的应用。
 
+* Manjaro 系列: `pacman -S appimagelauncher and use appimage install`
+* Windows: 下载 exe 即可
+* Macos: 下载 dmg 安装包（未测试）
+
 ### ⚡ 基本操作
 
 1. 首次启动时，选择或创建一个 Wiki 文件夹
