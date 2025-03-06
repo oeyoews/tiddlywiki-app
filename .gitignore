@@ -3,3 +3,4 @@ output/
 src/wiki/tiddlers/
 builder*.yaml
 release
+wiki/

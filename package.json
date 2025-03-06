@@ -7,10 +7,15 @@
     "dev": "electron ./src/main/index.js",
     "build": "electron-builder"
   },
-  "keywords": ["tiddlywiki"],
+  "keywords": [
+    "tiddlywiki"
+  ],
+  "type": "commonjs",
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "electron-conf": "^1.2.1",
+    "get-port": "^7.1.0",
     "tiddlywiki": "5.3.6"
   },
   "pnpm": {
@@ -19,7 +24,7 @@
     ]
   },
   "devDependencies": {
-    "electron-builder": "^25.1.8",
-    "electron": "^35.0.0"
+    "electron": "^35.0.0",
+    "electron-builder": "^25.1.8"
   }
 }
