@@ -1,23 +1,9 @@
-name: Build & Release
+name: Build/release
 
-on:
-  push:
-    tags:
-      - 'v*.*.*' # 只有 vX.X.X 形式的 tag 触发
-    branches: [main]
-    paths-ignore:
-      - "**.md"
-      - "**.spec.js"
-      - ".idea"
-      - ".vscode"
-      - ".dockerignore"
-      - "Dockerfile"
-      - ".gitignore"
-      - ".github/**"
-      - "!.github/workflows/build.yml"
+on: push
 
 jobs:
-  build:
+  release:
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -25,59 +11,21 @@ jobs:
         os: [macos-latest, ubuntu-latest, windows-latest]
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
+      - name: Check out Git repository
+        uses: actions/checkout@v1
 
-      - name: Setup Node.js
+      - name: Install Node.js, NPM and Yarn
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Build Release Files
-        run: npm run build
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+      - name: Build/release Electron app
+        uses: samuelmeuli/action-electron-builder@v1
         with:
-          name: release_on_${{ matrix.os }}
-          path: release/
-          retention-days: 5
+          # GitHub token, automatically provided to the action
+          # (No need to define this secret in the repo settings)
+          github_token: ${{ secrets.github_token }}
 
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          draft: true
-          generate_release_notes: true
-          files: |
-            release/**/*.exe
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  # release:
-  #   needs: build
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #     - name: Checkout Code
-  #       uses: actions/checkout@v3
-
-  #     - name: Download Artifacts
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         path: artifacts
-
-  #     - name: Create GitHub Release
-  #       uses: softprops/action-gh-release@v2
-  #       if: startsWith(github.ref, 'refs/tags/')
-  #       with:
-  #         files: artifacts/**/*  # 上传所有构建产物
-  #         token: ${{ secrets.GITHUB_TOKEN }}
-  #         body: "🚀 新版本发布啦！"
-  #         draft: false
-  #         prerelease: false
+          # If the commit is tagged with a version (e.g. "v1.0.0"),
+          # release the app after building
+          release: ${{ startsWith(github.ref, 'refs/tags/v') }}
