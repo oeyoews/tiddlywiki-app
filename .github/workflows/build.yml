@@ -34,7 +34,7 @@ jobs:
           node-version: 18
 
       - name: Install Dependencies
-        run: npm ci
+        run: npm install
 
       - name: Build Release Files
         run: npm run build
