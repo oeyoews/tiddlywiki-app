@@ -1,8 +1,16 @@
-const {crashReporter, shell, app, BrowserWindow,BrowserView, dialog, Menu } = require("electron");
-const path = require("path");
-const fs = require("fs");
-const { TiddlyWiki } = require("tiddlywiki");
-const { Conf: Config }  = require('electron-conf');
+const {
+  crashReporter,
+  shell,
+  app,
+  BrowserWindow,
+  BrowserView,
+  dialog,
+  Menu,
+} = require('electron');
+const path = require('path');
+const fs = require('fs');
+const { TiddlyWiki } = require('tiddlywiki');
+const { Conf: Config } = require('electron-conf');
 const getPorts = require('get-port').default;
 
 let config;
@@ -15,29 +23,29 @@ const DEFAULT_PORT = 8080;
 
 async function buildWiki() {
   try {
-    const { boot } = TiddlyWiki()
-    boot.argv = [wikiPath, '--build', 'index']
+    const { boot } = TiddlyWiki();
+    boot.argv = [wikiPath, '--build', 'index'];
     await boot.boot(() => {
-      console.log('开始构建')
-    })
+      console.log('开始构建');
+    });
 
-    const outputPath = path.join(wikiPath, 'output', 'index.html')
+    const outputPath = path.join(wikiPath, 'output', 'index.html');
     const result = await dialog.showMessageBox({
       type: 'info',
       title: '构建完成',
       message: `Wiki 已构建完成，是否在浏览器中预览？`,
       buttons: ['预览', '在文件夹中显示', '关闭'],
       defaultId: 0,
-      cancelId: 2
-    })
+      cancelId: 2,
+    });
 
     if (result.response === 0) {
-      shell.openExternal(`file://${outputPath}`)
+      shell.openExternal(`file://${outputPath}`);
     } else if (result.response === 1) {
-      shell.showItemInFolder(outputPath)
+      shell.showItemInFolder(outputPath);
     }
   } catch (err) {
-    dialog.showErrorBox("错误", `构建 Wiki 失败：${err.message}`)
+    dialog.showErrorBox('错误', `构建 Wiki 失败：${err.message}`);
   }
 }
 
@@ -45,9 +53,9 @@ async function initWiki(wikiFolder, isFirstTime = false) {
   try {
     if (isFirstTime) {
       const result = await dialog.showOpenDialog({
-        title: "选择 Wiki 文件夹位置",
-        properties: ["openDirectory"],
-        message: "请选择一个文件夹作为 Wiki 的存储位置"
+        title: '选择 Wiki 文件夹位置',
+        properties: ['openDirectory'],
+        message: '请选择一个文件夹作为 Wiki 的存储位置',
       });
 
       if (!result.canceled && result.filePaths.length > 0) {
@@ -57,15 +65,15 @@ async function initWiki(wikiFolder, isFirstTime = false) {
       }
     }
 
-    const bootPath = path.join(wikiFolder, "tiddlywiki.info");
+    const bootPath = path.join(wikiFolder, 'tiddlywiki.info');
 
     if (!fs.existsSync(bootPath)) {
       const { boot } = TiddlyWiki();
-      boot.argv = [wikiFolder, "--init", 'server'];
-		await boot.boot(() => {
-		  console.log('start init first')
-	  }); // 首次初始化必须要初始化启动下
-	  console.log('finished init')
+      boot.argv = [wikiFolder, '--init', 'server'];
+      await boot.boot(() => {
+        console.log('start init first');
+      }); // 首次初始化必须要初始化启动下
+      console.log('finished init');
     }
 
     if (currentServer) {
@@ -73,23 +81,25 @@ async function initWiki(wikiFolder, isFirstTime = false) {
     }
 
     // 获取可用端口
-    currentPort = await getPorts({port: DEFAULT_PORT});
+    currentPort = await getPorts({ port: DEFAULT_PORT });
 
     const { boot: twBoot } = TiddlyWiki();
-    twBoot.argv = [
-      wikiFolder,
-      "--listen",
-      `port=${currentPort}`,
-    ];
+    twBoot.argv = [wikiFolder, '--listen', `port=${currentPort}`];
 
     const startServer = () => {
-      console.log(`start begin: http://localhost:${currentPort}`); mainWindow.loadURL(`http://localhost:${currentPort}`);
+      console.log(`start begin: http://localhost:${currentPort}`);
+      mainWindow.loadURL(`http://localhost:${currentPort}`);
+      mainWindow.webContents.once('did-finish-load', () => {
+        // 获取页面标题并设置窗口标题
+        const pageTitle = mainWindow.webContents.getTitle();
+        mainWindow.setTitle(`${pageTitle} - ${wikiFolder}`);
+      });
     };
 
     currentServer = twBoot;
     twBoot.boot(startServer);
   } catch (err) {
-    dialog.showErrorBox("错误", `初始化 Wiki 失败：${err.message}`);
+    dialog.showErrorBox('错误', `初始化 Wiki 失败：${err.message}`);
   }
 }
 
@@ -139,7 +149,7 @@ function createWindow() {
       y: 0,
       // width: bounds.width - sidebarWidth,
       width: bounds.width,
-      height: bounds.height
+      height: bounds.height,
     });
   }
 
@@ -157,32 +167,31 @@ function createWindow() {
   initWiki(wikiPath, isFirstTime);
   // mainView.webContents.loadURL(`http://localhost:${DEFAULT_PORT}`);
 
-//  mainView.webContents.openDevTools({ mode: 'right' })
+  //  mainView.webContents.openDevTools({ mode: 'right' })
 
   const menu = Menu.buildFromTemplate([
-
     {
-      label: "文件",
+      label: '文件',
       submenu: [
         {
-          label: "打开 Wiki",
+          label: '打开 Wiki',
           click: openFolderDialog,
         },
         {
-          label: "构建 Wiki",
+          label: '构建 Wiki',
           click: buildWiki,
         },
         {
-          label: "在浏览器中打开",
+          label: '在浏览器中打开',
           click: () => {
             if (currentServer) {
               // const port = currentServer.argv.find(arg => arg.startsWith('port=')).split('=')[1];
               shell.openExternal(`http://localhost:${currentPort}`);
             }
-          }
+          },
         },
-        { type: "separator" },
-        { role: "quit" },
+        { type: 'separator' },
+        { role: 'quit' },
       ],
     },
     {
@@ -194,10 +203,10 @@ function createWindow() {
         // },
         {
           label: '打开主视图开发工具',
-          click: () => mainView.webContents.openDevTools({ mode: 'right' })
-        }
-      ]
-    }
+          click: () => mainView.webContents.openDevTools({ mode: 'right' }),
+        },
+      ],
+    },
   ]);
   Menu.setApplicationMenu(menu);
 }
@@ -206,14 +215,14 @@ function createWindow() {
 function openFolderDialog() {
   dialog
     .showOpenDialog({
-      title: "选择 Wiki 文件夹",
-      properties: ["openDirectory"],
+      title: '选择 Wiki 文件夹',
+      properties: ['openDirectory'],
     })
     .then((result) => {
       if (!result.canceled && result.filePaths.length > 0) {
         if (wikiPath === result.filePaths[0]) {
-          console.info('已经是当前打开的 Wiki 文件夹')
-          return
+          console.info('已经是当前打开的 Wiki 文件夹');
+          return;
         }
         wikiPath = result.filePaths[0];
         config.set('wikiPath', wikiPath);
@@ -226,8 +235,8 @@ function openFolderDialog() {
 const initApp = async () => {
   config = new Config({
     defaults: {
-      wikiPath: path.resolve("wiki")
-    }
+      wikiPath: path.resolve('wiki'),
+    },
   });
 
   // 初始化 wikiPath
@@ -240,6 +249,6 @@ const initApp = async () => {
 // 将原来的立即执行函数替换为初始化调用
 initApp();
 
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") app.quit();
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') app.quit();
 });
