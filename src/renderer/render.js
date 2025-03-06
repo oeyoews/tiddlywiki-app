@@ -63,5 +63,4 @@ const renderDom = async () => {
 // `;
 // document.body.appendChild(style);
 // TODO: 添加配置，可以自定义开启
-return
-renderDom()
+// renderDom()

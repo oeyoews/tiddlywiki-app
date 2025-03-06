@@ -5,21 +5,68 @@ const {
   BrowserWindow,
   dialog,
   Menu,
+  Tray,
 } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const { TiddlyWiki } = require('tiddlywiki');
 const { Conf: Config } = require('electron-conf');
 const getPorts = require('get-port').default;
-const preload = path.join(__dirname, "../preload/index.js");
+const preload = path.join(__dirname, '../preload/index.js');
 
 let config;
 let wikiPath;
 let mainWindow;
 let currentServer = null;
 let currentPort = null;
+let tray = null;
 
 const DEFAULT_PORT = 8080;
+function createTray() {
+  const iconPath = path.join(__dirname, '..', 'assets', 'tray-icon.png');
+  tray = new Tray(iconPath);
+  tray.setToolTip('TiddlyWiki Wrapper');
+
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: '显示主窗口',
+      click: () => {
+        mainWindow.show();
+      },
+    },
+    {
+      label: '在浏览器中打开',
+      click: () => {
+        if (currentServer && currentPort) {
+          shell.openExternal(`http://localhost:${currentPort}`);
+        }
+      },
+    },
+    { type: 'separator' },
+    {
+      label: '退出',
+      click: () => {
+        app.quit();
+      },
+    },
+  ]);
+
+  tray.setContextMenu(contextMenu);
+
+  // 修改点击事件处理，实现窗口切换
+  tray.on('click', () => {
+    if (mainWindow.isVisible()) {
+      if (mainWindow.isMinimized()) {
+        mainWindow.restore();
+      } else {
+        mainWindow.minimize();
+      }
+    } else {
+      mainWindow.show();
+      mainWindow.focus();
+    }
+  });
+}
 
 async function buildWiki() {
   try {
@@ -113,6 +160,24 @@ function createWindow() {
       webSecurity: false,
     },
   });
+  // 创建任务栏图标
+  createTray();
+
+  // 处理窗口最小化事件
+  mainWindow.on('minimize', (event) => {
+    event.preventDefault();
+    mainWindow.hide();
+  });
+
+  // 处理窗口关闭按钮事件
+  mainWindow.on('close', (event) => {
+    if (!app.isQuitting) {
+      event.preventDefault();
+      mainWindow.hide();
+      return false;
+    }
+    return true;
+  });
   // 检查是否首次启动
   const isFirstTime = !config.get('wikiPath');
 
@@ -122,7 +187,9 @@ function createWindow() {
   mainWindow.webContents.on('did-finish-load', () => {
     mainWindow.webContents.executeJavaScript(`
       const script = document.createElement('script');
-      script.src = 'file://${path.join(__dirname, '..', 'renderer', 'render.js').replace(/\\/g, '/')}';
+      script.src = 'file://${path
+        .join(__dirname, '..', 'renderer', 'render.js')
+        .replace(/\\/g, '/')}';
       document.body.appendChild(script);
     `);
   });
@@ -147,7 +214,10 @@ function createWindow() {
           },
         },
         { type: 'separator' },
-        { role: 'quit' },
+        {
+          label: '退出',
+          role: 'quit',
+        },
       ],
     },
     {
@@ -191,7 +261,7 @@ ipcMain.handle('wiki:openInBrowser', () => {
 ipcMain.handle('wiki:getInfo', () => {
   return {
     wikiPath,
-    port: currentPort
+    port: currentPort,
   };
 });
 
@@ -213,5 +283,13 @@ const initApp = async () => {
 initApp();
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit();
+  if (process.platform !== 'darwin') {
+    app.isQuitting = true;
+    app.quit();
+  }
+});
+
+// 添加 before-quit 事件处理
+app.on('before-quit', () => {
+  app.isQuitting = true;
 });
