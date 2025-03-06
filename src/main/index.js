@@ -22,6 +22,16 @@ let currentPort = null;
 let tray = null;
 
 const DEFAULT_PORT = 8080;
+// 添加显示 Wiki 信息的函数
+async function showWikiInfo() {
+  const info = await dialog.showMessageBox({
+    type: 'info',
+    title: '关于 Wiki',
+    message: 'TiddlyWiki Wrapper',
+    detail: `当前 Wiki 路径：${wikiPath}\n运行端口：${currentPort || '未启动'}`
+  });
+}
+
 function createTray() {
   const iconPath = path.join(__dirname, '..', 'assets', 'tray-icon.png');
   tray = new Tray(iconPath);
@@ -44,15 +54,17 @@ function createTray() {
     },
     { type: 'separator' },
     {
+      label: '关于',
+      click: showWikiInfo
+    },
+    {
       label: '退出',
       click: () => {
         app.quit();
       },
     },
   ]);
-
   tray.setContextMenu(contextMenu);
-
   // 修改点击事件处理，实现窗口切换
   tray.on('click', () => {
     if (mainWindow.isVisible()) {
@@ -229,6 +241,15 @@ function createWindow() {
         },
       ],
     },
+    {
+      label: '帮助',
+      submenu: [
+        {
+          label: '关于',
+          click: showWikiInfo
+        }
+      ]
+    }
   ]);
   Menu.setApplicationMenu(menu);
 }
