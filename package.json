@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "🌟 一个基于 Electron 的 TiddlyWiki 桌面应用，提供更丝滑的 TiddlyWiki 使用体验。",
   "main": "./src/main/index.js",
-  "email": "jyao4783@gmail.com",
+  "person": {
+    "name": "oeyoews",
+    "email": "jyao4783@gmail.com",
+    "url": "http://github.com/oeyoews/tiddlywiki-app"
+  },
   "scripts": {
     "dev": "electron ./src/main/index.js",
     "build": "electron-builder"
