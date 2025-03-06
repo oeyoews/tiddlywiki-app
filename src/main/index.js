@@ -3,11 +3,13 @@ const path = require("path");
 const fs = require("fs");
 const { TiddlyWiki } = require("tiddlywiki");
 const { Conf: Config }  = require('electron-conf');
+const getPorts = require('get-port').default;
 
 let config;
 let wikiPath;
 let mainWindow;
 let currentServer = null;
+let currentPort = null;
 
 const DEFAULT_PORT = 8080;
 
@@ -70,15 +72,18 @@ async function initWiki(wikiFolder, isFirstTime = false) {
       currentServer = null;
     }
 
+    // 获取可用端口
+    currentPort = await getPorts({port: DEFAULT_PORT});
+
     const { boot: twBoot } = TiddlyWiki();
     twBoot.argv = [
-    	wikiFolder,
+      wikiFolder,
       "--listen",
-      `port=${DEFAULT_PORT}`,
+      `port=${currentPort}`,
     ];
 
     const startServer = () => {
-      console.log(`start begin: http://localhost:${DEFAULT_PORT}`); mainWindow.loadURL(`http://localhost:${DEFAULT_PORT}`);
+      console.log(`start begin: http://localhost:${currentPort}`); mainWindow.loadURL(`http://localhost:${currentPort}`);
     };
 
     currentServer = twBoot;
@@ -139,8 +144,8 @@ function createWindow() {
   }
 
   // 监听窗口大小变化
-  mainWindow.on('resize', updateBrowserViewsSize);
-  updateBrowserViewsSize();
+  // mainWindow.on('resize', updateBrowserViewsSize);
+  // updateBrowserViewsSize();
 
   // 加载侧边栏
   // sidebarView.webContents.loadFile(path.join(__dirname, 'sidebar.html'));
@@ -150,8 +155,7 @@ function createWindow() {
 
   // 初始化并加载 wiki 到主视图
   initWiki(wikiPath, isFirstTime);
-
-  mainView.webContents.loadURL(`http://localhost:${DEFAULT_PORT}`);
+  // mainView.webContents.loadURL(`http://localhost:${DEFAULT_PORT}`);
 
 //  mainView.webContents.openDevTools({ mode: 'right' })
 
@@ -171,7 +175,10 @@ function createWindow() {
         {
           label: "在浏览器中打开",
           click: () => {
-            shell.openExternal(`http://localhost:${DEFAULT_PORT}`)
+            if (currentServer) {
+              // const port = currentServer.argv.find(arg => arg.startsWith('port=')).split('=')[1];
+              shell.openExternal(`http://localhost:${currentPort}`);
+            }
           }
         },
         { type: "separator" },
@@ -204,10 +211,14 @@ function openFolderDialog() {
     })
     .then((result) => {
       if (!result.canceled && result.filePaths.length > 0) {
+        if (wikiPath === result.filePaths[0]) {
+          console.info('已经是当前打开的 Wiki 文件夹')
+          return
+        }
         wikiPath = result.filePaths[0];
         config.set('wikiPath', wikiPath);
         initWiki(wikiPath);
-        mainWindow.getBrowserView().webContents.loadURL(`http://localhost:${DEFAULT_PORT}`);
+        // mainWindow.getBrowserView().webContents.loadURL(`http://localhost:${currentPort}`);
       }
     });
 }

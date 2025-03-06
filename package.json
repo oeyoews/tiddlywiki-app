@@ -15,6 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "electron-conf": "^1.2.1",
+    "get-port": "^7.1.0",
     "tiddlywiki": "5.3.6"
   },
   "pnpm": {
