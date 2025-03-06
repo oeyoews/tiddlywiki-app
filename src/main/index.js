@@ -165,10 +165,8 @@ async function importSingleFileWiki() {
   try {
     const result = await dialog.showOpenDialog({
       title: '选择 TiddlyWiki HTML 文件',
-      filters: [
-        { name: 'TiddlyWiki HTML', extensions: ['html'] }
-      ],
-      properties: ['openFile']
+      filters: [{ name: 'TiddlyWiki HTML', extensions: ['html'] }],
+      properties: ['openFile'],
     });
 
     if (!result.canceled && result.filePaths.length > 0) {
@@ -176,12 +174,12 @@ async function importSingleFileWiki() {
       const targetFolder = await dialog.showOpenDialog({
         title: '选择导入目标文件夹',
         properties: ['openDirectory'],
-        message: '请选择要将 Wiki 导入到的目标文件夹'
+        message: '请选择要将 Wiki 导入到的目标文件夹',
       });
 
       if (!targetFolder.canceled && targetFolder.filePaths.length > 0) {
         const targetPath = targetFolder.filePaths[0];
-        
+
         const { boot } = TiddlyWiki();
         boot.argv = ['--load', htmlPath, '--savewikifolder', targetPath];
         await boot.boot(() => {
@@ -196,7 +194,7 @@ async function importSingleFileWiki() {
         dialog.showMessageBox({
           type: 'info',
           title: '导入成功',
-          message: '单文件 Wiki 已成功导入到 Node.js 版本'
+          message: '单文件 Wiki 已成功导入到 Node.js 版本',
         });
       }
     }
