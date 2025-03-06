@@ -1,9 +1,8 @@
 const {
-  crashReporter,
+  ipcMain,
   shell,
   app,
   BrowserWindow,
-  BrowserView,
   dialog,
   Menu,
 } = require('electron');
@@ -12,6 +11,7 @@ const fs = require('fs');
 const { TiddlyWiki } = require('tiddlywiki');
 const { Conf: Config } = require('electron-conf');
 const getPorts = require('get-port').default;
+const preload = path.join(__dirname, "../preload/index.js");
 
 let config;
 let wikiPath;
@@ -102,73 +102,30 @@ async function initWiki(wikiFolder, isFirstTime = false) {
     dialog.showErrorBox('错误', `初始化 Wiki 失败：${err.message}`);
   }
 }
-
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1400,
     height: 800,
     webPreferences: {
-      nodeIntegration: true,
+      preload,
+      nodeIntegration: false,
       contextIsolation: true,
       webSecurity: false,
     },
   });
-
-  // // 创建侧边栏视图
-  // const sidebarView = new BrowserView({
-  //   webPreferences: {
-  //     nodeIntegration: false,
-  //     contextIsolation: true,
-  //   },
-  // });
-
-  // 创建主内容视图
-  const mainView = new BrowserView({
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: true,
-      webSecurity: false,
-    },
-  });
-
-  // mainWindow.addBrowserView(sidebarView);
-  mainWindow.addBrowserView(mainView);
-
-  // 设置侧边栏尺寸和位置
-  const sidebarWidth = 0;
-  function updateBrowserViewsSize() {
-    const bounds = mainWindow.getBounds();
-    // sidebarView.setBounds({
-    //   x: 0,
-    //   y: 0,
-    //   width: sidebarWidth,
-    //   height: bounds.height
-    // });
-    mainView.setBounds({
-      x: sidebarWidth,
-      y: 0,
-      // width: bounds.width - sidebarWidth,
-      width: bounds.width,
-      height: bounds.height,
-    });
-  }
-
-  // 监听窗口大小变化
-  // mainWindow.on('resize', updateBrowserViewsSize);
-  // updateBrowserViewsSize();
-
-  // 加载侧边栏
-  // sidebarView.webContents.loadFile(path.join(__dirname, 'sidebar.html'));
-
   // 检查是否首次启动
   const isFirstTime = !config.get('wikiPath');
 
-  // 初始化并加载 wiki 到主视图
+  // 初始化并加载 wiki
   initWiki(wikiPath, isFirstTime);
-  // mainView.webContents.loadURL(`http://localhost:${DEFAULT_PORT}`);
-
-  //  mainView.webContents.openDevTools({ mode: 'right' })
-
+  // 注入渲染脚本
+  mainWindow.webContents.on('did-finish-load', () => {
+    mainWindow.webContents.executeJavaScript(`
+      const script = document.createElement('script');
+      script.src = 'file://${path.join(__dirname, '..', 'renderer', 'render.js').replace(/\\/g, '/')}';
+      document.body.appendChild(script);
+    `);
+  });
   const menu = Menu.buildFromTemplate([
     {
       label: '文件',
@@ -184,8 +141,7 @@ function createWindow() {
         {
           label: '在浏览器中打开',
           click: () => {
-            if (currentServer) {
-              // const port = currentServer.argv.find(arg => arg.startsWith('port=')).split('=')[1];
+            if (currentServer && currentPort) {
               shell.openExternal(`http://localhost:${currentPort}`);
             }
           },
@@ -197,40 +153,47 @@ function createWindow() {
     {
       label: '开发',
       submenu: [
-        // {
-        //   label: '打开侧边栏开发工具',
-        //   click: () => sidebarView.webContents.openDevTools({ mode: 'right' })
-        // },
         {
-          label: '打开主视图开发工具',
-          click: () => mainView.webContents.openDevTools({ mode: 'right' }),
+          label: '打开开发者工具',
+          click: () => mainWindow.webContents.openDevTools({ mode: 'right' }),
         },
       ],
     },
   ]);
   Menu.setApplicationMenu(menu);
 }
+// 添加 openFolderDialog 函数定义
+async function openFolderDialog() {
+  const result = await dialog.showOpenDialog({
+    title: '选择 Wiki 文件夹',
+    properties: ['openDirectory'],
+  });
 
-// 修改 loadURL 调用
-function openFolderDialog() {
-  dialog
-    .showOpenDialog({
-      title: '选择 Wiki 文件夹',
-      properties: ['openDirectory'],
-    })
-    .then((result) => {
-      if (!result.canceled && result.filePaths.length > 0) {
-        if (wikiPath === result.filePaths[0]) {
-          console.info('已经是当前打开的 Wiki 文件夹');
-          return;
-        }
-        wikiPath = result.filePaths[0];
-        config.set('wikiPath', wikiPath);
-        initWiki(wikiPath);
-        // mainWindow.getBrowserView().webContents.loadURL(`http://localhost:${currentPort}`);
-      }
-    });
+  if (!result.canceled && result.filePaths.length > 0) {
+    if (wikiPath === result.filePaths[0]) {
+      console.info('已经是当前打开的 Wiki 文件夹');
+      return;
+    }
+    wikiPath = result.filePaths[0];
+    config.set('wikiPath', wikiPath);
+    await initWiki(wikiPath);
+  }
 }
+
+// 添加 IPC 处理程序
+ipcMain.handle('dialog:openWiki', openFolderDialog);
+ipcMain.handle('wiki:build', buildWiki);
+ipcMain.handle('wiki:openInBrowser', () => {
+  if (currentServer && currentPort) {
+    shell.openExternal(`http://localhost:${currentPort}`);
+  }
+});
+ipcMain.handle('wiki:getInfo', () => {
+  return {
+    wikiPath,
+    port: currentPort
+  };
+});
 
 const initApp = async () => {
   config = new Config({
