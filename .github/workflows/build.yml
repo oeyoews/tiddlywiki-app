@@ -45,7 +45,7 @@ jobs:
       - name: Cleanup Artifacts for Linux
         if: matrix.os == 'ubuntu-latest'
         run: |
-          npx rimraf "dist/!(*.AppImage)"
+          sudo snap install snapcraft --classic && npx rimraf "dist/!(*.AppImage)"
 
       - name: upload artifacts
         uses: actions/upload-artifact@v3.0.0
