@@ -9,7 +9,7 @@ const {
 } = require('electron');
 const path = require('path');
 const fs = require('fs');
-const { TiddlyWiki } = require('tiddlywiki');
+const { TiddlyWiki }= require('tiddlywiki');
 const { Conf: Config } = require('electron-conf');
 const getPorts = require('get-port').default;
 const preload = path.join(__dirname, '../preload/index.js');
@@ -28,7 +28,7 @@ async function showWikiInfo() {
     type: 'info',
     title: '关于 Wiki',
     message: 'TiddlyWiki Wrapper',
-    detail: `当前 Wiki 路径：${wikiPath}\n运行端口：${currentPort || '未启动'}`
+    detail: `当前 Wiki 路径：${wikiPath}\n运行端口：${currentPort || '未启动'}`,
   });
 }
 
@@ -55,7 +55,7 @@ function createTray() {
     { type: 'separator' },
     {
       label: '关于',
-      click: showWikiInfo
+      click: showWikiInfo,
     },
     {
       label: '退出',
@@ -165,6 +165,13 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1400,
     height: 800,
+    // frame: false,
+    // titleBarStyle: 'hidden',
+    // titleBarOverlay: {
+    //   color: 'transparent',
+    //   symbolColor: 'transparent',
+    //   height: 10,
+    // },
     webPreferences: {
       preload,
       nodeIntegration: false,
@@ -218,10 +225,18 @@ function createWindow() {
           click: buildWiki,
         },
         {
-          label: '在浏览器中打开',
+          label: '在浏览器中打开 TiddlyWiki',
           click: () => {
             if (currentServer && currentPort) {
               shell.openExternal(`http://localhost:${currentPort}`);
+            }
+          },
+        },
+        {
+          label: '打开当前 Wiki 文件夹',
+          click: () => {
+            if (wikiPath) {
+              shell.showItemInFolder(wikiPath);
             }
           },
         },
@@ -233,23 +248,18 @@ function createWindow() {
       ],
     },
     {
-      label: '开发',
+      label: '帮助',
       submenu: [
         {
           label: '打开开发者工具',
           click: () => mainWindow.webContents.openDevTools({ mode: 'right' }),
         },
-      ],
-    },
-    {
-      label: '帮助',
-      submenu: [
         {
           label: '关于',
-          click: showWikiInfo
-        }
-      ]
-    }
+          click: showWikiInfo,
+        },
+      ],
+    },
   ]);
   Menu.setApplicationMenu(menu);
 }
