@@ -2,25 +2,22 @@ name: Build
 
 on:
   push:
-    # branches:
-    #   - main
     tags:
       - 'v*.*.*' # 只有 vX.X.X 形式的 tag 触发
 
 jobs:
   build:
-    name: build and release electron app
+    name: build app
     runs-on: ${{ matrix.os }}
 
     strategy:
       fail-fast: false
       matrix:
-        # , ubuntu-latest
         os: [windows-latest, macos-latest, ubuntu-latest]
 
     steps:
       - name: Check out git repository
-        uses: actions/checkout@v3.0.0
+        uses: actions/checkout@v3
 
       - name: Install Node.js
         uses: actions/setup-node@v3
@@ -40,9 +37,8 @@ jobs:
             **/node_modules
             ~/.pnpm-store
             ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
             ${{ runner.os }}-node-
 
       - name: Install Dependencies
@@ -54,14 +50,22 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
   release:
-    - name: release
-      uses: softprops/action-gh-release@v0.1.14
-      if: startsWith(github.ref, 'refs/tags/')
-      with:
-        files: |
-          release/**/tiddlywiki-app_**.exe
-          release/**/tiddlywiki-app_**.dmg
-          release/**/tiddlywiki-app_**.AppImage
-          release/**/tiddlywiki-app_**.deb
-      env:
-        GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+    name: release
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out git repository
+        uses: actions/checkout@v3
+
+      - name: Upload Release Assets
+        uses: softprops/action-gh-release@v0.1.14
+        with:
+          files: |
+            release/**/tiddlywiki-app_**.exe
+            release/**/tiddlywiki-app_**.dmg
+            release/**/tiddlywiki-app_**.AppImage
+            release/**/tiddlywiki-app_**.deb
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
