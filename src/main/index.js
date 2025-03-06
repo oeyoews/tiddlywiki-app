@@ -9,7 +9,7 @@ const {
 } = require('electron');
 const path = require('path');
 const fs = require('fs');
-const { TiddlyWiki }= require('tiddlywiki');
+const { TiddlyWiki } = require('tiddlywiki');
 const { Conf: Config } = require('electron-conf');
 const getPorts = require('get-port').default;
 const preload = path.join(__dirname, '../preload/index.js');
@@ -21,6 +21,7 @@ let currentServer = null;
 let currentPort = null;
 let tray = null;
 
+const iconPath = path.join(__dirname, '..', 'assets', 'tray-icon.png');
 const DEFAULT_PORT = 8080;
 // 添加显示 Wiki 信息的函数
 async function showWikiInfo() {
@@ -33,7 +34,6 @@ async function showWikiInfo() {
 }
 
 function createTray() {
-  const iconPath = path.join(__dirname, '..', 'assets', 'tray-icon.png');
   tray = new Tray(iconPath);
   tray.setToolTip('TiddlyWiki Wrapper');
 
@@ -165,6 +165,7 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1400,
     height: 800,
+    icon: iconPath,
     // frame: false,
     // titleBarStyle: 'hidden',
     // titleBarOverlay: {
