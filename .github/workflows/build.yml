@@ -4,7 +4,7 @@ on:
   push:
     tags:
       - 'v*.*.*' # 只有 vX.X.X 形式的 tag 触发
-    branches: [main]
+    # branches: [main]
     paths-ignore:
       - "**.md"
       - "**.spec.js"
