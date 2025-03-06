@@ -10,15 +10,6 @@
   "files": [
     "src"
   ],
-  "deb": {
-    "artifactName": "${version}/${name}_${version}-1_${arch}.${ext}",
-    "synopsis": "TiddlyWiki App",
-    "depends": [ ],
-    "priority": "optional"
-  },
-  "appImage": {
-    "executableArgs": [" "]
-  },
   "mac": {
     "artifactName": "${productName}_${version}.${ext}",
     "target": [
@@ -26,8 +17,12 @@
       "zip"
     ]
   },
+  "linux": {
+    "target": "AppImage",
+    "category": "Utility"
+  },
   "win": {
-  "target": [
+    "target": [
       "nsis",
       "zip",
       "msi"
