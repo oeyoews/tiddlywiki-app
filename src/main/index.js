@@ -1,10 +1,15 @@
-const {crashReporter, shell, app, BrowserWindow,BrowserView, dialog, Menu } = require("electron");
-const path = require("path");
-const fs = require("fs");
-const { TiddlyWiki } = require("tiddlywiki");
+import { crashReporter, shell, app, BrowserWindow, BrowserView, dialog, Menu } from 'electron';
+import path from 'path';
+import fs from 'fs';
+import { TiddlyWiki } from 'tiddlywiki';
+import Store from 'electron-store';
+
+// ... rest of the code ...
+
+const store = new Store();
 
 let mainWindow;
-let wikiPath = path.join(__dirname, "wiki"); // 默认 wiki 文件夹路径
+let wikiPath = path.resolve("wiki"); // 默认 wiki 文件夹路径
 let currentServer = null;
 
 const DEFAULT_PORT = 8080;
@@ -153,6 +158,8 @@ function createWindow() {
   initWiki(wikiPath);
 
   mainView.webContents.loadURL(`http://localhost:${DEFAULT_PORT}`);
+
+//  mainView.webContents.openDevTools({ mode: 'right' })
 
   const menu = Menu.buildFromTemplate([
 

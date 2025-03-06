@@ -7,10 +7,14 @@
     "dev": "electron ./src/main/index.js",
     "build": "electron-builder"
   },
-  "keywords": ["tiddlywiki"],
+  "keywords": [
+    "tiddlywiki"
+  ],
+  "type": "module",
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "electron-store": "^10.0.1",
     "tiddlywiki": "5.3.6"
   },
   "pnpm": {
@@ -19,7 +23,7 @@
     ]
   },
   "devDependencies": {
-    "electron-builder": "^25.1.8",
-    "electron": "^35.0.0"
+    "electron": "^35.0.0",
+    "electron-builder": "^25.1.8"
   }
 }
