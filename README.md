@@ -1,4 +1,4 @@
-# TiddlyWiki Wrapper 🌟
+# TiddlyWiki App 🌟
 
 一个基于 Electron 的 TiddlyWiki 桌面应用封装，提供更好的桌面端使用体验。
 
