@@ -161,6 +161,51 @@ async function initWiki(wikiFolder, isFirstTime = false) {
     dialog.showErrorBox('错误', `初始化 Wiki 失败：${err.message}`);
   }
 }
+async function importSingleFileWiki() {
+  try {
+    const result = await dialog.showOpenDialog({
+      title: '选择 TiddlyWiki HTML 文件',
+      filters: [
+        { name: 'TiddlyWiki HTML', extensions: ['html'] }
+      ],
+      properties: ['openFile']
+    });
+
+    if (!result.canceled && result.filePaths.length > 0) {
+      const htmlPath = result.filePaths[0];
+      const targetFolder = await dialog.showOpenDialog({
+        title: '选择导入目标文件夹',
+        properties: ['openDirectory'],
+        message: '请选择要将 Wiki 导入到的目标文件夹'
+      });
+
+      if (!targetFolder.canceled && targetFolder.filePaths.length > 0) {
+        const targetPath = targetFolder.filePaths[0];
+        
+        const { boot } = TiddlyWiki();
+        boot.argv = ['--load', htmlPath, '--savewikifolder', targetPath];
+        await boot.boot(() => {
+          console.log('开始导入单文件 Wiki');
+        });
+
+        // 更新当前 Wiki 路径并重新初始化
+        wikiPath = targetPath;
+        config.set('wikiPath', wikiPath);
+        await initWiki(wikiPath);
+
+        dialog.showMessageBox({
+          type: 'info',
+          title: '导入成功',
+          message: '单文件 Wiki 已成功导入到 Node.js 版本'
+        });
+      }
+    }
+  } catch (err) {
+    dialog.showErrorBox('错误', `导入失败：${err.message}`);
+  }
+}
+
+// 在 createWindow 函数中修改菜单模板
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1400,
@@ -220,6 +265,10 @@ function createWindow() {
         {
           label: '打开 Wiki',
           click: openFolderDialog,
+        },
+        {
+          label: '导入单文件 Wiki',
+          click: importSingleFileWiki,
         },
         {
           label: '构建 Wiki',

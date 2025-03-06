@@ -2,6 +2,8 @@ name: Build
 
 on:
   push:
+    tags:
+      - 'v*.*.*'
     branches: [main]
     paths-ignore:
       - "**.md"
@@ -39,9 +41,19 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+      # - name: Upload Artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: release_on_${{ matrix. os }}
+      #     path: release/
+      #     retention-days: 5
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
         with:
-          name: release_on_${{ matrix. os }}
-          path: release/
-          retention-days: 5
+          draft: true
+          generate_release_notes: true
+          files: release/
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
