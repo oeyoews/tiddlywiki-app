@@ -16,7 +16,7 @@
     ]
   },
   "linux": {
-    "target": "AppImage",
+    "target": ["AppImage", "deb"],
     "category": "Utility"
   },
   "win": {
