@@ -8,8 +8,8 @@
   "files": [
     "src"
   ],
+  "artifactName": "${productName}_${version}.${ext}",
   "mac": {
-    "artifactName": "${productName}_${version}.${ext}",
     "target": [
       "dmg",
       "zip"
@@ -27,8 +27,7 @@
           "x64"
         ]
       }
-    ],
-    "artifactName": "${productName}_${version}.${ext}"
+    ]
   },
   "nsis": {
     "oneClick": false,
