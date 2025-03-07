@@ -15,7 +15,6 @@ const getPorts = require('get-port').default;
 const preload = path.join(__dirname, '../preload/index.js');
 const { initI18n, i18next } = require('../i18n');
 const { t } = i18next;
-// 在文件顶部添加 package.json 的引入
 const packageInfo = require('../../package.json');
 const { isEmptyDirectory } = require('../utils/index.js');
 
@@ -81,17 +80,12 @@ function createTray() {
     },
   ]);
   tray.setContextMenu(contextMenu);
-  // 修改点击事件处理，实现窗口切换
   tray.on('click', () => {
-    if (mainWindow.isVisible()) {
-      if (mainWindow.isMinimized()) {
-        mainWindow.restore();
-      } else {
-        mainWindow.minimize();
-      }
-    } else {
+    if (!mainWindow.isVisible() || mainWindow.isMinimized()) {
       mainWindow.show();
-      // mainWindow.focus();
+      mainWindow.restore();
+    } else {
+      mainWindow.minimize();
     }
   });
 }
