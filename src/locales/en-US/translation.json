@@ -21,6 +21,7 @@
     "name": "TiddlyWiki App",
     "about": "About Wiki",
     "version": "Version",
+    "configPath": "Config File Path",
     "currentWikiPath": "Current Wiki Path",
     "runningPort": "Running Port",
     "notRunning": "Not Running"

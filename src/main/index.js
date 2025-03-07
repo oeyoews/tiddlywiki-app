@@ -25,6 +25,7 @@ let mainWindow;
 let currentServer = null;
 let currentPort = null;
 let tray = null;
+let configPath = null;
 
 const iconPath = path.join(__dirname, '..', 'assets', 'tray-icon.png');
 const DEFAULT_PORT = 8080;
@@ -40,11 +41,10 @@ async function showWikiInfo() {
       'app.currentWikiPath'
     )}：${wikiPath}\n${t('app.runningPort')}：${
       currentPort || t('app.notRunning')
-    }`,
+    }\n${t('app.configPath')}：${configPath}`,
   });
 }
 // 修改 createTray 函数中的菜单项
-// 修改 createTray 函数
 function createTray() {
   if (!tray) {
     tray = new Tray(iconPath);
@@ -178,7 +178,8 @@ async function initWiki(wikiFolder, isFirstTime = false) {
           dialog.showErrorBox(t('dialog.error'), t('dialog.invalidFolderName'));
           return await initWiki(wikiFolder, true);
         }
-        wikiPath = path.join(selectedPath, 'wiki');
+        // wikiPath = path.join(selectedPath, 'wiki');
+        wikiPath = selectedPath;
         wikiFolder = wikiPath;
         config.set('wikiPath', wikiPath);
       }
@@ -213,7 +214,7 @@ async function initWiki(wikiFolder, isFirstTime = false) {
     twBoot.argv = [wikiFolder, '--listen', `port=${currentPort}`];
 
     const startServer = () => {
-      console.log(`start begin: http://localhost:${currentPort}`);
+      // console.log(`start begin: http://localhost:${currentPort}`);
       mainWindow.loadURL(`http://localhost:${currentPort}`);
       mainWindow.webContents.once('did-finish-load', () => {
         // 获取页面标题并设置窗口标题
@@ -380,6 +381,7 @@ function createWindow() {
     width: 1400,
     height: 800,
     icon: iconPath,
+    skipTaskbar: true, // 添加此行以隐藏任务栏图标
     // frame: false,
     // titleBarStyle: 'hidden',
     // titleBarOverlay: {
@@ -443,7 +445,7 @@ async function openFolderDialog() {
       dialog.showErrorBox(t('dialog.error'), t('dialog.invalidFolderName'));
       return await openFolderDialog();
     }
-    const newWikiPath = path.join(selectedPath, 'wiki');
+    const newWikiPath = selectedPath;
     if (wikiPath === newWikiPath) {
       console.info(t('log.sameFolder'));
       return;
@@ -471,6 +473,13 @@ ipcMain.handle('wiki:getInfo', () => {
 
 // 修改 initApp 函数
 const initApp = async () => {
+// 单实例
+// const gotTheLock = app.requestSingleInstanceLock();
+
+//   if (!gotTheLock) {
+//     app.quit();
+//     return;
+//   }
   config = new Config({
     defaults: {
       wikiPath: DEFAULT_WIKI_DIR,
@@ -480,11 +489,17 @@ const initApp = async () => {
   // 初始化 wikiPath
   wikiPath = config.get('wikiPath');
   console.log(wikiPath);
+  configPath = config.fileName; //  存储配置路径
   // 初始化 i18n，传入 config
   await initI18n(config);
   // 启动应用
   app.on('ready', () => {
     createWindow();
+    // app.on('activate', () => {
+    //   if (BrowserWindow.getAllWindows().length === 0) {
+    //     createWindow();
+    //   }
+    // });
   });
 };
 
