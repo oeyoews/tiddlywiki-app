@@ -106,6 +106,23 @@ function createTray() {
 
 async function buildWiki() {
   try {
+    const bootPath = path.join(wikiPath, 'tiddlywiki.info');
+    let twInfo = JSON.parse(fs.readFileSync(bootPath, 'utf8'));
+
+    // 检查并添加构建配置，修复导入的文件夹无法构建
+    if (!twInfo.build || !twInfo.build.index) {
+      twInfo.build = {
+        ...twInfo.build,
+        index: [
+          "--render",
+          "$:/plugins/tiddlywiki/tiddlyweb/save/offline",
+          "index.html",
+          "text/plain"
+        ]
+      };
+      fs.writeFileSync(bootPath, JSON.stringify(twInfo, null, 4), 'utf8');
+    }
+
     const { boot } = TiddlyWiki();
     boot.argv = [wikiPath, '--build', 'index'];
     await boot.boot(() => {
