@@ -32,12 +32,29 @@
     "exit": "Exit"
   },
   "dialog": {
+    "selectWikiFolder": "Select Wiki Folder",
+    "selectWikiFolderMessage": "Please select a folder for Wiki storage",
+    "selectHtmlFile": "Select TiddlyWiki HTML File",
+    "htmlFilter": "TiddlyWiki HTML",
+    "selectImportFolder": "Select Import Target Folder",
+    "selectImportFolderMessage": "Please select a folder to import the Wiki to",
+    "importSuccess": "Import Successful",
+    "importSuccessMessage": "Single-file Wiki has been imported to Node.js version",
     "buildComplete": "Build Complete",
     "buildCompleteMessage": "Wiki has been built. Would you like to preview in browser?",
     "preview": "Preview",
     "showInFolder": "Show in Folder",
     "close": "Close",
     "error": "Error",
-    "buildError": "Failed to build Wiki: {{message}}"
+    "buildError": "Failed to build Wiki: {{message}}",
+    "initError": "Failed to initialize Wiki: {{message}}",
+    "importError": "Import failed: {{message}}"
+  },
+  "log": {
+    "startBuild": "Start building",
+    "startInit": "Start initialization",
+    "finishInit": "Initialization complete",
+    "startImport": "Start importing single-file Wiki",
+    "sameFolder": "Already the current Wiki folder"
   }
 }

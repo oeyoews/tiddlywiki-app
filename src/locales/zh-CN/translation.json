@@ -28,13 +28,30 @@
     "exit": "退出"
   },
   "dialog": {
+    "selectWikiFolder": "选择 Wiki 文件夹",
+    "selectWikiFolderMessage": "请选择一个文件夹作为 Wiki 的存储位置",
+    "selectHtmlFile": "选择 TiddlyWiki HTML 文件",
+    "htmlFilter": "TiddlyWiki HTML",
+    "selectImportFolder": "选择导入目标文件夹",
+    "selectImportFolderMessage": "请选择要将 Wiki 导入到的目标文件夹",
+    "importSuccess": "导入成功",
+    "importSuccessMessage": "单文件 Wiki 已成功导入到 Node.js 版本",
     "buildComplete": "构建完成",
     "buildCompleteMessage": "Wiki 已构建完成，是否在浏览器中预览？",
     "preview": "预览",
     "showInFolder": "在文件夹中显示",
     "close": "关闭",
     "error": "错误",
-    "buildError": "构建 Wiki 失败：{{message}}"
+    "buildError": "构建 Wiki 失败：{{message}}",
+    "initError": "初始化 Wiki 失败：{{message}}",
+    "importError": "导入失败：{{message}}"
+  },
+  "log": {
+    "startBuild": "开始构建",
+    "startInit": "开始初始化",
+    "finishInit": "初始化完成",
+    "startImport": "开始导入单文件 Wiki",
+    "sameFolder": "已经是当前打开的 Wiki 文件夹"
   },
   "settings": {
     "languageChanged": "语言已更改",
