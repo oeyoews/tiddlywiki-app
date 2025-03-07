@@ -52,7 +52,7 @@ function createTray() {
     tray = new Tray(iconPath);
   }
   tray.setToolTip(t('tray.tooltip'));
-  tray.setTitle('test')
+  tray.setTitle(t('tray.tooltip'));
   const contextMenu = Menu.buildFromTemplate([
     {
       label: t('tray.showWindow'),
