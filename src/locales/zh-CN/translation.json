@@ -1,0 +1,29 @@
+{
+  "app": {
+    "name": "TiddlyWiki App",
+    "about": "关于 Wiki",
+    "currentWikiPath": "当前 Wiki 路径",
+    "runningPort": "运行端口",
+    "notRunning": "未启动"
+  },
+  "tray": {
+    "tooltip": "TiddlyWiki App",
+    "showWindow": "显示主窗口",
+    "openInBrowser": "在浏览器中打开",
+    "about": "关于",
+    "exit": "退出"
+  },
+  "dialog": {
+    "buildComplete": "构建完成",
+    "buildCompleteMessage": "Wiki 已构建完成，是否在浏览器中预览？",
+    "preview": "预览",
+    "showInFolder": "在文件夹中显示",
+    "close": "关闭",
+    "error": "错误",
+    "buildError": "构建 Wiki 失败：{{message}}"
+  },
+  "settings": {
+    "languageChanged": "语言已更改",
+    "restartTips": "语言设置已更改，部分更改可能需要重启应用后生效"
+  }
+}

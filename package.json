@@ -16,6 +16,7 @@
   "dependencies": {
     "electron-conf": "^1.2.1",
     "get-port": "^7.1.0",
+    "i18next": "^24.2.2",
     "tiddlywiki": "5.3.6"
   },
   "pnpm": {

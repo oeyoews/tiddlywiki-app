@@ -1,0 +1,29 @@
+{
+  "settings": {
+    "languageChanged": "Language Changed",
+    "restartTips": "Language settings have been changed. Some changes may require restarting the application"
+  },
+  "app": {
+    "name": "TiddlyWiki App",
+    "about": "About Wiki",
+    "currentWikiPath": "Current Wiki Path",
+    "runningPort": "Running Port",
+    "notRunning": "Not Running"
+  },
+  "tray": {
+    "tooltip": "TiddlyWiki App",
+    "showWindow": "Show Window",
+    "openInBrowser": "Open in Browser",
+    "about": "About",
+    "exit": "Exit"
+  },
+  "dialog": {
+    "buildComplete": "Build Complete",
+    "buildCompleteMessage": "Wiki has been built. Would you like to preview in browser?",
+    "preview": "Preview",
+    "showInFolder": "Show in Folder",
+    "close": "Close",
+    "error": "Error",
+    "buildError": "Failed to build Wiki: {{message}}"
+  }
+}

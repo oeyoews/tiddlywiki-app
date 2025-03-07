@@ -13,6 +13,7 @@ const { TiddlyWiki } = require('tiddlywiki');
 const { Conf: Config } = require('electron-conf');
 const getPorts = require('get-port').default;
 const preload = path.join(__dirname, '../preload/index.js');
+const { initI18n, i18next } = require('../i18n');
 
 let config;
 let wikiPath;
@@ -24,28 +25,32 @@ let tray = null;
 const iconPath = path.join(__dirname, '..', 'assets', 'tray-icon.png');
 const DEFAULT_PORT = 8080;
 // 添加显示 Wiki 信息的函数
+// 修改 showWikiInfo 函数
 async function showWikiInfo() {
   const info = await dialog.showMessageBox({
     type: 'info',
-    title: '关于 Wiki',
-    message: 'TiddlyWiki App',
-    detail: `当前 Wiki 路径：${wikiPath}\n运行端口：${currentPort || '未启动'}`,
+    title: i18next.t('app.about'),
+    message: i18next.t('app.name'),
+    detail: `${i18next.t('app.currentWikiPath')}：${wikiPath}\n${i18next.t(
+      'app.runningPort'
+    )}：${currentPort || i18next.t('app.notRunning')}`,
   });
 }
 
+// 修改 createTray 函数中的菜单项
 function createTray() {
   tray = new Tray(iconPath);
-  tray.setToolTip('TiddlyWiki App');
+  tray.setToolTip(i18next.t('tray.tooltip'));
 
   const contextMenu = Menu.buildFromTemplate([
     {
-      label: '显示主窗口',
+      label: i18next.t('tray.showWindow'),
       click: () => {
         mainWindow.show();
       },
     },
     {
-      label: '在浏览器中打开',
+      label: i18next.t('tray.openInBrowser'),
       click: () => {
         if (currentServer && currentPort) {
           shell.openExternal(`http://localhost:${currentPort}`);
@@ -54,11 +59,11 @@ function createTray() {
     },
     { type: 'separator' },
     {
-      label: '关于',
+      label: i18next.t('tray.about'),
       click: showWikiInfo,
     },
     {
-      label: '退出',
+      label: i18next.t('tray.exit'),
       click: () => {
         app.quit();
       },
@@ -296,6 +301,28 @@ function createWindow() {
       ],
     },
     {
+      label: '设置',
+      submenu: [
+        {
+          label: '语言',
+          submenu: [
+            {
+              label: '简体中文',
+              type: 'radio',
+              checked: i18next.language === 'zh-CN',
+              click: () => switchLanguage('zh-CN'),
+            },
+            {
+              label: 'English',
+              type: 'radio',
+              checked: i18next.language === 'en-US',
+              click: () => switchLanguage('en-US'),
+            },
+          ],
+        },
+      ],
+    },
+    {
       label: '帮助',
       submenu: [
         {
@@ -344,20 +371,38 @@ ipcMain.handle('wiki:getInfo', () => {
   };
 });
 
+// 修改 initApp 函数
 const initApp = async () => {
   config = new Config({
     defaults: {
       wikiPath: path.resolve('wiki'),
+      language: 'zh-CN',
     },
   });
-
   // 初始化 wikiPath
   wikiPath = config.get('wikiPath');
-
+  // 初始化 i18n，传入 config
+  await initI18n(config);
   // 启动应用
   app.whenReady().then(createWindow);
 };
 
+// 添加切换语言的函数
+async function switchLanguage(lang) {
+  config.set('language', lang);
+  await i18next.changeLanguage(lang);
+
+  // 重新创建菜单和托盘
+  createWindow();
+  createTray();
+
+  // 显示语言切换成功提示
+  dialog.showMessageBox({
+    type: 'info',
+    title: i18next.t('settings.languageChanged'),
+    message: i18next.t('settings.restartTips'),
+  });
+}
 // 将原来的立即执行函数替换为初始化调用
 initApp();
 
