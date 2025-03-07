@@ -1,4 +1,10 @@
 {
+  "menu": {
+    "file": "文件",
+    "settings": "设置",
+    "language": "语言",
+    "help": "帮助"
+  },
   "app": {
     "name": "TiddlyWiki App",
     "about": "关于 Wiki",

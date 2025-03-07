@@ -1,4 +1,10 @@
 {
+  "menu": {
+    "file": "File",
+    "settings": "Settings",
+    "language": "Language",
+    "help": "Help"
+  },
   "settings": {
     "languageChanged": "Language Changed",
     "restartTips": "Language settings have been changed. Some changes may require restarting the application"

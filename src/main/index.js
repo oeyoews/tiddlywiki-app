@@ -207,8 +207,108 @@ async function importSingleFileWiki() {
     dialog.showErrorBox('错误', `导入失败：${err.message}`);
   }
 }
+// 修改切换语言的函数
+async function switchLanguage(lang) {
+  config.set('language', lang);
+  await i18next.changeLanguage(lang);
 
-// 在 createWindow 函数中修改菜单模板
+  // 更新菜单
+  const menu = Menu.buildFromTemplate(createMenuTemplate());
+  Menu.setApplicationMenu(menu);
+
+  // 更新托盘
+  if (tray) {
+    // createTray();
+  }
+
+  // 显示语言切换成功提示
+  dialog.showMessageBox({
+    type: 'info',
+    title: i18next.t('settings.languageChanged'),
+    message: i18next.t('settings.restartTips'),
+  });
+}
+
+// 添加创建菜单模板的函数
+function createMenuTemplate() {
+  return [
+    {
+      label: i18next.t('menu.file'),
+      submenu: [
+        {
+          label: '打开 Wiki',
+          click: openFolderDialog,
+        },
+        {
+          label: '导入单文件 Wiki',
+          click: importSingleFileWiki,
+        },
+        {
+          label: '构建 Wiki',
+          click: buildWiki,
+        },
+        {
+          label: '在浏览器中打开 TiddlyWiki',
+          click: () => {
+            if (currentServer && currentPort) {
+              shell.openExternal(`http://localhost:${currentPort}`);
+            }
+          },
+        },
+        {
+          label: '打开当前 Wiki 文件夹',
+          click: () => {
+            if (wikiPath) {
+              shell.showItemInFolder(wikiPath);
+            }
+          },
+        },
+        { type: 'separator' },
+        {
+          label: '退出',
+          role: 'quit',
+        },
+      ],
+    },
+    {
+      label: i18next.t('menu.settings'),
+      submenu: [
+        {
+          label: i18next.t('menu.language'),
+          submenu: [
+            {
+              label: '简体中文',
+              type: 'radio',
+              checked: i18next.language === 'zh-CN',
+              click: () => switchLanguage('zh-CN'),
+            },
+            {
+              label: 'English',
+              type: 'radio',
+              checked: i18next.language === 'en-US',
+              click: () => switchLanguage('en-US'),
+            },
+          ],
+        },
+      ],
+    },
+    {
+      label: i18next.t('menu.help'),
+      submenu: [
+        {
+          label: '打开开发者工具',
+          click: () => mainWindow.webContents.openDevTools({ mode: 'right' }),
+        },
+        {
+          label: '关于',
+          click: showWikiInfo,
+        },
+      ],
+    },
+  ];
+}
+
+// 修改 createWindow 函数中的菜单创建部分
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1400,
@@ -261,81 +361,7 @@ function createWindow() {
       document.body.appendChild(script);
     `);
   });
-  const menu = Menu.buildFromTemplate([
-    {
-      label: '文件',
-      submenu: [
-        {
-          label: '打开 Wiki',
-          click: openFolderDialog,
-        },
-        {
-          label: '导入单文件 Wiki',
-          click: importSingleFileWiki,
-        },
-        {
-          label: '构建 Wiki',
-          click: buildWiki,
-        },
-        {
-          label: '在浏览器中打开 TiddlyWiki',
-          click: () => {
-            if (currentServer && currentPort) {
-              shell.openExternal(`http://localhost:${currentPort}`);
-            }
-          },
-        },
-        {
-          label: '打开当前 Wiki 文件夹',
-          click: () => {
-            if (wikiPath) {
-              shell.showItemInFolder(wikiPath);
-            }
-          },
-        },
-        { type: 'separator' },
-        {
-          label: '退出',
-          role: 'quit',
-        },
-      ],
-    },
-    {
-      label: '设置',
-      submenu: [
-        {
-          label: '语言',
-          submenu: [
-            {
-              label: '简体中文',
-              type: 'radio',
-              checked: i18next.language === 'zh-CN',
-              click: () => switchLanguage('zh-CN'),
-            },
-            {
-              label: 'English',
-              type: 'radio',
-              checked: i18next.language === 'en-US',
-              click: () => switchLanguage('en-US'),
-            },
-          ],
-        },
-      ],
-    },
-    {
-      label: '帮助',
-      submenu: [
-        {
-          label: '打开开发者工具',
-          click: () => mainWindow.webContents.openDevTools({ mode: 'right' }),
-        },
-        {
-          label: '关于',
-          click: showWikiInfo,
-        },
-      ],
-    },
-  ]);
+  const menu = Menu.buildFromTemplate(createMenuTemplate());
   Menu.setApplicationMenu(menu);
 }
 // 添加 openFolderDialog 函数定义
@@ -387,22 +413,6 @@ const initApp = async () => {
   app.whenReady().then(createWindow);
 };
 
-// 添加切换语言的函数
-async function switchLanguage(lang) {
-  config.set('language', lang);
-  await i18next.changeLanguage(lang);
-
-  // 重新创建菜单和托盘
-  createWindow();
-  createTray();
-
-  // 显示语言切换成功提示
-  dialog.showMessageBox({
-    type: 'info',
-    title: i18next.t('settings.languageChanged'),
-    message: i18next.t('settings.restartTips'),
-  });
-}
 // 将原来的立即执行函数替换为初始化调用
 initApp();
 
