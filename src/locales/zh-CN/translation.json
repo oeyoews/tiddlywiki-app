@@ -11,6 +11,12 @@
     "openFolder": "打开当前 Wiki 文件夹",
     "exit": "退出",
     "devTools": "打开开发者工具",
+    "toggleFullscreen": "切换全屏",
+    "copy": "复制",
+    "paste": "粘贴",
+    "cut": "剪切",
+    "selectAll": "全选",
+    "reload": "刷新",
     "about": "关于"
   },
   "app": {

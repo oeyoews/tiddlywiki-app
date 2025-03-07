@@ -11,7 +11,13 @@
     "openFolder": "Open Wiki Folder",
     "exit": "Exit",
     "devTools": "Open Developer Tools",
-    "about": "About"
+    "about": "About",
+    "toggleFullscreen": "Toggle Fullscreen",
+    "copy": "Copy",
+    "paste": "Paste",
+    "cut": "Cut",
+    "selectAll": "Select All",
+    "reload": "Reload"
   },
   "settings": {
     "languageChanged": "Language Changed",

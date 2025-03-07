@@ -396,6 +396,42 @@ function createWindow() {
       webSecurity: false,
     },
   });
+mainWindow.webContents.on('context-menu', (event, params) => {
+    const contextMenu = Menu.buildFromTemplate([
+      {
+        label: t('menu.copy'),
+        role: 'copy',
+        enabled: params.editFlags.canCopy,
+      },
+      {
+        label: t('menu.paste'),
+        role: 'paste',
+        enabled: params.editFlags.canPaste,
+      },
+      {
+        label: t('menu.cut'),
+        role: 'cut',
+        enabled: params.editFlags.canCut,
+      },
+      { type: 'separator' },
+      {
+        label: t('menu.selectAll'),
+        role: 'selectAll',
+      },
+      { type: 'separator' },
+      {
+        label: t('menu.toggleFullscreen'),
+        click: () => {
+          mainWindow.setFullScreen(!mainWindow.isFullScreen());
+        }
+      },
+      {
+        label: t('menu.reload'),
+        role: 'reload',
+      },
+    ]);
+    contextMenu.popup();
+  });
   // 创建任务栏图标
   createTray();
 
