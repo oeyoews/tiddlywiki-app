@@ -28,7 +28,6 @@
       "AppImage",
       "deb",
       "rpm",
-      "pacman",
       "apk"
     ],
     "category": "Utility"
