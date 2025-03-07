@@ -109,7 +109,7 @@ function createTray() {
       }
     } else {
       mainWindow.show();
-      mainWindow.focus();
+      // mainWindow.focus();
     }
   });
 }
@@ -384,7 +384,7 @@ function createWindow() {
     width: 1400,
     height: 800,
     icon: iconPath,
-    skipTaskbar: true, // 添加此行以隐藏任务栏图标
+    skipTaskbar: false, // 添加此行以隐藏任务栏图标
     // show: false,
     // alwaysOnTop: true,
     // autoHideMenuBar: true, // 隐藏菜单栏，按 `Alt` 可暂时显示
@@ -449,11 +449,11 @@ function createWindow() {
   // 创建任务栏图标
   createTray();
 
-  // 处理窗口最小化事件
-  mainWindow.on('minimize', (event) => {
-    event.preventDefault();
-    mainWindow.hide();
-  });
+  // // 处理窗口最小化事件
+  // mainWindow.on('minimize', (event) => {
+  //   event.preventDefault();
+  //   mainWindow.minimize();
+  // });
 
   // 处理窗口关闭按钮事件
   mainWindow.on('close', (event) => {
@@ -534,7 +534,7 @@ const initApp = async () => {
     app.on('second-instance', (event, commandLine, workingDirectory) => {
       if (mainWindow) {
         if (mainWindow.isMinimized()) mainWindow.restore();
-        mainWindow.focus();
+        // mainWindow.focus();
       }
     });
   }
