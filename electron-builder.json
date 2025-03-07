@@ -1,4 +1,12 @@
 {
+  "protocols": [
+    {
+      "name": "TiddlyWiki Protocol",
+      "schemes": [
+        "tiddlywiki"
+      ]
+    }
+  ],
   "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
   "appId": "tiddlywiki.app",
   "asar": true,

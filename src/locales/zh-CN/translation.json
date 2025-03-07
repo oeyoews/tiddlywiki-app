@@ -6,6 +6,8 @@
     "help": "帮助",
     "openWiki": "打开 Wiki",
     "importWiki": "导入单文件 Wiki",
+    "toggleTitleBar": "切换标题栏",
+    "toggleMenuBar": "显示/隐藏菜单栏",
     "buildWiki": "构建 Wiki",
     "openInBrowser": "在浏览器中打开 TiddlyWiki",
     "openFolder": "打开当前 Wiki 文件夹",

@@ -382,6 +382,7 @@ function createWindow() {
     height: 800,
     icon: iconPath,
     skipTaskbar: true, // 添加此行以隐藏任务栏图标
+    // autoHideMenuBar: true, // 隐藏菜单栏，按 `Alt` 可暂时显示
     // frame: false,
     // titleBarStyle: 'hidden',
     // titleBarOverlay: {
@@ -391,47 +392,55 @@ function createWindow() {
     // },
     webPreferences: {
       preload,
+      // devTools: true,
       nodeIntegration: false,
       contextIsolation: true,
       webSecurity: false,
     },
   });
 mainWindow.webContents.on('context-menu', (event, params) => {
-    const contextMenu = Menu.buildFromTemplate([
-      {
-        label: t('menu.copy'),
-        role: 'copy',
-        enabled: params.editFlags.canCopy,
+  const contextMenu = Menu.buildFromTemplate([
+     {
+      label: t('menu.toggleMenuBar'),
+      click: () => {
+        const isVisible = mainWindow.isMenuBarVisible();
+        mainWindow.setMenuBarVisibility(!isVisible);
       },
-      {
-        label: t('menu.paste'),
-        role: 'paste',
-        enabled: params.editFlags.canPaste,
+    },
+    {
+      label: t('menu.copy'),
+      role: 'copy',
+      enabled: params.editFlags.canCopy,
+    },
+    {
+      label: t('menu.paste'),
+      role: 'paste',
+      enabled: params.editFlags.canPaste,
+    },
+    {
+      label: t('menu.cut'),
+      role: 'cut',
+      enabled: params.editFlags.canCut,
+    },
+    { type: 'separator' },
+    {
+      label: t('menu.selectAll'),
+      role: 'selectAll',
+    },
+    { type: 'separator' },
+    {
+      label: t('menu.toggleFullscreen'),
+      click: () => {
+        mainWindow.setFullScreen(!mainWindow.isFullScreen());
       },
-      {
-        label: t('menu.cut'),
-        role: 'cut',
-        enabled: params.editFlags.canCut,
-      },
-      { type: 'separator' },
-      {
-        label: t('menu.selectAll'),
-        role: 'selectAll',
-      },
-      { type: 'separator' },
-      {
-        label: t('menu.toggleFullscreen'),
-        click: () => {
-          mainWindow.setFullScreen(!mainWindow.isFullScreen());
-        }
-      },
-      {
-        label: t('menu.reload'),
-        role: 'reload',
-      },
-    ]);
-    contextMenu.popup();
-  });
+    },
+    {
+      label: t('menu.reload'),
+      role: 'reload',
+    },
+  ]);
+  contextMenu.popup();
+});
   // 创建任务栏图标
   createTray();
 
@@ -516,6 +525,14 @@ const initApp = async () => {
 //     app.quit();
 //     return;
 //   }
+// 注册自定义协议
+  if (process.defaultApp) {
+    if (process.argv.length >= 2) {
+      app.setAsDefaultProtocolClient('tiddlywiki', process.execPath, [path.resolve(process.argv[1])])
+    }
+  } else {
+    app.setAsDefaultProtocolClient('tiddlywiki')
+  }
   config = new Config({
     defaults: {
       wikiPath: DEFAULT_WIKI_DIR,
@@ -552,4 +569,14 @@ app.on('window-all-closed', () => {
 // 添加 before-quit 事件处理
 app.on('before-quit', () => {
   app.isQuitting = true;
+});
+
+// macos (untest)
+app.on("open-url", (event, url) => {
+  event.preventDefault();
+  const win = BrowserWindow.getAllWindows()[0];
+  if (win) {
+    win.webContents.send("url-opened", url);
+  }
+  console.log("Received URL:", url);
 });
