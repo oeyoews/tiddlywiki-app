@@ -36,12 +36,13 @@ async function showWikiInfo() {
     )}：${currentPort || i18next.t('app.notRunning')}`,
   });
 }
-
 // 修改 createTray 函数中的菜单项
+// 修改 createTray 函数
 function createTray() {
-  tray = new Tray(iconPath);
+  if (!tray) {
+    tray = new Tray(iconPath);
+  }
   tray.setToolTip(i18next.t('tray.tooltip'));
-
   const contextMenu = Menu.buildFromTemplate([
     {
       label: i18next.t('tray.showWindow'),
@@ -56,6 +57,24 @@ function createTray() {
           shell.openExternal(`http://localhost:${currentPort}`);
         }
       },
+    },
+    { type: 'separator' },
+    {
+      label: i18next.t('menu.language'),
+      submenu: [
+        {
+          label: '简体中文',
+          type: 'radio',
+          checked: i18next.language === 'zh-CN',
+          click: () => switchLanguage('zh-CN'),
+        },
+        {
+          label: 'English',
+          type: 'radio',
+          checked: i18next.language === 'en-US',
+          click: () => switchLanguage('en-US'),
+        },
+      ],
     },
     { type: 'separator' },
     {
@@ -216,10 +235,8 @@ async function switchLanguage(lang) {
   const menu = Menu.buildFromTemplate(createMenuTemplate());
   Menu.setApplicationMenu(menu);
 
-  // 更新托盘
-  if (tray) {
-    // createTray();
-  }
+  // 更新托盘菜单
+  createTray();
 
   // 显示语言切换成功提示
   dialog.showMessageBox({
