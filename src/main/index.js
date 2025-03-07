@@ -14,6 +14,7 @@ const { Conf: Config } = require('electron-conf');
 const getPorts = require('get-port').default;
 const preload = path.join(__dirname, '../preload/index.js');
 const { initI18n, i18next } = require('../i18n');
+const { t } = i18next
 // 在文件顶部添加 package.json 的引入
 const packageInfo = require('../../package.json');
 
@@ -31,11 +32,11 @@ const DEFAULT_PORT = 8080;
 async function showWikiInfo() {
   const info = await dialog.showMessageBox({
     type: 'info',
-    title: i18next.t('app.about'),
-    message: i18next.t('app.name'),
-    detail: `${i18next.t('app.version')}: ${packageInfo.version}\n${i18next.t('app.currentWikiPath')}：${wikiPath}\n${i18next.t(
+    title: t('app.about'),
+    message: t('app.name'),
+    detail: `${t('app.version')}: ${packageInfo.version}\n${t('app.currentWikiPath')}：${wikiPath}\n${t(
       'app.runningPort'
-    )}：${currentPort || i18next.t('app.notRunning')}`,
+    )}：${currentPort || t('app.notRunning')}`,
   });
 }
 // 修改 createTray 函数中的菜单项
@@ -44,16 +45,16 @@ function createTray() {
   if (!tray) {
     tray = new Tray(iconPath);
   }
-  tray.setToolTip(i18next.t('tray.tooltip'));
+  tray.setToolTip(t('tray.tooltip'));
   const contextMenu = Menu.buildFromTemplate([
     {
-      label: i18next.t('tray.showWindow'),
+      label: t('tray.showWindow'),
       click: () => {
         mainWindow.show();
       },
     },
     {
-      label: i18next.t('tray.openInBrowser'),
+      label: t('tray.openInBrowser'),
       click: () => {
         if (currentServer && currentPort) {
           shell.openExternal(`http://localhost:${currentPort}`);
@@ -62,7 +63,7 @@ function createTray() {
     },
     { type: 'separator' },
     {
-      label: i18next.t('menu.language'),
+      label: t('menu.language'),
       submenu: [
         {
           label: '简体中文',
@@ -80,11 +81,11 @@ function createTray() {
     },
     { type: 'separator' },
     {
-      label: i18next.t('tray.about'),
+      label: t('tray.about'),
       click: showWikiInfo,
     },
     {
-      label: i18next.t('tray.exit'),
+      label: t('tray.exit'),
       click: () => {
         app.quit();
       },
@@ -128,18 +129,18 @@ async function buildWiki() {
     const { boot } = TiddlyWiki();
     boot.argv = [wikiPath, '--build', 'index'];
     await boot.boot(() => {
-      console.log(i18next.t('log.startBuild'));
+      console.log(t('log.startBuild'));
     });
 
     const outputPath = path.join(wikiPath, 'output', 'index.html');
     const result = await dialog.showMessageBox({
       type: 'info',
-      title: i18next.t('dialog.buildComplete'),
-      message: i18next.t('dialog.buildCompleteMessage'),
+      title: t('dialog.buildComplete'),
+      message: t('dialog.buildCompleteMessage'),
       buttons: [
-        i18next.t('dialog.preview'),
-        i18next.t('dialog.showInFolder'),
-        i18next.t('dialog.close'),
+        t('dialog.preview'),
+        t('dialog.showInFolder'),
+        t('dialog.close'),
       ],
       defaultId: 0,
       cancelId: 2,
@@ -152,8 +153,8 @@ async function buildWiki() {
     }
   } catch (err) {
     dialog.showErrorBox(
-      i18next.t('dialog.error'),
-      i18next.t('dialog.buildError', { message: err.message })
+      t('dialog.error'),
+      t('dialog.buildError', { message: err.message })
     );
   }
 }
@@ -162,13 +163,13 @@ async function initWiki(wikiFolder, isFirstTime = false) {
   try {
     if (isFirstTime) {
       const result = await dialog.showOpenDialog({
-        title: i18next.t('dialog.selectWikiFolder'),
+        title: t('dialog.selectWikiFolder'),
         properties: ['openDirectory'],
-        message: i18next.t('dialog.selectWikiFolderMessage'),
+        message: t('dialog.selectWikiFolderMessage'),
       });
 
       if (!result.canceled && result.filePaths.length > 0) {
-        wikiPath = result.filePaths[0];
+        wikiPath = path.join(result.filePaths[0], 'wiki');
         wikiFolder = wikiPath;
         config.set('wikiPath', wikiPath);
       }
@@ -180,9 +181,9 @@ async function initWiki(wikiFolder, isFirstTime = false) {
       const { boot } = TiddlyWiki();
       boot.argv = [wikiFolder, '--init', 'server'];
       await boot.boot(() => {
-        console.log(i18next.t('log.startInit'));
+        console.log(t('log.startInit'));
       });
-      console.log(i18next.t('log.finishInit'));
+      console.log(t('log.finishInit'));
     }
 
     if (currentServer) {
@@ -209,25 +210,25 @@ async function initWiki(wikiFolder, isFirstTime = false) {
     twBoot.boot(startServer);
   } catch (err) {
     dialog.showErrorBox(
-      i18next.t('dialog.error'),
-      i18next.t('dialog.initError', { message: err.message })
+      t('dialog.error'),
+      t('dialog.initError', { message: err.message })
     );
   }
 }
 async function importSingleFileWiki() {
   try {
     const result = await dialog.showOpenDialog({
-      title: i18next.t('dialog.selectHtmlFile'),
-      filters: [{ name: i18next.t('dialog.htmlFilter'), extensions: ['html'] }],
+      title: t('dialog.selectHtmlFile'),
+      filters: [{ name: t('dialog.htmlFilter'), extensions: ['html'] }],
       properties: ['openFile'],
     });
 
     if (!result.canceled && result.filePaths.length > 0) {
       const htmlPath = result.filePaths[0];
       const targetFolder = await dialog.showOpenDialog({
-        title: i18next.t('dialog.selectImportFolder'),
+        title: t('dialog.selectImportFolder'),
         properties: ['openDirectory'],
-        message: i18next.t('dialog.selectImportFolderMessage'),
+        message: t('dialog.selectImportFolderMessage'),
       });
 
       if (!targetFolder.canceled && targetFolder.filePaths.length > 0) {
@@ -236,7 +237,7 @@ async function importSingleFileWiki() {
         const { boot } = TiddlyWiki();
         boot.argv = ['--load', htmlPath, '--savewikifolder', targetPath];
         await boot.boot(() => {
-          console.log(i18next.t('log.startImport'));
+          console.log(t('log.startImport'));
         });
 
         // 更新当前 Wiki 路径并重新初始化
@@ -246,15 +247,15 @@ async function importSingleFileWiki() {
 
         dialog.showMessageBox({
           type: 'info',
-          title: i18next.t('dialog.importSuccess'),
-          message: i18next.t('dialog.importSuccessMessage'),
+          title: t('dialog.importSuccess'),
+          message: t('dialog.importSuccessMessage'),
         });
       }
     }
   } catch (err) {
     dialog.showErrorBox(
-      i18next.t('dialog.error'),
-      i18next.t('dialog.importError', { message: err.message })
+      t('dialog.error'),
+      t('dialog.importError', { message: err.message })
     );
   }
 }
@@ -273,8 +274,8 @@ async function switchLanguage(lang) {
   // 显示语言切换成功提示
   // dialog.showMessageBox({
   //   type: 'info',
-  //   title: i18next.t('settings.languageChanged'),
-  //   message: i18next.t('settings.restartTips'),
+  //   title: t('settings.languageChanged'),
+  //   message: t('settings.restartTips'),
   // });
 }
 
@@ -282,22 +283,22 @@ async function switchLanguage(lang) {
 function createMenuTemplate() {
   return [
     {
-      label: i18next.t('menu.file'),
+      label: t('menu.file'),
       submenu: [
         {
-          label: i18next.t('menu.openWiki'),
+          label: t('menu.openWiki'),
           click: openFolderDialog,
         },
         {
-          label: i18next.t('menu.importWiki'),
+          label: t('menu.importWiki'),
           click: importSingleFileWiki,
         },
         {
-          label: i18next.t('menu.buildWiki'),
+          label: t('menu.buildWiki'),
           click: buildWiki,
         },
         {
-          label: i18next.t('menu.openInBrowser'),
+          label: t('menu.openInBrowser'),
           click: () => {
             if (currentServer && currentPort) {
               shell.openExternal(`http://localhost:${currentPort}`);
@@ -305,7 +306,7 @@ function createMenuTemplate() {
           },
         },
         {
-          label: i18next.t('menu.openFolder'),
+          label: t('menu.openFolder'),
           click: () => {
             if (wikiPath) {
               shell.showItemInFolder(wikiPath);
@@ -314,16 +315,16 @@ function createMenuTemplate() {
         },
         { type: 'separator' },
         {
-          label: i18next.t('menu.exit'),
+          label: t('menu.exit'),
           role: 'quit',
         },
       ],
     },
     {
-      label: i18next.t('menu.settings'),
+      label: t('menu.settings'),
       submenu: [
         {
-          label: i18next.t('menu.language'),
+          label: t('menu.language'),
           submenu: [
             {
               label: '简体中文',
@@ -342,14 +343,14 @@ function createMenuTemplate() {
       ],
     },
     {
-      label: i18next.t('menu.help'),
+      label: t('menu.help'),
       submenu: [
         {
-          label: i18next.t('menu.devTools'),
+          label: t('menu.devTools'),
           click: () => mainWindow.webContents.openDevTools({ mode: 'right' }),
         },
         {
-          label: i18next.t('menu.about'),
+          label: t('menu.about'),
           click: showWikiInfo,
         },
       ],
@@ -416,16 +417,17 @@ function createWindow() {
 // 添加 openFolderDialog 函数定义
 async function openFolderDialog() {
   const result = await dialog.showOpenDialog({
-    title: i18next.t('dialog.selectWikiFolder'),
+    title: t('dialog.selectWikiFolder'),
     properties: ['openDirectory'],
   });
 
   if (!result.canceled && result.filePaths.length > 0) {
-    if (wikiPath === result.filePaths[0]) {
-      console.info(i18next.t('log.sameFolder'));
+    const newWikiPath = path.join(result.filePaths[0], 'wiki');
+    if (wikiPath === newWikiPath) {
+      console.info(t('log.sameFolder'));
       return;
     }
-    wikiPath = result.filePaths[0];
+    wikiPath = newWikiPath;
     config.set('wikiPath', wikiPath);
     await initWiki(wikiPath);
   }
@@ -456,10 +458,11 @@ const initApp = async () => {
   });
   // 初始化 wikiPath
   wikiPath = config.get('wikiPath');
+  // console.log(config, wikiPath)
   // 初始化 i18n，传入 config
   await initI18n(config);
   // 启动应用
-  app.whenReady().then(createWindow);
+  app.on("ready", () => { createWindow()})
 };
 
 // 将原来的立即执行函数替换为初始化调用
