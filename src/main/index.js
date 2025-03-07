@@ -70,24 +70,6 @@ function createTray() {
     },
     { type: 'separator' },
     {
-      label: t('menu.language'),
-      submenu: [
-        {
-          label: '简体中文',
-          type: 'radio',
-          checked: i18next.language === 'zh-CN',
-          click: () => switchLanguage('zh-CN'),
-        },
-        {
-          label: 'English',
-          type: 'radio',
-          checked: i18next.language === 'en-US',
-          click: () => switchLanguage('en-US'),
-        },
-      ],
-    },
-    { type: 'separator' },
-    {
       label: t('tray.about'),
       click: showWikiInfo,
     },
