@@ -1,0 +1,60 @@
+{
+  "menu": {
+    "file": "File",
+    "settings": "Settings",
+    "language": "Language",
+    "help": "Help",
+    "openWiki": "Open Wiki",
+    "importWiki": "Import Single-file Wiki",
+    "buildWiki": "Build Wiki",
+    "openInBrowser": "Open TiddlyWiki in Browser",
+    "openFolder": "Open Wiki Folder",
+    "exit": "Exit",
+    "devTools": "Open Developer Tools",
+    "about": "About"
+  },
+  "settings": {
+    "languageChanged": "Language Changed",
+    "restartTips": "Language settings have been changed. Some changes may require restarting the application"
+  },
+  "app": {
+    "name": "TiddlyWiki App",
+    "about": "About Wiki",
+    "currentWikiPath": "Current Wiki Path",
+    "runningPort": "Running Port",
+    "notRunning": "Not Running"
+  },
+  "tray": {
+    "tooltip": "TiddlyWiki App",
+    "showWindow": "Show Window",
+    "openInBrowser": "Open in Browser",
+    "about": "About",
+    "exit": "Exit"
+  },
+  "dialog": {
+    "selectWikiFolder": "Select Wiki Folder",
+    "selectWikiFolderMessage": "Please select a folder for Wiki storage",
+    "selectHtmlFile": "Select TiddlyWiki HTML File",
+    "htmlFilter": "TiddlyWiki HTML",
+    "selectImportFolder": "Select Import Target Folder",
+    "selectImportFolderMessage": "Please select a folder to import the Wiki to",
+    "importSuccess": "Import Successful",
+    "importSuccessMessage": "Single-file Wiki has been imported to Node.js version",
+    "buildComplete": "Build Complete",
+    "buildCompleteMessage": "Wiki has been built. Would you like to preview in browser?",
+    "preview": "Preview",
+    "showInFolder": "Show in Folder",
+    "close": "Close",
+    "error": "Error",
+    "buildError": "Failed to build Wiki: {{message}}",
+    "initError": "Failed to initialize Wiki: {{message}}",
+    "importError": "Import failed: {{message}}"
+  },
+  "log": {
+    "startBuild": "Start building",
+    "startInit": "Start initialization",
+    "finishInit": "Initialization complete",
+    "startImport": "Start importing single-file Wiki",
+    "sameFolder": "Already the current Wiki folder"
+  }
+}
