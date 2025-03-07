@@ -14,9 +14,10 @@ const { Conf: Config } = require('electron-conf');
 const getPorts = require('get-port').default;
 const preload = path.join(__dirname, '../preload/index.js');
 const { initI18n, i18next } = require('../i18n');
-const { t } = i18next
+const { t } = i18next;
 // 在文件顶部添加 package.json 的引入
 const packageInfo = require('../../package.json');
+const { isEmptyDirectory } = require('../utils/index.js');
 
 let config;
 let wikiPath;
@@ -27,6 +28,7 @@ let tray = null;
 
 const iconPath = path.join(__dirname, '..', 'assets', 'tray-icon.png');
 const DEFAULT_PORT = 8080;
+const DEFAULT_WIKI_DIR = path.resolve('wiki');
 // 添加显示 Wiki 信息的函数
 // 修改 showWikiInfo 函数
 async function showWikiInfo() {
@@ -34,9 +36,11 @@ async function showWikiInfo() {
     type: 'info',
     title: t('app.about'),
     message: t('app.name'),
-    detail: `${t('app.version')}: ${packageInfo.version}\n${t('app.currentWikiPath')}：${wikiPath}\n${t(
-      'app.runningPort'
-    )}：${currentPort || t('app.notRunning')}`,
+    detail: `${t('app.version')}: ${packageInfo.version}\n${t(
+      'app.currentWikiPath'
+    )}：${wikiPath}\n${t('app.runningPort')}：${
+      currentPort || t('app.notRunning')
+    }`,
   });
 }
 // 修改 createTray 函数中的菜单项
@@ -117,11 +121,11 @@ async function buildWiki() {
       twInfo.build = {
         ...twInfo.build,
         index: [
-          "--render",
-          "$:/plugins/tiddlywiki/tiddlyweb/save/offline",
-          "index.html",
-          "text/plain"
-        ]
+          '--render',
+          '$:/plugins/tiddlywiki/tiddlyweb/save/offline',
+          'index.html',
+          'text/plain',
+        ],
       };
       fs.writeFileSync(bootPath, JSON.stringify(twInfo, null, 4), 'utf8');
     }
@@ -171,10 +175,7 @@ async function initWiki(wikiFolder, isFirstTime = false) {
       if (!result.canceled && result.filePaths.length > 0) {
         const selectedPath = result.filePaths[0];
         if (path.basename(selectedPath) === 'tiddlers') {
-          dialog.showErrorBox(
-            t('dialog.error'),
-            t('dialog.invalidFolderName')
-          );
+          dialog.showErrorBox(t('dialog.error'), t('dialog.invalidFolderName'));
           return await initWiki(wikiFolder, true);
         }
         wikiPath = path.join(selectedPath, 'wiki');
@@ -184,9 +185,16 @@ async function initWiki(wikiFolder, isFirstTime = false) {
     }
 
     const bootPath = path.join(wikiFolder, 'tiddlywiki.info');
+    console.log('wikifolder', wikiPath);
 
     if (!fs.existsSync(bootPath)) {
       const { boot } = TiddlyWiki();
+      if (!isEmptyDirectory(wikiFolder)) {
+        wikiFolder = DEFAULT_WIKI_DIR;
+        if (!isFirstTime) {
+          return;
+        }
+      }
       boot.argv = [wikiFolder, '--init', 'server'];
       await boot.boot(() => {
         console.log(t('log.startInit'));
@@ -432,10 +440,7 @@ async function openFolderDialog() {
   if (!result.canceled && result.filePaths.length > 0) {
     const selectedPath = result.filePaths[0];
     if (path.basename(selectedPath) === 'tiddlers') {
-      dialog.showErrorBox(
-        t('dialog.error'),
-        t('dialog.invalidFolderName')
-      );
+      dialog.showErrorBox(t('dialog.error'), t('dialog.invalidFolderName'));
       return await openFolderDialog();
     }
     const newWikiPath = path.join(selectedPath, 'wiki');
@@ -468,17 +473,19 @@ ipcMain.handle('wiki:getInfo', () => {
 const initApp = async () => {
   config = new Config({
     defaults: {
-      wikiPath: path.resolve('wiki'),
+      wikiPath: DEFAULT_WIKI_DIR,
       language: 'zh-CN',
     },
   });
   // 初始化 wikiPath
   wikiPath = config.get('wikiPath');
-  // console.log(config, wikiPath)
+  console.log(wikiPath);
   // 初始化 i18n，传入 config
   await initI18n(config);
   // 启动应用
-  app.on("ready", () => { createWindow()})
+  app.on('ready', () => {
+    createWindow();
+  });
 };
 
 // 将原来的立即执行函数替换为初始化调用
