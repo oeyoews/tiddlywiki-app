@@ -24,7 +24,7 @@
 
 下载并安装最新版本的应用。
 
-* Manjaro 系列：`pacman -S appimagelauncher and use appimage install`
+* Manjaro 系列：`pacman -S appimagelauncher and use appimage install, or use pacman package`
 * Windows: 下载 exe 即可
 * Macos: 下载 dmg 安装包（未测试）
 
