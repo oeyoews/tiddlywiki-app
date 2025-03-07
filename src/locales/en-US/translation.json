@@ -3,7 +3,15 @@
     "file": "File",
     "settings": "Settings",
     "language": "Language",
-    "help": "Help"
+    "help": "Help",
+    "openWiki": "Open Wiki",
+    "importWiki": "Import Single-file Wiki",
+    "buildWiki": "Build Wiki",
+    "openInBrowser": "Open TiddlyWiki in Browser",
+    "openFolder": "Open Wiki Folder",
+    "exit": "Exit",
+    "devTools": "Open Developer Tools",
+    "about": "About"
   },
   "settings": {
     "languageChanged": "Language Changed",

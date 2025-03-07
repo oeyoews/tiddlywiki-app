@@ -253,19 +253,19 @@ function createMenuTemplate() {
       label: i18next.t('menu.file'),
       submenu: [
         {
-          label: '打开 Wiki',
+          label: i18next.t('menu.openWiki'),
           click: openFolderDialog,
         },
         {
-          label: '导入单文件 Wiki',
+          label: i18next.t('menu.importWiki'),
           click: importSingleFileWiki,
         },
         {
-          label: '构建 Wiki',
+          label: i18next.t('menu.buildWiki'),
           click: buildWiki,
         },
         {
-          label: '在浏览器中打开 TiddlyWiki',
+          label: i18next.t('menu.openInBrowser'),
           click: () => {
             if (currentServer && currentPort) {
               shell.openExternal(`http://localhost:${currentPort}`);
@@ -273,7 +273,7 @@ function createMenuTemplate() {
           },
         },
         {
-          label: '打开当前 Wiki 文件夹',
+          label: i18next.t('menu.openFolder'),
           click: () => {
             if (wikiPath) {
               shell.showItemInFolder(wikiPath);
@@ -282,7 +282,7 @@ function createMenuTemplate() {
         },
         { type: 'separator' },
         {
-          label: '退出',
+          label: i18next.t('menu.exit'),
           role: 'quit',
         },
       ],
@@ -313,11 +313,11 @@ function createMenuTemplate() {
       label: i18next.t('menu.help'),
       submenu: [
         {
-          label: '打开开发者工具',
+          label: i18next.t('menu.devTools'),
           click: () => mainWindow.webContents.openDevTools({ mode: 'right' }),
         },
         {
-          label: '关于',
+          label: i18next.t('menu.about'),
           click: showWikiInfo,
         },
       ],

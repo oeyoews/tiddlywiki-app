@@ -3,7 +3,15 @@
     "file": "文件",
     "settings": "设置",
     "language": "语言",
-    "help": "帮助"
+    "help": "帮助",
+    "openWiki": "打开 Wiki",
+    "importWiki": "导入单文件 Wiki",
+    "buildWiki": "构建 Wiki",
+    "openInBrowser": "在浏览器中打开 TiddlyWiki",
+    "openFolder": "打开当前 Wiki 文件夹",
+    "exit": "退出",
+    "devTools": "打开开发者工具",
+    "about": "关于"
   },
   "app": {
     "name": "TiddlyWiki App",
