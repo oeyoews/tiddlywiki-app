@@ -385,6 +385,8 @@ function createWindow() {
     height: 800,
     icon: iconPath,
     skipTaskbar: true, // 添加此行以隐藏任务栏图标
+    // show: false,
+    // alwaysOnTop: true,
     // autoHideMenuBar: true, // 隐藏菜单栏，按 `Alt` 可暂时显示
     // frame: false,
     // titleBarStyle: 'hidden',

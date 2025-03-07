@@ -27,7 +27,9 @@
     "target": [
       "AppImage",
       "deb",
-      "rpm"
+      "rpm",
+      "pacman",
+      "apk"
     ],
     "category": "Utility"
   },

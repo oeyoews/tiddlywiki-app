@@ -68,5 +68,7 @@ jobs:
             release/**/tiddlywiki-app_**.dmg
             release/**/tiddlywiki-app_**.AppImage
             release/**/tiddlywiki-app_**.deb
+            release/**/tiddlywiki-app_**.rpm
+            release/**/tiddlywiki-app_**.pacman
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
