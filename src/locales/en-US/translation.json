@@ -20,6 +20,7 @@
   "app": {
     "name": "TiddlyWiki App",
     "about": "About Wiki",
+     "version": "Version",
     "currentWikiPath": "Current Wiki Path",
     "runningPort": "Running Port",
     "notRunning": "Not Running"

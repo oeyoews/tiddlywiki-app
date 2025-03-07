@@ -14,6 +14,8 @@ const { Conf: Config } = require('electron-conf');
 const getPorts = require('get-port').default;
 const preload = path.join(__dirname, '../preload/index.js');
 const { initI18n, i18next } = require('../i18n');
+// 在文件顶部添加 package.json 的引入
+const packageInfo = require('../../package.json');
 
 let config;
 let wikiPath;
@@ -31,7 +33,7 @@ async function showWikiInfo() {
     type: 'info',
     title: i18next.t('app.about'),
     message: i18next.t('app.name'),
-    detail: `${i18next.t('app.currentWikiPath')}：${wikiPath}\n${i18next.t(
+    detail: `${i18next.t('app.version')}: ${packageInfo.version}\n${i18next.t('app.currentWikiPath')}：${wikiPath}\n${i18next.t(
       'app.runningPort'
     )}：${currentPort || i18next.t('app.notRunning')}`,
   });

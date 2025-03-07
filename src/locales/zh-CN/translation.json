@@ -16,6 +16,7 @@
   "app": {
     "name": "TiddlyWiki App",
     "about": "关于 Wiki",
+    "version": "版本",
     "currentWikiPath": "当前 Wiki 路径",
     "runningPort": "运行端口",
     "notRunning": "未启动"
