@@ -14,6 +14,9 @@
   - 📂 打开/切换 Wiki
   - 🔨 构建静态 Wiki
   - 📁 在系统文件管理器中打开
+- 🌍 国际化支持
+  - 🇨🇳 简体中文
+  - 🇺🇸 English
 
 ## 📖 使用说明
 
@@ -21,7 +24,7 @@
 
 下载并安装最新版本的应用。
 
-* Manjaro 系列: `pacman -S appimagelauncher and use appimage install`
+* Manjaro 系列：`pacman -S appimagelauncher and use appimage install`
 * Windows: 下载 exe 即可
 * Macos: 下载 dmg 安装包（未测试）
 
