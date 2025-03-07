@@ -1,7 +1,7 @@
 {
   "name": "tiddlywiki-app",
   "version": "1.1.4",
-  "description": "🌟 一个基于 Electron 的 TiddlyWiki 桌面应用，提供更丝滑的 TiddlyWiki 使用体验。",
+  "description": "TiddlyWiki App",
   "main": "./src/main/index.js",
   "scripts": {
     "dev": "electron ./src/main/index.js",
