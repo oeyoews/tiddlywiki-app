@@ -27,6 +27,8 @@ let currentPort = null;
 let tray = null;
 let configPath = null;
 
+Menu.setApplicationMenu(null);
+
 const iconPath = path.join(__dirname, '..', 'assets', 'tray-icon.png');
 const DEFAULT_PORT = 8080;
 const DEFAULT_WIKI_DIR = path.resolve('wiki');
@@ -50,6 +52,7 @@ function createTray() {
     tray = new Tray(iconPath);
   }
   tray.setToolTip(t('tray.tooltip'));
+  tray.setTitle('test')
   const contextMenu = Menu.buildFromTemplate([
     {
       label: t('tray.showWindow'),
@@ -398,49 +401,49 @@ function createWindow() {
       webSecurity: false,
     },
   });
-mainWindow.webContents.on('context-menu', (event, params) => {
-  const contextMenu = Menu.buildFromTemplate([
-     {
-      label: t('menu.toggleMenuBar'),
-      click: () => {
-        const isVisible = mainWindow.isMenuBarVisible();
-        mainWindow.setMenuBarVisibility(!isVisible);
+  mainWindow.webContents.on('context-menu', (event, params) => {
+    const contextMenu = Menu.buildFromTemplate([
+      {
+        label: t('menu.toggleMenuBar'),
+        click: () => {
+          const isVisible = mainWindow.isMenuBarVisible();
+          mainWindow.setMenuBarVisibility(!isVisible);
+        },
       },
-    },
-    {
-      label: t('menu.copy'),
-      role: 'copy',
-      enabled: params.editFlags.canCopy,
-    },
-    {
-      label: t('menu.paste'),
-      role: 'paste',
-      enabled: params.editFlags.canPaste,
-    },
-    {
-      label: t('menu.cut'),
-      role: 'cut',
-      enabled: params.editFlags.canCut,
-    },
-    { type: 'separator' },
-    {
-      label: t('menu.selectAll'),
-      role: 'selectAll',
-    },
-    { type: 'separator' },
-    {
-      label: t('menu.toggleFullscreen'),
-      click: () => {
-        mainWindow.setFullScreen(!mainWindow.isFullScreen());
+      {
+        label: t('menu.copy'),
+        role: 'copy',
+        enabled: params.editFlags.canCopy,
       },
-    },
-    {
-      label: t('menu.reload'),
-      role: 'reload',
-    },
-  ]);
-  contextMenu.popup();
-});
+      {
+        label: t('menu.paste'),
+        role: 'paste',
+        enabled: params.editFlags.canPaste,
+      },
+      {
+        label: t('menu.cut'),
+        role: 'cut',
+        enabled: params.editFlags.canCut,
+      },
+      { type: 'separator' },
+      {
+        label: t('menu.selectAll'),
+        role: 'selectAll',
+      },
+      { type: 'separator' },
+      {
+        label: t('menu.toggleFullscreen'),
+        click: () => {
+          mainWindow.setFullScreen(!mainWindow.isFullScreen());
+        },
+      },
+      {
+        label: t('menu.reload'),
+        role: 'reload',
+      },
+    ]);
+    contextMenu.popup();
+  });
   // 创建任务栏图标
   createTray();
 
@@ -518,20 +521,30 @@ ipcMain.handle('wiki:getInfo', () => {
 
 // 修改 initApp 函数
 const initApp = async () => {
-// 单实例
-// const gotTheLock = app.requestSingleInstanceLock();
+  // 单实例
+  const gotTheLock = app.requestSingleInstanceLock();
 
-//   if (!gotTheLock) {
-//     app.quit();
-//     return;
-//   }
-// 注册自定义协议
+  if (!gotTheLock) {
+    app.quit();
+    return;
+  } else {
+    // 监听第二个实例被运行时
+    app.on('second-instance', (event, commandLine, workingDirectory) => {
+      if (mainWindow) {
+        if (mainWindow.isMinimized()) mainWindow.restore();
+        mainWindow.focus();
+      }
+    });
+  }
+  // 注册自定义协议
   if (process.defaultApp) {
     if (process.argv.length >= 2) {
-      app.setAsDefaultProtocolClient('tiddlywiki', process.execPath, [path.resolve(process.argv[1])])
+      app.setAsDefaultProtocolClient('tiddlywiki', process.execPath, [
+        path.resolve(process.argv[1]),
+      ]);
     }
   } else {
-    app.setAsDefaultProtocolClient('tiddlywiki')
+    app.setAsDefaultProtocolClient('tiddlywiki');
   }
   config = new Config({
     defaults: {
@@ -572,11 +585,11 @@ app.on('before-quit', () => {
 });
 
 // macos (untest)
-app.on("open-url", (event, url) => {
+app.on('open-url', (event, url) => {
   event.preventDefault();
   const win = BrowserWindow.getAllWindows()[0];
   if (win) {
-    win.webContents.send("url-opened", url);
+    win.webContents.send('url-opened', url);
   }
-  console.log("Received URL:", url);
+  console.log('Received URL:', url);
 });
