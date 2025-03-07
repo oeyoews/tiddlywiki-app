@@ -503,15 +503,13 @@ const initApp = async () => {
   const gotTheLock = app.requestSingleInstanceLock();
 
   if (!gotTheLock) {
+    // 如果不是第一个实例，直接退出
     app.quit();
     return;
   } else {
     // 监听第二个实例被运行时
     app.on('second-instance', (event, commandLine, workingDirectory) => {
-      if (mainWindow) {
-        if (mainWindow.isMinimized()) mainWindow.restore();
-        // mainWindow.focus();
-      }
+      showMainWindow();
     });
   }
   // 注册自定义协议
@@ -565,9 +563,22 @@ app.on('before-quit', () => {
 // macos (untest)
 app.on('open-url', (event, url) => {
   event.preventDefault();
+  showWikiInfo();
   const win = BrowserWindow.getAllWindows()[0];
   if (win) {
     win.webContents.send('url-opened', url);
   }
   console.log('Received URL:', url);
 });
+
+function showMainWindow() {
+  if (mainWindow) {
+    if (mainWindow.isMinimized()) {
+      mainWindow.restore();
+    }
+    if (!mainWindow.isVisible()) {
+      mainWindow.show();
+    }
+    mainWindow.focus();
+  }
+}
