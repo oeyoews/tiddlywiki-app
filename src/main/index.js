@@ -252,11 +252,11 @@ async function switchLanguage(lang) {
   createTray();
 
   // 显示语言切换成功提示
-  dialog.showMessageBox({
-    type: 'info',
-    title: i18next.t('settings.languageChanged'),
-    message: i18next.t('settings.restartTips'),
-  });
+  // dialog.showMessageBox({
+  //   type: 'info',
+  //   title: i18next.t('settings.languageChanged'),
+  //   message: i18next.t('settings.restartTips'),
+  // });
 }
 
 // 添加创建菜单模板的函数
