@@ -29,6 +29,7 @@
     "exit": "退出"
   },
   "dialog": {
+    "invalidFolderName": "不能选择名为 'tiddlers' 的文件夹，请选择其他文件夹",
     "selectWikiFolder": "选择 Wiki 文件夹",
     "selectWikiFolderMessage": "请选择一个文件夹作为 Wiki 的存储位置",
     "selectHtmlFile": "选择 TiddlyWiki HTML 文件",

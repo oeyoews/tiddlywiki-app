@@ -169,7 +169,15 @@ async function initWiki(wikiFolder, isFirstTime = false) {
       });
 
       if (!result.canceled && result.filePaths.length > 0) {
-        wikiPath = path.join(result.filePaths[0], 'wiki');
+        const selectedPath = result.filePaths[0];
+        if (path.basename(selectedPath) === 'tiddlers') {
+          dialog.showErrorBox(
+            t('dialog.error'),
+            t('dialog.invalidFolderName')
+          );
+          return await initWiki(wikiFolder, true);
+        }
+        wikiPath = path.join(selectedPath, 'wiki');
         wikiFolder = wikiPath;
         config.set('wikiPath', wikiPath);
       }
@@ -422,7 +430,15 @@ async function openFolderDialog() {
   });
 
   if (!result.canceled && result.filePaths.length > 0) {
-    const newWikiPath = path.join(result.filePaths[0], 'wiki');
+    const selectedPath = result.filePaths[0];
+    if (path.basename(selectedPath) === 'tiddlers') {
+      dialog.showErrorBox(
+        t('dialog.error'),
+        t('dialog.invalidFolderName')
+      );
+      return await openFolderDialog();
+    }
+    const newWikiPath = path.join(selectedPath, 'wiki');
     if (wikiPath === newWikiPath) {
       console.info(t('log.sameFolder'));
       return;

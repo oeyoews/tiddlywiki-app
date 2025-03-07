@@ -20,7 +20,7 @@
   "app": {
     "name": "TiddlyWiki App",
     "about": "About Wiki",
-     "version": "Version",
+    "version": "Version",
     "currentWikiPath": "Current Wiki Path",
     "runningPort": "Running Port",
     "notRunning": "Not Running"
@@ -33,6 +33,7 @@
     "exit": "Exit"
   },
   "dialog": {
+    "invalidFolderName": "Cannot select folder named 'tiddlers', please choose another folder",
     "selectWikiFolder": "Select Wiki Folder",
     "selectWikiFolderMessage": "Please select a folder for Wiki storage",
     "selectHtmlFile": "Select TiddlyWiki HTML File",
