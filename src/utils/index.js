@@ -247,7 +247,7 @@ function createMenuTemplate() {
       submenu: [
         {
           label: t('menu.openExistingWiki'),
-          accelerator: 'Ctrl + O',
+          accelerator: 'CmdOrCtrl+O',
           click: async () => {
             const { port } = await openWiki();
             currentPort = port;
@@ -255,7 +255,7 @@ function createMenuTemplate() {
         },
         {
           label: t('menu.createNewWiki'),
-          accelerator: 'Ctrl + N',
+          accelerator: 'CmdOrCtrl+N',
           click: async () => {
             const { port } = await createNewWiki();
             currentPort = port;
@@ -297,7 +297,7 @@ function createMenuTemplate() {
         { type: 'separator' },
         {
           label: t('menu.restart'),
-          accelerator: 'Ctrl + SHIFT + R',
+          accelerator: 'CmdOrCtrl+Shift+R',
           click: () => {
             app.relaunch();
             app.exit(0);
@@ -306,7 +306,7 @@ function createMenuTemplate() {
         { type: 'separator' },
         {
           label: t('menu.exit'),
-          accelerator: 'Ctrl + Q',
+          accelerator: 'CmdOrCtrl+Q',
           role: 'quit',
         },
       ],
@@ -333,7 +333,7 @@ function createMenuTemplate() {
         },
         {
           label: t('menu.openInBrowser'),
-          accelerator: 'Ctrl + SHIFT + O',
+          accelerator: 'CmdOrCtrl+Shift+O',
           click: () => {
             if (currentPort) {
               shell.openExternal(`http://localhost:${currentPort}`);
@@ -342,7 +342,7 @@ function createMenuTemplate() {
         },
         {
           label: t('menu.openFolder'),
-          accelerator: 'Ctrl + E',
+          accelerator: 'CmdOrCtrl+E',
           click: () => {
             shell.showItemInFolder(config.get('wikiPath'));
           },
