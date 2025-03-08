@@ -306,6 +306,7 @@ function createMenuTemplate() {
         { type: 'separator' },
         {
           label: t('menu.exit'),
+          accelerator: 'Ctrl + Q',
           role: 'quit',
         },
       ],
