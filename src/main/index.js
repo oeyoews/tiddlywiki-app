@@ -282,8 +282,12 @@ function createMenuTemplate() {
       label: t('menu.file'),
       submenu: [
         {
-          label: t('menu.openWiki'),
+          label: t('menu.openExistingWiki'),
           click: openFolderDialog,
+        },
+        {
+          label: t('menu.createNewWiki'),
+          click: createNewWiki,
         },
         {
           label: t('menu.importWiki'),
@@ -458,7 +462,31 @@ function createWindow() {
   const menu = Menu.buildFromTemplate(createMenuTemplate());
   Menu.setApplicationMenu(menu);
 }
-// 添加 openFolderDialog 函数定义
+async function createNewWiki() {
+  const result = await dialog.showOpenDialog({
+    title: t('dialog.selectNewWikiFolder'),
+    properties: ['openDirectory'],
+    message: t('dialog.selectNewWikiFolderMessage'),
+  });
+
+  if (!result.canceled && result.filePaths.length > 0) {
+    const selectedPath = result.filePaths[0];
+    if (path.basename(selectedPath) === 'tiddlers') {
+      dialog.showErrorBox(t('dialog.error'), t('dialog.invalidFolderName'));
+      return await createNewWiki();
+    }
+
+    // 检查文件夹是否为空
+    if (!isEmptyDirectory(selectedPath)) {
+      dialog.showErrorBox(t('dialog.error'), t('dialog.folderNotEmpty'));
+      return await createNewWiki();
+    }
+
+    wikiPath = selectedPath;
+    config.set('wikiPath', wikiPath);
+    await initWiki(wikiPath, true);
+  }
+}
 async function openFolderDialog() {
   const result = await dialog.showOpenDialog({
     title: t('dialog.selectWikiFolder'),
@@ -471,6 +499,14 @@ async function openFolderDialog() {
       dialog.showErrorBox(t('dialog.error'), t('dialog.invalidFolderName'));
       return await openFolderDialog();
     }
+
+    // 检查是否存在 tiddlywiki.info 文件
+    const bootPath = path.join(selectedPath, 'tiddlywiki.info');
+    if (!fs.existsSync(bootPath)) {
+      dialog.showErrorBox(t('dialog.error'), t('dialog.noTiddlyWikiInfo'));
+      return await openFolderDialog();
+    }
+
     const newWikiPath = selectedPath;
     if (wikiPath === newWikiPath) {
       console.info(t('log.sameFolder'));
@@ -484,6 +520,7 @@ async function openFolderDialog() {
 
 // 添加 IPC 处理程序
 ipcMain.handle('dialog:openWiki', openFolderDialog);
+ipcMain.handle('dialog:createWiki', createNewWiki);
 ipcMain.handle('wiki:build', buildWiki);
 ipcMain.handle('wiki:openInBrowser', () => {
   if (currentServer && currentPort) {

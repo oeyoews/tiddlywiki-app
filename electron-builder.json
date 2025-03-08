@@ -46,11 +46,5 @@
     "perMachine": false,
     "allowToChangeInstallationDirectory": true,
     "deleteAppDataOnUninstall": false
-  },
-  "publish": {
-    "provider": "github",
-    "channel": "latest",
-    "publishAutoUpdate": true,
-    "releaseType": "release"
   }
 }

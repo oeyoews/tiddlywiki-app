@@ -4,8 +4,9 @@
     "settings": "Settings",
     "language": "Language",
     "help": "Help",
-    "openWiki": "Open Wiki",
     "importWiki": "Import Single-file Wiki",
+    "openExistingWiki": "Open Existing Wiki",
+    "createNewWiki": "Create New Wiki",
     "buildWiki": "Build Wiki",
     "openInBrowser": "Open TiddlyWiki in Browser",
     "openFolder": "Open Wiki Folder",
@@ -42,6 +43,10 @@
     "exit": "Exit"
   },
   "dialog": {
+    "selectNewWikiFolder": "Select Folder for New Wiki",
+    "selectNewWikiFolderMessage": "Please select an empty folder to create new Wiki",
+    "folderNotEmpty": "Selected folder is not empty, please select an empty folder",
+    "noTiddlyWikiInfo": "Selected folder is not a valid TiddlyWiki folder, please ensure it contains tiddlywiki.info file",
     "invalidFolderName": "Cannot select folder named 'tiddlers', please choose another folder",
     "selectWikiFolder": "Select Wiki Folder",
     "selectWikiFolderMessage": "Please select a folder for Wiki storage",

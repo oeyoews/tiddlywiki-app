@@ -4,7 +4,8 @@
     "settings": "设置",
     "language": "语言",
     "help": "帮助",
-    "openWiki": "打开 Wiki",
+    "openExistingWiki": "打开已有 Wiki",
+    "createNewWiki": "新建 Wiki",
     "importWiki": "导入单文件 Wiki",
     "toggleTitleBar": "切换标题栏",
     "toggleMenuBar": "显示/隐藏菜单栏",
@@ -38,6 +39,10 @@
     "exit": "退出"
   },
   "dialog": {
+    "selectNewWikiFolder": "选择新建 Wiki 的文件夹",
+    "selectNewWikiFolderMessage": "请选择一个空文件夹来创建新的 Wiki",
+    "folderNotEmpty": "所选文件夹不为空，请选择一个空文件夹",
+    "noTiddlyWikiInfo": "所选文件夹不是有效的 TiddlyWiki 文件夹，请确保文件夹中包含 tiddlywiki.info 文件",
     "invalidFolderName": "不能选择名为 'tiddlers' 的文件夹，请选择其他文件夹",
     "selectWikiFolder": "选择 Wiki 文件夹",
     "selectWikiFolderMessage": "请选择一个文件夹作为 Wiki 的存储位置",
