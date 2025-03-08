@@ -28,7 +28,7 @@ function updateRecentWikis(wikiPath) {
   const recentWikis = config.get('recentWikis') || [];
   // 移除当前路径和已存在的相同路径
   const filteredWikis = recentWikis.filter(
-    path => path !== wikiPath && path !== config.get('wikiPath')
+    (path) => path !== wikiPath && path !== config.get('wikiPath')
   );
   // 将新路径添加到开头
   filteredWikis.unshift(wikiPath);
@@ -128,7 +128,7 @@ async function createNewWiki() {
     }
 
     config.set('wikiPath', selectedPath);
-    const { port } = await initWiki(selectedPath, true);
+    const { port } = await initWiki(selectedPath);
     return { port };
   }
 }
@@ -237,9 +237,10 @@ async function showWikiInfo() {
 
 // 添加创建菜单模板的函数
 function createMenuTemplate() {
-  const recentWikis = (config.get('recentWikis') || [])
-    .filter(path => path !== config.get('wikiPath'));
-  
+  const recentWikis = (config.get('recentWikis') || []).filter(
+    (path) => path !== config.get('wikiPath')
+  );
+
   return [
     {
       label: t('menu.file'),
