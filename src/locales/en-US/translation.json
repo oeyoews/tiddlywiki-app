@@ -2,6 +2,7 @@
   "menu": {
     "file": "File",
     "settings": "Settings",
+    "autoStart": "Auto Start",
     "language": "Language",
     "view": "View",
     "help": "Help",

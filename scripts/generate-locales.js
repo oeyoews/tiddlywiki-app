@@ -15,6 +15,10 @@ const translations = {
       'en-US': 'Settings',
       'zh-CN': '设置',
     },
+    autoStart: {
+      'en-US': 'Auto Start',
+      'zh-CN': '开机自动启动',
+    },
     language: {
       'en-US': 'Language',
       'zh-CN': '语言',

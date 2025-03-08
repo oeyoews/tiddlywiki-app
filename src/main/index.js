@@ -49,6 +49,7 @@ async function createWindow() {
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();
     createTray(mainWindow); // 创建任务栏图标
+
     // 注册右键菜单
     mainWindow.webContents.on('context-menu', (event, params) => {
       const contextMenu = Menu.buildFromTemplate([

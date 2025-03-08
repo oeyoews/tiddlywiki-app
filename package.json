@@ -1,6 +1,6 @@
 {
   "name": "tiddlywiki-app",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "description": "TiddlyWiki App",
   "main": "./src/main/index.js",
   "scripts": {
