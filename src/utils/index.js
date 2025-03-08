@@ -322,6 +322,28 @@ function createMenuTemplate() {
       ],
     },
     {
+      label: t('menu.view'),
+      submenu: [
+        {
+          label: t('menu.toggleFullscreen'),
+          accelerator: 'F11',
+          click: () => {
+            const isFullScreen = mainWindow.isFullScreen();
+            mainWindow.setFullScreen(!isFullScreen);
+          },
+        },
+        {
+          label: t('menu.toggleMenuBar'),
+          accelerator: 'Alt+M',
+          click: () => {
+            const isVisible = mainWindow.isMenuBarVisible();
+            mainWindow.setMenuBarVisibility(!isVisible);
+            // mainWindow.setAutoHideMenuBar(menuBarVisible);
+          },
+        },
+      ],
+    },
+    {
       label: t('menu.settings'),
       submenu: [
         {

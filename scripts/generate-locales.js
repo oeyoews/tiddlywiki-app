@@ -19,6 +19,10 @@ const translations = {
       'en-US': 'Language',
       'zh-CN': '语言',
     },
+    view: {
+      'en-US': 'View',
+      'zh-CN': '视图',
+    },
     help: {
       'en-US': 'Help',
       'zh-CN': '帮助',

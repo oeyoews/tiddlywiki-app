@@ -3,6 +3,7 @@
     "file": "File",
     "settings": "Settings",
     "language": "Language",
+    "view": "View",
     "help": "Help",
     "openExistingWiki": "Open Existing Wiki",
     "createNewWiki": "Create New Wiki",
