@@ -8,6 +8,7 @@
     "createNewWiki": "新建 Wiki",
     "importWiki": "导入单文件 Wiki",
     "toggleTitleBar": "切换标题栏",
+    "restart": "重启应用",
     "toggleMenuBar": "显示/隐藏菜单栏",
     "buildWiki": "构建 Wiki",
     "openInBrowser": "在浏览器中打开 TiddlyWiki",

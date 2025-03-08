@@ -266,6 +266,14 @@ function createMenuTemplate() {
         },
         { type: 'separator' },
         {
+          label: t('menu.restart'),
+          click: () => {
+            app.relaunch();
+            app.exit(0);
+          },
+        },
+        { type: 'separator' },
+        {
           label: t('menu.exit'),
           role: 'quit',
         },

@@ -8,6 +8,7 @@
     "openExistingWiki": "Open Existing Wiki",
     "createNewWiki": "Create New Wiki",
     "buildWiki": "Build Wiki",
+    "restart": "Restart App",
     "openInBrowser": "Open TiddlyWiki in Browser",
     "openFolder": "Open Wiki Folder",
     "toggleMenuBar": "Toggle Menu Bar",
