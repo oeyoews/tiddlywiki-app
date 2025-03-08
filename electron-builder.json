@@ -48,8 +48,9 @@
     "deleteAppDataOnUninstall": false
   },
   "publish": {
-    "provider": "generic",
+    "provider": "github",
     "channel": "latest",
-    "url": "https://github.com/oeyoews/tiddlywiki-app/releases/download/v1.0.0"
+    "publishAutoUpdate": true,
+    "releaseType": "release"
   }
 }
