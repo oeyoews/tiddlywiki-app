@@ -46,5 +46,9 @@
     "perMachine": false,
     "allowToChangeInstallationDirectory": true,
     "deleteAppDataOnUninstall": false
+  },
+  "publish": {
+    "provider": "generic",
+    "url": "https://github.com/oeyoews/tiddlywiki-app/releases/"
   }
 }
