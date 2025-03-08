@@ -1,6 +1,6 @@
 const { app, BrowserWindow, Menu } = require('electron');
 const path = require('path');
-const preload = path.join(__dirname, '../preload/index.js');
+// const preload = path.join(__dirname, '../preload/index.js');
 const { initI18n, i18next } = require('../i18n');
 const { t } = i18next;
 const {
@@ -25,7 +25,8 @@ async function createWindow() {
     height: 800,
     icon: iconPath,
     skipTaskbar: false, // 添加此行以隐藏任务栏图标
-    // show: false,
+    // backgroundColor: '#2e2c29',
+    show: false,
     // alwaysOnTop: true,
     // autoHideMenuBar: true, // 隐藏菜单栏，按 `Alt` 可暂时显示
     // frame: false,
@@ -36,13 +37,19 @@ async function createWindow() {
     //   height: 10,
     // },
     webPreferences: {
-      preload,
+      spellcheck: false,
+      // preload,
       // devTools: true,
       nodeIntegration: false,
       contextIsolation: true,
       webSecurity: false,
     },
   });
+
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.show();
+  });
+
   mainWindow.webContents.on('context-menu', (event, params) => {
     const contextMenu = Menu.buildFromTemplate([
       {
