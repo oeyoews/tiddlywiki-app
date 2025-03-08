@@ -283,7 +283,7 @@ function createMenuTemplate() {
       submenu: [
         {
           label: t('menu.openExistingWiki'),
-          click: openFolderDialog,
+          click: openWiki,
         },
         {
           label: t('menu.createNewWiki'),
@@ -462,6 +462,7 @@ function createWindow() {
   const menu = Menu.buildFromTemplate(createMenuTemplate());
   Menu.setApplicationMenu(menu);
 }
+
 async function createNewWiki() {
   const result = await dialog.showOpenDialog({
     title: t('dialog.selectNewWikiFolder'),
@@ -487,7 +488,7 @@ async function createNewWiki() {
     await initWiki(wikiPath, true);
   }
 }
-async function openFolderDialog() {
+async function openWiki() {
   const result = await dialog.showOpenDialog({
     title: t('dialog.selectWikiFolder'),
     properties: ['openDirectory'],
@@ -497,14 +498,14 @@ async function openFolderDialog() {
     const selectedPath = result.filePaths[0];
     if (path.basename(selectedPath) === 'tiddlers') {
       dialog.showErrorBox(t('dialog.error'), t('dialog.invalidFolderName'));
-      return await openFolderDialog();
+      return await openWiki();
     }
 
     // 检查是否存在 tiddlywiki.info 文件
     const bootPath = path.join(selectedPath, 'tiddlywiki.info');
     if (!fs.existsSync(bootPath)) {
       dialog.showErrorBox(t('dialog.error'), t('dialog.noTiddlyWikiInfo'));
-      return await openFolderDialog();
+      return await openWiki();
     }
 
     const newWikiPath = selectedPath;
@@ -519,7 +520,7 @@ async function openFolderDialog() {
 }
 
 // 添加 IPC 处理程序
-ipcMain.handle('dialog:openWiki', openFolderDialog);
+ipcMain.handle('dialog:openWiki', openWiki);
 ipcMain.handle('dialog:createWiki', createNewWiki);
 ipcMain.handle('wiki:build', buildWiki);
 ipcMain.handle('wiki:openInBrowser', () => {
