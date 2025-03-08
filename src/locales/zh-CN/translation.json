@@ -21,7 +21,8 @@
     "cut": "剪切",
     "selectAll": "全选",
     "reload": "刷新",
-    "about": "关于"
+    "about": "关于",
+    "reportIssue": "报告问题"
   },
   "app": {
     "name": "TiddlyWiki App",
@@ -44,7 +45,7 @@
     "selectNewWikiFolderMessage": "请选择一个空文件夹来创建新的 Wiki",
     "folderNotEmpty": "所选文件夹不为空，请选择一个空文件夹",
     "noTiddlyWikiInfo": "所选文件夹不是有效的 TiddlyWiki 文件夹，请确保文件夹中包含 tiddlywiki.info 文件",
-    "invalidFolderName": "不能选择名为 'tiddlers' 的文件夹，请选择其他文件夹",
+    "invalidFolderName": "不能选择名为 \"tiddlers\" 的文件夹，请选择其他文件夹",
     "selectWikiFolder": "选择 Wiki 文件夹",
     "selectWikiFolderMessage": "请选择一个文件夹作为 Wiki 的存储位置",
     "selectHtmlFile": "选择 TiddlyWiki HTML 文件",

@@ -4,34 +4,31 @@
     "settings": "Settings",
     "language": "Language",
     "help": "Help",
-    "importWiki": "Import Single-file Wiki",
     "openExistingWiki": "Open Existing Wiki",
     "createNewWiki": "Create New Wiki",
-    "buildWiki": "Build Wiki",
-    "restart": "Restart App",
-    "openInBrowser": "Open TiddlyWiki in Browser",
-    "openFolder": "Open Wiki Folder",
-    "toggleMenuBar": "Toggle Menu Bar",
-    "exit": "Exit",
-    "devTools": "Open Developer Tools",
-    "about": "About",
-    "toggleFullscreen": "Toggle Fullscreen",
+    "importWiki": "Import Single-file Wiki",
     "toggleTitleBar": "Toggle Title Bar",
+    "restart": "Restart App",
+    "toggleMenuBar": "Toggle Menu Bar",
+    "buildWiki": "Build Wiki",
+    "openInBrowser": "Open in Browser",
+    "openFolder": "Open Wiki Folder",
+    "exit": "Exit",
+    "devTools": "Open DevTools",
+    "toggleFullscreen": "Toggle Fullscreen",
     "copy": "Copy",
     "paste": "Paste",
     "cut": "Cut",
     "selectAll": "Select All",
-    "reload": "Reload"
-  },
-  "settings": {
-    "languageChanged": "Language Changed",
-    "restartTips": "Language settings have been changed. Some changes may require restarting the application"
+    "reload": "Reload",
+    "about": "About",
+    "reportIssue": "Report Issue"
   },
   "app": {
     "name": "TiddlyWiki App",
     "about": "About Wiki",
     "version": "Version",
-    "configPath": "Config File Path",
+    "configPath": "Config Path",
     "currentWikiPath": "Current Wiki Path",
     "runningPort": "Running Port",
     "notRunning": "Not Running"
@@ -44,21 +41,21 @@
     "exit": "Exit"
   },
   "dialog": {
-    "selectNewWikiFolder": "Select Folder for New Wiki",
-    "selectNewWikiFolderMessage": "Please select an empty folder to create new Wiki",
+    "selectNewWikiFolder": "Select New Wiki Folder",
+    "selectNewWikiFolderMessage": "Please select an empty folder for the new Wiki",
     "folderNotEmpty": "Selected folder is not empty, please select an empty folder",
     "noTiddlyWikiInfo": "Selected folder is not a valid TiddlyWiki folder, please ensure it contains tiddlywiki.info file",
-    "invalidFolderName": "Cannot select folder named 'tiddlers', please choose another folder",
+    "invalidFolderName": "Cannot select folder named \"tiddlers\", please choose another folder",
     "selectWikiFolder": "Select Wiki Folder",
     "selectWikiFolderMessage": "Please select a folder for Wiki storage",
     "selectHtmlFile": "Select TiddlyWiki HTML File",
     "htmlFilter": "TiddlyWiki HTML",
     "selectImportFolder": "Select Import Target Folder",
-    "selectImportFolderMessage": "Please select a folder to import the Wiki to",
-    "importSuccess": "Import Successful",
-    "importSuccessMessage": "Single-file Wiki has been imported to Node.js version",
+    "selectImportFolderMessage": "Please select a target folder to import the Wiki",
+    "importSuccess": "Import Success",
+    "importSuccessMessage": "Single-file Wiki has been successfully imported to Node.js version",
     "buildComplete": "Build Complete",
-    "buildCompleteMessage": "Wiki has been built. Would you like to preview in browser?",
+    "buildCompleteMessage": "Wiki build completed, preview in browser?",
     "preview": "Preview",
     "showInFolder": "Show in Folder",
     "close": "Close",
@@ -72,6 +69,10 @@
     "startInit": "Start initialization",
     "finishInit": "Initialization complete",
     "startImport": "Start importing single-file Wiki",
-    "sameFolder": "Already the current Wiki folder"
+    "sameFolder": "Already the current open Wiki folder"
+  },
+  "settings": {
+    "languageChanged": "Language Changed",
+    "restartTips": "Language settings have been changed, some changes may require a restart to take effect"
   }
 }

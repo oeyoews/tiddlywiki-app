@@ -309,6 +309,13 @@ function createMenuTemplate() {
           click: () => mainWindow.webContents.openDevTools({ mode: 'right' }),
         },
         {
+          label: t('menu.reportIssue'),
+          click: () =>
+            shell.openExternal(
+              'https://github.com/oeyoews/tiddlywiki-app/issues'
+            ),
+        },
+        {
           label: t('menu.about'),
           click: showWikiInfo,
         },
