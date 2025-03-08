@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { shell, Menu, dialog, Tray } = require('electron');
+const { app, shell, Menu, dialog, Tray } = require('electron');
 const { i18next } = require('../i18n');
 const { t } = i18next;
 const { Conf: Config } = require('electron-conf');

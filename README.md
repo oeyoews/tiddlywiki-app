@@ -63,7 +63,7 @@ npm install
 npm run dev
 ```
 
-## Why create another electron app for tiddlywiki
+## 🤔 Why create Tiddlywiki APP?
 
 Tiddlywiki APP 和 Tiddly Desktop 或类似应用的主要区别在于，它完全不侵入用户的 Wiki，也不会对其进行任何改动，真正意义上的开箱即用。我希望它尽可能简单，让初次尝试 TiddlyWiki 的用户无需额外学习其他知识。
 
