@@ -99,6 +99,14 @@ const translations = {
       'en-US': 'Report Issue',
       'zh-CN': '报告问题',
     },
+    recentWikis: {
+      'en-US': 'Recent Wikis',
+      'zh-CN': '最近打开的 Wiki',
+    },
+    clearRecentWikis: {
+      'en-US': 'Clear Recent List',
+      'zh-CN': '清除最近记录',
+    },
   },
   app: {
     name: {

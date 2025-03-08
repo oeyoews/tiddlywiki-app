@@ -16,11 +16,25 @@ const config = new Config({
   defaults: {
     wikiPath: DEFAULT_WIKI_DIR,
     language: 'zh-CN',
+    recentWikis: [], // 添加最近打开的 wiki 列表
   },
 });
 let currentServer = null;
 let mainWindow = null; // 在 initwiki 初始化时赋值
 let currentPort = DEFAULT_PORT;
+
+// 添加更新最近打开的 wiki 列表的函数
+function updateRecentWikis(wikiPath) {
+  const recentWikis = config.get('recentWikis') || [];
+  // 移除当前路径和已存在的相同路径
+  const filteredWikis = recentWikis.filter(
+    path => path !== wikiPath && path !== config.get('wikiPath')
+  );
+  // 将新路径添加到开头
+  filteredWikis.unshift(wikiPath);
+  // 只保留最近的 5 个
+  config.set('recentWikis', filteredWikis.slice(0, 5));
+}
 
 async function initWiki(wikiFolder, isFirstTime = false, _mainWindow) {
   if (_mainWindow) {
@@ -81,10 +95,10 @@ async function initWiki(wikiFolder, isFirstTime = false, _mainWindow) {
         mainWindow.setTitle(`${pageTitle} - ${wikiFolder}`);
       });
     };
-
     currentServer = twBoot;
     twBoot.boot(startServer);
-    return { port: currentPort }; // 返回端口号
+    updateRecentWikis(wikiFolder); // 添加这一行
+    return { port: currentPort };
   } catch (err) {
     dialog.showErrorBox(
       t('dialog.error'),
@@ -223,7 +237,9 @@ async function showWikiInfo() {
 
 // 添加创建菜单模板的函数
 function createMenuTemplate() {
-  console.log('create menu');
+  const recentWikis = (config.get('recentWikis') || [])
+    .filter(path => path !== config.get('wikiPath'));
+  
   return [
     {
       label: t('menu.file'),
@@ -242,6 +258,31 @@ function createMenuTemplate() {
             currentPort = port;
           },
         },
+        { type: 'separator' },
+        {
+          label: t('menu.recentWikis'),
+          submenu: [
+            ...recentWikis.map((wikiPath) => ({
+              label: wikiPath,
+              click: async () => {
+                config.set('wikiPath', wikiPath);
+                const { port } = await initWiki(wikiPath);
+                currentPort = port;
+              },
+            })),
+            { type: 'separator' },
+            {
+              label: t('menu.clearRecentWikis'),
+              enabled: recentWikis.length > 0,
+              click: () => {
+                config.set('recentWikis', []);
+                const menu = Menu.buildFromTemplate(createMenuTemplate());
+                Menu.setApplicationMenu(menu);
+              },
+            },
+          ],
+        },
+        { type: 'separator' },
         {
           label: t('menu.importWiki'),
           click: importSingleFileWiki,

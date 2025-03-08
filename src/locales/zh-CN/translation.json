@@ -22,7 +22,9 @@
     "selectAll": "全选",
     "reload": "刷新",
     "about": "关于",
-    "reportIssue": "报告问题"
+    "reportIssue": "报告问题",
+    "recentWikis": "最近打开的 Wiki",
+    "clearRecentWikis": "清除最近记录"
   },
   "app": {
     "name": "TiddlyWiki App",

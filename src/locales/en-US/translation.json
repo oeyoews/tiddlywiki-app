@@ -22,7 +22,9 @@
     "selectAll": "Select All",
     "reload": "Reload",
     "about": "About",
-    "reportIssue": "Report Issue"
+    "reportIssue": "Report Issue",
+    "recentWikis": "Recent Wikis",
+    "clearRecentWikis": "Clear Recent List"
   },
   "app": {
     "name": "TiddlyWiki App",
