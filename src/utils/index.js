@@ -352,23 +352,27 @@ function createMenuTemplate() {
     {
       label: t('menu.settings'),
       submenu: [
-        {
-          label: t('menu.autoStart'),
-          type: 'checkbox',
-          checked: app.getLoginItemSettings().openAtLogin,
-          click() {
-            if (!app.isPackaged) {
-              app.setLoginItemSettings({
-                openAtLogin: !app.getLoginItemSettings().openAtLogin,
-                path: process.execPath, // or use app.getPath('exe'),
-              });
-            } else {
-              app.setLoginItemSettings({
-                openAtLogin: !app.getLoginItemSettings().openAtLogin,
-              });
-            }
-          },
-        },
+        ...(process.platform === 'win32' || process.platform === 'darwin'
+          ? [
+              {
+                label: t('menu.autoStart'),
+                type: 'checkbox',
+                checked: app.getLoginItemSettings().openAtLogin,
+                click() {
+                  if (!app.isPackaged) {
+                    app.setLoginItemSettings({
+                      openAtLogin: !app.getLoginItemSettings().openAtLogin,
+                      path: process.execPath, // or use app.getPath('exe'),
+                    });
+                  } else {
+                    app.setLoginItemSettings({
+                      openAtLogin: !app.getLoginItemSettings().openAtLogin,
+                    });
+                  }
+                },
+              },
+            ]
+          : []),
         {
           label: t('menu.language'),
           submenu: [
