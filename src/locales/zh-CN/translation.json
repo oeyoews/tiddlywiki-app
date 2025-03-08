@@ -12,7 +12,7 @@
     "restart": "重启应用",
     "toggleMenuBar": "显示/隐藏菜单栏",
     "buildWiki": "构建 Wiki",
-    "openInBrowser": "在浏览器中打开 TiddlyWiki",
+    "openInBrowser": "在浏览器中打开",
     "openFolder": "打开当前 Wiki 文件夹",
     "exit": "退出",
     "devTools": "打开开发者工具",

@@ -294,21 +294,6 @@ function createMenuTemplate() {
           label: t('menu.buildWiki'),
           click: buildWiki,
         },
-        {
-          label: t('menu.openInBrowser'),
-          accelerator: 'Ctrl + SHIFT + O',
-          click: () => {
-            if (currentPort) {
-              shell.openExternal(`http://localhost:${currentPort}`);
-            }
-          },
-        },
-        {
-          label: t('menu.openFolder'),
-          click: () => {
-            shell.showItemInFolder(config.get('wikiPath'));
-          },
-        },
         { type: 'separator' },
         {
           label: t('menu.restart'),
@@ -343,6 +328,22 @@ function createMenuTemplate() {
             const isVisible = mainWindow.isMenuBarVisible();
             mainWindow.setMenuBarVisibility(!isVisible);
             // mainWindow.setAutoHideMenuBar(menuBarVisible);
+          },
+        },
+        {
+          label: t('menu.openInBrowser'),
+          accelerator: 'Ctrl + SHIFT + O',
+          click: () => {
+            if (currentPort) {
+              shell.openExternal(`http://localhost:${currentPort}`);
+            }
+          },
+        },
+        {
+          label: t('menu.openFolder'),
+          accelerator: 'Ctrl + E',
+          click: () => {
+            shell.showItemInFolder(config.get('wikiPath'));
           },
         },
       ],

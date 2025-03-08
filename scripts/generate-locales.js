@@ -57,7 +57,7 @@ const translations = {
     },
     openInBrowser: {
       'en-US': 'Open in Browser',
-      'zh-CN': '在浏览器中打开 TiddlyWiki',
+      'zh-CN': '在浏览器中打开',
     },
     openFolder: {
       'en-US': 'Open Wiki Folder',
