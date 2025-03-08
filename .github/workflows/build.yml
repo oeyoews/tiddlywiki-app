@@ -69,6 +69,6 @@ jobs:
             release/**/tiddlywiki-app_**.AppImage
             release/**/tiddlywiki-app_**.deb
             release/**/tiddlywiki-app_**.rpm
-            # release/**/tiddlywiki-app_**.apk
+            release/**/latest.yml
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
