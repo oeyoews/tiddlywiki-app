@@ -21,7 +21,8 @@ async function saveToGitHub({
   branch = 'main',
   wikiFolder,
   GITHUB_TOKEN,
-  COMMIT_MESSAGE = 'Saved by TiddlyWiki App' + new Date().toLocaleTimeString(),
+  // + new Date().toLocaleTimeString(),
+  COMMIT_MESSAGE = 'Saved by TiddlyWiki App ',
   mainWindow, // 添加 mainWindow 参数
 }) {
   const pageSite = `https://${owner}.github.io/${repo}`;
