@@ -5,7 +5,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
     // console.log(twInstance, 'saveed instance');
     ipcRenderer.invoke('send-tw-instance', twInstance);
   },
-
+  alert: (message) =>
+    ipcRenderer.sendSync('custom-dialog', { type: 'alert', message }),
+  confirm: (message) =>
+    ipcRenderer.sendSync('custom-dialog', { type: 'confirm', message }),
   onConfigGithub: (callback) => ipcRenderer.on('config-github', callback),
 
   // onTwInstanceUpdate: (callback) =>

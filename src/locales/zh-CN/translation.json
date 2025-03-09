@@ -90,6 +90,8 @@
       "clickToView": "点击查看 GitHub Pages",
       "apiError": "GitHub API 错误"
     },
+    "confirm": "确定",
+    "cancel": "取消",
     "close": "关闭",
     "error": "错误",
     "buildError": "构建 Wiki 失败：{{message}}",

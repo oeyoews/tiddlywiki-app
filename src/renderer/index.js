@@ -3,6 +3,14 @@
 // 	console.log('loaded')
 // });
 
+window.confirm = function (message) {
+  return window.electronAPI.confirm(message);
+};
+
+window.alert = function (message) {
+  return window.electronAPI.alert(message);
+};
+
 const getText = (title) => {
   return $tw.wiki.getTiddlerText(title);
 };

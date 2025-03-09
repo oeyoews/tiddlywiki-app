@@ -1,4 +1,11 @@
-const { shell, ipcMain, app, BrowserWindow, Menu } = require('electron');
+const {
+  dialog,
+  shell,
+  ipcMain,
+  app,
+  BrowserWindow,
+  Menu,
+} = require('electron');
 const path = require('path');
 const preload = path.join(__dirname, '../preload/index.js');
 const render = path.join(__dirname, '../renderer/index.js');
@@ -141,6 +148,22 @@ async function createWindow() {
 // 监听更新更新
 ipcMain.handle('send-tw-instance', async (event, githubConfig) => {
   config.set('github', githubConfig);
+});
+
+ipcMain.on('custom-dialog', (event, { type, message }) => {
+  // const win = BrowserWindow.getFocusedWindow(); // 获取当前窗口
+  const options = {
+    type: type === 'confirm' ? 'question' : 'info',
+    buttons:
+      type === 'confirm'
+        ? [t('dialog.cancel'), t('dialog.confirm')]
+        : [t('dialog.confirm')],
+    defaultId: type === 'confirm' ? 1 : 0,
+    title: t('dialog.confirm'),
+    message,
+  };
+  const result = dialog.showMessageBoxSync(mainWindow, options);
+  event.returnValue = type === 'confirm' ? result === 1 : undefined; // confirm 返回 true/false，alert 无返回值
 });
 
 // 添加 IPC 处理程序
