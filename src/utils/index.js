@@ -5,18 +5,25 @@ const { i18next } = require('../i18n');
 const { t } = i18next;
 const { Conf: Config } = require('electron-conf');
 const DEFAULT_PORT = 8080;
-const DEFAULT_WIKI_DIR = path.resolve('wiki');
+const DEFAULT_WIKI_DIR = path.resolve('wiki'); // use app.getPath('desktop')
 const { default: getPorts } = require('get-port');
 const { TiddlyWiki } = require('tiddlywiki');
 let tray = null;
 const iconPath = path.join(__dirname, '..', 'assets', 'tray-icon.png');
 const packageInfo = require('../../package.json');
+const saveToGitHub = require('./github-saver');
 
 const config = new Config({
   defaults: {
     wikiPath: DEFAULT_WIKI_DIR,
     language: 'zh-CN',
     recentWikis: [], // 添加最近打开的 wiki 列表
+    github: {
+      token: '',
+      owner: 'oeyoews',
+      repo: 'tiddlywiki-app-website-deploy',
+      branch: 'main',
+    },
   },
 });
 let currentServer = null;
@@ -34,6 +41,19 @@ function updateRecentWikis(wikiPath) {
   filteredWikis.unshift(wikiPath);
   // 只保留最近的 5 个
   config.set('recentWikis', filteredWikis.slice(0, 5));
+}
+
+async function releaseWiki() {
+  const wikiFolder = config.get('wikiPath');
+  const { repo, owner, token, branch } = config.get('github');
+  await saveToGitHub({
+    wikiFolder,
+    owner,
+    repo,
+    GITHUB_TOKEN: token,
+    branch,
+    mainWindow,
+  });
 }
 
 async function initWiki(wikiFolder, isFirstTime = false, _mainWindow) {
@@ -291,6 +311,15 @@ function createMenuTemplate() {
           click: importSingleFileWiki,
         },
         {
+          label: t('menu.publish'),
+          submenu: [
+            {
+              label: t('menu.publishToGitHub'),
+              click: releaseWiki,
+            },
+          ],
+        },
+        {
           label: t('menu.buildWiki'),
           click: buildWiki,
         },
@@ -373,6 +402,10 @@ function createMenuTemplate() {
               },
             ]
           : []),
+        {
+          label: t('menu.githubConfig'),
+          click: configureGitHub,
+        },
         {
           label: t('menu.language'),
           submenu: [
@@ -499,11 +532,23 @@ async function buildWiki() {
       fs.writeFileSync(bootPath, JSON.stringify(twInfo, null, 4), 'utf8');
     }
 
+    // 设置进度条
+    mainWindow.setProgressBar(0.1);
+
     const { boot } = TiddlyWiki();
     boot.argv = [wikiPath, '--build', 'index'];
+
+    // 更新进度条
+    mainWindow.setProgressBar(0.4);
+
     await boot.boot(() => {
+      mainWindow.setProgressBar(0.7);
       console.log(t('log.startBuild'));
     });
+
+    // 构建完成
+    mainWindow.setProgressBar(1);
+    setTimeout(() => mainWindow.setProgressBar(-1), 1000); // 1 秒后移除进度条
 
     const outputPath = path.join(wikiPath, 'output', 'index.html');
     const result = await dialog.showMessageBox({
@@ -513,6 +558,7 @@ async function buildWiki() {
       buttons: [
         t('dialog.preview'),
         t('dialog.showInFolder'),
+        t('menu.publish'),
         t('dialog.close'),
       ],
       defaultId: 0,
@@ -523,13 +569,33 @@ async function buildWiki() {
       shell.openExternal(`file://${outputPath}`);
     } else if (result.response === 1) {
       shell.showItemInFolder(outputPath);
+    } else if (result.response === 2) {
+      await releaseWiki();
     }
   } catch (err) {
+    mainWindow.setProgressBar(-1); // 出错时移除进度条
     dialog.showErrorBox(
       t('dialog.error'),
       t('dialog.buildError', { message: err.message })
     );
   }
+}
+
+async function configureGitHub() {
+  const currentConfig = config.get('github');
+  await dialog.showMessageBox({
+    type: 'question',
+    title: t('dialog.githubConfig'),
+    message: t('dialog.githubConfigMessage'),
+    detail:
+      `Token: ${currentConfig.token ? '******' : t('dialog.notSet')}\n` +
+      `Owner: ${currentConfig.owner}\n` +
+      `Repo: ${currentConfig.repo}\n` +
+      `Branch: ${currentConfig.branch}`,
+    // buttons: [t('dialog.modify'), t('dialog.cancel')],
+    // defaultId: 0,
+    // cancelId: 1,
+  });
 }
 
 module.exports = {

@@ -1,6 +1,7 @@
-const { app, BrowserWindow, Menu } = require('electron');
+const { ipcMain, app, BrowserWindow, Menu } = require('electron');
 const path = require('path');
-// const preload = path.join(__dirname, '../preload/index.js');
+const preload = path.join(__dirname, '../preload/index.js');
+const render = path.join(__dirname, '../renderer/index.js');
 const { initI18n, i18next } = require('../i18n');
 const { t } = i18next;
 const {
@@ -24,6 +25,8 @@ async function createWindow() {
     width: 1400,
     height: 800,
     icon: iconPath,
+    // titleBarStyle: 'hidden',
+    // titleBarOverlay: true,
     skipTaskbar: false, // 添加此行以隐藏任务栏图标
     // backgroundColor: '#2e2c29',
     show: false,
@@ -38,7 +41,7 @@ async function createWindow() {
     // },
     webPreferences: {
       spellcheck: false,
-      // preload,
+      preload,
       // devTools: true,
       nodeIntegration: false,
       contextIsolation: true,
@@ -118,19 +121,28 @@ async function createWindow() {
   await initWiki(wikiPath, isFirstTime, mainWindow);
 
   // 注入渲染脚本
-  // mainWindow.webContents.on('did-finish-load', () => {
-  //   mainWindow.webContents.executeJavaScript(`
-  //     const script = document.createElement('script');
-  //     script.src = 'file://${path
-  //       .join(__dirname, '..', 'renderer', 'render.js')
-  //       .replace(/\\/g, '/')}';
-  //     document.body.appendChild(script);
-  //   `);
-  // });
+  mainWindow.webContents.on('did-finish-load', () => {
+    mainWindow.webContents.executeJavaScript(`
+      const script = document.createElement('script');
+      script.src = 'file://${render.replace(/\\/g, '/')}';
+      document.body.appendChild(script);
+    `);
+  });
 
   const menu = Menu.buildFromTemplate(createMenuTemplate());
   Menu.setApplicationMenu(menu);
 }
+
+ipcMain.handle('send-tw-instance', async (event, githubConfig) => {
+  // 可以在这里进行其他操作
+  console.log('Received $tw githubConfig', githubConfig);
+  config.set('github', githubConfig);
+});
+
+// 如果需要从主进程向渲染进程发送更新后的 $tw
+// function updateTwInstance(window) {
+//   window.webContents.send('tw-instance-update', global.$tw);
+// }
 
 // 添加 IPC 处理程序
 // ipcMain.handle('dialog:openWiki', openWiki);

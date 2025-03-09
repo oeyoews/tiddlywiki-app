@@ -3,6 +3,20 @@
 // 	console.log('loaded')
 // });
 
+const getText = (title) => {
+  return $tw.wiki.getTiddlerText(title);
+};
+if (window.$tw) {
+  const githubConfig = {
+    repo: getText('$:/GitHub/Repo').split('/').pop(),
+    owner: getText('$:/GitHub/Username'),
+    token: localStorage.getItem('tw5-password-github'),
+    branch: getText('$:/GitHub/Branch') || 'main',
+  };
+  // console.log(githubConfig);
+  window.electronAPI.sendTiddlyWikiInstance(githubConfig);
+}
+
 const renderDom = async () => {
   // 获取 Wiki 信息
   const wikiInfo = await window.electronAPI.getWikiInfo();
@@ -41,8 +55,8 @@ const renderDom = async () => {
   };
 
   // 监听标题变化
-//   const observer = new MutationObserver(updateTitle);
-//   observer.observe(document.querySelector('title'), { childList: true });
+  //   const observer = new MutationObserver(updateTitle);
+  //   observer.observe(document.querySelector('title'), { childList: true });
 };
 
 // 添加自定义样式
