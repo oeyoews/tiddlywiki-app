@@ -349,11 +349,11 @@ const translations = {
       },
     },
     confirm: {
-      'en-US': 'confirm',
+      'en-US': 'Confirm',
       'zh-CN': '确定',
     },
     cancel: {
-      'en-US': 'cancel',
+      'en-US': 'Cancel',
       'zh-CN': '取消',
     },
     close: {
