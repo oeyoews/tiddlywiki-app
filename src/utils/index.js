@@ -589,8 +589,8 @@ async function configureGitHub() {
     message: t('dialog.githubConfigMessage'),
     detail:
       `Token: ${currentConfig.token ? '******' : t('dialog.notSet')}\n` +
-      `Owner: ${currentConfig.owner || '无'}\n` +
-      `Repo: ${currentConfig.repo || '无'}\n` +
+      `Owner: ${currentConfig.owner || t('dialog.notSet')}\n` +
+      `Repo: ${currentConfig.repo || t('dialog.notSet')}\n` +
       `Branch: ${currentConfig.branch}`,
     // buttons: [t('dialog.modify'), t('dialog.cancel')],
     // defaultId: 0,
