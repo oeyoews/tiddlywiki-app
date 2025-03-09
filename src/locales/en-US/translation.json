@@ -63,7 +63,7 @@
     "buildComplete": "Build Complete",
     "buildCompleteMessage": "Wiki build completed, preview in browser?",
     "preview": "Preview",
-    "showInFolder": "Show in Folder",
+    "showInFolder": "Reveal in File Explorer",
     "close": "Close",
     "error": "Error",
     "buildError": "Failed to build Wiki: {{message}}",

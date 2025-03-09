@@ -1,4 +1,4 @@
-const { shell, dialog } = require('electron');
+const { Notification, shell, dialog } = require('electron');
 const fs = require('fs');
 
 /**
@@ -10,6 +10,7 @@ const fs = require('fs');
  * @param {string} options.repo - 目标仓库名称
  * @param {string} [options.branch='main'] - 目标分支名称，默认为 main
  * @param {string} [options.COMMIT_MESSAGE='Deploy to GitHub Pages'] - 提交消息
+ * @param {Object} options.mainWindow - 主窗口对象
  * @returns {Promise} 上传操作的 Promise
  */
 async function saveToGitHub({
@@ -19,6 +20,7 @@ async function saveToGitHub({
   wikiFolder,
   GITHUB_TOKEN,
   COMMIT_MESSAGE = 'Deploy to GitHub Pages ' + new Date().toLocaleDateString(),
+  mainWindow, // 添加 mainWindow 参数
 }) {
   const pageSite = `https://${owner}.github.io/${repo}`;
   // @see: https://github.com/settings/tokens
@@ -30,6 +32,12 @@ async function saveToGitHub({
       message: 'index.html 文件不存在',
       detail: '请先构建文件',
     });
+    return;
+  }
+  if (!owner || !repo || !GITHUB_TOKEN) {
+    // dialog.showMessageBox({
+    //   type: 'info',
+    // })
     return;
   }
 
@@ -54,51 +62,65 @@ async function saveToGitHub({
   }
 
   async function uploadToGHPages() {
-    const content = fs.readFileSync(FILE_PATH, 'base64');
+    try {
+      const content = fs.readFileSync(FILE_PATH, 'base64');
 
-    const body = {
-      message: COMMIT_MESSAGE,
-      content,
-      branch,
-    };
-    const sha = await getFileSha();
-    if (sha) {
-      body.sha = sha;
-    }
+      // 开始上传时显示进度条
+      if (mainWindow) {
+        mainWindow.setProgressBar(0.2);
+      }
 
-    const response = await fetch(url, {
-      method: 'PUT',
-      headers: {
-        Authorization: `token ${GITHUB_TOKEN}`,
-        Accept: 'application/vnd.github.v3+json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    });
+      const body = {
+        message: COMMIT_MESSAGE,
+        content,
+        branch,
+      };
+      const sha = await getFileSha();
+      if (sha) {
+        body.sha = sha;
+      }
 
-    if (!response.ok) {
-      throw new Error(`GitHub API error: ${response.statusText}`);
-    }
-
-    const data = await response.json();
-    console.log('File uploaded to GitHub Pages:', data.content.html_url);
-    // 点击可以跳转到 GitHub Pages
-    dialog
-      .showMessageBox({
-        type: 'info',
-        title: '提示',
-        message: '文件已上传到 GitHub Pages',
-        detail: '点击可以跳转到 GitHub Pages',
-        buttons: ['查看', '关闭'],
-        cancelId: 1,
-      })
-      .then((result) => {
-        if (result.response === 0) {
-          // 打开链接
-          // https://oeyoews.github.io/tiddlywiki-app-website-deploy/
-          shell.openExternal(pageSite);
-        }
+      // 上传过程中更新进度
+      if (mainWindow) {
+        mainWindow.setProgressBar(0.6);
+      }
+      const response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          Authorization: `token ${GITHUB_TOKEN}`,
+          Accept: 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
       });
+
+      // 上传完成，移除进度条
+      if (mainWindow) {
+        mainWindow.setProgressBar(-1);
+      }
+
+      if (!response.ok) {
+        throw new Error(`GitHub API error: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      console.log('File uploaded to GitHub Pages:', data.content.html_url);
+      new Notification({
+        title: '发布成功',
+        body: '点击查看 GitHub Pages',
+        silent: false,
+      })
+        .on('click', () => {
+          shell.openExternal(pageSite);
+        })
+        .show();
+    } catch (error) {
+      // 发生错误时移除进度条
+      if (mainWindow) {
+        mainWindow.setProgressBar(-1);
+      }
+      throw error;
+    }
   }
 
   return uploadToGHPages();

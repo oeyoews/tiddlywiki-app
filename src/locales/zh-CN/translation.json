@@ -63,7 +63,7 @@
     "buildComplete": "构建完成",
     "buildCompleteMessage": "Wiki 已构建完成，是否在浏览器中预览？",
     "preview": "预览",
-    "showInFolder": "在文件夹中显示",
+    "showInFolder": "在文件资源管理器中显示",
     "close": "关闭",
     "error": "错误",
     "buildError": "构建 Wiki 失败：{{message}}",

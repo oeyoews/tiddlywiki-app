@@ -246,8 +246,8 @@ const translations = {
       'zh-CN': '预览',
     },
     showInFolder: {
-      'en-US': 'Show in Folder',
-      'zh-CN': '在文件夹中显示',
+      'en-US': 'Reveal in File Explorer',
+      'zh-CN': '在文件资源管理器中显示',
     },
     close: {
       'en-US': 'Close',

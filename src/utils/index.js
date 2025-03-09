@@ -19,7 +19,7 @@ const config = new Config({
     language: 'zh-CN',
     recentWikis: [], // 添加最近打开的 wiki 列表
     github: {
-      token: null,
+      token: '',
       owner: 'oeyoews',
       repo: 'tiddlywiki-app-website-deploy',
       branch: 'main',
@@ -52,6 +52,7 @@ async function releaseWiki() {
     repo,
     GITHUB_TOKEN: token,
     branch,
+    mainWindow,
   });
 }
 
@@ -527,11 +528,23 @@ async function buildWiki() {
       fs.writeFileSync(bootPath, JSON.stringify(twInfo, null, 4), 'utf8');
     }
 
+    // 设置进度条
+    mainWindow.setProgressBar(0.1);
+
     const { boot } = TiddlyWiki();
     boot.argv = [wikiPath, '--build', 'index'];
+
+    // 更新进度条
+    mainWindow.setProgressBar(0.4);
+
     await boot.boot(() => {
+      mainWindow.setProgressBar(0.7);
       console.log(t('log.startBuild'));
     });
+
+    // 构建完成
+    mainWindow.setProgressBar(1);
+    setTimeout(() => mainWindow.setProgressBar(-1), 1000); // 1 秒后移除进度条
 
     const outputPath = path.join(wikiPath, 'output', 'index.html');
     const result = await dialog.showMessageBox({
@@ -541,6 +554,7 @@ async function buildWiki() {
       buttons: [
         t('dialog.preview'),
         t('dialog.showInFolder'),
+        t('menu.publish'),
         t('dialog.close'),
       ],
       defaultId: 0,
@@ -551,8 +565,11 @@ async function buildWiki() {
       shell.openExternal(`file://${outputPath}`);
     } else if (result.response === 1) {
       shell.showItemInFolder(outputPath);
+    } else if (result.response === 2) {
+      await releaseWiki();
     }
   } catch (err) {
+    mainWindow.setProgressBar(-1); // 出错时移除进度条
     dialog.showErrorBox(
       t('dialog.error'),
       t('dialog.buildError', { message: err.message })
