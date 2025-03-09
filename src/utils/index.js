@@ -436,6 +436,7 @@ function createMenuTemplate() {
       submenu: [
         {
           label: t('menu.devTools'),
+          accelerator: 'CmdOrCtrl+Shift+I',
           click: () => mainWindow.webContents.openDevTools({ mode: 'right' }),
         },
         {
@@ -631,12 +632,19 @@ async function toggleMarkdown(enable) {
     fs.writeFileSync(bootPath, JSON.stringify(twInfo, null, 4), 'utf8');
     config.set('markdown', enable);
 
-    // 重启提示
-    dialog.showMessageBox({
+    const result = await dialog.showMessageBox({
       type: 'info',
       title: t('settings.markdownChanged'),
       message: t('settings.restartTips'),
+      buttons: [t('dialog.restartNow'), t('dialog.later')],
+      defaultId: 0,
+      cancelId: 1,
     });
+
+    if (result.response === 0) {
+      app.relaunch();
+      app.exit(0);
+    }
   } catch (err) {
     // dialog.showErrorBox(
     //   t('dialog.error'),

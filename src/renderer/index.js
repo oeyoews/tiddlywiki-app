@@ -27,7 +27,20 @@ if (window.$tw) {
 
   // 监听 github 配置跳转
   window.electronAPI.onConfigGithub(gotoGithubConfig);
-  // some option
+
+  // enable official plugin library
+  const pluginLibraryUrl = `https://tiddlywiki.com/library/v${$tw.version}/index.html`;
+  const officialLibraryTiddler = '$:/config/OfficialPluginLibrary';
+  if ($tw.wiki.getTiddler('url')?.fields?.enable === 'no') {
+    $tw.wiki.setText(officialLibraryTiddler, 'url', null, pluginLibraryUrl, {
+      suppressTimestamp: true,
+    });
+    $tw.wiki.setText(officialLibraryTiddler, 'enable', null, 'yes', {
+      suppressTimestamp: true,
+    });
+  }
+
+  // change tiddlywiki default sidebar layout
   const sidebarLayout = 'fluid-fixed';
   const sidebarLayoutTiddler =
     '$:/themes/tiddlywiki/vanilla/options/sidebarlayout';

@@ -49,6 +49,8 @@
     "exit": "Exit"
   },
   "dialog": {
+    "restartNow": "Restart Now",
+    "later": "Later",
     "githubConfig": "GitHub Configuration",
     "githubConfigMessage": "Current GitHub Configuration:",
     "notSet": "Not Set",

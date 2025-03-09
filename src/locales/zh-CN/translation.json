@@ -49,6 +49,8 @@
     "exit": "退出"
   },
   "dialog": {
+    "restartNow": "立即重启",
+    "later": "稍后",
     "githubConfig": "GitHub 配置",
     "githubConfigMessage": "当前 GitHub 配置信息：",
     "notSet": "未设置",

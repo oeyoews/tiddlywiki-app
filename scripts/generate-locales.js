@@ -185,6 +185,14 @@ const translations = {
     },
   },
   dialog: {
+    restartNow: {
+      'en-US': 'Restart Now',
+      'zh-CN': '立即重启',
+    },
+    later: {
+      'en-US': 'Later',
+      'zh-CN': '稍后',
+    },
     githubConfig: {
       'en-US': 'GitHub Configuration',
       'zh-CN': 'GitHub 配置',
