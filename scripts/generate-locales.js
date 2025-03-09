@@ -15,6 +15,14 @@ const translations = {
       'en-US': 'Settings',
       'zh-CN': '设置',
     },
+    publish: {
+      'en-US': 'Publish',
+      'zh-CN': '发布',
+    },
+    publishToGitHub: {
+      'en-US': 'Publish to GitHub',
+      'zh-CN': '发布到 GitHub',
+    },
     autoStart: {
       'en-US': 'Auto Start',
       'zh-CN': '开机自动启动',

@@ -2,6 +2,8 @@
   "menu": {
     "file": "文件",
     "settings": "设置",
+    "publish": "发布",
+    "publishToGitHub": "发布到 GitHub",
     "autoStart": "开机自动启动",
     "language": "语言",
     "view": "视图",

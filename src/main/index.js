@@ -24,6 +24,8 @@ async function createWindow() {
     width: 1400,
     height: 800,
     icon: iconPath,
+    // titleBarStyle: 'hidden',
+    // titleBarOverlay: true,
     skipTaskbar: false, // 添加此行以隐藏任务栏图标
     // backgroundColor: '#2e2c29',
     show: false,

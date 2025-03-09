@@ -5,18 +5,25 @@ const { i18next } = require('../i18n');
 const { t } = i18next;
 const { Conf: Config } = require('electron-conf');
 const DEFAULT_PORT = 8080;
-const DEFAULT_WIKI_DIR = path.resolve('wiki');
+const DEFAULT_WIKI_DIR = path.resolve('wiki'); // use app.getPath('desktop')
 const { default: getPorts } = require('get-port');
 const { TiddlyWiki } = require('tiddlywiki');
 let tray = null;
 const iconPath = path.join(__dirname, '..', 'assets', 'tray-icon.png');
 const packageInfo = require('../../package.json');
+const saveToGitHub = require('./github-saver');
 
 const config = new Config({
   defaults: {
     wikiPath: DEFAULT_WIKI_DIR,
     language: 'zh-CN',
     recentWikis: [], // 添加最近打开的 wiki 列表
+    github: {
+      token: null,
+      owner: 'oeyoews',
+      repo: 'tiddlywiki-app-website-deploy',
+      branch: 'main',
+    },
   },
 });
 let currentServer = null;
@@ -34,6 +41,18 @@ function updateRecentWikis(wikiPath) {
   filteredWikis.unshift(wikiPath);
   // 只保留最近的 5 个
   config.set('recentWikis', filteredWikis.slice(0, 5));
+}
+
+async function releaseWiki() {
+  const wikiFolder = config.get('wikiPath');
+  const { repo, owner, token, branch } = config.get('github');
+  await saveToGitHub({
+    wikiFolder,
+    owner,
+    repo,
+    GITHUB_TOKEN: token,
+    branch,
+  });
 }
 
 async function initWiki(wikiFolder, isFirstTime = false, _mainWindow) {
@@ -289,6 +308,15 @@ function createMenuTemplate() {
         {
           label: t('menu.importWiki'),
           click: importSingleFileWiki,
+        },
+        {
+          label: t('menu.publish'),
+          submenu: [
+            {
+              label: t('menu.publishToGitHub'),
+              click: releaseWiki,
+            },
+          ],
         },
         {
           label: t('menu.buildWiki'),

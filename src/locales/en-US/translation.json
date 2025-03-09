@@ -2,6 +2,8 @@
   "menu": {
     "file": "File",
     "settings": "Settings",
+    "publish": "Publish",
+    "publishToGitHub": "Publish to GitHub",
     "autoStart": "Auto Start",
     "language": "Language",
     "view": "View",
