@@ -20,7 +20,10 @@ if (window.$tw) {
     branch: getText('$:/GitHub/Branch') || 'main',
   };
 
-  window.electronAPI.sendTiddlyWikiInstance(githubConfig);
+  // 如果有 token 再存储配置
+  if (githubConfig.token) {
+    window.electronAPI.sendTiddlyWikiInstance(githubConfig);
+  }
 
   // 监听 github 配置跳转
   window.electronAPI.onConfigGithub(gotoGithubConfig);
