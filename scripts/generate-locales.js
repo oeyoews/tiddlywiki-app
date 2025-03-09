@@ -249,6 +249,29 @@ const translations = {
       'en-US': 'Reveal in File Explorer',
       'zh-CN': '在文件资源管理器中显示',
     },
+    // 添加 GitHub 相关的翻译
+    github: {
+      fileNotExist: {
+        'en-US': 'index.html file does not exist',
+        'zh-CN': 'index.html 文件不存在',
+      },
+      buildFirst: {
+        'en-US': 'Please build the file first',
+        'zh-CN': '请先构建文件',
+      },
+      uploadSuccess: {
+        'en-US': 'Published Successfully',
+        'zh-CN': '发布成功',
+      },
+      clickToView: {
+        'en-US': 'Click to view GitHub Pages',
+        'zh-CN': '点击查看 GitHub Pages',
+      },
+      apiError: {
+        'en-US': 'GitHub API Error',
+        'zh-CN': 'GitHub API 错误',
+      },
+    },
     close: {
       'en-US': 'Close',
       'zh-CN': '关闭',

@@ -64,6 +64,13 @@
     "buildCompleteMessage": "Wiki 已构建完成，是否在浏览器中预览？",
     "preview": "预览",
     "showInFolder": "在文件资源管理器中显示",
+    "github": {
+      "fileNotExist": "index.html 文件不存在",
+      "buildFirst": "请先构建文件",
+      "uploadSuccess": "发布成功",
+      "clickToView": "点击查看 GitHub Pages",
+      "apiError": "GitHub API 错误"
+    },
     "close": "关闭",
     "error": "错误",
     "buildError": "构建 Wiki 失败：{{message}}",

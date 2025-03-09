@@ -1,5 +1,7 @@
 const { Notification, shell, dialog } = require('electron');
 const fs = require('fs');
+const i18next = require('i18next');
+const { t } = i18next;
 
 /**
  * 将 Wiki 发布到 GitHub Pages
@@ -28,12 +30,13 @@ async function saveToGitHub({
   if (!fs.existsSync(FILE_PATH)) {
     dialog.showMessageBox({
       type: 'error',
-      title: '错误',
-      message: 'index.html 文件不存在',
-      detail: '请先构建文件',
+      title: 'Error',
+      message: t('github.error.fileNotExist'),
+      detail: t('github.error.buildFirst'),
     });
     return;
   }
+
   if (!owner || !repo || !GITHUB_TOKEN) {
     // dialog.showMessageBox({
     //   type: 'info',
@@ -100,14 +103,16 @@ async function saveToGitHub({
       }
 
       if (!response.ok) {
-        throw new Error(`GitHub API error: ${response.statusText}`);
+        throw new Error(
+          `${t('github.upload.apiError')}: ${response.statusText}`
+        );
       }
 
       const data = await response.json();
       console.log('File uploaded to GitHub Pages:', data.content.html_url);
       new Notification({
-        title: '发布成功',
-        body: '点击查看 GitHub Pages',
+        title: t('github.upload.success'),
+        body: t('github.upload.clickToView'),
         silent: false,
       })
         .on('click', () => {

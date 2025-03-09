@@ -64,6 +64,13 @@
     "buildCompleteMessage": "Wiki build completed, preview in browser?",
     "preview": "Preview",
     "showInFolder": "Reveal in File Explorer",
+    "github": {
+      "fileNotExist": "index.html file does not exist",
+      "buildFirst": "Please build the file first",
+      "uploadSuccess": "Published Successfully",
+      "clickToView": "Click to view GitHub Pages",
+      "apiError": "GitHub API Error"
+    },
     "close": "Close",
     "error": "Error",
     "buildError": "Failed to build Wiki: {{message}}",
