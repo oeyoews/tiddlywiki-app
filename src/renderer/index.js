@@ -27,6 +27,15 @@ if (window.$tw) {
 
   // 监听 github 配置跳转
   window.electronAPI.onConfigGithub(gotoGithubConfig);
+  // some option
+  const sidebarLayout = 'fluid-fixed';
+  const sidebarLayoutTiddler =
+    '$:/themes/tiddlywiki/vanilla/options/sidebarlayout';
+  if (getText(sidebarLayoutTiddler) !== sidebarLayout) {
+    $tw.wiki.setText(sidebarLayoutTiddler, 'text', null, sidebarLayout, {
+      suppressTimestamp: true,
+    });
+  }
 }
 
 // const renderDom = async () => {
