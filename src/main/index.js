@@ -1,4 +1,4 @@
-const { ipcMain, app, BrowserWindow, Menu } = require('electron');
+const { shell, ipcMain, app, BrowserWindow, Menu } = require('electron');
 const path = require('path');
 const preload = path.join(__dirname, '../preload/index.js');
 const render = path.join(__dirname, '../renderer/index.js');
@@ -51,6 +51,11 @@ async function createWindow() {
 
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();
+    // 设置所有外部链接在默认浏览器中打开
+    mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+      shell.openExternal(url);
+      return { action: 'deny' };
+    });
     createTray(mainWindow); // 创建任务栏图标
 
     // 注册右键菜单
