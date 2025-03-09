@@ -20,8 +20,8 @@ const config = new Config({
     recentWikis: [], // 添加最近打开的 wiki 列表
     github: {
       token: '',
-      owner: 'oeyoews',
-      repo: 'tiddlywiki-app-website-deploy',
+      owner: '',
+      repo: '',
       branch: 'main',
     },
   },
