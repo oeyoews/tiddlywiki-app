@@ -1,5 +1,6 @@
 {
   "menu": {
+    "markdown": "enable Markdown",
     "file": "File",
     "settings": "Settings",
     "publish": "Publish",
@@ -101,6 +102,7 @@
   },
   "settings": {
     "languageChanged": "Language Changed",
+    "markdownChanged": "Markdown setting has changed",
     "restartTips": "Language settings have been changed, some changes may require a restart to take effect"
   }
 }

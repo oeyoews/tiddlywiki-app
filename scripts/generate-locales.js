@@ -7,6 +7,10 @@ const SUPPORTED_LOCALES = ['en-US', 'zh-CN'];
 // 统一的翻译对象
 const translations = {
   menu: {
+    markdown: {
+      'en-US': 'enable Markdown',
+      'zh-CN': '启用 Markdown',
+    },
     file: {
       'en-US': 'File',
       'zh-CN': '文件',
@@ -379,6 +383,10 @@ const translations = {
     languageChanged: {
       'en-US': 'Language Changed',
       'zh-CN': '语言已更改',
+    },
+    markdownChanged: {
+      'en-US': 'Markdown setting has changed',
+      'zh-CN': 'Markdown 设置已更改',
     },
     restartTips: {
       'en-US':

@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { ipcMain, app, shell, Menu, dialog, Tray } = require('electron');
+const { app, shell, Menu, dialog, Tray } = require('electron');
 const { i18next } = require('../i18n');
 const { t } = i18next;
 const { Conf: Config } = require('electron-conf');
@@ -381,6 +381,12 @@ function createMenuTemplate() {
     {
       label: t('menu.settings'),
       submenu: [
+        {
+          label: t('menu.markdown'),
+          type: 'checkbox',
+          checked: config.get('markdown'),
+          click: (menuItem) => toggleMarkdown(menuItem.checked),
+        },
         ...(process.platform === 'win32' || process.platform === 'darwin'
           ? [
               {
@@ -598,6 +604,44 @@ async function configureGitHub() {
   });
   if (result.response === 0) {
     mainWindow.webContents.send('config-github');
+  }
+}
+
+async function toggleMarkdown(enable) {
+  try {
+    const wikiPath = config.get('wikiPath');
+    const bootPath = path.join(wikiPath, 'tiddlywiki.info');
+    let twInfo = JSON.parse(fs.readFileSync(bootPath, 'utf8'));
+
+    if (!twInfo.plugins) {
+      twInfo.plugins = [];
+    }
+
+    const markdownPlugin = 'tiddlywiki/markdown';
+    const hasMarkdown = twInfo.plugins.includes(markdownPlugin);
+
+    if (enable && !hasMarkdown) {
+      twInfo.plugins.push(markdownPlugin);
+    } else if (!enable && hasMarkdown) {
+      twInfo.plugins = twInfo.plugins.filter(
+        (plugin) => plugin !== markdownPlugin
+      );
+    }
+
+    fs.writeFileSync(bootPath, JSON.stringify(twInfo, null, 4), 'utf8');
+    config.set('markdown', enable);
+
+    // 重启提示
+    dialog.showMessageBox({
+      type: 'info',
+      title: t('settings.markdownChanged'),
+      message: t('settings.restartTips'),
+    });
+  } catch (err) {
+    // dialog.showErrorBox(
+    //   t('dialog.error'),
+    //   t('dialog.markdownError', { message: err.message })
+    // );
   }
 }
 
