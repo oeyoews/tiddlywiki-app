@@ -1,6 +1,7 @@
 const { app, BrowserWindow, Menu } = require('electron');
 const path = require('path');
-// const preload = path.join(__dirname, '../preload/index.js');
+const preload = path.join(__dirname, '../preload/index.js');
+const render = path.join(__dirname, '../renderer/index.js');
 const { initI18n, i18next } = require('../i18n');
 const { t } = i18next;
 const {
@@ -40,7 +41,7 @@ async function createWindow() {
     // },
     webPreferences: {
       spellcheck: false,
-      // preload,
+      preload,
       // devTools: true,
       nodeIntegration: false,
       contextIsolation: true,
@@ -120,15 +121,13 @@ async function createWindow() {
   await initWiki(wikiPath, isFirstTime, mainWindow);
 
   // 注入渲染脚本
-  // mainWindow.webContents.on('did-finish-load', () => {
-  //   mainWindow.webContents.executeJavaScript(`
-  //     const script = document.createElement('script');
-  //     script.src = 'file://${path
-  //       .join(__dirname, '..', 'renderer', 'render.js')
-  //       .replace(/\\/g, '/')}';
-  //     document.body.appendChild(script);
-  //   `);
-  // });
+  mainWindow.webContents.on('did-finish-load', () => {
+    mainWindow.webContents.executeJavaScript(`
+      const script = document.createElement('script');
+      script.src = 'file://${render.replace(/\\/g, '/')}';
+      document.body.appendChild(script);
+    `);
+  });
 
   const menu = Menu.buildFromTemplate(createMenuTemplate());
   Menu.setApplicationMenu(menu);

@@ -2,6 +2,7 @@
 // document.addEventListener('DOMContentLoaded', () => {
 // 	console.log('loaded')
 // });
+// console.log('tw', $tw.version);
 
 const renderDom = async () => {
   // 获取 Wiki 信息
@@ -41,8 +42,8 @@ const renderDom = async () => {
   };
 
   // 监听标题变化
-//   const observer = new MutationObserver(updateTitle);
-//   observer.observe(document.querySelector('title'), { childList: true });
+  //   const observer = new MutationObserver(updateTitle);
+  //   observer.observe(document.querySelector('title'), { childList: true });
 };
 
 // 添加自定义样式
