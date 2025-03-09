@@ -19,6 +19,10 @@ const translations = {
       'en-US': 'Publish',
       'zh-CN': '发布',
     },
+    githubConfig: {
+      'en-US': 'GitHub Settings',
+      'zh-CN': 'GitHub 设置',
+    },
     publishToGitHub: {
       'en-US': 'Publish to GitHub',
       'zh-CN': '发布到 GitHub',
@@ -177,6 +181,62 @@ const translations = {
     },
   },
   dialog: {
+    githubConfig: {
+      'en-US': 'GitHub Configuration',
+      'zh-CN': 'GitHub 配置',
+    },
+    githubConfigMessage: {
+      'en-US': 'Current GitHub Configuration:',
+      'zh-CN': '当前 GitHub 配置信息：',
+    },
+    notSet: {
+      'en-US': 'Not Set',
+      'zh-CN': '未设置',
+    },
+    modify: {
+      'en-US': 'Modify',
+      'zh-CN': '修改',
+    },
+    githubToken: {
+      'en-US': 'GitHub Token',
+      'zh-CN': 'GitHub Token',
+    },
+    githubOwner: {
+      'en-US': 'Repository Owner',
+      'zh-CN': '仓库所有者',
+    },
+    githubRepo: {
+      'en-US': 'Repository Name',
+      'zh-CN': '仓库名称',
+    },
+    githubBranch: {
+      'en-US': 'Branch Name',
+      'zh-CN': '分支名称',
+    },
+    enterGithubToken: {
+      'en-US': 'Please enter GitHub Token',
+      'zh-CN': '请输入 GitHub Token',
+    },
+    enterGithubOwner: {
+      'en-US': 'Please enter repository owner',
+      'zh-CN': '请输入仓库所有者',
+    },
+    enterGithubRepo: {
+      'en-US': 'Please enter repository name',
+      'zh-CN': '请输入仓库名称',
+    },
+    enterGithubBranch: {
+      'en-US': 'Please enter branch name',
+      'zh-CN': '请输入分支名称',
+    },
+    success: {
+      'en-US': 'Success',
+      'zh-CN': '成功',
+    },
+    githubConfigSuccess: {
+      'en-US': 'GitHub configuration has been updated',
+      'zh-CN': 'GitHub 配置已更新',
+    },
     selectNewWikiFolder: {
       'en-US': 'Select New Wiki Folder',
       'zh-CN': '选择新建 Wiki 的文件夹',

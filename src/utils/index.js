@@ -403,6 +403,10 @@ function createMenuTemplate() {
             ]
           : []),
         {
+          label: t('menu.githubConfig'),
+          click: configureGitHub,
+        },
+        {
           label: t('menu.language'),
           submenu: [
             {
@@ -575,6 +579,23 @@ async function buildWiki() {
       t('dialog.buildError', { message: err.message })
     );
   }
+}
+
+async function configureGitHub() {
+  const currentConfig = config.get('github');
+  await dialog.showMessageBox({
+    type: 'question',
+    title: t('dialog.githubConfig'),
+    message: t('dialog.githubConfigMessage'),
+    detail:
+      `Token: ${currentConfig.token ? '******' : t('dialog.notSet')}\n` +
+      `Owner: ${currentConfig.owner}\n` +
+      `Repo: ${currentConfig.repo}\n` +
+      `Branch: ${currentConfig.branch}`,
+    // buttons: [t('dialog.modify'), t('dialog.cancel')],
+    // defaultId: 0,
+    // cancelId: 1,
+  });
 }
 
 module.exports = {
