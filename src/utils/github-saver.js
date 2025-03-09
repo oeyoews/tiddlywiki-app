@@ -111,8 +111,8 @@ async function saveToGitHub({
       const data = await response.json();
       console.log('File uploaded to GitHub Pages:', data.content.html_url);
       new Notification({
-        title: t('github.upload.success'),
-        body: t('github.upload.clickToView'),
+        title: t('dialog.github.uploadSuccess'),
+        body: t('dialog.github.clickToView'),
         silent: false,
       })
         .on('click', () => {

@@ -2,7 +2,20 @@
 // document.addEventListener('DOMContentLoaded', () => {
 // 	console.log('loaded')
 // });
-// console.log('tw', $tw.version);
+
+const getText = (title) => {
+  return $tw.wiki.getTiddlerText(title);
+};
+if (window.$tw) {
+  const githubConfig = {
+    repo: getText('$:/GitHub/Repo').split('/').pop(),
+    owner: getText('$:/GitHub/Username'),
+    token: localStorage.getItem('tw5-password-github'),
+    branch: getText('$:/GitHub/Branch') || 'main',
+  };
+  // console.log(githubConfig);
+  window.electronAPI.sendTiddlyWikiInstance(githubConfig);
+}
 
 const renderDom = async () => {
   // 获取 Wiki 信息
