@@ -150,18 +150,20 @@ ipcMain.handle('send-tw-instance', async (event, githubConfig) => {
   config.set('github', githubConfig);
 });
 
-ipcMain.on('custom-confirm', (event, message) => {
+ipcMain.on('custom-dialog', (event, { type, message }) => {
   // const win = BrowserWindow.getFocusedWindow(); // 获取当前窗口
-  const result = dialog.showMessageBoxSync(mainWindow, {
-    type: 'warning',
-    buttons: [t('dialog.cancel'), t('dialog.confirm')],
-    defaultId: 1,
+  const options = {
+    type: type === 'confirm' ? 'question' : 'info',
+    buttons:
+      type === 'confirm'
+        ? [t('dialog.cancel'), t('dialog.confirm')]
+        : [t('dialog.confirm')],
+    defaultId: type === 'confirm' ? 1 : 0,
     title: t('dialog.confirm'),
     message,
-  });
-  console.log(result);
-
-  event.returnValue = result === 1; // 确定返回 true，取消返回 false
+  };
+  const result = dialog.showMessageBoxSync(mainWindow, options);
+  event.returnValue = type === 'confirm' ? result === 1 : undefined; // confirm 返回 true/false，alert 无返回值
 });
 
 // 添加 IPC 处理程序
