@@ -17,6 +17,7 @@ const config = new Config({
   defaults: {
     wikiPath: DEFAULT_WIKI_DIR,
     language: 'zh-CN',
+    'lang-CN': false,
     recentWikis: [], // 添加最近打开的 wiki 列表
     github: {
       token: '',
@@ -387,6 +388,12 @@ function createMenuTemplate() {
           checked: config.get('markdown'),
           click: (menuItem) => toggleMarkdown(menuItem.checked),
         },
+        {
+          label: t('menu.langCN'),
+          type: 'checkbox',
+          checked: config.get('lang-CN'),
+          click: (menuItem) => toggleChineseLang(menuItem.checked),
+        },
         ...(process.platform === 'win32' || process.platform === 'darwin'
           ? [
               {
@@ -634,7 +641,7 @@ async function toggleMarkdown(enable) {
 
     const result = await dialog.showMessageBox({
       type: 'info',
-      title: t('settings.markdownChanged'),
+      title: t('settings.settingChanged'),
       message: t('settings.restartTips'),
       buttons: [t('dialog.restartNow'), t('dialog.later')],
       defaultId: 0,
@@ -651,6 +658,47 @@ async function toggleMarkdown(enable) {
     //   t('dialog.markdownError', { message: err.message })
     // );
   }
+}
+
+// TODO: ipc 修改 lang
+async function toggleChineseLang(enable) {
+  try {
+    const wikiPath = config.get('wikiPath');
+    const bootPath = path.join(wikiPath, 'tiddlywiki.info');
+    let twInfo = JSON.parse(fs.readFileSync(bootPath, 'utf8'));
+
+    if (!twInfo.languages) {
+      twInfo.languages = [];
+    }
+
+    const langPlugin = 'zh-Hans';
+    const hasChineseLang = twInfo.languages.includes(langPlugin);
+
+    if (enable && !hasChineseLang) {
+      twInfo.languages.push(langPlugin);
+      console.log('push zh-Hans');
+    } else if (!enable && hasChineseLang) {
+      twInfo.languages = twInfo.languages.filter((lang) => lang !== langPlugin);
+      console.log('remove', twInfo.languages);
+    }
+
+    fs.writeFileSync(bootPath, JSON.stringify(twInfo, null, 4), 'utf8');
+    config.set('lang-CN', enable);
+
+    const result = await dialog.showMessageBox({
+      type: 'info',
+      title: t('settings.settingChanged'),
+      message: t('settings.restartTips'),
+      buttons: [t('dialog.restartNow'), t('dialog.later')],
+      defaultId: 0,
+      cancelId: 1,
+    });
+
+    if (result.response === 0) {
+      app.relaunch();
+      app.exit(0);
+    }
+  } catch (err) {}
 }
 
 module.exports = {

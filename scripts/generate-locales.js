@@ -7,6 +7,10 @@ const SUPPORTED_LOCALES = ['en-US', 'zh-CN'];
 // 统一的翻译对象
 const translations = {
   menu: {
+    langCN: {
+      'en-US': 'enable TiddlyWiki Chinese Language',
+      'zh-CN': '启用 TiddlyWiki 中文语言',
+    },
     markdown: {
       'en-US': 'enable Markdown',
       'zh-CN': '启用 Markdown',
@@ -392,9 +396,9 @@ const translations = {
       'en-US': 'Language Changed',
       'zh-CN': '语言已更改',
     },
-    markdownChanged: {
-      'en-US': 'Markdown setting has changed',
-      'zh-CN': 'Markdown 设置已更改',
+    settingChanged: {
+      'en-US': 'setting has changed',
+      'zh-CN': '设置已更改',
     },
     restartTips: {
       'en-US':

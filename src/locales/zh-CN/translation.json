@@ -1,5 +1,6 @@
 {
   "menu": {
+    "langCN": "启用 TiddlyWiki 中文语言",
     "markdown": "启用 Markdown",
     "file": "文件",
     "settings": "设置",
@@ -104,7 +105,7 @@
   },
   "settings": {
     "languageChanged": "语言已更改",
-    "markdownChanged": "Markdown 设置已更改",
+    "settingChanged": "设置已更改",
     "restartTips": "语言设置已更改，部分更改可能需要重启应用后生效"
   }
 }
