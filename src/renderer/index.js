@@ -8,7 +8,7 @@ const getText = (title) => {
 };
 if (window.$tw) {
   const githubConfig = {
-    repo: getText('$:/GitHub/Repo').split('/').pop(),
+    repo: getText('$:/GitHub/Repo')?.split('/').pop(),
     owner: getText('$:/GitHub/Username'),
     token: localStorage.getItem('tw5-password-github'),
     branch: getText('$:/GitHub/Branch') || 'main',
