@@ -133,16 +133,10 @@ async function createWindow() {
   Menu.setApplicationMenu(menu);
 }
 
+// 监听更新更新
 ipcMain.handle('send-tw-instance', async (event, githubConfig) => {
-  // 可以在这里进行其他操作
-  console.log('Received $tw githubConfig', githubConfig);
   config.set('github', githubConfig);
 });
-
-// 如果需要从主进程向渲染进程发送更新后的 $tw
-// function updateTwInstance(window) {
-//   window.webContents.send('tw-instance-update', global.$tw);
-// }
 
 // 添加 IPC 处理程序
 // ipcMain.handle('dialog:openWiki', openWiki);

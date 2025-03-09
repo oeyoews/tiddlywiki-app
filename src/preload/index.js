@@ -5,6 +5,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
     // console.log(twInstance, 'saveed instance');
     ipcRenderer.invoke('send-tw-instance', twInstance);
   },
+
+  onConfigGithub: (callback) => ipcRenderer.on('config-github', callback),
+
   // onTwInstanceUpdate: (callback) =>
   //   ipcRenderer.on('tw-instance-update', callback),
   // openWiki: () => ipcRenderer.invoke('dialog:openWiki'),

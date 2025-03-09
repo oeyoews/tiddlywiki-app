@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { app, shell, Menu, dialog, Tray } = require('electron');
+const { ipcMain, app, shell, Menu, dialog, Tray } = require('electron');
 const { i18next } = require('../i18n');
 const { t } = i18next;
 const { Conf: Config } = require('electron-conf');
@@ -583,7 +583,7 @@ async function buildWiki() {
 
 async function configureGitHub() {
   const currentConfig = config.get('github');
-  await dialog.showMessageBox({
+  const result = await dialog.showMessageBox({
     type: 'question',
     title: t('dialog.githubConfig'),
     message: t('dialog.githubConfigMessage'),
@@ -592,10 +592,13 @@ async function configureGitHub() {
       `Owner: ${currentConfig.owner || t('dialog.notSet')}\n` +
       `Repo: ${currentConfig.repo || t('dialog.notSet')}\n` +
       `Branch: ${currentConfig.branch}`,
-    // buttons: [t('dialog.modify'), t('dialog.cancel')],
-    // defaultId: 0,
-    // cancelId: 1,
+    buttons: [t('dialog.modify'), t('dialog.close')],
+    defaultId: 1,
+    cancelId: 1,
   });
+  if (result.response === 0) {
+    mainWindow.webContents.send('config-github');
+  }
 }
 
 module.exports = {
