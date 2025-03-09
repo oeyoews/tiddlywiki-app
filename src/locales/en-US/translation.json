@@ -90,6 +90,8 @@
       "clickToView": "Click to view GitHub Pages",
       "apiError": "GitHub API Error"
     },
+    "confirm": "confirm",
+    "cancel": "cancel",
     "close": "Close",
     "error": "Error",
     "buildError": "Failed to build Wiki: {{message}}",

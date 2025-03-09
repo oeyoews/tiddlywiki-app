@@ -348,6 +348,14 @@ const translations = {
         'zh-CN': 'GitHub API 错误',
       },
     },
+    confirm: {
+      'en-US': 'confirm',
+      'zh-CN': '确定',
+    },
+    cancel: {
+      'en-US': 'cancel',
+      'zh-CN': '取消',
+    },
     close: {
       'en-US': 'Close',
       'zh-CN': '关闭',
