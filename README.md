@@ -2,7 +2,7 @@
 
 ![img](./banner.png)
 
-一个基于 Electron 的 TiddlyWiki 桌面应用封装，提供更加丝滑的桌面端使用体验。
+一个TiddlyWiki 桌面应用，提供更加丝滑的桌面端使用体验。
 
 ## ✨ 功能特点
 
