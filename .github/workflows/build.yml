@@ -51,8 +51,8 @@ jobs:
       - name: Build Electron App
         run: pnpm run build
         env:
-          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
       # - name: upload artifacts
       #   uses: actions/upload-artifact@v4
@@ -72,5 +72,4 @@ jobs:
             release/**/tiddlywiki-app_**.rpm
             release/**/latest*.yml
         env:
-          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
