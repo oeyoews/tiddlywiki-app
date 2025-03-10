@@ -1,12 +1,12 @@
 {
   "name": "tiddlywiki-app",
-  "version": "1.6.4",
+  "version": "1.6.5",
   "description": "TiddlyWiki App",
   "main": "./src/main/index.js",
   "scripts": {
     "dev": "electron ./src/main/index.js",
     "build": "electron-builder",
-    "release": "electron-builder --publish always"
+    "release": "electron-builder"
   },
   "keywords": [
     "tiddlywiki"
