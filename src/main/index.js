@@ -211,13 +211,12 @@ const initApp = async () => {
   wikiPath = config.get('wikiPath');
   console.log(wikiPath);
   configPath = config.fileName; //  存储配置路径
-  // 初始化 i18n，传入 config
-  await initI18n(config);
   // 启动应用
-  app.on('ready', () => {
+  app.on('ready', async () => {
     const lang = app.getSystemLocale();
-    // console.log('lang', lang);
     config.set('language', lang); // 获取系统语言
+    // 初始化 i18n，传入 config
+    initI18n(config);
     createWindow();
     // app.on('activate', () => {
     //   if (BrowserWindow.getAllWindows().length === 0) {
