@@ -5,7 +5,8 @@
   "main": "./src/main/index.js",
   "scripts": {
     "dev": "electron ./src/main/index.js",
-    "build": "electron-builder"
+    "build": "electron-builder",
+    "release": "electron-builder --publish always"
   },
   "keywords": [
     "tiddlywiki"

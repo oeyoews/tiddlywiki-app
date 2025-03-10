@@ -49,7 +49,7 @@ jobs:
         run: pnpm install
 
       - name: Build Electron App
-        run: pnpm run build
+        run: pnpm run release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
