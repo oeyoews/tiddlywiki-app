@@ -729,26 +729,13 @@ async function checkForUpdates() {
       mainWindow.setProgressBar(0.2);
     });
 
-    autoUpdater.on('update-available', async (info) => {
-      const result = await dialog.showMessageBox({
+    autoUpdater.on('update-available', (info) => {
+      dialog.showMessageBox({
         type: 'info',
         title: t('dialog.updateAvailable'),
         message: t('dialog.newVersion', { version: info.version }),
-        detail: t('dialog.downloadConfirm'),
-        buttons: [t('dialog.downloadNow'), t('dialog.later')],
-        defaultId: 0,
-        cancelId: 1,
+        detail: t('dialog.downloading'),
       });
-
-      if (result.response === 0) {
-        dialog.showMessageBox({
-          type: 'info',
-          title: t('dialog.updateAvailable'),
-          message: t('dialog.downloading'),
-        });
-      } else {
-        mainWindow.setProgressBar(-1);
-      }
     });
 
     autoUpdater.on('update-not-available', () => {
