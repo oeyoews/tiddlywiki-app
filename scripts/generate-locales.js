@@ -7,6 +7,10 @@ const SUPPORTED_LOCALES = ['en-US', 'zh-CN'];
 // 统一的翻译对象
 const translations = {
   menu: {
+    checkUpdate: {
+      'en-US': 'Check for Updates',
+      'zh-CN': '检查更新',
+    },
     langCN: {
       'en-US': 'Enable TiddlyWiki Chinese Language',
       'zh-CN': '启用 TiddlyWiki 中文语言',
@@ -189,6 +193,39 @@ const translations = {
     },
   },
   dialog: {
+    updateAvailable: {
+      'en-US': 'Update Available',
+      'zh-CN': '发现新版本',
+    },
+    newVersion: {
+      'en-US': 'New version v{{version}} is available',
+      'zh-CN': '发现新版本 v{{version}}',
+    },
+    downloading: {
+      'en-US': 'Downloading update...',
+      'zh-CN': '正在下载更新...',
+    },
+    updateReady: {
+      'en-US': 'Update Ready',
+      'zh-CN': '更新已就绪',
+    },
+    updateReadyMessage: {
+      'en-US':
+        'Version v{{version}} has been downloaded. Restart now to install?',
+      'zh-CN': '新版本 v{{version}} 已下载完成，是否立即重启应用？',
+    },
+    updateError: {
+      'en-US': 'Update failed: {{message}}',
+      'zh-CN': '更新失败：{{message}}',
+    },
+    checkingUpdate: {
+      'en-US': 'Checking for updates...',
+      'zh-CN': '正在检查更新...',
+    },
+    noUpdate: {
+      'en-US': 'You are using the latest version',
+      'zh-CN': '当前已是最新版本',
+    },
     restartNow: {
       'en-US': 'Restart Now',
       'zh-CN': '立即重启',
