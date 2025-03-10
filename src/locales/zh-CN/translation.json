@@ -1,5 +1,6 @@
 {
   "menu": {
+    "checkUpdate": "检查更新",
     "langCN": "启用 TiddlyWiki 中文语言",
     "markdown": "启用 Markdown",
     "file": "文件",
@@ -50,6 +51,14 @@
     "exit": "退出"
   },
   "dialog": {
+    "updateAvailable": "发现新版本",
+    "newVersion": "发现新版本 v{{version}}",
+    "downloading": "正在下载更新...",
+    "updateReady": "更新已就绪",
+    "updateReadyMessage": "新版本 v{{version}} 已下载完成，是否立即重启应用？",
+    "updateError": "更新失败：{{message}}",
+    "checkingUpdate": "正在检查更新...",
+    "noUpdate": "当前已是最新版本",
     "restartNow": "立即重启",
     "later": "稍后",
     "githubConfig": "GitHub 配置",

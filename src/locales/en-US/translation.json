@@ -1,5 +1,6 @@
 {
   "menu": {
+    "checkUpdate": "Check for Updates",
     "langCN": "Enable TiddlyWiki Chinese Language",
     "markdown": "Enable Markdown",
     "file": "File",
@@ -50,6 +51,14 @@
     "exit": "Exit"
   },
   "dialog": {
+    "updateAvailable": "Update Available",
+    "newVersion": "New version v{{version}} is available",
+    "downloading": "Downloading update...",
+    "updateReady": "Update Ready",
+    "updateReadyMessage": "Version v{{version}} has been downloaded. Restart now to install?",
+    "updateError": "Update failed: {{message}}",
+    "checkingUpdate": "Checking for updates...",
+    "noUpdate": "You are using the latest version",
     "restartNow": "Restart Now",
     "later": "Later",
     "githubConfig": "GitHub Configuration",

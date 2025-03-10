@@ -8,6 +8,7 @@ const DEFAULT_PORT = 8080;
 const DEFAULT_WIKI_DIR = path.resolve('wiki'); // use app.getPath('desktop')
 const { default: getPorts } = require('get-port');
 const { TiddlyWiki } = require('tiddlywiki');
+const { autoUpdater } = require('electron-updater');
 let tray = null;
 const iconPath = path.join(__dirname, '..', 'assets', 'tray-icon.png');
 const packageInfo = require('../../package.json');
@@ -447,6 +448,10 @@ function createMenuTemplate() {
           click: () => mainWindow.webContents.openDevTools({ mode: 'right' }),
         },
         {
+          label: t('menu.checkUpdate'),
+          click: checkForUpdates,
+        },
+        {
           label: t('menu.reportIssue'),
           click: () =>
             shell.openExternal(
@@ -711,3 +716,70 @@ module.exports = {
   createTray,
   createMenuTemplate,
 };
+
+async function checkForUpdates() {
+  try {
+    autoUpdater.setFeedURL({
+      provider: 'github',
+      owner: 'oeyoews',
+      repo: 'tiddlywiki-app',
+    });
+
+    autoUpdater.on('checking-for-update', () => {
+      mainWindow.setProgressBar(0.2);
+    });
+
+    autoUpdater.on('update-available', (info) => {
+      dialog.showMessageBox({
+        type: 'info',
+        title: t('dialog.updateAvailable'),
+        message: t('dialog.newVersion', { version: info.version }),
+        detail: t('dialog.downloading'),
+      });
+    });
+
+    autoUpdater.on('update-not-available', () => {
+      mainWindow.setProgressBar(-1);
+      dialog.showMessageBox({
+        type: 'info',
+        title: t('dialog.updateCheck'),
+        message: t('dialog.noUpdate'),
+      });
+    });
+
+    autoUpdater.on('download-progress', (progressObj) => {
+      mainWindow.setProgressBar(progressObj.percent / 100);
+    });
+
+    autoUpdater.on('update-downloaded', async (info) => {
+      mainWindow.setProgressBar(-1);
+      const result = await dialog.showMessageBox({
+        type: 'info',
+        title: t('dialog.updateReady'),
+        message: t('dialog.updateReadyMessage', { version: info.version }),
+        buttons: [t('dialog.restartNow'), t('dialog.later')],
+        defaultId: 0,
+        cancelId: 1,
+      });
+
+      if (result.response === 0) {
+        autoUpdater.quitAndInstall();
+      }
+    });
+
+    autoUpdater.on('error', (err) => {
+      mainWindow.setProgressBar(-1);
+      dialog.showErrorBox(
+        t('dialog.error'),
+        t('dialog.updateError', { message: err.message })
+      );
+    });
+
+    await autoUpdater.checkForUpdates();
+  } catch (err) {
+    dialog.showErrorBox(
+      t('dialog.error'),
+      t('dialog.updateError', { message: err.message })
+    );
+  }
+}
