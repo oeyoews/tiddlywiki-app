@@ -48,7 +48,8 @@
     "deleteAppDataOnUninstall": false
   },
   "publish": {
-    "provider": "generic",
-    "url": "https://github.com/oeyoews/tiddlywiki-app/releases/"
+    "provider": "github",
+    "owner": "oeyoews",
+    "repo": "tiddlywiki-app"
   }
 }
