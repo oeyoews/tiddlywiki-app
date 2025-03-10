@@ -51,6 +51,7 @@
     "exit": "退出"
   },
   "dialog": {
+    "updateCheck": "检查更新",
     "updateAvailable": "发现新版本",
     "newVersion": "发现新版本 v{{version}}",
     "downloading": "正在下载更新...",

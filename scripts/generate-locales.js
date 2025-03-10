@@ -193,6 +193,10 @@ const translations = {
     },
   },
   dialog: {
+    updateCheck: {
+      'en-US': 'Update Check',
+      'zh-CN': '检查更新',
+    },
     updateAvailable: {
       'en-US': 'Update Available',
       'zh-CN': '发现新版本',
