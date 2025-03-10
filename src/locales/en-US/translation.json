@@ -51,6 +51,8 @@
     "exit": "Exit"
   },
   "dialog": {
+    "updateDetail": "Update Detail",
+    "downloadUpdate": "Download Update",
     "updateCheck": "Update Check",
     "updateAvailable": "Update Available",
     "newVersion": "New version v{{version}} is available",
