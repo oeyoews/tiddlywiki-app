@@ -1,7 +1,7 @@
 {
   "menu": {
-    "langCN": "enable TiddlyWiki Chinese Language",
-    "markdown": "enable Markdown",
+    "langCN": "Enable TiddlyWiki Chinese Language",
+    "markdown": "Enable Markdown",
     "file": "File",
     "settings": "Settings",
     "publish": "Publish",

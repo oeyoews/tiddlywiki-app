@@ -8,11 +8,11 @@ const SUPPORTED_LOCALES = ['en-US', 'zh-CN'];
 const translations = {
   menu: {
     langCN: {
-      'en-US': 'enable TiddlyWiki Chinese Language',
+      'en-US': 'Enable TiddlyWiki Chinese Language',
       'zh-CN': '启用 TiddlyWiki 中文语言',
     },
     markdown: {
-      'en-US': 'enable Markdown',
+      'en-US': 'Enable Markdown',
       'zh-CN': '启用 Markdown',
     },
     file: {

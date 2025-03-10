@@ -215,6 +215,9 @@ const initApp = async () => {
   await initI18n(config);
   // 启动应用
   app.on('ready', () => {
+    const lang = app.getSystemLocale();
+    // console.log('lang', lang);
+    config.set('language', lang); // 获取系统语言
     createWindow();
     // app.on('activate', () => {
     //   if (BrowserWindow.getAllWindows().length === 0) {

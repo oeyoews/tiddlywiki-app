@@ -1,33 +1,34 @@
 const i18next = require('i18next');
 const path = require('path');
 const fs = require('fs');
+const { app } = require('electron');
 
 const loadLocales = () => {
   const resources = {};
   const localesDir = path.join(__dirname, '..', 'locales');
-  
-  fs.readdirSync(localesDir).forEach(lang => {
+
+  fs.readdirSync(localesDir).forEach((lang) => {
     const langPath = path.join(localesDir, lang);
     if (fs.statSync(langPath).isDirectory()) {
       resources[lang] = {
-        translation: require(path.join(langPath, 'translation.json'))
+        translation: require(path.join(langPath, 'translation.json')),
       };
     }
   });
-  
+
   return resources;
 };
 
 const initI18n = async (config) => {
   await i18next.init({
     resources: loadLocales(),
-    lng: config.get('language', 'zh-CN'),
+    lng: config.get('language') || 'en-US',
     fallbackLng: 'en-US',
     interpolation: {
-      escapeValue: false
-    }
+      escapeValue: false,
+    },
   });
-  
+
   return i18next;
 };
 

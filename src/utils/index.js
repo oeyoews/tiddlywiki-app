@@ -16,7 +16,7 @@ const saveToGitHub = require('./github-saver');
 const config = new Config({
   defaults: {
     wikiPath: DEFAULT_WIKI_DIR,
-    language: 'zh-CN',
+    language: 'en-US',
     'lang-CN': false,
     recentWikis: [], // 添加最近打开的 wiki 列表
     github: {
