@@ -11,6 +11,7 @@ const preload = path.join(__dirname, '../preload/index.js');
 const render = path.join(__dirname, '../renderer/index.js');
 const { initI18n, i18next } = require('../i18n');
 const { t } = i18next;
+const { autoUpdater } = require('electron-updater');
 const {
   createMenuTemplate,
   showWikiInfo,
@@ -57,6 +58,12 @@ async function createWindow() {
   });
 
   mainWindow.once('ready-to-show', () => {
+    autoUpdater.autoDownload = false;
+
+    // autoUpdater.checkForUpdatesAndNotify().then((res) => {
+    //   console.log(res);
+    // });
+
     mainWindow.show();
     // 设置所有外部链接在默认浏览器中打开
     mainWindow.webContents.setWindowOpenHandler(({ url }) => {

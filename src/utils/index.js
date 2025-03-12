@@ -729,13 +729,19 @@ async function checkForUpdates() {
       mainWindow.setProgressBar(0.2);
     });
 
-    autoUpdater.on('update-available', (info) => {
-      dialog.showMessageBox({
+    autoUpdater.on('update-available', async (info) => {
+      const result = await dialog.showMessageBox({
         type: 'info',
         title: t('dialog.updateAvailable'),
         message: t('dialog.newVersion', { version: info.version }),
         detail: t('dialog.downloading'),
+        buttons: ['confirm', 'cancel'],
+        defaultId: 0,
+        cancelId: 1,
       });
+      if (result.response === 0) {
+        autoUpdater.downloadUpdate();
+      }
     });
 
     autoUpdater.on('update-not-available', () => {
