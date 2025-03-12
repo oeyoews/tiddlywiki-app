@@ -7,6 +7,10 @@ const SUPPORTED_LOCALES = ['en-US', 'zh-CN'];
 // 统一的翻译对象
 const translations = {
   menu: {
+    copyImage: {
+      'en-US': 'Copy image',
+      'zh-CN': '复制图片',
+    },
     checkUpdate: {
       'en-US': 'Check for Updates',
       'zh-CN': '检查更新',

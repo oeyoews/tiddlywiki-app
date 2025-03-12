@@ -60,6 +60,13 @@ async function createWindow() {
   mainWindow.once('ready-to-show', () => {
     autoUpdater.autoDownload = false;
 
+    // 禁用 Ctrl+A 全选
+    // mainWindow.webContents.on('before-input-event', (event, input) => {
+    //   if (input.control && input.key.toLowerCase() === 'a') {
+    //     event.preventDefault();
+    //   }
+    // });
+
     // autoUpdater.checkForUpdatesAndNotify().then((res) => {
     //   console.log(res);
     // });
@@ -74,14 +81,29 @@ async function createWindow() {
 
     // 注册右键菜单
     mainWindow.webContents.on('context-menu', (event, params) => {
-      const contextMenu = Menu.buildFromTemplate([
+      const menuTemplate = [
         {
+          accelerator: 'ALT+M',
           label: t('menu.toggleMenuBar'),
           click: () => {
             const isVisible = mainWindow.isMenuBarVisible();
             mainWindow.setMenuBarVisibility(!isVisible);
           },
         },
+      ];
+
+      // 如果右键点击的是图片，添加复制图片选项
+      if (params.mediaType === 'image') {
+        menuTemplate.push({
+          label: t('menu.copyImage'),
+          click: () => {
+            mainWindow.webContents.copyImageAt(params.x, params.y);
+          },
+        });
+      }
+
+      // 添加其他常规菜单项
+      menuTemplate.push(
         {
           label: t('menu.copy'),
           role: 'copy',
@@ -98,11 +120,11 @@ async function createWindow() {
           enabled: params.editFlags.canCut,
         },
         { type: 'separator' },
-        {
-          label: t('menu.selectAll'),
-          role: 'selectAll',
-        },
-        { type: 'separator' },
+        // {
+        //   label: t('menu.selectAll'),
+        //   role: 'selectAll',
+        // },
+        // { type: 'separator' },
         {
           label: t('menu.toggleFullscreen'),
           click: () => {
@@ -112,8 +134,10 @@ async function createWindow() {
         {
           label: t('menu.reload'),
           role: 'reload',
-        },
-      ]);
+        }
+      );
+
+      const contextMenu = Menu.buildFromTemplate(menuTemplate);
       contextMenu.popup();
     });
   });

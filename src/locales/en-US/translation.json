@@ -1,5 +1,6 @@
 {
   "menu": {
+    "copyImage": "Copy image",
     "checkUpdate": "Check for Updates",
     "langCN": "Enable TiddlyWiki Chinese Language",
     "markdown": "Enable Markdown",
