@@ -249,7 +249,7 @@ function createTray(mainWindow) {
 
 async function showWikiInfo() {
   const info = await dialog.showMessageBox({
-    type: 'info',
+    type: 'none',
     title: t('app.about'),
     message: t('app.name'),
     detail: `${t('app.version')}: ${packageInfo.version}\n${t(
@@ -257,6 +257,11 @@ async function showWikiInfo() {
     )}：${config.get('wikiPath')}\n${t('app.runningPort')}：${
       currentPort || t('app.notRunning')
     }\n${t('app.configPath')}：${config.fileName}`,
+    width: 400,
+    height: 300,
+    buttons: [t('dialog.close')],
+    defaultId: 0,
+    noLink: true,
   });
 }
 
