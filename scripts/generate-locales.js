@@ -210,8 +210,9 @@ const translations = {
       'zh-CN': '发现新版本',
     },
     newVersion: {
-      'en-US': 'New version v{{version}} is available',
-      'zh-CN': '发现新版本 v{{version}}',
+      'en-US':
+        'New version v{{version}} is available, Would you like to download the update now ?',
+      'zh-CN': '发现新版本 v{{version}}, 是否立刻下载更新？',
     },
     downloading: {
       'en-US': 'Downloading update...',

@@ -13,6 +13,8 @@ let tray = null;
 const iconPath = path.join(__dirname, '..', 'assets', 'tray-icon.png');
 const packageInfo = require('../../package.json');
 const saveToGitHub = require('./github-saver');
+let updateAvailableHandled = false;
+let downloadFinished = false;
 
 const config = new Config({
   defaults: {
@@ -730,12 +732,15 @@ async function checkForUpdates() {
     });
 
     autoUpdater.on('update-available', async (info) => {
+      if (updateAvailableHandled) return; // 防止重复弹窗
+      updateAvailableHandled = true;
       const result = await dialog.showMessageBox({
         type: 'info',
         title: t('dialog.updateAvailable'),
         message: t('dialog.newVersion', { version: info.version }),
-        detail: t('dialog.downloading'),
-        buttons: ['confirm', 'cancel'],
+        // detail: t('dialog.downloading'),
+        // buttons: ['confirm', 'cancel'],
+        buttons: [t('dialog.confirm'), t('dialog.cancel')],
         defaultId: 0,
         cancelId: 1,
       });
@@ -758,6 +763,8 @@ async function checkForUpdates() {
     });
 
     autoUpdater.on('update-downloaded', async (info) => {
+      if (downloadFinished) return; // 防止重复弹窗
+      downloadFinished = true;
       mainWindow.setProgressBar(-1);
       const result = await dialog.showMessageBox({
         type: 'info',

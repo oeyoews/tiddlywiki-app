@@ -55,7 +55,7 @@
     "downloadUpdate": "Download Update",
     "updateCheck": "Update Check",
     "updateAvailable": "Update Available",
-    "newVersion": "New version v{{version}} is available",
+    "newVersion": "New version v{{version}} is available, Would you like to download the update now ?",
     "downloading": "Downloading update...",
     "updateReady": "Update Ready",
     "updateReadyMessage": "Version v{{version}} has been downloaded. Restart now to install?",

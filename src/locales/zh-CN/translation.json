@@ -55,7 +55,7 @@
     "downloadUpdate": "下载更新",
     "updateCheck": "检查更新",
     "updateAvailable": "发现新版本",
-    "newVersion": "发现新版本 v{{version}}",
+    "newVersion": "发现新版本 v{{version}}, 是否立刻下载更新？",
     "downloading": "正在下载更新...",
     "updateReady": "更新已就绪",
     "updateReadyMessage": "新版本 v{{version}} 已下载完成，是否立即重启应用？",
