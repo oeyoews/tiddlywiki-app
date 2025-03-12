@@ -15,6 +15,7 @@ const packageInfo = require('../../package.json');
 const saveToGitHub = require('./github-saver');
 let updateAvailableHandled = false;
 let downloadFinished = false;
+let hasLatestNotify = false;
 
 const config = new Config({
   defaults: {
@@ -750,6 +751,8 @@ async function checkForUpdates() {
     });
 
     autoUpdater.on('update-not-available', () => {
+      if (hasLatestNotify) return; // 防止重复弹窗
+      hasLatestNotify = true;
       mainWindow.setProgressBar(-1);
       dialog.showMessageBox({
         type: 'info',
@@ -787,6 +790,11 @@ async function checkForUpdates() {
         t('dialog.updateError', { message: err.message })
       );
     });
+
+    // 重置变量
+    updateAvailableHandled = false;
+    downloadFinished = false;
+    hasLatestNotify = false;
 
     await autoUpdater.checkForUpdates();
   } catch (err) {
