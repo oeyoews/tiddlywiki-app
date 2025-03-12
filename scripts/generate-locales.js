@@ -7,6 +7,26 @@ const SUPPORTED_LOCALES = ['en-US', 'zh-CN'];
 // 统一的翻译对象
 const translations = {
   menu: {
+    reload: {
+      'en-US': 'Reload',
+      'zh-CN': '重新加载',
+    },
+    forceReload: {
+      'en-US': 'Force Reload',
+      'zh-CN': '强制重新加载',
+    },
+    resetZoom: {
+      'en-US': 'Reset Zoom',
+      'zh-CN': '重置缩放',
+    },
+    zoomIn: {
+      'en-US': 'Zoom In',
+      'zh-CN': '放大',
+    },
+    zoomOut: {
+      'en-US': 'Zoom Out',
+      'zh-CN': '缩小',
+    },
     copyImage: {
       'en-US': 'Copy image',
       'zh-CN': '复制图片',

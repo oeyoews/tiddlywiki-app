@@ -1,5 +1,10 @@
 {
   "menu": {
+    "reload": "刷新",
+    "forceReload": "强制重新加载",
+    "resetZoom": "重置缩放",
+    "zoomIn": "放大",
+    "zoomOut": "缩小",
     "copyImage": "复制图片",
     "saveImageAs": "图片另存为...",
     "checkUpdate": "检查更新",
@@ -30,7 +35,6 @@
     "paste": "粘贴",
     "cut": "剪切",
     "selectAll": "全选",
-    "reload": "刷新",
     "about": "关于",
     "reportIssue": "报告问题",
     "recentWikis": "最近打开的 Wiki",

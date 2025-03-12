@@ -176,9 +176,10 @@ async function createWindow() {
         {
           label: t('menu.toggleFullscreen'),
           accelerator: 'F11',
-          click: () => {
-            mainWindow.setFullScreen(!mainWindow.isFullScreen());
-          },
+          role: 'togglefullscreen',
+          // click: () => {
+          //   mainWindow.setFullScreen(!mainWindow.isFullScreen());
+          // },
         },
         {
           label: t('menu.reload'),

@@ -1,5 +1,10 @@
 {
   "menu": {
+    "reload": "Reload",
+    "forceReload": "Force Reload",
+    "resetZoom": "Reset Zoom",
+    "zoomIn": "Zoom In",
+    "zoomOut": "Zoom Out",
     "copyImage": "Copy image",
     "saveImageAs": "Save Image As...",
     "checkUpdate": "Check for Updates",
@@ -30,7 +35,6 @@
     "paste": "Paste",
     "cut": "Cut",
     "selectAll": "Select All",
-    "reload": "Reload",
     "about": "About",
     "reportIssue": "Report Issue",
     "recentWikis": "Recent Wikis",

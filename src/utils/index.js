@@ -349,12 +349,35 @@ function createMenuTemplate() {
       label: t('menu.view'),
       submenu: [
         {
+          role: 'reload',
+          label: t('menu.reload'),
+        },
+        {
+          role: 'forceReload',
+          label: t('menu.forceReload'),
+        },
+        { type: 'separator' },
+        {
+          role: 'resetZoom',
+          label: t('menu.resetZoom'),
+        },
+        {
+          role: 'zoomIn',
+          label: t('menu.zoomIn'),
+        },
+        {
+          role: 'zoomOut',
+          label: t('menu.zoomOut'),
+        },
+        { type: 'separator' },
+        {
+          role: 'togglefullscreen',
           label: t('menu.toggleFullscreen'),
           accelerator: 'F11',
-          click: () => {
-            const isFullScreen = mainWindow.isFullScreen();
-            mainWindow.setFullScreen(!isFullScreen);
-          },
+          // click: () => {
+          //   const isFullScreen = mainWindow.isFullScreen();
+          //   mainWindow.setFullScreen(!isFullScreen);
+          // },
         },
         {
           label: t('menu.toggleMenuBar'),
