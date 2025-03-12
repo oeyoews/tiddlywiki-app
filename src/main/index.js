@@ -83,7 +83,7 @@ async function createWindow() {
     mainWindow.webContents.on('context-menu', (event, params) => {
       const menuTemplate = [
         {
-          accelerator: 'ALT+M',
+          accelerator: 'Alt+M',
           label: t('menu.toggleMenuBar'),
           click: () => {
             const isVisible = mainWindow.isMenuBarVisible();

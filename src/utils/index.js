@@ -331,7 +331,7 @@ function createMenuTemplate() {
         { type: 'separator' },
         {
           label: t('menu.restart'),
-          accelerator: 'CmdOrCtrl+Shift+R',
+          accelerator: 'CmdOrCtrl+Shift+Alt+R',
           click: () => {
             app.relaunch();
             app.exit(0);
