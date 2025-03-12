@@ -105,13 +105,21 @@ async function createWindow() {
             label: t('menu.saveImageAs'),
             click: async () => {
               try {
+                // 处理文件名
+                let defaultFileName;
+                if (params.srcURL.startsWith('data:')) {
+                  // 处理 base64 图片
+                  const mimeMatch = params.srcURL.match(/^data:image\/(\w+);/);
+                  const ext = mimeMatch ? mimeMatch[1] : 'png';
+                  defaultFileName = `image-${Date.now()}.${ext}`;
+                } else {
+                  defaultFileName = path.basename(params.srcURL);
+                }
+
                 const result = await dialog.showSaveDialog({
-                  defaultPath: path.basename(params.srcURL),
+                  defaultPath: defaultFileName,
                   filters: [
-                    {
-                      name: 'Images',
-                      extensions: ['png', 'jpg', 'jpeg', 'gif'],
-                    },
+                    { name: 'Images', extensions: ['png', 'jpg', 'jpeg', 'gif'] },
                   ],
                 });
                 if (!result.canceled) {
