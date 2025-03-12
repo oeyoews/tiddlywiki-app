@@ -100,41 +100,52 @@ async function createWindow() {
             click: () => {
               mainWindow.webContents.copyImageAt(params.x, params.y);
             },
-          },
-          {
-            label: t('menu.saveImageAs'),
-            click: async () => {
-              try {
-                // 处理文件名
-                let defaultFileName;
-                if (params.srcURL.startsWith('data:')) {
-                  // 处理 base64 图片
-                  const mimeMatch = params.srcURL.match(/^data:image\/(\w+);/);
-                  const ext = mimeMatch ? mimeMatch[1] : 'png';
-                  defaultFileName = `image-${Date.now()}.${ext}`;
-                } else {
-                  defaultFileName = path.basename(params.srcURL);
-                }
-
-                const result = await dialog.showSaveDialog({
-                  defaultPath: defaultFileName,
-                  filters: [
-                    { name: 'Images', extensions: ['png', 'jpg', 'jpeg', 'gif'] },
-                  ],
-                });
-                if (!result.canceled) {
-                  const response = await fetch(params.srcURL);
-                  const buffer = Buffer.from(await response.arrayBuffer());
-                  fs.writeFileSync(result.filePath, buffer);
-                }
-              } catch (err) {
-                dialog.showErrorBox(
-                  t('dialog.error'),
-                  t('dialog.saveImageError')
-                );
-              }
-            },
           }
+          // {
+          //   label: t('menu.saveImageAs'),
+          //   click: async () => {
+          //     try {
+          //       // 处理文件名
+          //       let defaultFileName;
+          //       if (params.srcURL.startsWith('data:')) {
+          //         // 处理 base64 图片
+          //         const mimeMatch = params.srcURL.match(/^data:image\/(\w+);/);
+          //         const ext = mimeMatch ? mimeMatch[1] : 'png';
+          //         defaultFileName = `image-${Date.now()}.${ext}`;
+          //       } else {
+          //         defaultFileName = path.basename(params.srcURL);
+          //       }
+
+          //       const result = await dialog.showSaveDialog({
+          //         defaultPath: defaultFileName,
+          //         filters: [
+          //           {
+          //             name: 'Images',
+          //             extensions: ['png', 'jpg', 'jpeg', 'gif'],
+          //           },
+          //         ],
+          //       });
+          //       if (!result.canceled) {
+          //         let buffer;
+          //         if (params.srcURL.startsWith('data:')) {
+          //           // 处理 base64 图片
+          //           const base64Data = params.srcURL.split(',')[1];
+          //           buffer = Buffer.from(base64Data, 'base64');
+          //         } else {
+          //           // 处理普通 URL 图片
+          //           const response = await fetch(params.srcURL);
+          //           buffer = Buffer.from(await response.arrayBuffer());
+          //         }
+          //         fs.writeFileSync(result.filePath, buffer);
+          //       }
+          //     } catch (err) {
+          //       dialog.showErrorBox(
+          //         t('dialog.error'),
+          //         t('dialog.saveImageError')
+          //       );
+          //     }
+          //   },
+          // }
         );
       }
 
@@ -143,6 +154,7 @@ async function createWindow() {
         {
           label: t('menu.copy'),
           role: 'copy',
+          accelerator: 'CmdOrCtrl+C',
           enabled: params.editFlags.canCopy,
         },
         {
@@ -163,6 +175,7 @@ async function createWindow() {
         // { type: 'separator' },
         {
           label: t('menu.toggleFullscreen'),
+          accelerator: 'F11',
           click: () => {
             mainWindow.setFullScreen(!mainWindow.isFullScreen());
           },
@@ -170,6 +183,7 @@ async function createWindow() {
         {
           label: t('menu.reload'),
           role: 'reload',
+          accelerator: 'CmdOrCtrl+R',
         }
       );
 
