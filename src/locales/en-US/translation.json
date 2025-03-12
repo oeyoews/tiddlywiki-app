@@ -1,6 +1,7 @@
 {
   "menu": {
     "copyImage": "Copy image",
+    "saveImageAs": "Save Image As...",
     "checkUpdate": "Check for Updates",
     "langCN": "Enable TiddlyWiki Chinese Language",
     "markdown": "Enable Markdown",
@@ -52,6 +53,7 @@
     "exit": "Exit"
   },
   "dialog": {
+    "saveImageError": "Failed to save image",
     "updateDetail": "Update Detail",
     "downloadUpdate": "Download Update",
     "updateCheck": "Update Check",

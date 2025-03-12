@@ -11,6 +11,10 @@ const translations = {
       'en-US': 'Copy image',
       'zh-CN': '复制图片',
     },
+    saveImageAs: {
+      'en-US': 'Save Image As...',
+      'zh-CN': '图片另存为...',
+    },
     checkUpdate: {
       'en-US': 'Check for Updates',
       'zh-CN': '检查更新',
@@ -197,6 +201,10 @@ const translations = {
     },
   },
   dialog: {
+    saveImageError: {
+      'en-US': 'Failed to save image',
+      'zh-CN': '保存图片失败',
+    },
     updateDetail: {
       'en-US': 'Update Detail',
       'zh-CN': '更新详情',

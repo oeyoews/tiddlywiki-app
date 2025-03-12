@@ -94,12 +94,40 @@ async function createWindow() {
 
       // 如果右键点击的是图片，添加复制图片选项
       if (params.mediaType === 'image') {
-        menuTemplate.push({
-          label: t('menu.copyImage'),
-          click: () => {
-            mainWindow.webContents.copyImageAt(params.x, params.y);
+        menuTemplate.push(
+          {
+            label: t('menu.copyImage'),
+            click: () => {
+              mainWindow.webContents.copyImageAt(params.x, params.y);
+            },
           },
-        });
+          {
+            label: t('menu.saveImageAs'),
+            click: async () => {
+              try {
+                const result = await dialog.showSaveDialog({
+                  defaultPath: path.basename(params.srcURL),
+                  filters: [
+                    {
+                      name: 'Images',
+                      extensions: ['png', 'jpg', 'jpeg', 'gif'],
+                    },
+                  ],
+                });
+                if (!result.canceled) {
+                  const response = await fetch(params.srcURL);
+                  const buffer = Buffer.from(await response.arrayBuffer());
+                  fs.writeFileSync(result.filePath, buffer);
+                }
+              } catch (err) {
+                dialog.showErrorBox(
+                  t('dialog.error'),
+                  t('dialog.saveImageError')
+                );
+              }
+            },
+          }
+        );
       }
 
       // 添加其他常规菜单项

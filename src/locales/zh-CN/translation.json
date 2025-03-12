@@ -1,6 +1,7 @@
 {
   "menu": {
     "copyImage": "复制图片",
+    "saveImageAs": "图片另存为...",
     "checkUpdate": "检查更新",
     "langCN": "启用 TiddlyWiki 中文语言",
     "markdown": "启用 Markdown",
@@ -52,6 +53,7 @@
     "exit": "退出"
   },
   "dialog": {
+    "saveImageError": "保存图片失败",
     "updateDetail": "更新详情",
     "downloadUpdate": "下载更新",
     "updateCheck": "检查更新",
