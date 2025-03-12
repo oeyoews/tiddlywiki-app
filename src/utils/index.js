@@ -94,7 +94,7 @@ async function initWiki(wikiFolder, isFirstTime = false, _mainWindow) {
           return;
         }
       }
-      boot.argv = [wikiFolder, '--init', 'server'];
+      boot.argv = [wikiFolder, '--init'];
       await boot.boot(() => {
         console.log(t('log.startInit'));
       });
@@ -109,7 +109,13 @@ async function initWiki(wikiFolder, isFirstTime = false, _mainWindow) {
     currentPort = await getPorts({ port: DEFAULT_PORT });
 
     const { boot: twBoot } = TiddlyWiki();
-    twBoot.argv = [wikiFolder, '--listen', `port=${currentPort}`];
+    twBoot.argv = [
+      wikiFolder,
+      '--listen',
+      `port=${currentPort}`,
+      // 'host=0.0.0.0',
+      'root-tiddler=$:/core/save/all-external-js',
+    ];
 
     const startServer = () => {
       // console.log(`start begin: http://localhost:${currentPort}`);
