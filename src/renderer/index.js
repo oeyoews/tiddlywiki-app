@@ -36,6 +36,21 @@ if (window.$tw) {
   // 监听 github 配置跳转
   window.electronAPI.onConfigGithub(gotoGithubConfig);
 
+  window.electronAPI.onShowWikiInfo((event, data) => {
+    console.log(data.closeText);
+    window._swal({
+      title: data.appName,
+      text: `
+      版本：${data.version}
+      当前 Wiki 路径：${data.wikiPath}
+      运行端口：${data.port}
+      配置文件路径：${data.configPath}
+    `,
+      buttons: data.closeText,
+      // icon: 'info',
+    });
+  });
+
   // enable official plugin library
   const pluginLibraryUrl = `https://tiddlywiki.com/library/v${$tw.version}/index.html`;
   const officialLibraryTiddler = '$:/config/OfficialPluginLibrary';

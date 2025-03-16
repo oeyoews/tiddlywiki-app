@@ -271,6 +271,17 @@ async function showWikiInfo() {
   });
 }
 
+async function showWikiInfo2() {
+  mainWindow.webContents.send('show-wiki-info', {
+    appName: t('app.name'),
+    version: packageInfo.version,
+    wikiPath: config.get('wikiPath'),
+    port: currentPort || t('app.notRunning'),
+    configPath: config.fileName,
+    closeText: t('dialog.close'),
+  });
+}
+
 // 添加创建菜单模板的函数
 function createMenuTemplate() {
   const recentWikis = (config.get('recentWikis') || []).filter(
@@ -497,7 +508,7 @@ function createMenuTemplate() {
         },
         {
           label: t('menu.about'),
-          click: showWikiInfo,
+          click: showWikiInfo2,
         },
       ],
     },

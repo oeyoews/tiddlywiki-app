@@ -9,6 +9,7 @@ const {
 const path = require('path');
 const preload = path.join(__dirname, '../preload/index.js');
 const render = path.join(__dirname, '../renderer/index.js');
+const swal = path.join(__dirname, '../lib/sweetalert.min.js');
 const { initI18n, i18next } = require('../i18n');
 const { t } = i18next;
 const { autoUpdater } = require('electron-updater');
@@ -220,6 +221,11 @@ async function createWindow() {
       const script = document.createElement('script');
       script.src = 'file://${render.replace(/\\/g, '/')}';
       document.body.appendChild(script);
+    `);
+    mainWindow.webContents.executeJavaScript(`
+      const script2 = document.createElement('script');
+      script2.src = 'file://${swal.replace(/\\/g, '/')}';
+      document.body.appendChild(script2);
     `);
   });
 
