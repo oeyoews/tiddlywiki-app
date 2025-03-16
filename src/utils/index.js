@@ -729,10 +729,8 @@ async function toggleChineseLang(enable) {
 
     if (enable && !hasChineseLang) {
       twInfo.languages.push(langPlugin);
-      console.log('push zh-Hans');
     } else if (!enable && hasChineseLang) {
       twInfo.languages = twInfo.languages.filter((lang) => lang !== langPlugin);
-      console.log('remove', twInfo.languages);
     }
 
     fs.writeFileSync(bootPath, JSON.stringify(twInfo, null, 4), 'utf8');

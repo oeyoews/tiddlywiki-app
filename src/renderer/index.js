@@ -37,7 +37,6 @@ if (window.$tw) {
   window.electronAPI.onConfigGithub(gotoGithubConfig);
 
   window.electronAPI.onShowWikiInfo((event, data) => {
-    console.log(data.closeText);
     window._swal({
       title: data.appName,
       text: `
