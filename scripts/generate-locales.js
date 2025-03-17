@@ -11,6 +11,10 @@ const translations = {
       'en-US': 'Reload',
       'zh-CN': '重新加载',
     },
+    showLogs: {
+      'en-US': 'Show logs on Explorer',
+      'zh-CN': '打开日志文件夹',
+    },
     forceReload: {
       'en-US': 'Force Reload',
       'zh-CN': '强制重新加载',

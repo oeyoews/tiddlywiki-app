@@ -423,7 +423,7 @@ function createMenuTemplate() {
           label: t('menu.openFolder'),
           accelerator: 'CmdOrCtrl+E',
           click: () => {
-            shell.showItemInFolder(config.get('wikiPath'));
+            shell.openPath(config.get('wikiPath'));
           },
         },
       ],
@@ -498,6 +498,12 @@ function createMenuTemplate() {
         {
           label: t('menu.checkUpdate'),
           click: checkForUpdates,
+        },
+        {
+          label: t('menu.showLogs'),
+          click: () => {
+            shell.openPath(app.getPath('logs'));
+          },
         },
         {
           label: t('menu.reportIssue'),

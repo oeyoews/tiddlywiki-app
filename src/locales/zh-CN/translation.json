@@ -1,6 +1,7 @@
 {
   "menu": {
     "reload": "刷新",
+    "showLogs": "打开日志文件夹",
     "forceReload": "强制重新加载",
     "resetZoom": "重置缩放",
     "zoomIn": "放大",

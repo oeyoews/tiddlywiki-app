@@ -1,6 +1,7 @@
 {
   "menu": {
     "reload": "Reload",
+    "showLogs": "Show logs on Explorer",
     "forceReload": "Force Reload",
     "resetZoom": "Reset Zoom",
     "zoomIn": "Zoom In",

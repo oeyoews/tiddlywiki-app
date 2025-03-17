@@ -13,6 +13,7 @@ const swal = path.join(__dirname, '../lib/sweetalert.min.js');
 const { initI18n, i18next } = require('../i18n');
 const { t } = i18next;
 const { autoUpdater } = require('electron-updater');
+const log = require('electron-log/main');
 const {
   createMenuTemplate,
   showWikiInfo,
@@ -23,6 +24,11 @@ const {
 
 let mainWindow;
 let wikiPath;
+
+const date = new Date().toISOString().split('T').shift().replace('-', '/'); // 替换第一个-
+log.transports.file.resolvePathFn = () =>
+  path.join(app.getPath('logs'), date, `main.log`);
+console.log(path.join(app.getPath('logs'), date, `main.log`));
 
 Menu.setApplicationMenu(null);
 
@@ -59,6 +65,7 @@ async function createWindow() {
   });
 
   mainWindow.once('ready-to-show', () => {
+    log.info('Log from the main process');
     autoUpdater.autoDownload = false;
 
     // 禁用 Ctrl+A 全选
@@ -297,7 +304,7 @@ const initApp = async () => {
   }
   // 初始化 wikiPath
   wikiPath = config.get('wikiPath');
-  console.log(wikiPath);
+  log.info('wikiPath is ', wikiPath);
   configPath = config.fileName; //  存储配置路径
   // 启动应用
   app.on('ready', async () => {
@@ -336,7 +343,7 @@ app.on('open-url', (event, url) => {
   if (win) {
     win.webContents.send('url-opened', url);
   }
-  console.log('Received URL:', url);
+  log.info('Received URL:', url);
 });
 
 function showMainWindow() {

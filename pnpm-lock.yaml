@@ -11,6 +11,9 @@ importers:
       electron-conf:
         specifier: ^1.2.1
         version: 1.2.1(electron@35.0.0)
+      electron-log:
+        specifier: ^5.3.2
+        version: 5.3.2
       electron-updater:
         specifier: ^6.3.9
         version: 6.3.9
@@ -492,6 +495,10 @@ packages:
     resolution: {integrity: sha512-MjREzEIA77VpwX+gSviMgCdse7KuuaQEY13rqka96DKlm9xdEP7adMOX+7Z9gFr5lZTmAxLjmHz5XJ0xweED3Q==}
     peerDependencies:
       electron: '>=15.0.0'
+
+  electron-log@5.3.2:
+    resolution: {integrity: sha512-EFI5MFFEzFJU5gyhJNpKQhfGfrRP9IWzSu0sSxrWXasWKvVAOFgBySafX8W1pbPKa/w8/DDPu2bBBtVZJdDsnw==}
+    engines: {node: '>= 14'}
 
   electron-publish@25.1.7:
     resolution: {integrity: sha512-+jbTkR9m39eDBMP4gfbqglDd6UvBC7RLh5Y0MhFSsc6UkGHj9Vj9TWobxevHYMMqmoujL11ZLjfPpMX+Pt6YEg==}
@@ -2041,6 +2048,8 @@ snapshots:
     dependencies:
       ajv: 8.17.1
       electron: 35.0.0
+
+  electron-log@5.3.2: {}
 
   electron-publish@25.1.7:
     dependencies:
