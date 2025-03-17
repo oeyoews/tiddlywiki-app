@@ -22,8 +22,7 @@
     "target": [
       "dmg",
       "zip"
-    ],
-    "executableName": "twapp"
+    ]
   },
   "linux": {
     "target": [
@@ -31,7 +30,6 @@
       "deb",
       "rpm"
     ],
-    "executableName": "twapp",
     "maintainer": "oeyoews",
     "category": "Utility"
   },

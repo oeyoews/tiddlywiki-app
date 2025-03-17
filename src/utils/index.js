@@ -17,6 +17,22 @@ let updateAvailableHandled = false;
 let downloadFinished = false;
 let hasLatestNotify = false;
 
+const getUpdateText = () => {
+  const texts = {
+    normal: t('dialog.updateCheck'),
+    downloadIng: t('dialog.downloading'),
+    restart: t('dialog.restart'),
+  };
+  if (updateAvailableHandled) {
+    if (downloadFinished) {
+      return texts.restart;
+    } else {
+      return texts.downloadIng;
+    }
+  }
+  return texts.normal;
+};
+
 const config = new Config({
   defaults: {
     wikiPath: DEFAULT_WIKI_DIR,
@@ -498,6 +514,18 @@ function createMenuTemplate() {
         {
           label: t('menu.checkUpdate'),
           click: checkForUpdates,
+          // label: getUpdateText(),
+          // click: () => {
+          //   if (downloadFinished) {
+          //     autoUpdater.quitAndInstall();
+          //   } else {
+          //     checkForUpdates();
+          //     // 更新菜单
+          //     const menu = Menu.buildFromTemplate(createMenuTemplate());
+          //     Menu.setApplicationMenu(menu);
+          //   }
+          // },
+          enabled: !downloadFinished,
         },
         {
           label: t('menu.showLogs'),
@@ -771,6 +799,18 @@ module.exports = {
 
 async function checkForUpdates() {
   try {
+    // 模拟打包环境
+    if (!app.isPackaged) {
+      Object.defineProperty(app, 'isPackaged', {
+        get: () => true,
+      });
+    }
+
+    // autoUpdater.setFeedURL({
+    //   provider: 'generic',
+    //   url: 'http://localhost:8081',
+    // });
+
     autoUpdater.setFeedURL({
       provider: 'github',
       owner: 'oeyoews',
