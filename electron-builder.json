@@ -14,14 +14,16 @@
     "output": "release/${version}"
   },
   "files": [
-    "src"
+    "src",
+    "LICENSE"
   ],
   "artifactName": "${productName}_${version}.${ext}",
   "mac": {
     "target": [
       "dmg",
       "zip"
-    ]
+    ],
+    "executableName": "twapp"
   },
   "linux": {
     "target": [
@@ -29,9 +31,12 @@
       "deb",
       "rpm"
     ],
+    "executableName": "twapp",
+    "maintainer": "oeyoews",
     "category": "Utility"
   },
   "win": {
+    "executableName": "twapp",
     "target": [
       {
         "target": "nsis",
