@@ -62,6 +62,10 @@ function updateRecentWikis(wikiPath) {
   filteredWikis.unshift(wikiPath);
   // 只保留最近的 5 个
   config.set('recentWikis', filteredWikis.slice(0, 5));
+
+  // 更新菜单
+  const menu = Menu.buildFromTemplate(createMenuTemplate());
+  Menu.setApplicationMenu(menu);
 }
 
 async function releaseWiki() {
@@ -144,7 +148,7 @@ async function initWiki(wikiFolder, isFirstTime = false, _mainWindow) {
     };
     currentServer = twBoot;
     twBoot.boot(startServer);
-    updateRecentWikis(wikiFolder); // 添加这一行
+    updateRecentWikis(wikiFolder);
     return { port: currentPort };
   } catch (err) {
     dialog.showErrorBox(
