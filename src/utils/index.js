@@ -16,6 +16,9 @@ const saveToGitHub = require('./github-saver');
 let updateAvailableHandled = false;
 let downloadFinished = false;
 let hasLatestNotify = false;
+let wikiInstances = {}; // 用于记录 port: wikipath, 便于端口复用
+
+const log = require('electron-log/main');
 
 const getUpdateText = () => {
   const texts = {
@@ -38,7 +41,7 @@ const config = new Config({
     wikiPath: DEFAULT_WIKI_DIR,
     language: 'en-US',
     'lang-CN': false,
-    recentWikis: [], // 添加最近打开的 wiki 列表
+    recentWikis: [],
     github: {
       token: '',
       owner: '',
@@ -86,6 +89,20 @@ async function initWiki(wikiFolder, isFirstTime = false, _mainWindow) {
     mainWindow = _mainWindow;
   }
   try {
+    // 检查当前实例的文件夹是否被初始化过
+    const existingPort = Object.entries(wikiInstances).find(
+      ([_, path]) => path === wikiFolder
+    )?.[0];
+
+    // 新实例：记录端口和路径
+    if (!existingPort) {
+      currentPort = await getPorts({ port: DEFAULT_PORT });
+      log.info('start new server on ', currentPort);
+      wikiInstances[currentPort] = wikiFolder;
+    } else {
+      currentPort = existingPort; // 更新端口
+    }
+
     if (isFirstTime) {
       const result = await dialog.showOpenDialog({
         title: t('dialog.selectWikiFolder'),
@@ -125,9 +142,6 @@ async function initWiki(wikiFolder, isFirstTime = false, _mainWindow) {
       currentServer = null;
     }
 
-    // 获取可用端口
-    currentPort = await getPorts({ port: DEFAULT_PORT });
-
     const { boot: twBoot } = TiddlyWiki();
     twBoot.argv = [
       wikiFolder,
@@ -137,9 +151,9 @@ async function initWiki(wikiFolder, isFirstTime = false, _mainWindow) {
       'root-tiddler=$:/core/save/all-external-js',
     ];
 
-    const startServer = () => {
-      // console.log(`start begin: http://localhost:${currentPort}`);
-      mainWindow.loadURL(`http://localhost:${currentPort}`);
+    const startServer = (port) => {
+      log.info(`start begin: http://localhost:${currentPort}`);
+      mainWindow.loadURL(`http://localhost:${port}`);
       mainWindow.webContents.once('did-finish-load', () => {
         // 获取页面标题并设置窗口标题
         const pageTitle = mainWindow.webContents.getTitle();
@@ -147,7 +161,12 @@ async function initWiki(wikiFolder, isFirstTime = false, _mainWindow) {
       });
     };
     currentServer = twBoot;
-    twBoot.boot(startServer);
+    if (!existingPort) {
+      twBoot.boot(startServer(currentPort));
+    } else {
+      // 直接加载已存在的服务器
+      startServer(currentPort);
+    }
     updateRecentWikis(wikiFolder);
     return { port: currentPort };
   } catch (err) {
@@ -648,7 +667,7 @@ async function buildWiki() {
 
     await boot.boot(() => {
       mainWindow.setProgressBar(0.7);
-      console.log(t('log.startBuild'));
+      log.log(t('log.startBuild'));
     });
 
     // 构建完成

@@ -65,7 +65,7 @@ async function createWindow() {
   });
 
   mainWindow.once('ready-to-show', () => {
-    log.info('Log from the main process');
+    log.info('ready to show');
     autoUpdater.autoDownload = false;
 
     // 禁用 Ctrl+A 全选
@@ -304,7 +304,7 @@ const initApp = async () => {
   }
   // 初始化 wikiPath
   wikiPath = config.get('wikiPath');
-  log.info('wikiPath is ', wikiPath);
+  log.info('WikiPath is', wikiPath);
   configPath = config.fileName; //  存储配置路径
   // 启动应用
   app.on('ready', async () => {
@@ -344,6 +344,11 @@ app.on('open-url', (event, url) => {
     win.webContents.send('url-opened', url);
   }
   log.info('Received URL:', url);
+});
+
+// 在文件末尾添加清理函数
+app.on('before-quit', () => {
+  log.info('exit');
 });
 
 function showMainWindow() {
