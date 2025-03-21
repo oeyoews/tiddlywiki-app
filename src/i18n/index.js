@@ -1,7 +1,6 @@
 const i18next = require('i18next');
 const path = require('path');
 const fs = require('fs');
-const { app } = require('electron');
 
 const loadLocales = () => {
   const resources = {};

@@ -305,7 +305,6 @@ const initApp = async () => {
   // 初始化 wikiPath
   wikiPath = config.get('wikiPath');
   log.info('WikiPath is', wikiPath);
-  configPath = config.fileName; //  存储配置路径
   // 启动应用
   app.on('ready', async () => {
     const lang = app.getSystemLocale();
