@@ -14,7 +14,7 @@
     "output": "release/${version}"
   },
   "files": [
-    "src",
+    "dist",
     "LICENSE"
   ],
   "artifactName": "${productName}_${version}.${ext}",

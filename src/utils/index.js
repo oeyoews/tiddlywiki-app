@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { app, shell, Menu, dialog, Tray } = require('electron');
-const { i18next } = require('../i18n');
+import { i18next } from '../i18n/index.js';
 const { t } = i18next;
 const { Conf: Config } = require('electron-conf');
 const DEFAULT_PORT = 8080;
@@ -10,9 +10,12 @@ const { default: getPorts } = require('get-port');
 const { TiddlyWiki } = require('tiddlywiki');
 const { autoUpdater } = require('electron-updater');
 let tray = null;
-const iconPath = path.join(__dirname, '..', 'assets', 'tray-icon.png');
-const packageInfo = require('../../package.json');
-const saveToGitHub = require('./github-saver');
+// const iconPath = path.join(__dirname, '..', 'assets', 'tray-icon.png');
+
+const iconPath = path.join(process.cwd(), 'dist/assets', 'tray-icon.png'); // 这里假设你的 `assets` 在项目根目录
+console.log(process.cwd(), 'cwd');
+import packageInfo from '../../package.json';
+import saveToGitHub from './github-saver';
 let updateAvailableHandled = false;
 let downloadFinished = false;
 let hasLatestNotify = false;
@@ -808,8 +811,18 @@ async function toggleChineseLang(enable) {
     }
   } catch (err) {}
 }
+// module.exports = {
+//   isEmptyDirectory,
+//   config,
+//   openWiki,
+//   initWiki,
+//   createNewWiki,
+//   showWikiInfo,
+//   createTray,
+//   createMenuTemplate,
+// };
 
-module.exports = {
+export {
   isEmptyDirectory,
   config,
   openWiki,

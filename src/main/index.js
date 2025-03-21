@@ -11,17 +11,19 @@ const path = require('path');
 const preload = path.join(__dirname, '../preload/index.js');
 const render = path.join(__dirname, '../renderer/index.js');
 const swal = path.join(__dirname, '../lib/sweetalert.min.js');
-const { initI18n, i18next } = require('../i18n');
+import { initI18n, i18next } from '../i18n/index.js';
 const { t } = i18next;
 const { autoUpdater } = require('electron-updater');
 const log = require('electron-log/main');
-const {
+const { fileURLToPath } = require('url');
+
+import {
   createMenuTemplate,
   showWikiInfo,
   createTray,
   initWiki,
   config,
-} = require('../utils/index.js');
+} from '../utils/index.js';
 
 let mainWindow;
 let wikiPath;
@@ -32,7 +34,19 @@ log.transports.file.resolvePathFn = () =>
 
 Menu.setApplicationMenu(null);
 
-const iconPath = path.join(__dirname, '..', 'assets', 'tray-icon.png');
+// const iconPath = path.join(__dirname, '..', 'assets', 'tray-icon.png');
+const iconPath = path.join(process.cwd(), 'assets', 'tray-icon.png'); // 这里假设你的 `assets` 在项目根目录
+// import iconPath from '../assets/tray-icon.png';
+
+// const iconPath = path.join(
+//   path.dirname(fileURLToPath(import.meta.url)),
+//   '..',
+//   'assets',
+//   'tray-icon.png'
+// );
+console.log('iconpath', iconPath);
+
+// console.log(iconPath, 'iconpath');
 
 // 修改 createWindow 函数中的菜单创建部分
 async function createWindow() {
@@ -305,7 +319,6 @@ const initApp = async () => {
   // 初始化 wikiPath
   wikiPath = config.get('wikiPath');
   log.info('WikiPath is', wikiPath);
-  configPath = config.fileName; //  存储配置路径
   // 启动应用
   app.on('ready', async () => {
     const lang = app.getSystemLocale();

@@ -1,27 +1,18 @@
-const i18next = require('i18next');
-const path = require('path');
-const fs = require('fs');
-const { app } = require('electron');
+import i18next from 'i18next';
 
-const loadLocales = () => {
-  const resources = {};
-  const localesDir = path.join(__dirname, '..', 'locales');
+import enTranslation from '../locales/en-US/translation.json';
+import zhTranslation from '../locales/zh-CN/translation.json';
 
-  fs.readdirSync(localesDir).forEach((lang) => {
-    const langPath = path.join(localesDir, lang);
-    if (fs.statSync(langPath).isDirectory()) {
-      resources[lang] = {
-        translation: require(path.join(langPath, 'translation.json')),
-      };
-    }
-  });
-
-  return resources;
+const resources = {
+  en: { translation: enTranslation },
+  zh: { translation: zhTranslation },
 };
+
+export default resources;
 
 const initI18n = async (config) => {
   await i18next.init({
-    resources: loadLocales(),
+    resources,
     lng: config.get('language') || 'en-US',
     fallbackLng: 'en-US',
     interpolation: {
@@ -32,4 +23,4 @@ const initI18n = async (config) => {
   return i18next;
 };
 
-module.exports = { initI18n, i18next };
+export { initI18n, i18next };
