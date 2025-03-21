@@ -6,6 +6,7 @@ const {
   BrowserWindow,
   Menu,
 } = require('electron');
+const setFindBar = require('find-bar');
 const path = require('path');
 const preload = path.join(__dirname, '../preload/index.js');
 const render = path.join(__dirname, '../renderer/index.js');
@@ -28,7 +29,6 @@ let wikiPath;
 const date = new Date().toISOString().split('T').shift().replace('-', '/'); // 替换第一个-
 log.transports.file.resolvePathFn = () =>
   path.join(app.getPath('logs'), date, `main.log`);
-console.log(path.join(app.getPath('logs'), date, `main.log`));
 
 Menu.setApplicationMenu(null);
 
@@ -328,6 +328,13 @@ app.on('window-all-closed', () => {
     app.isQuitting = true;
     app.quit();
   }
+});
+
+// create findbar
+app.on('browser-window-created', async (_, win) => {
+  setFindBar(win, {
+    top: 55,
+  });
 });
 
 // 添加 before-quit 事件处理
