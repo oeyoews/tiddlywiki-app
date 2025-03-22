@@ -65,6 +65,7 @@ async function saveToGitHub({
 
       if (response.ok) {
         const data = await response.json();
+        log.info('github file sha', data.sha);
         return data.sha; // 返回文件的 SHA 值
       } else {
         log.error('response has crashed', response);
@@ -103,7 +104,7 @@ async function saveToGitHub({
       const response = await fetch(url, {
         method: 'PUT',
         headers: {
-          Authorization: `Basic ${GITHUB_TOKEN}`,
+          Authorization: `token ${GITHUB_TOKEN}`,
           Accept: 'application/vnd.github.v3+json',
           'Content-Type': 'application/json',
         },
