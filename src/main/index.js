@@ -34,19 +34,12 @@ log.transports.file.resolvePathFn = () =>
 
 Menu.setApplicationMenu(null);
 
-// const iconPath = path.join(__dirname, '..', 'assets', 'tray-icon.png');
-const iconPath = path.join(process.cwd(), 'assets', 'tray-icon.png'); // 这里假设你的 `assets` 在项目根目录
-// import iconPath from '../assets/tray-icon.png';
+process.env.DIST = path.join(__dirname, '../dist');
+process.env.VITE_PUBLIC = app.isPackaged
+  ? process.env.DIST
+  : path.join(process.env.DIST, '../public');
 
-// const iconPath = path.join(
-//   path.dirname(fileURLToPath(import.meta.url)),
-//   '..',
-//   'assets',
-//   'tray-icon.png'
-// );
-console.log('iconpath', iconPath);
-
-// console.log(iconPath, 'iconpath');
+const iconPath = path.join(process.env.VITE_PUBLIC, 'assets/tray-icon.png');
 
 // 修改 createWindow 函数中的菜单创建部分
 async function createWindow() {

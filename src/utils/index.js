@@ -10,10 +10,13 @@ const { default: getPorts } = require('get-port');
 const { TiddlyWiki } = require('tiddlywiki');
 const { autoUpdater } = require('electron-updater');
 let tray = null;
-// const iconPath = path.join(__dirname, '..', 'assets', 'tray-icon.png');
 
-const iconPath = path.join(process.cwd(), 'dist/assets', 'tray-icon.png'); // 这里假设你的 `assets` 在项目根目录
-console.log(process.cwd(), 'cwd');
+process.env.DIST = path.join(__dirname, '../dist');
+process.env.VITE_PUBLIC = app.isPackaged
+  ? process.env.DIST
+  : path.join(process.env.DIST, '../public');
+
+const iconPath = path.join(process.env.VITE_PUBLIC, 'assets/tray-icon.png');
 import packageInfo from '../../package.json';
 import saveToGitHub from './github-saver';
 let updateAvailableHandled = false;
@@ -836,11 +839,11 @@ export {
 async function checkForUpdates() {
   try {
     // 模拟打包环境
-    if (!app.isPackaged) {
-      Object.defineProperty(app, 'isPackaged', {
-        get: () => true,
-      });
-    }
+    // if (!app.isPackaged) {
+    //   Object.defineProperty(app, 'isPackaged', {
+    //     get: () => true,
+    //   });
+    // }
 
     // autoUpdater.setFeedURL({
     //   provider: 'generic',
