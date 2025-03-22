@@ -488,7 +488,7 @@ function createMenuTemplate() {
           label: t('menu.autocorrect'),
           type: 'checkbox',
           checked: config.get('autocorrect'),
-          click: async (menuItem) => await toggleAutocorrect(menuItem.checked),
+          click: async (menuItem) => await toggleAutocorrect(menuItem),
         },
         {
           label: t('menu.langCN'),
@@ -508,10 +508,23 @@ function createMenuTemplate() {
                       openAtLogin: !app.getLoginItemSettings().openAtLogin,
                       path: process.execPath, // or use app.getPath('exe'),
                     });
+                    log.info(
+                      'dev: test autoStart',
+                      app.getLoginItemSettings().openAtLogin
+                    );
                   } else {
+                    log.info(
+                      'before toggle autoStart',
+                      app.getLoginItemSettings().openAtLogin
+                    );
                     app.setLoginItemSettings({
                       openAtLogin: !app.getLoginItemSettings().openAtLogin,
+                      path: process.execPath, // or use app.getPath('exe'),
                     });
+                    log.info(
+                      app.getLoginItemSettings().openAtLogin,
+                      'after: autoStart toggled'
+                    );
                   }
                 },
               },
@@ -798,8 +811,9 @@ async function toggleMarkdown(enable) {
     // );
   }
 }
-async function toggleAutocorrect(enable) {
-  if (enable) {
+
+async function toggleAutocorrect(menuItem) {
+  if (menuItem.checked) {
     const res = await dialog.showMessageBox({
       type: 'info',
       title: t('dialog.enableAutocorrect'),
@@ -809,8 +823,14 @@ async function toggleAutocorrect(enable) {
       cancelId: 1,
     });
 
-    if (res.response !== 0) return;
-    config.set('autocorrect', true);
+    if (res.response !== 0) {
+      log.info('cancel enable autocorrect');
+      menuItem.checked = !menuItem.checked; // 取消时手动回退 checked
+      return;
+    } else {
+      config.set('autocorrect', menuItem.checked);
+      log.info('enable autocorrect');
+    }
   } else {
     config.set('autocorrect', false);
   }
