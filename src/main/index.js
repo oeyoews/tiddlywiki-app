@@ -30,9 +30,9 @@ process.env.VITE_PUBLIC = app.isPackaged
   ? process.env.DIST
   : path.join(process.env.DIST, '../public');
 
-const preload = path.join(process.env.VITE_PUBLIC, 'preload/index.js');
-const render = path.join(process.env.VITE_PUBLIC, 'renderer/index.js');
-const swal = path.join(process.env.VITE_PUBLIC, 'lib/sweetalert.min.js');
+const preload = path.join(__dirname, '../preload/index.js');
+const render = path.join(__dirname, '../renderer/index.js');
+const swal = path.join(process.env.VITE_PUBLIC, '../lib/sweetalert.min.js');
 
 const date = new Date().toISOString().split('T').shift().replace('-', '/'); // 替换第一个-
 log.transports.file.resolvePathFn = () =>
@@ -40,7 +40,7 @@ log.transports.file.resolvePathFn = () =>
 
 Menu.setApplicationMenu(null);
 
-const iconPath = path.join(process.env.VITE_PUBLIC, 'assets/tray-icon.png');
+const iconPath = path.join(process.env.VITE_PUBLIC, '../assets/tray-icon.png');
 
 // 修改 createWindow 函数中的菜单创建部分
 async function createWindow() {

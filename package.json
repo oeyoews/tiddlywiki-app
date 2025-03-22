@@ -1,10 +1,10 @@
 {
   "name": "tiddlywiki-app",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "TiddlyWiki App",
-  "main": "./dist/index.js",
+  "main": "./dist/main/index.js",
   "scripts": {
-    "dev": "vite build && electron ./dist/index.js",
+    "dev": "vite build && electron ./dist/main/index.js",
     "build": "vite build && electron-builder",
     "release": "vite build && electron-builder"
   },

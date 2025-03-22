@@ -16,7 +16,7 @@ process.env.VITE_PUBLIC = app.isPackaged
   ? process.env.DIST
   : path.join(process.env.DIST, '../public');
 
-const iconPath = path.join(process.env.VITE_PUBLIC, 'assets/tray-icon.png');
+const iconPath = path.join(process.env.VITE_PUBLIC, '../assets/tray-icon.png');
 import packageInfo from '../../package.json';
 import saveToGitHub from './github-saver';
 let updateAvailableHandled = false;
