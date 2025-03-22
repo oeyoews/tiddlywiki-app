@@ -49,12 +49,17 @@ Menu.setApplicationMenu(null);
 
 const iconPath = path.join(process.env.VITE_PUBLIC, '../assets/tray-icon.png');
 
+const iconPathDev = path.join(
+  process.env.VITE_PUBLIC,
+  '../assets/tray-icon-dev.png'
+);
+
 // 修改 createWindow 函数中的菜单创建部分
 async function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1400,
     height: 800,
-    icon: iconPath,
+    icon: app.isPackaged ? iconPath : iconPathDev,
     // titleBarStyle: 'hidden',
     // titleBarOverlay: true,
     skipTaskbar: false, // 添加此行以隐藏任务栏图标

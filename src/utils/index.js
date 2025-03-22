@@ -17,6 +17,10 @@ process.env.VITE_PUBLIC = app.isPackaged
   : path.join(process.env.DIST, '../public');
 
 const iconPath = path.join(process.env.VITE_PUBLIC, '../assets/tray-icon.png');
+const iconPathDev = path.join(
+  process.env.VITE_PUBLIC,
+  '../assets/tray-icon-dev.png'
+);
 import packageInfo from '../../package.json';
 import saveToGitHub from './github-saver';
 let updateAvailableHandled = false;
@@ -258,7 +262,7 @@ function isEmptyDirectory(directoryPath) {
 // 修改 createTray 函数中的菜单项
 function createTray(mainWindow) {
   if (!tray) {
-    tray = new Tray(iconPath);
+    tray = new Tray(app.isPackaged ? iconPath : iconPathDev);
   }
   tray.setToolTip(t('tray.tooltip'));
   tray.setTitle(t('tray.tooltip'));
