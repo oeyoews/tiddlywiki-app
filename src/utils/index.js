@@ -798,53 +798,35 @@ async function toggleMarkdown(enable) {
     // );
   }
 }
-
 async function toggleAutocorrect(enable) {
-  // 开启时，添加一个提示
   if (enable) {
-    // TODO: 检测用户 wiki 是否安装了插件
     const res = await dialog.showMessageBox({
       type: 'info',
-      title: '',
+      title: t('dialog.enableAutocorrect'),
       message: t('dialog.autocorrect'),
       buttons: [t('dialog.confirm'), t('dialog.cancel')],
       defaultId: 0,
       cancelId: 1,
     });
 
-    if (res.response === 0) {
-      config.set('autocorrect', true);
-
-      const result = await dialog.showMessageBox({
-        type: 'info',
-        title: t('settings.settingChanged'),
-        message: t('settings.restartTips'),
-        buttons: [t('dialog.restartNow'), t('dialog.later')],
-        defaultId: 0,
-        cancelId: 1,
-      });
-
-      if (result.response === 0) {
-        app.relaunch();
-        app.exit(0);
-      }
-    }
+    if (res.response !== 0) return;
+    config.set('autocorrect', true);
   } else {
     config.set('autocorrect', false);
+  }
 
-    const result = await dialog.showMessageBox({
-      type: 'info',
-      title: t('settings.settingChanged'),
-      message: t('settings.restartTips'),
-      buttons: [t('dialog.restartNow'), t('dialog.later')],
-      defaultId: 0,
-      cancelId: 1,
-    });
+  const result = await dialog.showMessageBox({
+    type: 'info',
+    title: t('settings.settingChanged'),
+    message: t('settings.restartTips'),
+    buttons: [t('dialog.restartNow'), t('dialog.later')],
+    defaultId: 0,
+    cancelId: 1,
+  });
 
-    if (result.response === 0) {
-      app.relaunch();
-      app.exit(0);
-    }
+  if (result.response === 0) {
+    app.relaunch();
+    app.exit(0);
   }
 }
 

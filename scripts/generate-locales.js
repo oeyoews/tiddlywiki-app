@@ -237,6 +237,10 @@ const translations = {
     },
   },
   dialog: {
+    enableAutocorrect: {
+      'en-US': 'Autocorrect format',
+      'zh-CN': '文本格式优化',
+    },
     autocorrect: {
       'en-US':
         'Enable this setting only if you have installed the oeyoews/autocorrect-wrapper TiddlyWiki plugin.',
@@ -514,7 +518,7 @@ const translations = {
     },
     restartTips: {
       'en-US':
-        'Language settings have been changed, some changes may require a restart to take effect',
+        'Settings have been changed, some changes may require a restart to take effect',
       'zh-CN': '设置已更改，可能需要重启应用后生效',
     },
   },

@@ -61,6 +61,7 @@
     "exit": "退出"
   },
   "dialog": {
+    "enableAutocorrect": "文本格式优化",
     "autocorrect": "开启此设置请确保已经安装了 oeyoews/autocorrect-wrapper tiddlywiki 插件",
     "saveImageError": "保存图片失败",
     "updateDetail": "更新详情",
