@@ -6,7 +6,8 @@ const {
   BrowserWindow,
   Menu,
 } = require('electron');
-const setFindBar = require('find-bar');
+// const setFindBar = require('./find-bar/index.js');
+import { setFindBar } from './find-bar';
 const path = require('path');
 import { initI18n, i18next } from '../i18n/index.js';
 const { t } = i18next;

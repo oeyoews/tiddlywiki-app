@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="google" value="notranslate">
+	<title>Find</title>
+	<style>
+		html,
+		body {
+			width: 100%;
+			height: 100%;
+			margin: 0;
+			padding: 0;
+			font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+			font-size: 12px;
+			overflow: hidden;
+		}
+
+		.find-bar {
+			box-sizing: border-box;
+			height: 48px;
+			width: 376px;
+			background-color: #fff;
+			font-size: 13px;
+			padding: 5px 5px 5px 15px;
+			white-space: nowrap;
+			cursor: default;
+			display: flex;
+		}
+
+		.find-bar>input,
+		.find-bar span,
+		.find-bar>div {
+			display: inline-block;
+			line-height: 38px;
+			box-sizing: border-box;
+			border: none;
+			outline: none;
+			overflow: hidden;
+			vertical-align: middle;
+		}
+
+		.find-bar>input {
+			flex: 1;
+			font-size: 13px;
+			color: #202124;
+			line-height: 18px;
+			background: transparent;
+		}
+
+		.find-bar>input:hover {
+			border-radius: 6px;
+			background: #f2f2f2;
+		}
+
+		.find-bar>input:focus {
+			background: transparent !important;
+		}
+
+		.find-bar>.find-result {
+			border-right: 1px solid #dadce0;
+			color: #606367;
+			min-width: 50px;
+			max-width: 100px;
+			text-align: right;
+			overflow: hidden;
+			padding-right: 5px;
+		}
+
+		.find-bar>div {
+			width: 113px;
+		}
+
+		.find-bar>div>span {
+			text-align: center;
+			color: #ccc;
+			cursor: default;
+			width: 26px;
+			height: 26px;
+			border-radius: 26px;
+			line-height: 20px;
+			box-sizing: border-box;
+			margin-left: 9px;
+			vertical-align: middle;
+			padding: 5px 6px 7px;
+			margin-top: -1px;
+		}
+
+		.find-bar>div>.find-prev {
+			padding: 6px;
+		}
+
+		.find-bar>div>span.active {
+			text-align: center;
+			color: #000;
+		}
+
+		.find-bar>div>span.active:hover {
+			background-color: #ebebeb;
+		}
+
+		.find-bar>div>span.active:active {
+			background-color: #d3d3d3;
+		}
+
+		@media (prefers-color-scheme: dark) {
+
+			.enable-dark-mode,
+			.find-bar {
+				background: #1f1f1f;
+			}
+
+			.enable-dark-mode .find-bar>input {
+				color: #e3e3e3;
+			}
+
+			.enable-dark-mode .find-bar>input:hover {
+				background: #363636;
+			}
+
+			.enable-dark-mode .find-bar>input:active {
+				background: #464647;
+			}
+
+			.enable-dark-mode .find-bar>span {
+				border-right: 1px solid #5e5e5e;
+			}
+
+			.enable-dark-mode .find-bar>div>span {
+				color: #535353;
+			}
+
+			.enable-dark-mode .find-bar>div>span.active {
+				text-align: center;
+				color: #a9a9aa;
+			}
+
+			.enable-dark-mode .find-bar>div>span.active:hover {
+				background-color: #3e3e3e;
+			}
+
+			.enable-dark-mode .find-bar>span {
+				color: #c7c7c7;
+			}
+		}
+	</style>
+</head>
+
+<body style="overscroll-behavior-x: none;" class="enable-dark-mode">
+	<div class="find-bar">
+		<input id="input" maxlength="128" />
+		<span id="result" class="find-result"></span>
+		<div>
+			<span id="findPrev" class="find-prev">
+				<svg viewBox="0 0 1024 1024" data-v-6fbb019e="">
+					<path fill="currentColor"
+						d="M104.704 685.248a64 64 0 0 0 90.496 0l316.8-316.8 316.8 316.8a64 64 0 0 0 90.496-90.496L557.248 232.704a64 64 0 0 0-90.496 0L104.704 594.752a64 64 0 0 0 0 90.496z">
+					</path>
+				</svg>
+			</span>
+			<span id="findNext" class="find-next">
+				<svg viewBox="0 0 1024 1024" data-v-6fbb019e="">
+					<path fill="currentColor"
+						d="M104.704 338.752a64 64 0 0 1 90.496 0l316.8 316.8 316.8-316.8a64 64 0 0 1 90.496 90.496L557.248 791.296a64 64 0 0 1-90.496 0L104.704 429.248a64 64 0 0 1 0-90.496z">
+					</path>
+				</svg>
+			</span>
+			<span id="findClose" class="find-close active">
+				<svg viewBox="0 0 1024 1024" data-v-6fbb019e="">
+					<path fill="currentColor"
+						d="M195.2 195.2a64 64 0 0 1 90.496 0L512 421.504 738.304 195.2a64 64 0 0 1 90.496 90.496L602.496 512 828.8 738.304a64 64 0 0 1-90.496 90.496L512 602.496 285.696 828.8a64 64 0 0 1-90.496-90.496L421.504 512 195.2 285.696a64 64 0 0 1 0-90.496z">
+					</path>
+				</svg>
+			</span>
+		</div>
+	</div>
+	<script>
+		function $(s) {
+			return typeof s === 'string' ? document.querySelector(s) : s;
+		}
+
+		function on(s, type, l) {
+			$(s).addEventListener(type, l, false);
+		}
+
+		function preventDefault(e) {
+			if (e.target.nodeName !== 'INPUT') {
+				e.preventDefault();
+			}
+		}
+
+		const input = $('#input');
+		const result = $('#result');
+		const findPrev = $('#findPrev');
+		const findNext = $('#findNext');
+		const findClose = $('#findClose');
+		const { ipcRenderer } = require('electron');
+		const hash = location.hash;
+		const FIND_CLOSE = `find-close${hash}`;
+		const FIND_START = `find-start${hash}`;
+		const FIND_PREV = `find-prev${hash}`;
+		const FIND_NEXT = `find-next${hash}`;
+		let seq = 0;
+
+		function sendMsg(type, data) {
+			ipcRenderer.send(type, data);
+		}
+
+		function findStart() {
+			sendMsg(FIND_START, {
+				value: input.value,
+				seq: seq++
+			});
+		}
+
+		function foucsInput() {
+			setTimeout(function () {
+				input.focus();
+				input.select();
+				findStart();
+			}, 30);
+		}
+
+		on(document, 'selectstart', preventDefault);
+		on(document, 'mousedown', preventDefault);
+		foucsInput();
+
+		ipcRenderer.on('find-result', function (_, data) {
+			const count = data && data.matches;
+			if (data) {
+				const index = data.activeMatchOrdinal;
+				result.innerText = `${index}/${count}`;
+			} else {
+				result.innerText = '';
+			}
+			if (count > 1) {
+				findNext.classList.add('active');
+				findPrev.classList.add('active');
+			} else {
+				findNext.classList.remove('active');
+				findPrev.classList.remove('active');
+			}
+		});
+
+		ipcRenderer.on('find-show', foucsInput);
+
+		let findTimer;
+		let lockInput;
+		function findInPage() {
+			findTimer = null;
+			if (!lockInput) {
+				findStart();
+			}
+		}
+		function handleInput() {
+			if (input.value) {
+				findTimer = findTimer || setTimeout(findInPage, 120);
+			} else {
+				clearTimeout(findTimer);
+				findTimer = null;
+				lockInput = false;
+				findInPage();
+			}
+		}
+		on(input, 'compositionstart', function () {
+			clearTimeout(findTimer)
+			findTimer = null;
+			lockInput = true;
+		});
+		on(input, 'compositionend', function () {
+			lockInput = false;
+			handleInput();
+		});
+		on(input, 'input', handleInput);
+		on(input, 'keydown', function (e) {
+			if (!findTimer && input.value && e.keyCode === 13) {
+				if (e.shiftKey) {
+					sendMsg(FIND_PREV);
+				} else {
+					sendMsg(FIND_NEXT);
+				}
+			}
+		});
+		on(findNext, 'click', function () {
+			sendMsg(FIND_NEXT);
+		});
+		on(findPrev, 'click', function () {
+			sendMsg(FIND_PREV);
+		});
+		on(findClose, 'click', function () {
+			sendMsg(FIND_CLOSE);
+		});
+
+		const search = location.search;
+		if (search && search.indexOf('disabledDarkMode') !== -1) {
+			document.body.className = '';
+		}
+	</script>
+</body>
+
+</html>

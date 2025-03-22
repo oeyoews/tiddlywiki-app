@@ -17,9 +17,6 @@ importers:
       electron-updater:
         specifier: ^6.3.9
         version: 6.3.9
-      find-bar:
-        specifier: ^0.1.3
-        version: 0.1.3
       get-port:
         specifier: ^7.1.0
         version: 7.1.0
@@ -852,9 +849,6 @@ packages:
 
   filelist@1.0.4:
     resolution: {integrity: sha512-w1cEuf3S+DrLCQL7ET6kz+gmlJdbq9J7yXCSjK/OZCPA+qEN1WyF4ZAf0YYJa4/shHJra2t/d/r8SV4Ji+x+8Q==}
-
-  find-bar@0.1.3:
-    resolution: {integrity: sha512-UE/HLv5NFm45lJTutMD2HY/eakwUyHp9gg7AW2OwniYKTrnSig7Pl78o0FKpLPvdWN7fvn4/lLSW1ass+JfSfA==}
 
   foreground-child@3.3.1:
     resolution: {integrity: sha512-gIXjKqtFuWEgzFRJA9WCQeSJLZDjgJUOMCMzxtvFq/37KojM1BFGufqsCy0r4qSQmYLsZYMeyRqzIWOMup03sw==}
@@ -2652,8 +2646,6 @@ snapshots:
   filelist@1.0.4:
     dependencies:
       minimatch: 5.1.6
-
-  find-bar@0.1.3: {}
 
   foreground-child@3.3.1:
     dependencies:
