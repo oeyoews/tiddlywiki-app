@@ -11,17 +11,19 @@ const path = require('path');
 const preload = path.join(__dirname, '../preload/index.js');
 const render = path.join(__dirname, '../renderer/index.js');
 const swal = path.join(__dirname, '../lib/sweetalert.min.js');
-const { initI18n, i18next } = require('../i18n');
+import { initI18n, i18next } from '../i18n/index.js';
 const { t } = i18next;
 const { autoUpdater } = require('electron-updater');
 const log = require('electron-log/main');
-const {
+const { fileURLToPath } = require('url');
+
+import {
   createMenuTemplate,
   showWikiInfo,
   createTray,
   initWiki,
   config,
-} = require('../utils/index.js');
+} from '../utils/index.js';
 
 let mainWindow;
 let wikiPath;
@@ -32,7 +34,12 @@ log.transports.file.resolvePathFn = () =>
 
 Menu.setApplicationMenu(null);
 
-const iconPath = path.join(__dirname, '..', 'assets', 'tray-icon.png');
+process.env.DIST = path.join(__dirname, '../dist');
+process.env.VITE_PUBLIC = app.isPackaged
+  ? process.env.DIST
+  : path.join(process.env.DIST, '../public');
+
+const iconPath = path.join(process.env.VITE_PUBLIC, 'assets/tray-icon.png');
 
 // 修改 createWindow 函数中的菜单创建部分
 async function createWindow() {

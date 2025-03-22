@@ -2,10 +2,10 @@
   "name": "tiddlywiki-app",
   "version": "2.0.2",
   "description": "TiddlyWiki App",
-  "main": "./src/main/index.js",
+  "main": "./dist/index.js",
   "scripts": {
-    "dev": "electron ./src/main/index.js",
-    "build": "electron-builder",
+    "dev": "vite build && electron ./dist/index.js",
+    "build": "vite build && electron-builder",
     "release": "electron-builder"
   },
   "keywords": [
@@ -25,11 +25,13 @@
   },
   "pnpm": {
     "onlyBuiltDependencies": [
-      "electron"
+      "electron",
+      "esbuild"
     ]
   },
   "devDependencies": {
     "electron": "^35.0.0",
-    "electron-builder": "^25.1.8"
+    "electron-builder": "^25.1.8",
+    "vite": "^6.2.2"
   }
 }

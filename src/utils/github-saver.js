@@ -132,4 +132,5 @@ async function saveToGitHub({
   return uploadToGHPages();
 }
 
-module.exports = saveToGitHub;
+// module.exports = saveToGitHub;
+export default saveToGitHub;
