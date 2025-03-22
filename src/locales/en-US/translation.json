@@ -1,5 +1,7 @@
 {
   "menu": {
+    "twdocs": "TiddlyWiki Documentation",
+    "forum": "TiddlyWiki Community Forum",
     "reload": "Reload",
     "showLogs": "Show logs on Explorer",
     "forceReload": "Force Reload",

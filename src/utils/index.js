@@ -570,6 +570,21 @@ function createMenuTemplate() {
             ),
         },
         {
+          label: t('menu.twdocs'),
+          click: () => {
+            const isZH = i18next.language === 'zh-CN';
+            shell.openExternal(
+              isZH
+                ? 'https://bramchen.github.io/tw5-docs/zh-Hans'
+                : 'https://tiddlywiki.com/'
+            );
+          },
+        },
+        {
+          label: t('menu.forum'),
+          click: () => shell.openExternal('https://talk.tiddlywiki.org/'),
+        },
+        {
           label: t('menu.about'),
           click: showWikiInfo2,
         },

@@ -1,5 +1,7 @@
 {
   "menu": {
+    "twdocs": "TiddlyWiki 文档",
+    "forum": "TiddlyWiki 社区论坛",
     "reload": "刷新",
     "showLogs": "打开日志文件夹",
     "forceReload": "强制重新加载",

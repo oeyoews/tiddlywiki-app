@@ -7,6 +7,14 @@ const SUPPORTED_LOCALES = ['en-US', 'zh-CN'];
 // 统一的翻译对象
 const translations = {
   menu: {
+    twdocs: {
+      'en-US': 'TiddlyWiki Documentation',
+      'zh-CN': 'TiddlyWiki 文档',
+    },
+    forum: {
+      'en-US': 'TiddlyWiki Community Forum',
+      'zh-CN': 'TiddlyWiki 社区论坛',
+    },
     reload: {
       'en-US': 'Reload',
       'zh-CN': '重新加载',
