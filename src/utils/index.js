@@ -139,7 +139,7 @@ async function initWiki(wikiFolder, isFirstTime = false, _mainWindow) {
           return;
         }
       }
-      boot.argv = [wikiFolder, '--init'];
+      boot.argv = [wikiFolder, '--init', 'server'];
       await boot.boot(() => {
         console.log(t('log.startInit'));
       });
