@@ -8,9 +8,6 @@ const {
 } = require('electron');
 const setFindBar = require('find-bar');
 const path = require('path');
-const preload = path.join(__dirname, '../preload/index.js');
-const render = path.join(__dirname, '../renderer/index.js');
-const swal = path.join(__dirname, '../lib/sweetalert.min.js');
 import { initI18n, i18next } from '../i18n/index.js';
 const { t } = i18next;
 const { autoUpdater } = require('electron-updater');
@@ -28,16 +25,20 @@ import {
 let mainWindow;
 let wikiPath;
 
+process.env.DIST = path.join(__dirname, '../dist');
+process.env.VITE_PUBLIC = app.isPackaged
+  ? process.env.DIST
+  : path.join(process.env.DIST, '../public');
+
+const preload = path.join(process.env.VITE_PUBLIC, 'preload/index.js');
+const render = path.join(process.env.VITE_PUBLIC, 'renderer/index.js');
+const swal = path.join(process.env.VITE_PUBLIC, 'lib/sweetalert.min.js');
+
 const date = new Date().toISOString().split('T').shift().replace('-', '/'); // 替换第一个-
 log.transports.file.resolvePathFn = () =>
   path.join(app.getPath('logs'), date, `main.log`);
 
 Menu.setApplicationMenu(null);
-
-process.env.DIST = path.join(__dirname, '../dist');
-process.env.VITE_PUBLIC = app.isPackaged
-  ? process.env.DIST
-  : path.join(process.env.DIST, '../public');
 
 const iconPath = path.join(process.env.VITE_PUBLIC, 'assets/tray-icon.png');
 
