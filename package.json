@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite build && electron ./dist/index.js",
     "build": "vite build && electron-builder",
-    "release": "electron-builder"
+    "release": "vite build && electron-builder"
   },
   "keywords": [
     "tiddlywiki"
