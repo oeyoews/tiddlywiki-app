@@ -54,11 +54,11 @@ async function saveToGitHub({
 
   async function getFileSha() {
     try {
-      log.info('begin getfilesha ...');
+      log.info('begin getfilesha ...', url);
       const response = await fetch(url, {
         method: 'GET',
         headers: {
-          Authorization: `token ${GITHUB_TOKEN}`,
+          Authorization: `Basic ${GITHUB_TOKEN}`,
           Accept: 'application/vnd.github.v3+json',
         },
       });
@@ -99,10 +99,11 @@ async function saveToGitHub({
       if (mainWindow) {
         mainWindow.setProgressBar(0.6);
       }
+      log.info('github-saver url is (uploading)', url);
       const response = await fetch(url, {
         method: 'PUT',
         headers: {
-          Authorization: `token ${GITHUB_TOKEN}`,
+          Authorization: `Basic ${GITHUB_TOKEN}`,
           Accept: 'application/vnd.github.v3+json',
           'Content-Type': 'application/json',
         },
