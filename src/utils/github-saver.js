@@ -1,6 +1,6 @@
 const { Notification, shell, dialog } = require('electron');
 const fs = require('fs');
-const i18next = require('i18next');
+import { i18next } from '../i18n/index.js';
 const { t } = i18next;
 
 const log = require('electron-log/main');
@@ -100,7 +100,8 @@ async function saveToGitHub({
       if (mainWindow) {
         mainWindow.setProgressBar(0.6);
       }
-      log.info('github-saver url is (uploading)', url);
+      log.info('github-saver url is (start)', url);
+
       const response = await fetch(url, {
         method: 'PUT',
         headers: {
@@ -110,6 +111,7 @@ async function saveToGitHub({
         },
         body: JSON.stringify(body),
       });
+      log.info('github-saver url is (uploading)', url);
 
       // 上传完成，移除进度条
       if (mainWindow) {
