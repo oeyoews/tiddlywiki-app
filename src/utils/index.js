@@ -46,6 +46,8 @@ const config = new Config({
   defaults: {
     wikiPath: DEFAULT_WIKI_DIR,
     language: 'en-US',
+    markdown: false,
+    autocorrect: false,
     'lang-CN': false,
     recentWikis: [],
     github: {
@@ -483,6 +485,12 @@ function createMenuTemplate() {
           click: (menuItem) => toggleMarkdown(menuItem.checked),
         },
         {
+          label: t('menu.autocorrect'),
+          type: 'checkbox',
+          checked: config.get('autocorrect'),
+          click: async (menuItem) => await toggleAutocorrect(menuItem.checked),
+        },
+        {
           label: t('menu.langCN'),
           type: 'checkbox',
           checked: config.get('lang-CN'),
@@ -788,6 +796,55 @@ async function toggleMarkdown(enable) {
     //   t('dialog.error'),
     //   t('dialog.markdownError', { message: err.message })
     // );
+  }
+}
+
+async function toggleAutocorrect(enable) {
+  // 开启时，添加一个提示
+  if (enable) {
+    // TODO: 检测用户 wiki 是否安装了插件
+    const res = await dialog.showMessageBox({
+      type: 'info',
+      title: '',
+      message: t('dialog.autocorrect'),
+      buttons: [t('dialog.confirm'), t('dialog.cancel')],
+      defaultId: 0,
+      cancelId: 1,
+    });
+
+    if (res.response === 0) {
+      config.set('autocorrect', true);
+
+      const result = await dialog.showMessageBox({
+        type: 'info',
+        title: t('settings.settingChanged'),
+        message: t('settings.restartTips'),
+        buttons: [t('dialog.restartNow'), t('dialog.later')],
+        defaultId: 0,
+        cancelId: 1,
+      });
+
+      if (result.response === 0) {
+        app.relaunch();
+        app.exit(0);
+      }
+    }
+  } else {
+    config.set('autocorrect', false);
+
+    const result = await dialog.showMessageBox({
+      type: 'info',
+      title: t('settings.settingChanged'),
+      message: t('settings.restartTips'),
+      buttons: [t('dialog.restartNow'), t('dialog.later')],
+      defaultId: 0,
+      cancelId: 1,
+    });
+
+    if (result.response === 0) {
+      app.relaunch();
+      app.exit(0);
+    }
   }
 }
 
