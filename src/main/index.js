@@ -4,6 +4,8 @@ const {
   ipcMain,
   app,
   BrowserWindow,
+  session,
+  // protocol,
   Menu,
 } = require('electron');
 // const setFindBar = require('./find-bar/index.js');
@@ -80,6 +82,21 @@ async function createWindow() {
   mainWindow.once('ready-to-show', () => {
     log.info('ready to show');
     autoUpdater.autoDownload = false;
+    const filter = { urls: ['<all_urls>'] }; // 监听所有 URL
+
+    // protocol.interceptBufferProtocol('https', (request, callback) => {
+    //   console.log('拦截 HTTPS 请求:', request.url);
+    //   callback(); // 继续请求
+    // });
+
+    session.defaultSession.webRequest.onBeforeRequest(
+      filter,
+      (details, callback) => {
+        console.log(`\nrequest URL:(${details.id})`, details.url);
+        console.log('request method:', details.method);
+        callback({ cancel: false }); // 继续请求
+      }
+    );
 
     // 禁用 Ctrl+A 全选
     // mainWindow.webContents.on('before-input-event', (event, input) => {

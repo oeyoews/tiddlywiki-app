@@ -3,6 +3,8 @@ const fs = require('fs');
 const i18next = require('i18next');
 const { t } = i18next;
 
+const log = require('electron-log/main');
+
 /**
  * 将 Wiki 发布到 GitHub Pages
  * @param {Object} options - 发布配置选项
@@ -25,6 +27,7 @@ async function saveToGitHub({
   COMMIT_MESSAGE = 'Saved by TiddlyWiki App ',
   mainWindow, // 添加 mainWindow 参数
 }) {
+  log.info('begine to save tiddlywiki html to github pages...');
   const pageSite = `https://${owner}.github.io/${repo}`;
   // @see: https://github.com/settings/tokens
   const FILE_PATH = wikiFolder + '/output/index.html';
@@ -42,6 +45,7 @@ async function saveToGitHub({
     // dialog.showMessageBox({
     //   type: 'info',
     // })
+    log.info('github config not corrected');
     return;
   }
 
@@ -49,20 +53,27 @@ async function saveToGitHub({
   const url = baseURL + `/${owner}/${repo}/contents/index.html`;
 
   async function getFileSha() {
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        Authorization: `token ${GITHUB_TOKEN}`,
-        Accept: 'application/vnd.github.v3+json',
-      },
-    });
+    try {
+      log.info('begin getfilesha ...');
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          Authorization: `token ${GITHUB_TOKEN}`,
+          Accept: 'application/vnd.github.v3+json',
+        },
+      });
 
-    if (response.ok) {
-      const data = await response.json();
-      return data.sha; // 返回文件的 SHA 值
+      if (response.ok) {
+        const data = await response.json();
+        return data.sha; // 返回文件的 SHA 值
+      } else {
+        log.error('response has crashed', response);
+      }
+
+      return null; // 文件不存在，返回 null
+    } catch (e) {
+      log.error('getfilesha', e);
     }
-
-    return null; // 文件不存在，返回 null
   }
 
   async function uploadToGHPages() {
