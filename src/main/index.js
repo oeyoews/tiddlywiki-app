@@ -33,6 +33,10 @@ process.env.VITE_PUBLIC = app.isPackaged
 const preload = path.join(__dirname, '../preload/index.js');
 const render = path.join(__dirname, '../renderer/index.js');
 const swal = path.join(process.env.VITE_PUBLIC, '../lib/sweetalert.min.js');
+const autocorrectLib = path.join(
+  process.env.VITE_PUBLIC,
+  '../lib/autocorrect.min.js'
+);
 
 const date = new Date().toISOString().split('T').shift().replace('-', '/'); // 替换第一个-
 log.transports.file.resolvePathFn = () =>
@@ -63,7 +67,7 @@ async function createWindow() {
     //   height: 10,
     // },
     webPreferences: {
-      spellcheck: false,
+      spellcheck: false, // TODO 配置
       preload,
       // devTools: true,
       nodeIntegration: false,
@@ -232,16 +236,22 @@ async function createWindow() {
 
   // 注入渲染脚本
   mainWindow.webContents.on('did-finish-load', () => {
-    mainWindow.webContents.executeJavaScript(`
-      const script = document.createElement('script');
-      script.src = 'file://${render.replace(/\\/g, '/')}';
-      document.body.appendChild(script);
+    const scripts = [render, swal];
+
+    if (config.get('autocorrect')) {
+      scripts.push(autocorrectLib);
+      log.info('Enable autocorrect lib');
+    }
+
+    scripts.forEach((src) => {
+      mainWindow.webContents.executeJavaScript(`
+      (() => {
+        const script = document.createElement('script');
+        script.src = 'file://${src.replace(/\\/g, '/')}';
+        document.body.appendChild(script);
+      })();
     `);
-    mainWindow.webContents.executeJavaScript(`
-      const script2 = document.createElement('script');
-      script2.src = 'file://${swal.replace(/\\/g, '/')}';
-      document.body.appendChild(script2);
-    `);
+    });
   });
 
   const menu = Menu.buildFromTemplate(createMenuTemplate());
@@ -254,7 +264,6 @@ ipcMain.handle('send-tw-instance', async (event, githubConfig) => {
 });
 
 ipcMain.on('custom-dialog', (event, { type, message }) => {
-  // const win = BrowserWindow.getFocusedWindow(); // 获取当前窗口
   const options = {
     type: type === 'confirm' ? 'question' : 'info',
     buttons:

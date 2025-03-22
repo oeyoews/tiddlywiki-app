@@ -7,6 +7,10 @@ const SUPPORTED_LOCALES = ['en-US', 'zh-CN'];
 // 统一的翻译对象
 const translations = {
   menu: {
+    autocorrect: {
+      'en-US': 'Autocorrect',
+      'zh-CN': '文本格式优化',
+    },
     twdocs: {
       'en-US': 'TiddlyWiki Documentation',
       'zh-CN': 'TiddlyWiki 文档',
@@ -233,6 +237,16 @@ const translations = {
     },
   },
   dialog: {
+    enableAutocorrect: {
+      'en-US': 'Autocorrect format',
+      'zh-CN': '文本格式优化',
+    },
+    autocorrect: {
+      'en-US':
+        'Enable this setting only if you have installed the oeyoews/autocorrect-wrapper TiddlyWiki plugin.',
+      'zh-CN':
+        '开启此设置请确保已经安装了 oeyoews/autocorrect-wrapper tiddlywiki 插件',
+    },
     saveImageError: {
       'en-US': 'Failed to save image',
       'zh-CN': '保存图片失败',
@@ -504,8 +518,8 @@ const translations = {
     },
     restartTips: {
       'en-US':
-        'Language settings have been changed, some changes may require a restart to take effect',
-      'zh-CN': '语言设置已更改，部分更改可能需要重启应用后生效',
+        'Settings have been changed, some changes may require a restart to take effect',
+      'zh-CN': '设置已更改，可能需要重启应用后生效',
     },
   },
 };

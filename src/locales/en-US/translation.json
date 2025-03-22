@@ -1,5 +1,6 @@
 {
   "menu": {
+    "autocorrect": "Autocorrect",
     "twdocs": "TiddlyWiki Documentation",
     "forum": "TiddlyWiki Community Forum",
     "reload": "Reload",
@@ -60,6 +61,8 @@
     "exit": "Exit"
   },
   "dialog": {
+    "enableAutocorrect": "Autocorrect format",
+    "autocorrect": "Enable this setting only if you have installed the oeyoews/autocorrect-wrapper TiddlyWiki plugin.",
     "saveImageError": "Failed to save image",
     "updateDetail": "Update Detail",
     "downloadUpdate": "Download Update",
@@ -130,6 +133,6 @@
   "settings": {
     "languageChanged": "Language Changed",
     "settingChanged": "setting has changed",
-    "restartTips": "Language settings have been changed, some changes may require a restart to take effect"
+    "restartTips": "Settings have been changed, some changes may require a restart to take effect"
   }
 }
