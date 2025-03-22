@@ -1,5 +1,6 @@
 import i18next from 'i18next';
 
+
 import enTranslation from '../locales/en-US/translation.json';
 import zhTranslation from '../locales/zh-CN/translation.json';
 
