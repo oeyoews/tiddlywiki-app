@@ -936,27 +936,28 @@ export {
 async function checkForUpdates() {
   try {
     // 模拟打包环境
-    if (!app.isPackaged) {
-      Object.defineProperty(app, 'isPackaged', {
-        get: () => true,
-      });
-    }
+    // if (!app.isPackaged) {
+    //   Object.defineProperty(app, 'isPackaged', {
+    //     get: () => true,
+    //   });
+    // }
 
-    autoUpdater.setFeedURL({
-      provider: 'generic',
-      url: 'http://localhost:8080',
-    });
+    // autoUpdater.setFeedURL({
+    //   provider: 'generic',
+    //   url: 'http://localhost:8080',
+    // });
+
     // console.log(app.getVersion());
 
     // const checkMenu = menu.items
     //   .find((item) => item.label === t('menu.help'))
     //   .submenu.items.find((item) => item.label === t('menu.checkUpdate'));
 
-    // autoUpdater.setFeedURL({
-    //   provider: 'github',
-    //   owner: 'oeyoews',
-    //   repo: 'tiddlywiki-app',
-    // });
+    autoUpdater.setFeedURL({
+      provider: 'github',
+      owner: 'oeyoews',
+      repo: 'tiddlywiki-app',
+    });
 
     autoUpdater.on('checking-for-update', () => {
       log.info('checking-for-update');
