@@ -67,6 +67,7 @@
     "updateDetail": "Update Detail",
     "downloadUpdate": "Download Update",
     "updateCheck": "Update Check",
+    "updateChecking": "Update Checking",
     "updateAvailable": "Update Available",
     "newVersion": "New version v{{version}} is available, Would you like to download the update now ?",
     "downloading": "Downloading update...",

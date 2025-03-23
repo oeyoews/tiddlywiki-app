@@ -67,6 +67,7 @@
     "updateDetail": "更新详情",
     "downloadUpdate": "下载更新",
     "updateCheck": "检查更新",
+    "updateChecking": "正在检查更新",
     "updateAvailable": "发现新版本",
     "newVersion": "发现新版本 v{{version}}, 是否立刻下载更新？",
     "downloading": "正在下载更新...",
