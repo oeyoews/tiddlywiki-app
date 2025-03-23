@@ -300,7 +300,7 @@ function createTray(mainWindow) {
 }
 
 async function showWikiInfo() {
-  const info = await dialog.showMessageBox({
+  dialog.showMessageBox({
     type: 'none',
     title: t('app.about'),
     message: t('app.name'),
@@ -378,8 +378,8 @@ function createMenuTemplate() {
                     (item) => item.label === t('menu.recentWikis')
                   );
                 // updatemenu.submenu.items = null;
-                updatemenu.enabled = false;
                 // updatemenu.label = updatemenu.label + ' (0)';
+                updatemenu.enabled = false;
                 Menu.setApplicationMenu(menu);
               },
             },
@@ -936,37 +936,43 @@ export {
 async function checkForUpdates() {
   try {
     // 模拟打包环境
-    // if (!app.isPackaged) {
-    //   Object.defineProperty(app, 'isPackaged', {
-    //     get: () => true,
-    //   });
-    // }
-    const checkMenu = menu.items
-      .find((item) => item.label === t('menu.help'))
-      .submenu.items.find((item) => item.label === t('menu.checkUpdate'));
-    checkMenu.enabled = false;
-    Menu.setApplicationMenu(menu);
-
-    // autoUpdater.setFeedURL({
-    //   provider: 'generic',
-    //   url: 'http://localhost:8081',
-    // });
+    if (!app.isPackaged) {
+      Object.defineProperty(app, 'isPackaged', {
+        get: () => true,
+      });
+    }
 
     autoUpdater.setFeedURL({
-      provider: 'github',
-      owner: 'oeyoews',
-      repo: 'tiddlywiki-app',
+      provider: 'generic',
+      url: 'http://localhost:8080',
     });
+    // console.log(app.getVersion());
+
+    // const checkMenu = menu.items
+    //   .find((item) => item.label === t('menu.help'))
+    //   .submenu.items.find((item) => item.label === t('menu.checkUpdate'));
+
+    // autoUpdater.setFeedURL({
+    //   provider: 'github',
+    //   owner: 'oeyoews',
+    //   repo: 'tiddlywiki-app',
+    // });
 
     autoUpdater.on('checking-for-update', () => {
+      log.info('checking-for-update');
       mainWindow.setProgressBar(0.2);
-      checkMenu.label = t('dialog.updateChecking');
-      Menu.setApplicationMenu(menu);
+      // checkMenu.label = t('dialog.updateChecking');
+      // Menu.setApplicationMenu(menu);
     });
 
     autoUpdater.on('update-available', async (info) => {
       if (updateAvailableHandled) return; // 防止重复弹窗
       updateAvailableHandled = true;
+
+      log.info('update available');
+      // checkMenu.enabled = false;
+      // Menu.setApplicationMenu(menu);
+
       const result = await dialog.showMessageBox({
         type: 'info',
         title: t('dialog.updateAvailable'),
@@ -979,6 +985,8 @@ async function checkForUpdates() {
       });
       if (result.response === 0) {
         autoUpdater.downloadUpdate();
+      } else {
+        log.info('update canceled', checkMenu);
       }
     });
 
@@ -999,8 +1007,10 @@ async function checkForUpdates() {
 
     autoUpdater.on('update-downloaded', async (info) => {
       if (downloadFinished) return; // 防止重复弹窗
-      checkMenu.label = t('menu.restart');
-      Menu.setApplicationMenu(menu);
+      // checkMenu.label = t('menu.restart');
+      // checkMenu.enabled = true;
+      // Menu.setApplicationMenu(menu);
+      log.info('update downloaded', checkMenu);
 
       downloadFinished = true;
       mainWindow.setProgressBar(-1);
