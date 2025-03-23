@@ -1003,6 +1003,7 @@ async function checkForUpdates() {
     });
 
     autoUpdater.on('download-progress', (progressObj) => {
+      log.info(progressObj.percent / 100, 'Updating');
       mainWindow.setProgressBar(progressObj.percent / 100);
     });
 
