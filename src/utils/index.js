@@ -154,6 +154,18 @@ async function initWiki(wikiFolder, isFirstTime = false, _mainWindow) {
       currentServer = null;
     }
 
+    // 启动实力前的检查
+    if (config.get('markdown')) {
+      toggleMarkdown(true, {
+        notify: false,
+      });
+    }
+    if (config.get('lang-CN')) {
+      toggleChineseLang(true, {
+        notify: false,
+      });
+    }
+
     const { boot: twBoot } = TiddlyWiki();
     twBoot.argv = [
       wikiFolder,
@@ -772,7 +784,12 @@ async function configureGitHub() {
   }
 }
 
-async function toggleMarkdown(enable) {
+async function toggleMarkdown(
+  enable,
+  options = {
+    notify: true,
+  }
+) {
   try {
     const wikiPath = config.get('wikiPath');
     const bootPath = path.join(wikiPath, 'tiddlywiki.info');
@@ -795,6 +812,9 @@ async function toggleMarkdown(enable) {
 
     fs.writeFileSync(bootPath, JSON.stringify(twInfo, null, 4), 'utf8');
     config.set('markdown', enable);
+    if (!options.notify) {
+      return;
+    }
 
     const result = await dialog.showMessageBox({
       type: 'info',
@@ -856,7 +876,12 @@ async function toggleAutocorrect(menuItem) {
 }
 
 // TODO: ipc 修改 lang
-async function toggleChineseLang(enable) {
+async function toggleChineseLang(
+  enable,
+  options = {
+    notify: true,
+  }
+) {
   try {
     const wikiPath = config.get('wikiPath');
     const bootPath = path.join(wikiPath, 'tiddlywiki.info');
@@ -877,6 +902,9 @@ async function toggleChineseLang(enable) {
 
     fs.writeFileSync(bootPath, JSON.stringify(twInfo, null, 4), 'utf8');
     config.set('lang-CN', enable);
+    if (!options.notify) {
+      return;
+    }
 
     const result = await dialog.showMessageBox({
       type: 'info',
