@@ -1,6 +1,6 @@
 {
   "name": "tiddlywiki-app",
-  "version": "2.2.8",
+  "version": "2.2.9",
   "description": "TiddlyWiki App",
   "main": "./dist/main/index.js",
   "scripts": {
@@ -29,7 +29,7 @@
     ]
   },
   "devDependencies": {
-    "electron": "^35.0.0",
+    "electron": "^35.0.3",
     "electron-builder": "^25.1.8",
     "vite": "^6.2.2"
   }

@@ -10,6 +10,7 @@ const {
 } = require('electron');
 // const setFindBar = require('./find-bar/index.js');
 import { setFindBar } from './find-bar';
+const fs = require('fs');
 const path = require('path');
 import { initI18n, i18next } from '../i18n/index.js';
 const { t } = i18next;
@@ -77,6 +78,8 @@ async function createWindow() {
     webPreferences: {
       spellcheck: false, // TODO 配置
       preload,
+      // plugins: false, // deprecated
+      // experimentalFeatures: true,
       // devTools: true,
       nodeIntegration: false,
       contextIsolation: true,
@@ -258,8 +261,21 @@ async function createWindow() {
   await initWiki(wikiPath, isFirstTime, mainWindow);
 
   // 注入渲染脚本
-  mainWindow.webContents.on('did-finish-load', () => {
+  mainWindow.webContents.on('did-finish-load', async () => {
     const scripts = [render, swal];
+    // const pdfData = await mainWindow.webContents.printToPDF({
+    //   margins: { marginType: 'default' },
+    //   printBackground: true,
+    //   // pageSize: 'A4',
+    // });
+
+    // const { filePath } = await dialog.showSaveDialog({
+    //   title: 'Save PDF',
+    //   defaultPath: 'output.pdf',
+    //   filters: [{ name: 'PDF', extensions: ['pdf'] }],
+    // });
+
+    // if (filePath) fs.writeFileSync(filePath, pdfData);
 
     if (config.get('autocorrect')) {
       scripts.push(autocorrectLib);
