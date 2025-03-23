@@ -24,8 +24,8 @@ importers:
         specifier: ^24.2.2
         version: 24.2.2(typescript@5.8.2)
       tiddlywiki:
-        specifier: 5.3.6
-        version: 5.3.6
+        specifier: npm:@oeyoews/tiddlywiki-lite@5.3.6-lite-20250323-1
+        version: '@oeyoews/tiddlywiki-lite@5.3.6-lite-20250323-1'
     devDependencies:
       electron:
         specifier: ^35.0.3
@@ -250,6 +250,12 @@ packages:
     resolution: {integrity: sha512-mJd2Z5TjYWq/ttPLLGqArdtnC74J6bOzg4rMDnN+p1xTacZ2yPRCk2y0oSWQtygLR9YVQXgOcONrwtnk3JupxQ==}
     engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
     deprecated: This functionality has been moved to @npmcli/fs
+
+  '@oeyoews/tiddlywiki-lite@5.3.6-lite-20250323-1':
+    resolution: {integrity: sha512-b9E44WUxyM3mspgh0p2zc0DOHX1Oj6NiL5fy9SvMgEoRqkPa5c8ACxUUjBMVlkRNyJI4dJqC4OFqDz53JOswgg==}
+    engines: {node: '>=0.8.2'}
+    hasBin: true
+    bundledDependencies: []
 
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -1588,12 +1594,6 @@ packages:
   temp-file@3.4.0:
     resolution: {integrity: sha512-C5tjlC/HCtVUOi3KWVokd4vHVViOmGjtLwIh4MuzPo/nMYTV/p1urt3RnMz2IWXDdKEGJH3k5+KPxtqRsUYGtg==}
 
-  tiddlywiki@5.3.6:
-    resolution: {integrity: sha512-RfWt+Bo/UsTdzP5N4nEInjaJjgAzylUMf21hE4FL5v65c3x054+A+3g3sgW1m68lTJbTbiiqSZ6q6BEIZMwhSQ==}
-    engines: {node: '>=0.8.2'}
-    hasBin: true
-    bundledDependencies: []
-
   tiny-typed-emitter@2.1.0:
     resolution: {integrity: sha512-qVtvMxeXbVej0cQWKqVSSAHmKZEHAvxdF8HEUBFWts8h+xEo5m/lEiPakuyZ3BnCBjOD8i24kzNOiOLLgsSxhA==}
 
@@ -1932,6 +1932,8 @@ snapshots:
     dependencies:
       mkdirp: 1.0.4
       rimraf: 3.0.2
+
+  '@oeyoews/tiddlywiki-lite@5.3.6-lite-20250323-1': {}
 
   '@pkgjs/parseargs@0.11.0':
     optional: true
@@ -3451,8 +3453,6 @@ snapshots:
     dependencies:
       async-exit-hook: 2.0.1
       fs-extra: 10.1.0
-
-  tiddlywiki@5.3.6: {}
 
   tiny-typed-emitter@2.1.0: {}
 
