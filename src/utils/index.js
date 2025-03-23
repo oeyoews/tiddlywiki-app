@@ -1008,6 +1008,7 @@ async function checkForUpdates() {
     });
 
     autoUpdater.on('update-downloaded', async (info) => {
+      log.info(downloadFinished, 'downloaded ?');
       if (downloadFinished) return; // 防止重复弹窗
       // checkMenu.label = t('menu.restart');
       // checkMenu.enabled = true;
