@@ -12,7 +12,11 @@
     "tiddlywiki"
   ],
   "type": "commonjs",
-  "author": "oeyoews <jyao4783@gmail.com> (https://github.com/oeyoews/tiddlywiki-app)",
+  "author": {
+    "name": "oeyoews",
+    "email": "jyao4783@gmail.com",
+    "url": "https://github.com/oeyoews/tiddlywiki-app"
+  },
   "license": "MIT",
   "dependencies": {
     "electron-conf": "^1.2.1",
