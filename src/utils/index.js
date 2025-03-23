@@ -437,6 +437,7 @@ function createMenuTemplate() {
         {
           role: 'zoomIn',
           label: t('menu.zoomIn'),
+          accelerator: 'CmdOrCtrl+=',
         },
         {
           role: 'zoomOut',

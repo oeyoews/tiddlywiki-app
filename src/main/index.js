@@ -76,6 +76,14 @@ async function createWindow() {
     //   height: 10,
     // },
     webPreferences: {
+      // defaultFontFamily: {
+      //   standard: 'Maple', // 标准字体
+      //   serif: 'Times New Roman', // 衬线字体
+      //   sansSerif: 'Arial', // 无衬线字体
+      //   monospace: 'Courier New', // 等宽字体
+      // },
+      // defaultFontSize: 16, // 默认字体大小
+      // minimumFontSize: 12, // 最小字体大小
       spellcheck: false, // TODO 配置
       preload,
       // plugins: false, // deprecated
