@@ -10,6 +10,7 @@ const { default: getPorts } = require('get-port');
 const { TiddlyWiki } = require('tiddlywiki');
 const { autoUpdater } = require('electron-updater');
 let tray = null;
+let menu = null;
 
 process.env.DIST = path.join(__dirname, '../dist');
 process.env.VITE_PUBLIC = app.isPackaged
@@ -29,22 +30,6 @@ let hasLatestNotify = false;
 let wikiInstances = {}; // 用于记录 port: wikipath, 便于端口复用
 
 const log = require('electron-log/main');
-
-const getUpdateText = () => {
-  const texts = {
-    normal: t('dialog.updateCheck'),
-    downloadIng: t('dialog.downloading'),
-    restart: t('dialog.restart'),
-  };
-  if (updateAvailableHandled) {
-    if (downloadFinished) {
-      return texts.restart;
-    } else {
-      return texts.downloadIng;
-    }
-  }
-  return texts.normal;
-};
 
 const config = new Config({
   defaults: {
@@ -73,13 +58,11 @@ function updateRecentWikis(wikiPath) {
   const filteredWikis = recentWikis.filter(
     (path) => path !== wikiPath && path !== config.get('wikiPath')
   );
-  // 将新路径添加到开头
   filteredWikis.unshift(wikiPath);
-  // 只保留最近的 5 个
   config.set('recentWikis', filteredWikis.slice(0, 5));
 
   // 更新菜单
-  const menu = Menu.buildFromTemplate(createMenuTemplate());
+  menu = Menu.buildFromTemplate(createMenuTemplate());
   Menu.setApplicationMenu(menu);
 }
 
@@ -154,7 +137,7 @@ async function initWiki(wikiFolder, isFirstTime = false, _mainWindow) {
       currentServer = null;
     }
 
-    // 启动实力前的检查
+    // 启动实例前的检查
     if (config.get('markdown')) {
       toggleMarkdown(true, {
         notify: false,
@@ -389,7 +372,14 @@ function createMenuTemplate() {
               enabled: recentWikis.length > 0,
               click: () => {
                 config.set('recentWikis', []);
-                const menu = Menu.buildFromTemplate(createMenuTemplate());
+                const updatemenu = menu.items
+                  .find((item) => item.label === t('menu.file'))
+                  .submenu.items.find(
+                    (item) => item.label === t('menu.recentWikis')
+                  );
+                // updatemenu.submenu.items = null;
+                updatemenu.enabled = false;
+                // updatemenu.label = updatemenu.label + ' (0)';
                 Menu.setApplicationMenu(menu);
               },
             },
@@ -636,7 +626,7 @@ async function switchLanguage(lang) {
   await i18next.changeLanguage(lang);
 
   // 更新菜单
-  const menu = Menu.buildFromTemplate(createMenuTemplate());
+  menu = Menu.buildFromTemplate(createMenuTemplate());
   Menu.setApplicationMenu(menu);
 
   // 更新托盘菜单
@@ -951,6 +941,11 @@ async function checkForUpdates() {
     //     get: () => true,
     //   });
     // }
+    const checkMenu = menu.items
+      .find((item) => item.label === t('menu.help'))
+      .submenu.items.find((item) => item.label === t('menu.checkUpdate'));
+    checkMenu.enabled = false;
+    Menu.setApplicationMenu(menu);
 
     // autoUpdater.setFeedURL({
     //   provider: 'generic',
@@ -965,6 +960,8 @@ async function checkForUpdates() {
 
     autoUpdater.on('checking-for-update', () => {
       mainWindow.setProgressBar(0.2);
+      checkMenu.label = t('dialog.updateChecking');
+      Menu.setApplicationMenu(menu);
     });
 
     autoUpdater.on('update-available', async (info) => {
@@ -1002,6 +999,9 @@ async function checkForUpdates() {
 
     autoUpdater.on('update-downloaded', async (info) => {
       if (downloadFinished) return; // 防止重复弹窗
+      checkMenu.label = t('menu.restart');
+      Menu.setApplicationMenu(menu);
+
       downloadFinished = true;
       mainWindow.setProgressBar(-1);
       const result = await dialog.showMessageBox({
