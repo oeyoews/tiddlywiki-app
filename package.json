@@ -28,7 +28,7 @@
     "electron-updater": "^6.3.9",
     "get-port": "^7.1.0",
     "i18next": "^24.2.2",
-    "tiddlywiki": "5.3.6"
+    "@oeyoews/tiddlywiki-lite": "5.3.6-lite-20250323-1"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
