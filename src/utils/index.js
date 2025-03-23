@@ -987,7 +987,7 @@ async function checkForUpdates() {
       if (result.response === 0) {
         autoUpdater.downloadUpdate();
       } else {
-        log.info('update canceled', checkMenu);
+        log.info('update canceled');
       }
     });
 
@@ -1008,12 +1008,11 @@ async function checkForUpdates() {
     });
 
     autoUpdater.on('update-downloaded', async (info) => {
-      log.info(downloadFinished, 'downloaded ?');
       if (downloadFinished) return; // 防止重复弹窗
       // checkMenu.label = t('menu.restart');
       // checkMenu.enabled = true;
       // Menu.setApplicationMenu(menu);
-      log.info('update downloaded', checkMenu);
+      log.info('update downloaded');
 
       downloadFinished = true;
       mainWindow.setProgressBar(-1);
