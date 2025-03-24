@@ -1,5 +1,5 @@
 {
-  "include": ["src", "./types.d.ts"],
+  "include": ["src", "@types"],
   "exclude": ["dist"],
   "ts-node": {
     "files": true,
