@@ -4,7 +4,6 @@ const {
   ipcMain,
   app,
   BrowserWindow,
-  session,
   Menu,
 } = require('electron');
 import { setFindBar } from '@/main/find-bar';
@@ -22,6 +21,7 @@ import {
   config,
 } from '@/utils/index.js';
 import { registerContextMenu } from '@/utils/contextmenu';
+import { injectScript } from '@/utils/injectScript';
 
 let mainWindow;
 let wikiPath;
@@ -112,25 +112,7 @@ async function createWindow() {
   // 初始化并加载 wiki
   await initWiki(wikiPath, isFirstTime, mainWindow);
 
-  // 注入渲染脚本
-  mainWindow.webContents.on('did-finish-load', async () => {
-    const scripts = [render, swal];
-
-    if (config.get('autocorrect')) {
-      scripts.push(autocorrectLib);
-      log.info('Enable autocorrect lib');
-    }
-
-    scripts.forEach((src) => {
-      mainWindow.webContents.executeJavaScript(`
-      (() => {
-        const script = document.createElement('script');
-        script.src = 'file://${src.replace(/\\/g, '/')}';
-        document.body.appendChild(script);
-      })();
-    `);
-    });
-  });
+  mainWindow.webContents.on('did-finish-load', () => injectScript(mainWindow));
 
   const menu = Menu.buildFromTemplate(createMenuTemplate());
   Menu.setApplicationMenu(menu);
