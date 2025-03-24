@@ -1,3 +1,4 @@
+// @ts-nocheck
 // from: copyed fron npm package find-bar
 // patch: remove esc shortcut register for tiddlywiki
 import { app, BrowserWindow, ipcMain, globalShortcut } from 'electron';
