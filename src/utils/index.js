@@ -1,9 +1,8 @@
-const fs = require('fs');
-const path = require('path');
-const { app, shell, Menu, dialog, Tray } = require('electron');
+import fs from 'fs';
+import path from 'path';
+import { app, shell, Menu, dialog, Tray } from 'electron';
 import { t, i18next } from '@/i18n/index.js';
-const DEFAULT_PORT = 8080;
-const DEFAULT_WIKI_DIR = path.resolve('wiki'); // use app.getPath('desktop')
+
 const { default: getPorts } = require('get-port');
 const { TiddlyWiki } = require('tiddlywiki');
 const { autoUpdater } = require('electron-updater');
@@ -11,16 +10,19 @@ import { config } from '@/utils/config';
 import { updaterConfig } from '@/utils/updater.js';
 import { appIcon } from '@/utils/icon';
 import { isEmptyDirectory } from '@/utils/checkEmptyDir';
+
 const WIKIINFOFILE = 'tiddlywiki.info';
+const DEFAULT_PORT = 8080;
+const DEFAULT_WIKI_DIR = path.resolve('wiki'); // use app.getPath('desktop')
 
 import packageInfo from '../../package.json';
-import saveToGitHub from './github-saver';
+import saveToGitHub from '@/utils/github-saver';
 import {
   buildIndexHTMLArgs,
   wikiBuildArgs,
   wikiInitArgs,
   wikiStartupArgs,
-} from './wiki';
+} from '@/utils/wiki';
 let updateAvailableHandled = false;
 let downloadFinished = false;
 let hasLatestNotify = false;

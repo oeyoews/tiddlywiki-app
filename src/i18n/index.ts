@@ -10,7 +10,7 @@ const resources = {
 
 export default resources;
 
-const initI18n = async (config) => {
+const initI18n = async (config: any) => {
   await i18next.init({
     resources,
     lng: config.get('language') || 'en-US',
