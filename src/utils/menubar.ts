@@ -2,6 +2,8 @@ import { t, i18next } from '@/i18n/index';
 import { Menu, shell, app, type BrowserWindow } from 'electron';
 import { log } from '@/utils/logger';
 
+import { checkForUpdates } from '@/utils/checkUpdate';
+
 export const createMenubar = (config: any, deps: any, server: any) => {
   return function (win: BrowserWindow) {
     const recentWikis = (config.get('recentWikis') || []).filter(
@@ -246,8 +248,7 @@ export const createMenubar = (config: any, deps: any, server: any) => {
           },
           {
             label: t('menu.checkUpdate'),
-            click: deps.checkForUpdates,
-            enabled: !deps.var.downloadFinished,
+            click: () => checkForUpdates(win),
           },
           {
             label: t('menu.showLogs'),

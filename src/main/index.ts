@@ -3,7 +3,6 @@ import { setFindBar } from '@/main/find-bar';
 import path from 'path';
 import { t, initI18n } from '@/i18n/index.js';
 import { appIcon } from '@/utils/icon';
-const { autoUpdater } = require('electron-updater');
 
 import { createMenuTemplate, showWikiInfo, initWiki } from '@/utils/index';
 import { config } from '@/utils/config';
@@ -50,7 +49,6 @@ async function createWindow() {
   win.once('ready-to-show', () => {
     win.show();
     log.info('ready to show');
-    autoUpdater.autoDownload = false;
 
     // 设置外部链接在默认浏览器中打开
     win.webContents.setWindowOpenHandler(({ url }: { url: string }) => {
