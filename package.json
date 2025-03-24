@@ -8,7 +8,7 @@
     "url": "https://github.com/oeyoews/tiddlywiki-app.git"
   },
   "scripts": {
-    "dev": "vite build && electron ./dist/main/index.js",
+    "dev": "node ./scripts/generate-locales.js && vite build && electron ./dist/main/index.js",
     "build": "vite build && electron-builder",
     "release": "vite build && electron-builder"
   },

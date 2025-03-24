@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { app, shell, Menu, dialog, Tray } from 'electron';
+import { app, shell, Menu, dialog, Tray, BrowserWindow } from 'electron';
 import { t, i18next } from '@/i18n/index';
 
 const { default: getPorts } = require('get-port');
@@ -27,17 +27,17 @@ import { createMenubar } from './menubar';
 let updateAvailableHandled = false;
 let downloadFinished = false;
 let hasLatestNotify = false;
-let wikiInstances = {}; // 用于记录 port: wikipath, 便于端口复用
-let tray = null;
+let wikiInstances: { [port: number]: string } = {}; // 用于记录 port: wikipath, 便于端口复用
+let tray: any = null;
 
 import { log } from '@/utils/logger';
 
-let win = null; // 在 initwiki 初始化时赋值
+let win: BrowserWindow; // 在 initwiki 初始化时赋值
 
 const server = {
   currentPort: DEFAULT_PORT,
   currentServer: null,
-  menu: null,
+  menu: {} as Menu,
 };
 
 const deps = {
@@ -46,7 +46,6 @@ const deps = {
   buildWiki,
   importSingleFileWiki,
   releaseWiki,
-  buildWiki,
   configureGitHub,
   switchLanguage,
   showWikiInfo2,
@@ -61,17 +60,17 @@ const deps = {
 const createMenuTemplate = createMenubar(config, deps, server);
 
 // 添加更新最近打开的 wiki 列表的函数
-function updateRecentWikis(wikiPath) {
+function updateRecentWikis(wikiPath: string) {
   const recentWikis = config.get('recentWikis') || [];
   // 移除当前路径和已存在的相同路径
   const filteredWikis = recentWikis.filter(
-    (path) => path !== wikiPath && path !== config.get('wikiPath')
+    (path: string) => path !== wikiPath && path !== config.get('wikiPath')
   );
   filteredWikis.unshift(wikiPath);
   config.set('recentWikis', filteredWikis.slice(0, 5));
 
   // 更新菜单
-  server.menu = Menu.buildFromTemplate(createMenuTemplate(win));
+  server.menu = Menu.buildFromTemplate(createMenuTemplate(win) as any);
   Menu.setApplicationMenu(server.menu);
 }
 
@@ -88,7 +87,11 @@ async function releaseWiki() {
   });
 }
 
-async function initWiki(wikiFolder, isFirstTime = false, _mainWindow) {
+async function initWiki(
+  wikiFolder: string,
+  isFirstTime: Boolean = false,
+  _mainWindow?: BrowserWindow
+) {
   log.info('begin initwiki');
   if (_mainWindow) {
     win = _mainWindow;
@@ -105,7 +108,7 @@ async function initWiki(wikiFolder, isFirstTime = false, _mainWindow) {
       log.info('start new server on ', server.currentPort);
       wikiInstances[server.currentPort] = wikiFolder;
     } else {
-      server.currentPort = existingPort; // 更新端口
+      server.currentPort = Number(existingPort); // 更新端口
     }
 
     if (isFirstTime) {
@@ -119,6 +122,7 @@ async function initWiki(wikiFolder, isFirstTime = false, _mainWindow) {
         const selectedPath = result.filePaths[0];
         if (path.basename(selectedPath) === 'tiddlers') {
           dialog.showErrorBox(t('dialog.error'), t('dialog.invalidFolderName'));
+          // @ts-ignore
           return await initWiki(wikiFolder, true);
         }
         wikiFolder = selectedPath;
@@ -162,7 +166,7 @@ async function initWiki(wikiFolder, isFirstTime = false, _mainWindow) {
     const { boot: twBoot } = TiddlyWiki();
     twBoot.argv = wikiStartupArgs(wikiFolder, server.currentPort);
 
-    const startServer = (port) => {
+    const startServer = (port: number) => {
       log.info(`start begin: http://localhost:${server.currentPort}`);
       win.loadURL(`http://localhost:${port}`);
       win.webContents.once('did-finish-load', () => {
@@ -183,7 +187,8 @@ async function initWiki(wikiFolder, isFirstTime = false, _mainWindow) {
   } catch (err) {
     dialog.showErrorBox(
       t('dialog.error'),
-      t('dialog.initError', { message: err.message })
+      // @ts-ignore
+      t('dialog.initError', { message: err?.message })
     );
   }
 }
@@ -209,8 +214,8 @@ async function createNewWiki() {
     }
 
     config.set('wikiPath', selectedPath);
-    const { port } = await initWiki(selectedPath);
-    return { port };
+    const res = await initWiki(selectedPath);
+    return res;
   }
 }
 
@@ -239,13 +244,13 @@ async function openWiki() {
       return;
     }
     config.set('wikiPath', selectedPath);
-    const { port } = await initWiki(selectedPath);
-    return { port };
+    const res = await initWiki(selectedPath);
+    return res;
   }
 }
 
 // 修改 createTray 函数中的菜单项
-function createTray(win) {
+function createTray(win: BrowserWindow) {
   if (!tray) {
     tray = new Tray(appIcon);
   }
@@ -299,8 +304,8 @@ async function showWikiInfo() {
     )}：${config.get('wikiPath')}\n${t('app.runningPort')}：${
       server.currentPort || t('app.notRunning')
     }\n${t('app.configPath')}：${config.fileName}`,
-    width: 400,
-    height: 300,
+    // width: 400,
+    // height: 300,
     buttons: [t('dialog.close')],
     defaultId: 0,
     noLink: true,
@@ -318,12 +323,12 @@ async function showWikiInfo2() {
   });
 }
 
-async function switchLanguage(lang) {
+async function switchLanguage(lang: string) {
   config.set('language', lang);
   await i18next.changeLanguage(lang);
 
   // 更新菜单
-  server.menu = Menu.buildFromTemplate(createMenuTemplate(win));
+  server.menu = Menu.buildFromTemplate(createMenuTemplate(win) as any);
   Menu.setApplicationMenu(server.menu);
 
   // 更新托盘菜单
@@ -358,7 +363,9 @@ async function importSingleFileWiki() {
         // 更新当前 Wiki 路径并重新初始化
         config.set('wikiPath', targetPath);
         const wikiRes = await initWiki(targetPath);
-        server.currentPort = wikiRes.port;
+        if (wikiRes?.port) {
+          server.currentPort = wikiRes.port;
+        }
 
         dialog.showMessageBox({
           type: 'info',
@@ -367,7 +374,7 @@ async function importSingleFileWiki() {
         });
       }
     }
-  } catch (err) {
+  } catch (err: any) {
     dialog.showErrorBox(
       t('dialog.error'),
       t('dialog.importError', { message: err.message })
@@ -430,7 +437,7 @@ async function buildWiki() {
     } else if (result.response === 2) {
       await releaseWiki();
     }
-  } catch (err) {
+  } catch (err: any) {
     win.setProgressBar(-1); // 出错时移除进度条
     dialog.showErrorBox(
       t('dialog.error'),
@@ -460,7 +467,7 @@ async function configureGitHub() {
 }
 
 async function toggleMarkdown(
-  enable,
+  enable: Boolean,
   options = {
     notify: true,
   }
@@ -481,7 +488,7 @@ async function toggleMarkdown(
       twInfo.plugins.push(markdownPlugin);
     } else if (!enable && hasMarkdown) {
       twInfo.plugins = twInfo.plugins.filter(
-        (plugin) => plugin !== markdownPlugin
+        (plugin: any) => plugin !== markdownPlugin
       );
     }
 
@@ -507,7 +514,7 @@ async function toggleMarkdown(
   } catch (err) {}
 }
 
-async function toggleAutocorrect(menuItem) {
+async function toggleAutocorrect(menuItem: any) {
   if (menuItem.checked) {
     const res = await dialog.showMessageBox({
       type: 'info',
@@ -546,7 +553,7 @@ async function toggleAutocorrect(menuItem) {
 }
 
 async function toggleChineseLang(
-  enable,
+  enable: Boolean,
   options = {
     notify: true,
   }
@@ -566,7 +573,9 @@ async function toggleChineseLang(
     if (enable && !hasChineseLang) {
       twInfo.languages.push(langPlugin);
     } else if (!enable && hasChineseLang) {
-      twInfo.languages = twInfo.languages.filter((lang) => lang !== langPlugin);
+      twInfo.languages = twInfo.languages.filter(
+        (lang: string) => lang !== langPlugin
+      );
     }
 
     fs.writeFileSync(bootPath, JSON.stringify(twInfo, null, 4), 'utf8');
@@ -613,7 +622,7 @@ async function checkForUpdates() {
       // Menu.setApplicationMenu(menu);
     });
 
-    autoUpdater.on('update-available', async (info) => {
+    autoUpdater.on('update-available', async (info: any) => {
       if (updateAvailableHandled) return; // 防止重复弹窗
       updateAvailableHandled = true;
 
@@ -649,12 +658,12 @@ async function checkForUpdates() {
       });
     });
 
-    autoUpdater.on('download-progress', (progressObj) => {
+    autoUpdater.on('download-progress', (progressObj: any) => {
       log.info(progressObj.percent.toFixed(2) + '%', 'Updating');
       win.setProgressBar(progressObj.percent / 100);
     });
 
-    autoUpdater.on('update-downloaded', async (info) => {
+    autoUpdater.on('update-downloaded', async (info: any) => {
       if (downloadFinished) return; // 防止重复弹窗
       // checkMenu.label = t('menu.restart');
       // checkMenu.enabled = true;
@@ -677,7 +686,7 @@ async function checkForUpdates() {
       }
     });
 
-    autoUpdater.on('error', (err) => {
+    autoUpdater.on('error', (err: any) => {
       win.setProgressBar(-1);
       dialog.showErrorBox(
         t('dialog.error'),
@@ -691,7 +700,7 @@ async function checkForUpdates() {
     hasLatestNotify = false;
 
     await autoUpdater.checkForUpdates();
-  } catch (err) {
+  } catch (err: any) {
     dialog.showErrorBox(
       t('dialog.error'),
       t('dialog.updateError', { message: err.message })

@@ -47,10 +47,10 @@
   "app": {
     "name": "TiddlyWiki App",
     "about": "About Wiki",
-    "version": "Version: {{version}}",
-    "configPath": "Config Path: {{configPath}}",
-    "currentWikiPath": "Current Wiki Path: {{wikiPath}}",
-    "runningPort": "Running Port: {{port}}",
+    "version": "Version",
+    "configPath": "Config Path",
+    "currentWikiPath": "Current Wiki Path",
+    "runningPort": "Running Port",
     "notRunning": "Not Running"
   },
   "tray": {
