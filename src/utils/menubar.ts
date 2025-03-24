@@ -1,10 +1,11 @@
 import { t, i18next } from '@/i18n/index';
-import { shell, app } from 'electron';
+import { Menu, shell, app, type BrowserWindow } from 'electron';
+import { log } from '@/utils/logger';
 
-export const createMenubar = (config, deps, server) => {
-  return function (win) {
+export const createMenubar = (config: any, deps: any, server: any) => {
+  return function (win: BrowserWindow) {
     const recentWikis = (config.get('recentWikis') || []).filter(
-      (path) => path !== config.get('wikiPath')
+      (path: string) => path !== config.get('wikiPath')
     );
 
     const menubars = [
@@ -35,7 +36,7 @@ export const createMenubar = (config, deps, server) => {
           {
             label: t('menu.recentWikis'),
             submenu: [
-              ...recentWikis.map((wikiPath) => ({
+              ...recentWikis.map((wikiPath: string) => ({
                 label: wikiPath,
                 click: async () => {
                   config.set('wikiPath', wikiPath);
@@ -49,15 +50,17 @@ export const createMenubar = (config, deps, server) => {
                 enabled: recentWikis.length > 0,
                 click: () => {
                   config.set('recentWikis', []);
-                  const updatemenu = menu.items
+                  const updatemenu = server.menu.items
+                    // @ts-ignore
                     .find((item) => item.label === t('menu.file'))
                     .submenu.items.find(
+                      // @ts-ignore
                       (item) => item.label === t('menu.recentWikis')
                     );
                   // updatemenu.submenu.items = null;
                   // updatemenu.label = updatemenu.label + ' (0)';
                   updatemenu.enabled = false;
-                  Menu.setApplicationMenu(menu);
+                  Menu.setApplicationMenu(server.menu);
                 },
               },
             ],
@@ -161,19 +164,20 @@ export const createMenubar = (config, deps, server) => {
             label: t('menu.markdown'),
             type: 'checkbox',
             checked: config.get('markdown'),
-            click: (menuItem) => deps.toggleMarkdown(menuItem.checked),
+            click: (menuItem: any) => deps.toggleMarkdown(menuItem.checked),
           },
           {
             label: t('menu.autocorrect'),
             type: 'checkbox',
             checked: config.get('autocorrect'),
-            click: async (menuItem) => await deps.toggleAutocorrect(menuItem),
+            click: async (menuItem: any) =>
+              await deps.toggleAutocorrect(menuItem),
           },
           {
             label: t('menu.langCN'),
             type: 'checkbox',
             checked: config.get('lang-CN'),
-            click: (menuItem) => deps.toggleChineseLang(menuItem.checked),
+            click: (menuItem: any) => deps.toggleChineseLang(menuItem.checked),
           },
           ...(process.platform === 'win32' || process.platform === 'darwin'
             ? [

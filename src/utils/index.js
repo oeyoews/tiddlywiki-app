@@ -29,7 +29,6 @@ let downloadFinished = false;
 let hasLatestNotify = false;
 let wikiInstances = {}; // 用于记录 port: wikipath, 便于端口复用
 let tray = null;
-let menu = null;
 
 import { log } from '@/utils/logger';
 
@@ -38,6 +37,7 @@ let win = null; // 在 initwiki 初始化时赋值
 const server = {
   currentPort: DEFAULT_PORT,
   currentServer: null,
+  menu: null,
 };
 
 const deps = {
@@ -71,8 +71,8 @@ function updateRecentWikis(wikiPath) {
   config.set('recentWikis', filteredWikis.slice(0, 5));
 
   // 更新菜单
-  menu = Menu.buildFromTemplate(createMenuTemplate(win));
-  Menu.setApplicationMenu(menu);
+  server.menu = Menu.buildFromTemplate(createMenuTemplate(win));
+  Menu.setApplicationMenu(server.menu);
 }
 
 async function releaseWiki() {
@@ -89,6 +89,7 @@ async function releaseWiki() {
 }
 
 async function initWiki(wikiFolder, isFirstTime = false, _mainWindow) {
+  log.info('begin initwiki');
   if (_mainWindow) {
     win = _mainWindow;
   }
@@ -322,8 +323,8 @@ async function switchLanguage(lang) {
   await i18next.changeLanguage(lang);
 
   // 更新菜单
-  menu = Menu.buildFromTemplate(createMenuTemplate(win));
-  Menu.setApplicationMenu(menu);
+  server.menu = Menu.buildFromTemplate(createMenuTemplate(win));
+  Menu.setApplicationMenu(server.menu);
 
   // 更新托盘菜单
   createTray(win);
