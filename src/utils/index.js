@@ -10,9 +10,17 @@ const { autoUpdater } = require('electron-updater');
 import { config } from '@/utils/config';
 import { updaterConfig } from '@/utils/updater.js';
 import { appIcon } from '@/utils/icon';
+import { isEmptyDirectory } from '@/utils/checkEmptyDir';
+const WIKIINFOFILE = 'tiddlywiki.info';
 
 import packageInfo from '../../package.json';
 import saveToGitHub from './github-saver';
+import {
+  buildIndexHTMLArgs,
+  wikiBuildArgs,
+  wikiInitArgs,
+  wikiStartupArgs,
+} from './wiki';
 let updateAvailableHandled = false;
 let downloadFinished = false;
 let hasLatestNotify = false;
@@ -91,7 +99,7 @@ async function initWiki(wikiFolder, isFirstTime = false, _mainWindow) {
       }
     }
 
-    const bootPath = path.join(wikiFolder, 'tiddlywiki.info');
+    const bootPath = path.join(wikiFolder, WIKIINFOFILE);
 
     if (!fs.existsSync(bootPath)) {
       const { boot } = TiddlyWiki();
@@ -101,7 +109,7 @@ async function initWiki(wikiFolder, isFirstTime = false, _mainWindow) {
           return;
         }
       }
-      boot.argv = [wikiFolder, '--init', 'server'];
+      boot.argv = wikiInitArgs(wikiFolder);
       await boot.boot(() => {
         console.log(t('log.startInit'));
       });
@@ -125,13 +133,7 @@ async function initWiki(wikiFolder, isFirstTime = false, _mainWindow) {
     }
 
     const { boot: twBoot } = TiddlyWiki();
-    twBoot.argv = [
-      wikiFolder,
-      '--listen',
-      `port=${currentPort}`,
-      // 'host=0.0.0.0',
-      'root-tiddler=$:/core/save/all-external-js',
-    ];
+    twBoot.argv = wikiStartupArgs(wikiFolder, currentPort);
 
     const startServer = (port) => {
       log.info(`start begin: http://localhost:${currentPort}`);
@@ -199,7 +201,7 @@ async function openWiki() {
     }
 
     // 检查是否存在 tiddlywiki.info 文件
-    const bootPath = path.join(selectedPath, 'tiddlywiki.info');
+    const bootPath = path.join(selectedPath, WIKIINFOFILE);
     if (!fs.existsSync(bootPath)) {
       dialog.showErrorBox(t('dialog.error'), t('dialog.noTiddlyWikiInfo'));
       return await openWiki();
@@ -212,20 +214,6 @@ async function openWiki() {
     config.set('wikiPath', selectedPath);
     const { port } = await initWiki(selectedPath);
     return { port };
-  }
-}
-
-// 检查目录是否为空
-function isEmptyDirectory(directoryPath) {
-  try {
-    if (!fs.existsSync(directoryPath)) {
-      return true;
-    }
-    const files = fs.readdirSync(directoryPath);
-    return files.length === 0;
-  } catch (err) {
-    console.error('检查目录失败：', err);
-    return false;
   }
 }
 
@@ -640,19 +628,14 @@ async function importSingleFileWiki() {
 async function buildWiki() {
   try {
     const wikiPath = config.get('wikiPath');
-    const bootPath = path.join(wikiPath, 'tiddlywiki.info');
+    const bootPath = path.join(wikiPath, WIKIINFOFILE);
     let twInfo = JSON.parse(fs.readFileSync(bootPath, 'utf8'));
 
     // 检查并添加构建配置，修复导入的文件夹无法构建
     if (!twInfo.build || !twInfo.build.index) {
       twInfo.build = {
         ...twInfo.build,
-        index: [
-          '--render',
-          '$:/plugins/tiddlywiki/tiddlyweb/save/offline',
-          'index.html',
-          'text/plain',
-        ],
+        index: buildIndexHTMLArgs,
       };
       fs.writeFileSync(bootPath, JSON.stringify(twInfo, null, 4), 'utf8');
     }
@@ -661,7 +644,7 @@ async function buildWiki() {
     mainWindow.setProgressBar(0.1);
 
     const { boot } = TiddlyWiki();
-    boot.argv = [wikiPath, '--build', 'index'];
+    boot.argv = wikiBuildArgs(wikiPath);
 
     // 更新进度条
     mainWindow.setProgressBar(0.4);
@@ -734,7 +717,7 @@ async function toggleMarkdown(
 ) {
   try {
     const wikiPath = config.get('wikiPath');
-    const bootPath = path.join(wikiPath, 'tiddlywiki.info');
+    const bootPath = path.join(wikiPath, WIKIINFOFILE);
     let twInfo = JSON.parse(fs.readFileSync(bootPath, 'utf8'));
 
     if (!twInfo.plugins) {
@@ -820,7 +803,7 @@ async function toggleChineseLang(
 ) {
   try {
     const wikiPath = config.get('wikiPath');
-    const bootPath = path.join(wikiPath, 'tiddlywiki.info');
+    const bootPath = path.join(wikiPath, WIKIINFOFILE);
     let twInfo = JSON.parse(fs.readFileSync(bootPath, 'utf8'));
 
     if (!twInfo.languages) {

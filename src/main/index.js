@@ -21,6 +21,7 @@ import {
   initWiki,
   config,
 } from '@/utils/index.js';
+import { registerContextMenu } from '@/utils/contextmenu';
 
 let mainWindow;
 let wikiPath;
@@ -62,103 +63,39 @@ async function createWindow() {
   });
 
   mainWindow.once('ready-to-show', () => {
+    mainWindow.show();
     log.info('ready to show');
     autoUpdater.autoDownload = false;
-    const filter = { urls: ['<all_urls>'] }; // 监听所有 URL
 
-    session.defaultSession.webRequest.onBeforeRequest(
-      filter,
-      (details, callback) => {
-        console.log(`\nrequest URL:(${details.id})`, details.url);
-        console.log('request method:', details.method);
-        callback({ cancel: false }); // 继续请求
-      }
-    );
+    // if (!app.isPackaged) {
+    //   const filter = { urls: ['<all_urls>'] }; // 监听所有 URL
+
+    //   session.defaultSession.webRequest.onBeforeRequest(
+    //     filter,
+    //     (details, callback) => {
+    //       console.log(`\nrequest URL:(${details.id})`, details.url);
+    //       console.log('request method:', details.method);
+    //       callback({ cancel: false }); // 继续请求
+    //     }
+    //   );
+    // }
 
     // autoUpdater.checkForUpdatesAndNotify().then((res) => {
     //   console.log(res);
     // });
 
-    mainWindow.show();
     // 设置所有外部链接在默认浏览器中打开
     mainWindow.webContents.setWindowOpenHandler(({ url }) => {
       shell.openExternal(url);
       return { action: 'deny' };
     });
+
     createTray(mainWindow); // 创建任务栏图标
 
-    // 注册右键菜单
     mainWindow.webContents.on('context-menu', (event, params) => {
-      const menuTemplate = [
-        {
-          accelerator: 'Alt+M',
-          label: t('menu.toggleMenuBar'),
-          click: () => {
-            const isVisible = mainWindow.isMenuBarVisible();
-            mainWindow.setMenuBarVisibility(!isVisible);
-          },
-        },
-      ];
-
-      // 如果右键点击的是图片，添加复制图片选项
-      if (params.mediaType === 'image') {
-        menuTemplate.push({
-          label: t('menu.copyImage'),
-          click: () => {
-            mainWindow.webContents.copyImageAt(params.x, params.y);
-          },
-        });
-      }
-
-      // 添加其他常规菜单项
-      menuTemplate.push(
-        {
-          label: t('menu.copy'),
-          role: 'copy',
-          accelerator: 'CmdOrCtrl+C',
-          enabled: params.editFlags.canCopy,
-        },
-        {
-          label: t('menu.paste'),
-          role: 'paste',
-          enabled: params.editFlags.canPaste,
-        },
-        {
-          label: t('menu.cut'),
-          role: 'cut',
-          enabled: params.editFlags.canCut,
-        },
-        { type: 'separator' },
-        // {
-        //   label: t('menu.selectAll'),
-        //   role: 'selectAll',
-        // },
-        // { type: 'separator' },
-        {
-          label: t('menu.toggleFullscreen'),
-          accelerator: 'F11',
-          role: 'togglefullscreen',
-          // click: () => {
-          //   mainWindow.setFullScreen(!mainWindow.isFullScreen());
-          // },
-        },
-        {
-          label: t('menu.reload'),
-          role: 'reload',
-          accelerator: 'CmdOrCtrl+R',
-        }
-      );
-
-      const contextMenu = Menu.buildFromTemplate(menuTemplate);
-      contextMenu.popup();
+      registerContextMenu(params, mainWindow);
     });
   });
-
-  // 处理窗口最小化事件
-  // mainWindow.on('minimize', (event) => {
-  //   event.preventDefault();
-  //   mainWindow.minimize();
-  // });
 
   // 处理窗口关闭按钮事件
   mainWindow.on('close', (event) => {
@@ -219,25 +156,8 @@ ipcMain.on('custom-dialog', (event, { type, message }) => {
   event.returnValue = type === 'confirm' ? result === 1 : undefined; // confirm 返回 true/false，alert 无返回值
 });
 
-// 添加 IPC 处理程序
-// ipcMain.handle('dialog:openWiki', openWiki);
-// ipcMain.handle('dialog:createWiki', createNewWiki);
-// ipcMain.handle('wiki:build', buildWiki);
-// ipcMain.handle('wiki:openInBrowser', () => {
-//   if (currentPort) {
-//     shell.openExternal(`http://localhost:${currentPort}`);
-//   }
-// });
-// ipcMain.handle('wiki:getInfo', () => {
-//   return {
-//     wikiPath: config.get('wikiPath'),
-//     port: currentPort,
-//   };
-// });
-
-// 修改 initApp 函数
 const initApp = async () => {
-  // 单实例
+  // 使用单实例锁
   const gotTheLock = app.requestSingleInstanceLock();
 
   if (!gotTheLock) {
@@ -247,7 +167,15 @@ const initApp = async () => {
   } else {
     // 监听第二个实例被运行时
     app.on('second-instance', (event, commandLine, workingDirectory) => {
-      showMainWindow();
+      if (mainWindow) {
+        if (mainWindow.isMinimized()) {
+          mainWindow.restore();
+        }
+        if (!mainWindow.isVisible()) {
+          mainWindow.show();
+        }
+        mainWindow.focus();
+      }
     });
   }
   // 注册自定义协议
@@ -277,8 +205,6 @@ const initApp = async () => {
     // });
   });
 };
-
-initApp();
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
@@ -315,14 +241,4 @@ app.on('before-quit', () => {
   log.info('exit');
 });
 
-function showMainWindow() {
-  if (mainWindow) {
-    if (mainWindow.isMinimized()) {
-      mainWindow.restore();
-    }
-    if (!mainWindow.isVisible()) {
-      mainWindow.show();
-    }
-    mainWindow.focus();
-  }
-}
+initApp();
