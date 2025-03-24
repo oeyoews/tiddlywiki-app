@@ -8,6 +8,7 @@
     "url": "https://github.com/oeyoews/tiddlywiki-app.git"
   },
   "scripts": {
+    "test": "playwright test",
     "dev": "node ./scripts/generate-locales.js && vite build && electron ./dist/main/index.js",
     "build": "vite build && electron-builder",
     "release": "vite build && electron-builder"
@@ -37,8 +38,10 @@
     ]
   },
   "devDependencies": {
+    "@playwright/test": "^1.51.1",
     "electron": "^35.0.3",
     "electron-builder": "^25.1.8",
+    "playwright": "^1.51.1",
     "vite": "^6.2.2"
   },
   "engines": {

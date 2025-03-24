@@ -415,7 +415,7 @@ async function configureGitHub() {
   }
 }
 
-async function toggleMarkdown(
+export async function toggleMarkdown(
   enable: Boolean,
   options = {
     notify: true,
