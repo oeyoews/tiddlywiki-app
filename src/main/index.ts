@@ -1,13 +1,6 @@
-const {
-  dialog,
-  shell,
-  ipcMain,
-  app,
-  BrowserWindow,
-  Menu,
-} = require('electron');
+import { dialog, shell, ipcMain, app, BrowserWindow, Menu } from 'electron';
 import { setFindBar } from '@/main/find-bar';
-const path = require('path');
+import path from 'path';
 import { t, initI18n } from '@/i18n/index.js';
 import { appIcon } from '@/utils/icon';
 const { autoUpdater } = require('electron-updater');
@@ -19,12 +12,12 @@ import {
   createTray,
   initWiki,
   config,
-} from '@/utils/index.js';
+} from '@/utils/index';
 import { registerContextMenu } from '@/utils/contextmenu';
 import { injectScript } from '@/utils/injectScript';
 
-let mainWindow;
-let wikiPath;
+let mainWindow: BrowserWindow;
+let wikiPath: string;
 
 process.env.DIST = path.join(__dirname, '../dist');
 process.env.VITE_PUBLIC = app.isPackaged
@@ -33,7 +26,7 @@ process.env.VITE_PUBLIC = app.isPackaged
 
 const preload = path.join(__dirname, '../preload/index.js');
 
-const date = new Date().toISOString().split('T').shift().replace('-', '/'); // 替换第一个-
+const date = new Date().toISOString().split('T').shift()!.replace('-', '/'); // 替换第一个-
 log.transports.file.resolvePathFn = () =>
   path.join(app.getPath('logs'), date, `main.log`);
 
@@ -79,20 +72,20 @@ async function createWindow() {
     // });
 
     // 设置所有外部链接在默认浏览器中打开
-    mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    mainWindow.webContents.setWindowOpenHandler(({ url }: { url: string }) => {
       shell.openExternal(url);
       return { action: 'deny' };
     });
 
     createTray(mainWindow); // 创建任务栏图标
 
-    mainWindow.webContents.on('context-menu', (event, params) => {
+    mainWindow.webContents.on('context-menu', (event: any, params: any) => {
       registerContextMenu(params, mainWindow);
     });
   });
 
   // 处理窗口关闭按钮事件
-  mainWindow.on('close', (event) => {
+  mainWindow.on('close', (event: any) => {
     if (!app.isQuitting) {
       event.preventDefault();
       mainWindow.hide();
@@ -108,29 +101,41 @@ async function createWindow() {
 
   mainWindow.webContents.on('did-finish-load', () => injectScript(mainWindow));
 
-  const menu = Menu.buildFromTemplate(createMenuTemplate());
+  const menu = Menu.buildFromTemplate(createMenuTemplate() as any);
   Menu.setApplicationMenu(menu);
 }
 
 // 监听更新更新
-ipcMain.handle('send-tw-instance', async (event, githubConfig) => {
+ipcMain.handle('send-tw-instance', async (event: any, githubConfig: any) => {
   config.set('github', githubConfig);
 });
 
-ipcMain.on('custom-dialog', (event, { type, message }) => {
-  const options = {
-    type: type === 'confirm' ? 'question' : 'info',
-    buttons:
-      type === 'confirm'
-        ? [t('dialog.cancel'), t('dialog.confirm')]
-        : [t('dialog.confirm')],
-    defaultId: type === 'confirm' ? 1 : 0,
-    title: t('dialog.confirm'),
-    message,
-  };
-  const result = dialog.showMessageBoxSync(mainWindow, options);
-  event.returnValue = type === 'confirm' ? result === 1 : undefined; // confirm 返回 true/false，alert 无返回值
-});
+ipcMain.on(
+  'custom-dialog',
+  (
+    event: any,
+    {
+      type,
+      message,
+    }: {
+      type: DialogType;
+      message: string;
+    }
+  ) => {
+    const options = {
+      type: type === 'confirm' ? 'question' : 'info',
+      buttons:
+        type === 'confirm'
+          ? [t('dialog.cancel'), t('dialog.confirm')]
+          : [t('dialog.confirm')],
+      defaultId: type === 'confirm' ? 1 : 0,
+      title: t('dialog.confirm'),
+      message,
+    };
+    const result = dialog.showMessageBoxSync(mainWindow, options as any);
+    event.returnValue = type === 'confirm' ? result === 1 : undefined; // confirm 返回 true/false，alert 无返回值
+  }
+);
 
 const initApp = async () => {
   // 使用单实例锁
@@ -142,17 +147,20 @@ const initApp = async () => {
     return;
   } else {
     // 监听第二个实例被运行时
-    app.on('second-instance', (event, commandLine, workingDirectory) => {
-      if (mainWindow) {
-        if (mainWindow.isMinimized()) {
-          mainWindow.restore();
+    app.on(
+      'second-instance',
+      (event: any, commandLine: any, workingDirectory: string) => {
+        if (mainWindow) {
+          if (mainWindow.isMinimized()) {
+            mainWindow.restore();
+          }
+          if (!mainWindow.isVisible()) {
+            mainWindow.show();
+          }
+          mainWindow.focus();
         }
-        if (!mainWindow.isVisible()) {
-          mainWindow.show();
-        }
-        mainWindow.focus();
       }
-    });
+    );
   }
   // 注册自定义协议
   if (process.defaultApp) {
@@ -190,7 +198,7 @@ app.on('window-all-closed', () => {
 });
 
 // create findbar
-app.on('browser-window-created', async (_, win) => {
+app.on('browser-window-created', async (_: any, win: any) => {
   setFindBar(win, {
     top: 55,
   });
@@ -202,7 +210,7 @@ app.on('before-quit', () => {
 });
 
 // macos (untest)
-app.on('open-url', (event, url) => {
+app.on('open-url', (event: any, url: string) => {
   event.preventDefault();
   showWikiInfo();
   const win = BrowserWindow.getAllWindows()[0];

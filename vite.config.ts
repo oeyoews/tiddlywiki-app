@@ -25,7 +25,7 @@ export default defineConfig({
       //   format: 'cjs',
       // },
       input: {
-        'main/index': 'src/main/index.js',
+        'main/index': 'src/main/index.ts',
         'preload/index': 'src/preload/index.js',
         'renderer/index': 'src/renderer/index.js',
       },
