@@ -1,8 +1,8 @@
 import { t, i18next } from '@/i18n/index';
 import { shell, app } from 'electron';
 
-export const createMenubar = (win, config, deps, server) => {
-  return function () {
+export const createMenubar = (config, deps, server) => {
+  return function (win) {
     const recentWikis = (config.get('recentWikis') || []).filter(
       (path) => path !== config.get('wikiPath')
     );

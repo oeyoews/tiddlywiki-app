@@ -58,7 +58,7 @@ const deps = {
   var: { downloadFinished },
 };
 
-const createMenuTemplate = createMenubar(win, config, deps, server);
+const createMenuTemplate = createMenubar(config, deps, server);
 
 // 添加更新最近打开的 wiki 列表的函数
 function updateRecentWikis(wikiPath) {
@@ -71,7 +71,7 @@ function updateRecentWikis(wikiPath) {
   config.set('recentWikis', filteredWikis.slice(0, 5));
 
   // 更新菜单
-  menu = Menu.buildFromTemplate(createMenuTemplate());
+  menu = Menu.buildFromTemplate(createMenuTemplate(win));
   Menu.setApplicationMenu(menu);
 }
 
@@ -322,7 +322,7 @@ async function switchLanguage(lang) {
   await i18next.changeLanguage(lang);
 
   // 更新菜单
-  menu = Menu.buildFromTemplate(createMenuTemplate());
+  menu = Menu.buildFromTemplate(createMenuTemplate(win));
   Menu.setApplicationMenu(menu);
 
   // 更新托盘菜单

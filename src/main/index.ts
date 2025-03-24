@@ -99,7 +99,7 @@ async function createWindow() {
 
   win.webContents.on('did-finish-load', () => injectScript(win));
 
-  const menu = Menu.buildFromTemplate(createMenuTemplate() as any);
+  const menu = Menu.buildFromTemplate(createMenuTemplate(win) as any);
   Menu.setApplicationMenu(menu);
 }
 
