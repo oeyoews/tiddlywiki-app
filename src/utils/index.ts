@@ -28,10 +28,12 @@ let wikiInstances: { [port: number]: string } = {}; // 用于记录 port: wikipa
 
 let win: BrowserWindow; // 在 initwiki 初始化时赋值
 
-const server = {
+// NOTE： 这里使用使用对象引用, 便于更新值
+export const server = {
   currentPort: DEFAULT_PORT,
   currentServer: null,
   menu: {} as Menu,
+  tray: null as any as Tray,
 };
 
 const deps = {
@@ -85,7 +87,7 @@ export async function initWiki(
   _mainWindow?: BrowserWindow
 ) {
   log.info('begin initwiki');
-  if (_mainWindow) {
+  if (_mainWindow && !win) {
     win = _mainWindow;
   }
   try {
@@ -97,7 +99,7 @@ export async function initWiki(
     // 新实例：记录端口和路径
     if (!existingPort) {
       server.currentPort = await getPorts({ port: DEFAULT_PORT });
-      log.info('start new server on ', server.currentPort);
+      log.info('start new server on', server.currentPort);
       wikiInstances[server.currentPort] = wikiFolder;
     } else {
       server.currentPort = Number(existingPort); // 更新端口
@@ -279,7 +281,7 @@ async function switchLanguage(lang: string) {
   Menu.setApplicationMenu(server.menu);
 
   // 更新托盘菜单
-  createTray(win);
+  createTray(win, server);
 }
 
 async function importSingleFileWiki() {

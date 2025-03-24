@@ -1,4 +1,4 @@
-import { dialog, shell, ipcMain, app, BrowserWindow, Menu } from 'electron';
+import { shell, ipcMain, app, BrowserWindow, Menu } from 'electron';
 import { setFindBar } from '@/main/find-bar';
 import path from 'path';
 import { t, initI18n } from '@/i18n/index.js';
@@ -11,6 +11,7 @@ import { injectScript } from '@/utils/injectScript';
 import { logInit, log } from '@/utils/logger';
 import { twDialog } from '@/utils/tw-dialog';
 import { createTray } from '@/utils/createTray';
+import { server } from '@/utils';
 
 let win: BrowserWindow;
 let wikiPath: string;
@@ -56,7 +57,7 @@ async function createWindow() {
       return { action: 'deny' };
     });
 
-    createTray(win); // 创建任务栏图标
+    createTray(win, server); // 创建任务栏图标
 
     win.webContents.on('context-menu', (event: any, params: any) => {
       registerContextMenu(params, win);
