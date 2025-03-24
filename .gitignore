@@ -5,3 +5,4 @@ builder*.yaml
 release
 wiki/
 dist/
+test-results/
