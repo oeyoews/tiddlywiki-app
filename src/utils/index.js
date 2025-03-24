@@ -10,19 +10,10 @@ const { TiddlyWiki } = require('tiddlywiki');
 const { autoUpdater } = require('electron-updater');
 let tray = null;
 let menu = null;
-import { config } from './config.js';
-import { updaterConfig } from './updater.js';
+import { config } from '@/utils/config';
+import { updaterConfig } from '@/utils/updater.js';
+import { iconPath, iconPathDev } from '@/utils/icon';
 
-process.env.DIST = path.join(__dirname, '../dist');
-process.env.VITE_PUBLIC = app.isPackaged
-  ? process.env.DIST
-  : path.join(process.env.DIST, '../public');
-
-const iconPath = path.join(process.env.VITE_PUBLIC, '../assets/tray-icon.png');
-const iconPathDev = path.join(
-  process.env.VITE_PUBLIC,
-  '../assets/tray-icon-dev.png'
-);
 import packageInfo from '../../package.json';
 import saveToGitHub from './github-saver';
 let updateAvailableHandled = false;

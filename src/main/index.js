@@ -7,9 +7,10 @@ const {
   session,
   Menu,
 } = require('electron');
-import { setFindBar } from './find-bar';
+import { setFindBar } from '@/main/find-bar';
 const path = require('path');
 import { initI18n, i18next } from '@/i18n/index.js';
+import { iconPath, iconPathDev } from '@/utils/icon';
 const { t } = i18next;
 const { autoUpdater } = require('electron-updater');
 const log = require('electron-log/main');
@@ -43,13 +44,6 @@ log.transports.file.resolvePathFn = () =>
   path.join(app.getPath('logs'), date, `main.log`);
 
 Menu.setApplicationMenu(null);
-
-const iconPath = path.join(process.env.VITE_PUBLIC, '../assets/tray-icon.png');
-
-const iconPathDev = path.join(
-  process.env.VITE_PUBLIC,
-  '../assets/tray-icon-dev.png'
-);
 
 // 修改 createWindow 函数中的菜单创建部分
 async function createWindow() {
