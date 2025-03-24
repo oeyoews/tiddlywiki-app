@@ -11,8 +11,8 @@ import {
   showWikiInfo,
   createTray,
   initWiki,
-  config,
 } from '@/utils/index';
+import { config } from '@/utils/config';
 import { registerContextMenu } from '@/utils/contextmenu';
 import { injectScript } from '@/utils/injectScript';
 

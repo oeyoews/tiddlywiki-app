@@ -23,6 +23,7 @@ import {
   wikiInitArgs,
   wikiStartupArgs,
 } from '@/utils/wiki';
+import { createMenubar } from './menubar';
 let updateAvailableHandled = false;
 let downloadFinished = false;
 let hasLatestNotify = false;
@@ -32,9 +33,32 @@ let menu = null;
 
 const log = require('electron-log/main');
 
-let currentServer = null;
 let win = null; // 在 initwiki 初始化时赋值
-let currentPort = DEFAULT_PORT;
+
+const server = {
+  currentPort: DEFAULT_PORT,
+  currentServer: null,
+};
+
+const deps = {
+  initWiki,
+  openWiki,
+  buildWiki,
+  importSingleFileWiki,
+  releaseWiki,
+  buildWiki,
+  configureGitHub,
+  switchLanguage,
+  showWikiInfo2,
+  checkForUpdates,
+  createNewWiki,
+  toggleAutocorrect,
+  toggleChineseLang,
+  toggleMarkdown,
+  var: { downloadFinished },
+};
+
+const createMenuTemplate = createMenubar(win, config, deps, server);
 
 // 添加更新最近打开的 wiki 列表的函数
 function updateRecentWikis(wikiPath) {
@@ -76,11 +100,11 @@ async function initWiki(wikiFolder, isFirstTime = false, _mainWindow) {
 
     // 新实例：记录端口和路径
     if (!existingPort) {
-      currentPort = await getPorts({ port: DEFAULT_PORT });
-      log.info('start new server on ', currentPort);
-      wikiInstances[currentPort] = wikiFolder;
+      server.currentPort = await getPorts({ port: DEFAULT_PORT });
+      log.info('start new server on ', server.currentPort);
+      wikiInstances[server.currentPort] = wikiFolder;
     } else {
-      currentPort = existingPort; // 更新端口
+      server.currentPort = existingPort; // 更新端口
     }
 
     if (isFirstTime) {
@@ -118,8 +142,8 @@ async function initWiki(wikiFolder, isFirstTime = false, _mainWindow) {
       console.log(t('log.finishInit'));
     }
 
-    if (currentServer) {
-      currentServer = null;
+    if (server.currentServer) {
+      server.currentServer = null;
     }
 
     // 启动实例前的检查
@@ -135,10 +159,10 @@ async function initWiki(wikiFolder, isFirstTime = false, _mainWindow) {
     }
 
     const { boot: twBoot } = TiddlyWiki();
-    twBoot.argv = wikiStartupArgs(wikiFolder, currentPort);
+    twBoot.argv = wikiStartupArgs(wikiFolder, server.currentPort);
 
     const startServer = (port) => {
-      log.info(`start begin: http://localhost:${currentPort}`);
+      log.info(`start begin: http://localhost:${server.currentPort}`);
       win.loadURL(`http://localhost:${port}`);
       win.webContents.once('did-finish-load', () => {
         // 获取页面标题并设置窗口标题
@@ -146,15 +170,15 @@ async function initWiki(wikiFolder, isFirstTime = false, _mainWindow) {
         win.setTitle(`${pageTitle} - ${wikiFolder}`);
       });
     };
-    currentServer = twBoot;
+    server.currentServer = twBoot;
     if (!existingPort) {
-      twBoot.boot(startServer(currentPort));
+      twBoot.boot(startServer(server.currentPort));
     } else {
       // 直接加载已存在的服务器
-      startServer(currentPort);
+      startServer(server.currentPort);
     }
     updateRecentWikis(wikiFolder);
-    return { port: currentPort };
+    return { port: server.currentPort };
   } catch (err) {
     dialog.showErrorBox(
       t('dialog.error'),
@@ -236,8 +260,8 @@ function createTray(win) {
     {
       label: t('tray.openInBrowser'),
       click: () => {
-        if (currentPort) {
-          shell.openExternal(`http://localhost:${currentPort}`);
+        if (server.currentPort) {
+          shell.openExternal(`http://localhost:${server.currentPort}`);
         }
       },
     },
@@ -272,7 +296,7 @@ async function showWikiInfo() {
     detail: `${t('app.version')}: ${packageInfo.version}\n${t(
       'app.currentWikiPath'
     )}：${config.get('wikiPath')}\n${t('app.runningPort')}：${
-      currentPort || t('app.notRunning')
+      server.currentPort || t('app.notRunning')
     }\n${t('app.configPath')}：${config.fileName}`,
     width: 400,
     height: 300,
@@ -287,287 +311,10 @@ async function showWikiInfo2() {
     appName: t('app.name'),
     version: packageInfo.version,
     wikiPath: config.get('wikiPath'),
-    port: currentPort || t('app.notRunning'),
+    port: server.currentPort || t('app.notRunning'),
     configPath: config.fileName,
     closeText: t('dialog.close'),
   });
-}
-
-// 添加创建菜单模板的函数
-function createMenuTemplate() {
-  const recentWikis = (config.get('recentWikis') || []).filter(
-    (path) => path !== config.get('wikiPath')
-  );
-
-  return [
-    {
-      label: t('menu.file'),
-      submenu: [
-        {
-          label: t('menu.openExistingWiki'),
-          accelerator: 'CmdOrCtrl+O',
-          click: async () => {
-            const { port } = await openWiki();
-            currentPort = port;
-          },
-        },
-        {
-          label: t('menu.createNewWiki'),
-          accelerator: 'CmdOrCtrl+N',
-          click: async () => {
-            const { port } = await createNewWiki();
-            currentPort = port;
-          },
-        },
-        { type: 'separator' },
-        {
-          label: t('menu.recentWikis'),
-          submenu: [
-            ...recentWikis.map((wikiPath) => ({
-              label: wikiPath,
-              click: async () => {
-                config.set('wikiPath', wikiPath);
-                const { port } = await initWiki(wikiPath);
-                currentPort = port;
-              },
-            })),
-            { type: 'separator' },
-            {
-              label: t('menu.clearRecentWikis'),
-              enabled: recentWikis.length > 0,
-              click: () => {
-                config.set('recentWikis', []);
-                const updatemenu = menu.items
-                  .find((item) => item.label === t('menu.file'))
-                  .submenu.items.find(
-                    (item) => item.label === t('menu.recentWikis')
-                  );
-                // updatemenu.submenu.items = null;
-                // updatemenu.label = updatemenu.label + ' (0)';
-                updatemenu.enabled = false;
-                Menu.setApplicationMenu(menu);
-              },
-            },
-          ],
-        },
-        { type: 'separator' },
-        {
-          label: t('menu.importWiki'),
-          click: importSingleFileWiki,
-        },
-        {
-          label: t('menu.publish'),
-          submenu: [
-            {
-              label: t('menu.publishToGitHub'),
-              click: releaseWiki,
-            },
-          ],
-        },
-        {
-          label: t('menu.buildWiki'),
-          click: buildWiki,
-        },
-        { type: 'separator' },
-        {
-          label: t('menu.restart'),
-          accelerator: 'CmdOrCtrl+Shift+Alt+R',
-          click: () => {
-            app.relaunch();
-            app.exit(0);
-          },
-        },
-        { type: 'separator' },
-        {
-          label: t('menu.exit'),
-          accelerator: 'CmdOrCtrl+Q',
-          role: 'quit',
-        },
-      ],
-    },
-    {
-      label: t('menu.view'),
-      submenu: [
-        {
-          role: 'reload',
-          label: t('menu.reload'),
-        },
-        {
-          role: 'forceReload',
-          label: t('menu.forceReload'),
-        },
-        { type: 'separator' },
-        {
-          role: 'resetZoom',
-          label: t('menu.resetZoom'),
-        },
-        {
-          role: 'zoomIn',
-          label: t('menu.zoomIn'),
-          accelerator: 'CmdOrCtrl+=',
-        },
-        {
-          role: 'zoomOut',
-          label: t('menu.zoomOut'),
-        },
-        { type: 'separator' },
-        {
-          role: 'togglefullscreen',
-          label: t('menu.toggleFullscreen'),
-          accelerator: 'F11',
-        },
-        {
-          label: t('menu.toggleMenuBar'),
-          accelerator: 'Alt+M',
-          click: () => {
-            const isVisible = win.isMenuBarVisible();
-            win.setMenuBarVisibility(!isVisible);
-          },
-        },
-        {
-          label: t('menu.openInBrowser'),
-          accelerator: 'CmdOrCtrl+Shift+O',
-          click: () => {
-            if (currentPort) {
-              shell.openExternal(`http://localhost:${currentPort}`);
-            }
-          },
-        },
-        {
-          label: t('menu.openFolder'),
-          accelerator: 'CmdOrCtrl+E',
-          click: () => {
-            shell.openPath(config.get('wikiPath'));
-          },
-        },
-      ],
-    },
-    {
-      label: t('menu.settings'),
-      submenu: [
-        {
-          label: t('menu.markdown'),
-          type: 'checkbox',
-          checked: config.get('markdown'),
-          click: (menuItem) => toggleMarkdown(menuItem.checked),
-        },
-        {
-          label: t('menu.autocorrect'),
-          type: 'checkbox',
-          checked: config.get('autocorrect'),
-          click: async (menuItem) => await toggleAutocorrect(menuItem),
-        },
-        {
-          label: t('menu.langCN'),
-          type: 'checkbox',
-          checked: config.get('lang-CN'),
-          click: (menuItem) => toggleChineseLang(menuItem.checked),
-        },
-        ...(process.platform === 'win32' || process.platform === 'darwin'
-          ? [
-              {
-                label: t('menu.autoStart'),
-                type: 'checkbox',
-                checked: app.getLoginItemSettings().openAtLogin,
-                click() {
-                  if (!app.isPackaged) {
-                    app.setLoginItemSettings({
-                      openAtLogin: !app.getLoginItemSettings().openAtLogin,
-                      path: process.execPath, // or use app.getPath('exe'),
-                    });
-                    log.info(
-                      'dev: test autoStart',
-                      app.getLoginItemSettings().openAtLogin
-                    );
-                  } else {
-                    log.info(
-                      'before toggle autoStart',
-                      app.getLoginItemSettings().openAtLogin
-                    );
-                    app.setLoginItemSettings({
-                      openAtLogin: !app.getLoginItemSettings().openAtLogin,
-                      path: process.execPath, // or use app.getPath('exe'),
-                    });
-                    log.info(
-                      app.getLoginItemSettings().openAtLogin,
-                      'after: autoStart toggled'
-                    );
-                  }
-                },
-              },
-            ]
-          : []),
-        {
-          label: t('menu.githubConfig'),
-          click: configureGitHub,
-        },
-        {
-          label: t('menu.language'),
-          submenu: [
-            {
-              label: '简体中文',
-              type: 'radio',
-              checked: i18next.language === 'zh-CN',
-              click: () => switchLanguage('zh-CN'),
-            },
-            {
-              label: 'English',
-              type: 'radio',
-              checked: i18next.language === 'en-US',
-              click: () => switchLanguage('en-US'),
-            },
-          ],
-        },
-      ],
-    },
-    {
-      label: t('menu.help'),
-      submenu: [
-        {
-          label: t('menu.devTools'),
-          accelerator: 'CmdOrCtrl+Shift+I',
-          click: () => win.webContents.openDevTools({ mode: 'right' }),
-        },
-        {
-          label: t('menu.checkUpdate'),
-          click: checkForUpdates,
-          enabled: !downloadFinished,
-        },
-        {
-          label: t('menu.showLogs'),
-          click: () => {
-            shell.openPath(app.getPath('logs'));
-          },
-        },
-        {
-          label: t('menu.reportIssue'),
-          click: () =>
-            shell.openExternal(
-              'https://github.com/oeyoews/tiddlywiki-app/issues'
-            ),
-        },
-        {
-          label: t('menu.twdocs'),
-          click: () => {
-            const isZH = i18next.language === 'zh-CN';
-            shell.openExternal(
-              isZH
-                ? 'https://bramchen.github.io/tw5-docs/zh-Hans'
-                : 'https://tiddlywiki.com/'
-            );
-          },
-        },
-        {
-          label: t('menu.forum'),
-          click: () => shell.openExternal('https://talk.tiddlywiki.org/'),
-        },
-        {
-          label: t('menu.about'),
-          click: showWikiInfo2,
-        },
-      ],
-    },
-  ];
 }
 
 async function switchLanguage(lang) {
@@ -610,7 +357,7 @@ async function importSingleFileWiki() {
         // 更新当前 Wiki 路径并重新初始化
         config.set('wikiPath', targetPath);
         const wikiRes = await initWiki(targetPath);
-        currentPort = wikiRes.port;
+        server.currentPort = wikiRes.port;
 
         dialog.showMessageBox({
           type: 'info',
@@ -843,17 +590,6 @@ async function toggleChineseLang(
   } catch (err) {}
 }
 
-export {
-  config,
-  isEmptyDirectory,
-  openWiki,
-  initWiki,
-  createNewWiki,
-  showWikiInfo,
-  createTray,
-  createMenuTemplate,
-};
-
 async function checkForUpdates() {
   try {
     // 模拟打包环境
@@ -961,3 +697,5 @@ async function checkForUpdates() {
     );
   }
 }
+
+export { initWiki, showWikiInfo, createTray, createMenuTemplate };
