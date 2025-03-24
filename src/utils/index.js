@@ -33,7 +33,7 @@ let menu = null;
 const log = require('electron-log/main');
 
 let currentServer = null;
-let mainWindow = null; // 在 initwiki 初始化时赋值
+let win = null; // 在 initwiki 初始化时赋值
 let currentPort = DEFAULT_PORT;
 
 // 添加更新最近打开的 wiki 列表的函数
@@ -60,13 +60,13 @@ async function releaseWiki() {
     repo,
     GITHUB_TOKEN: token,
     branch,
-    mainWindow,
+    win,
   });
 }
 
 async function initWiki(wikiFolder, isFirstTime = false, _mainWindow) {
   if (_mainWindow) {
-    mainWindow = _mainWindow;
+    win = _mainWindow;
   }
   try {
     // 检查当前实例的文件夹是否被初始化过
@@ -139,11 +139,11 @@ async function initWiki(wikiFolder, isFirstTime = false, _mainWindow) {
 
     const startServer = (port) => {
       log.info(`start begin: http://localhost:${currentPort}`);
-      mainWindow.loadURL(`http://localhost:${port}`);
-      mainWindow.webContents.once('did-finish-load', () => {
+      win.loadURL(`http://localhost:${port}`);
+      win.webContents.once('did-finish-load', () => {
         // 获取页面标题并设置窗口标题
-        const pageTitle = mainWindow.webContents.getTitle();
-        mainWindow.setTitle(`${pageTitle} - ${wikiFolder}`);
+        const pageTitle = win.webContents.getTitle();
+        win.setTitle(`${pageTitle} - ${wikiFolder}`);
       });
     };
     currentServer = twBoot;
@@ -220,7 +220,7 @@ async function openWiki() {
 }
 
 // 修改 createTray 函数中的菜单项
-function createTray(mainWindow) {
+function createTray(win) {
   if (!tray) {
     tray = new Tray(appIcon);
   }
@@ -230,7 +230,7 @@ function createTray(mainWindow) {
     {
       label: t('tray.showWindow'),
       click: () => {
-        mainWindow.show();
+        win.show();
       },
     },
     {
@@ -255,11 +255,11 @@ function createTray(mainWindow) {
   ]);
   tray.setContextMenu(contextMenu);
   tray.on('click', () => {
-    if (!mainWindow.isVisible() || mainWindow.isMinimized()) {
-      mainWindow.show();
-      mainWindow.restore();
+    if (!win.isVisible() || win.isMinimized()) {
+      win.show();
+      win.restore();
     } else {
-      mainWindow.minimize();
+      win.minimize();
     }
   });
 }
@@ -283,7 +283,7 @@ async function showWikiInfo() {
 }
 
 async function showWikiInfo2() {
-  mainWindow.webContents.send('show-wiki-info', {
+  win.webContents.send('show-wiki-info', {
     appName: t('app.name'),
     version: packageInfo.version,
     wikiPath: config.get('wikiPath'),
@@ -420,8 +420,8 @@ function createMenuTemplate() {
           label: t('menu.toggleMenuBar'),
           accelerator: 'Alt+M',
           click: () => {
-            const isVisible = mainWindow.isMenuBarVisible();
-            mainWindow.setMenuBarVisibility(!isVisible);
+            const isVisible = win.isMenuBarVisible();
+            win.setMenuBarVisibility(!isVisible);
           },
         },
         {
@@ -526,7 +526,7 @@ function createMenuTemplate() {
         {
           label: t('menu.devTools'),
           accelerator: 'CmdOrCtrl+Shift+I',
-          click: () => mainWindow.webContents.openDevTools({ mode: 'right' }),
+          click: () => win.webContents.openDevTools({ mode: 'right' }),
         },
         {
           label: t('menu.checkUpdate'),
@@ -579,7 +579,7 @@ async function switchLanguage(lang) {
   Menu.setApplicationMenu(menu);
 
   // 更新托盘菜单
-  createTray(mainWindow);
+  createTray(win);
 }
 
 async function importSingleFileWiki() {
@@ -643,22 +643,22 @@ async function buildWiki() {
     }
 
     // 设置进度条
-    mainWindow.setProgressBar(0.1);
+    win.setProgressBar(0.1);
 
     const { boot } = TiddlyWiki();
     boot.argv = wikiBuildArgs(wikiPath);
 
     // 更新进度条
-    mainWindow.setProgressBar(0.4);
+    win.setProgressBar(0.4);
 
     await boot.boot(() => {
-      mainWindow.setProgressBar(0.7);
+      win.setProgressBar(0.7);
       log.log(t('log.startBuild'));
     });
 
     // 构建完成
-    mainWindow.setProgressBar(1);
-    setTimeout(() => mainWindow.setProgressBar(-1), 1000); // 1 秒后移除进度条
+    win.setProgressBar(1);
+    setTimeout(() => win.setProgressBar(-1), 1000); // 1 秒后移除进度条
 
     const outputPath = path.join(wikiPath, 'output', 'index.html');
     const result = await dialog.showMessageBox({
@@ -683,7 +683,7 @@ async function buildWiki() {
       await releaseWiki();
     }
   } catch (err) {
-    mainWindow.setProgressBar(-1); // 出错时移除进度条
+    win.setProgressBar(-1); // 出错时移除进度条
     dialog.showErrorBox(
       t('dialog.error'),
       t('dialog.buildError', { message: err.message })
@@ -707,7 +707,7 @@ async function configureGitHub() {
     cancelId: 1,
   });
   if (result.response === 0) {
-    mainWindow.webContents.send('config-github');
+    win.webContents.send('config-github');
   }
 }
 
@@ -871,7 +871,7 @@ async function checkForUpdates() {
 
     autoUpdater.on('checking-for-update', () => {
       log.info('checking-for-update');
-      mainWindow.setProgressBar(0.2);
+      win.setProgressBar(0.2);
       // checkMenu.label = t('dialog.updateChecking');
       // Menu.setApplicationMenu(menu);
     });
@@ -904,7 +904,7 @@ async function checkForUpdates() {
     autoUpdater.on('update-not-available', () => {
       if (hasLatestNotify) return; // 防止重复弹窗
       hasLatestNotify = true;
-      mainWindow.setProgressBar(-1);
+      win.setProgressBar(-1);
       dialog.showMessageBox({
         type: 'info',
         title: t('dialog.updateCheck'),
@@ -914,7 +914,7 @@ async function checkForUpdates() {
 
     autoUpdater.on('download-progress', (progressObj) => {
       log.info(progressObj.percent.toFixed(2) + '%', 'Updating');
-      mainWindow.setProgressBar(progressObj.percent / 100);
+      win.setProgressBar(progressObj.percent / 100);
     });
 
     autoUpdater.on('update-downloaded', async (info) => {
@@ -925,7 +925,7 @@ async function checkForUpdates() {
       log.info('update downloaded');
 
       downloadFinished = true;
-      mainWindow.setProgressBar(-1);
+      win.setProgressBar(-1);
       const result = await dialog.showMessageBox({
         type: 'info',
         title: t('dialog.updateReady'),
@@ -941,7 +941,7 @@ async function checkForUpdates() {
     });
 
     autoUpdater.on('error', (err) => {
-      mainWindow.setProgressBar(-1);
+      win.setProgressBar(-1);
       dialog.showErrorBox(
         t('dialog.error'),
         t('dialog.updateError', { message: err.message })

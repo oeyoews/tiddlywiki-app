@@ -16,7 +16,7 @@ import {
 import { registerContextMenu } from '@/utils/contextmenu';
 import { injectScript } from '@/utils/injectScript';
 
-let mainWindow: BrowserWindow;
+let win: BrowserWindow;
 let wikiPath: string;
 
 process.env.DIST = path.join(__dirname, '../dist');
@@ -34,7 +34,7 @@ Menu.setApplicationMenu(null);
 
 // 修改 createWindow 函数中的菜单创建部分
 async function createWindow() {
-  mainWindow = new BrowserWindow({
+  win = new BrowserWindow({
     width: 1400,
     height: 800,
     icon: appIcon,
@@ -49,8 +49,8 @@ async function createWindow() {
     },
   });
 
-  mainWindow.once('ready-to-show', () => {
-    mainWindow.show();
+  win.once('ready-to-show', () => {
+    win.show();
     log.info('ready to show');
     autoUpdater.autoDownload = false;
 
@@ -72,23 +72,23 @@ async function createWindow() {
     // });
 
     // 设置所有外部链接在默认浏览器中打开
-    mainWindow.webContents.setWindowOpenHandler(({ url }: { url: string }) => {
+    win.webContents.setWindowOpenHandler(({ url }: { url: string }) => {
       shell.openExternal(url);
       return { action: 'deny' };
     });
 
-    createTray(mainWindow); // 创建任务栏图标
+    createTray(win); // 创建任务栏图标
 
-    mainWindow.webContents.on('context-menu', (event: any, params: any) => {
-      registerContextMenu(params, mainWindow);
+    win.webContents.on('context-menu', (event: any, params: any) => {
+      registerContextMenu(params, win);
     });
   });
 
   // 处理窗口关闭按钮事件
-  mainWindow.on('close', (event: any) => {
+  win.on('close', (event: any) => {
     if (!app.isQuitting) {
       event.preventDefault();
-      mainWindow.hide();
+      win.hide();
       return false;
     }
     return true;
@@ -97,9 +97,9 @@ async function createWindow() {
   const isFirstTime = !config.get('wikiPath');
 
   // 初始化并加载 wiki
-  await initWiki(wikiPath, isFirstTime, mainWindow);
+  await initWiki(wikiPath, isFirstTime, win);
 
-  mainWindow.webContents.on('did-finish-load', () => injectScript(mainWindow));
+  win.webContents.on('did-finish-load', () => injectScript(win));
 
   const menu = Menu.buildFromTemplate(createMenuTemplate() as any);
   Menu.setApplicationMenu(menu);
@@ -132,7 +132,7 @@ ipcMain.on(
       title: t('dialog.confirm'),
       message,
     };
-    const result = dialog.showMessageBoxSync(mainWindow, options as any);
+    const result = dialog.showMessageBoxSync(win, options as any);
     event.returnValue = type === 'confirm' ? result === 1 : undefined; // confirm 返回 true/false，alert 无返回值
   }
 );
@@ -150,14 +150,14 @@ const initApp = async () => {
     app.on(
       'second-instance',
       (event: any, commandLine: any, workingDirectory: string) => {
-        if (mainWindow) {
-          if (mainWindow.isMinimized()) {
-            mainWindow.restore();
+        if (win) {
+          if (win.isMinimized()) {
+            win.restore();
           }
-          if (!mainWindow.isVisible()) {
-            mainWindow.show();
+          if (!win.isVisible()) {
+            win.show();
           }
-          mainWindow.focus();
+          win.focus();
         }
       }
     );

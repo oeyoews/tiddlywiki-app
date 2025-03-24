@@ -14,7 +14,7 @@ const log = require('electron-log/main');
  * @param {string} options.repo - 目标仓库名称
  * @param {string} [options.branch='main'] - 目标分支名称，默认为 main
  * @param {string} [options.COMMIT_MESSAGE='Deploy to GitHub Pages'] - 提交消息
- * @param {Object} options.mainWindow - 主窗口对象
+ * @param {Object} options.win - 主窗口对象
  * @returns {Promise} 上传操作的 Promise
  */
 async function saveToGitHub({
@@ -25,7 +25,7 @@ async function saveToGitHub({
   GITHUB_TOKEN,
   // + new Date().toLocaleTimeString(),
   COMMIT_MESSAGE = 'Saved by TiddlyWiki App ',
-  mainWindow, // 添加 mainWindow 参数
+  win, // 添加 mainWindow 参数
 }) {
   log.info('begine to save tiddlywiki html to github pages...');
   const pageSite = `https://${owner}.github.io/${repo}`;
@@ -82,8 +82,8 @@ async function saveToGitHub({
       const content = fs.readFileSync(FILE_PATH, 'base64');
 
       // 开始上传时显示进度条
-      if (mainWindow) {
-        mainWindow.setProgressBar(0.2);
+      if (win) {
+        win.setProgressBar(0.2);
       }
 
       const body = {
@@ -97,8 +97,8 @@ async function saveToGitHub({
       }
 
       // 上传过程中更新进度
-      if (mainWindow) {
-        mainWindow.setProgressBar(0.6);
+      if (win) {
+        win.setProgressBar(0.6);
       }
       log.info('github-saver url is (start)', url);
 
@@ -114,8 +114,8 @@ async function saveToGitHub({
       log.info('github-saver url is (uploading)', url);
 
       // 上传完成，移除进度条
-      if (mainWindow) {
-        mainWindow.setProgressBar(-1);
+      if (win) {
+        win.setProgressBar(-1);
       }
 
       if (!response.ok) {
@@ -137,8 +137,8 @@ async function saveToGitHub({
         .show();
     } catch (error) {
       // 发生错误时移除进度条
-      if (mainWindow) {
-        mainWindow.setProgressBar(-1);
+      if (win) {
+        win.setProgressBar(-1);
       }
       throw error;
     }
