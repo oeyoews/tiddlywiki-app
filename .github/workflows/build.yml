@@ -47,7 +47,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install Dependencies
-        run: pnpm install
+        run: pnpm install && pnpm test
 
       - name: Build Electron App
         run: pnpm run release
