@@ -40,10 +40,10 @@ if (window.$tw) {
     window._swal({
       title: data.appName,
       text: `
-      版本：${data.version}
-      当前 Wiki 路径：${data.wikiPath}
-      运行端口：${data.port}
-      配置文件路径：${data.configPath}
+      version ：${data.version}
+      wiki folder：${data.wikiPath}
+      port：${data.port}
+      config file：${data.configPath}
     `,
       buttons: data.closeText,
       // icon: 'info',

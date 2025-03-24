@@ -194,20 +194,20 @@ const translations = {
       'zh-CN': '关于 Wiki',
     },
     version: {
-      'en-US': 'Version',
-      'zh-CN': '版本',
+      'en-US': 'Version: {{version}}',
+      'zh-CN': '版本：{{version}}',
     },
     configPath: {
-      'en-US': 'Config Path',
-      'zh-CN': '配置文件路径',
+      'en-US': 'Config Path: {{configPath}}',
+      'zh-CN': '配置文件路径：{{configPath}}',
     },
     currentWikiPath: {
-      'en-US': 'Current Wiki Path',
-      'zh-CN': '当前 Wiki 路径',
+      'en-US': 'Current Wiki Path: {{wikiPath}}',
+      'zh-CN': '当前 Wiki 路径：{{wikiPath}}',
     },
     runningPort: {
-      'en-US': 'Running Port',
-      'zh-CN': '运行端口',
+      'en-US': 'Running Port: {{port}}',
+      'zh-CN': '运行端口：{{port}}',
     },
     notRunning: {
       'en-US': 'Not Running',
