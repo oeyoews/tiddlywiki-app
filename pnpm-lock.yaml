@@ -35,7 +35,7 @@ importers:
         version: 25.1.8(electron-builder-squirrel-windows@25.1.8)
       vite:
         specifier: ^6.2.2
-        version: 6.2.2(@types/node@22.13.9)
+        version: 6.2.2(@types/node@22.13.11)
 
 packages:
 
@@ -399,8 +399,8 @@ packages:
   '@types/ms@2.1.0':
     resolution: {integrity: sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==}
 
-  '@types/node@22.13.9':
-    resolution: {integrity: sha512-acBjXdRJ3A6Pb3tqnw9HZmyR3Fiol3aGxRCK1x3d+6CDAMjl7I649wpSd+yNURCjbOUGu9tqtLKnTGxmK6CyGw==}
+  '@types/node@22.13.11':
+    resolution: {integrity: sha512-iEUCUJoU0i3VnrCmgoWCXttklWcvoCIx4jzcP22fioIVSdTmjgoEvmAO/QPw6TcS9k5FrNgn4w7q5lGOd1CT5g==}
 
   '@types/plist@3.0.5':
     resolution: {integrity: sha512-E6OCaRmAe4WDmWNsL/9RMqdkkzDCY1etutkflWk4c+AcjDU07Pcz1fQwTX0TQz+Pxqn9i4L1TU3UFpjnrcDgxA==}
@@ -2007,7 +2007,7 @@ snapshots:
     dependencies:
       '@types/http-cache-semantics': 4.0.4
       '@types/keyv': 3.1.4
-      '@types/node': 22.13.9
+      '@types/node': 22.13.11
       '@types/responselike': 1.0.3
 
   '@types/debug@4.1.12':
@@ -2018,36 +2018,36 @@ snapshots:
 
   '@types/fs-extra@9.0.13':
     dependencies:
-      '@types/node': 22.13.9
+      '@types/node': 22.13.11
 
   '@types/http-cache-semantics@4.0.4': {}
 
   '@types/keyv@3.1.4':
     dependencies:
-      '@types/node': 22.13.9
+      '@types/node': 22.13.11
 
   '@types/ms@2.1.0': {}
 
-  '@types/node@22.13.9':
+  '@types/node@22.13.11':
     dependencies:
       undici-types: 6.20.0
 
   '@types/plist@3.0.5':
     dependencies:
-      '@types/node': 22.13.9
+      '@types/node': 22.13.11
       xmlbuilder: 15.1.1
     optional: true
 
   '@types/responselike@1.0.3':
     dependencies:
-      '@types/node': 22.13.9
+      '@types/node': 22.13.11
 
   '@types/verror@1.10.11':
     optional: true
 
   '@types/yauzl@2.10.3':
     dependencies:
-      '@types/node': 22.13.9
+      '@types/node': 22.13.11
     optional: true
 
   '@xmldom/xmldom@0.8.10': {}
@@ -2547,7 +2547,7 @@ snapshots:
   electron@35.0.3:
     dependencies:
       '@electron/get': 2.0.3
-      '@types/node': 22.13.9
+      '@types/node': 22.13.11
       extract-zip: 2.0.1
     transitivePeerDependencies:
       - supports-color
@@ -3500,13 +3500,13 @@ snapshots:
       extsprintf: 1.4.1
     optional: true
 
-  vite@6.2.2(@types/node@22.13.9):
+  vite@6.2.2(@types/node@22.13.11):
     dependencies:
       esbuild: 0.25.1
       postcss: 8.5.3
       rollup: 4.36.0
     optionalDependencies:
-      '@types/node': 22.13.9
+      '@types/node': 22.13.11
       fsevents: 2.3.3
 
   wcwidth@1.0.1:
