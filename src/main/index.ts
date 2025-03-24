@@ -1,7 +1,7 @@
 import { shell, ipcMain, app, BrowserWindow, Menu } from 'electron';
 import { setFindBar } from '@/main/find-bar';
 import path from 'path';
-import { t, initI18n } from '@/i18n/index.js';
+import { initI18n } from '@/i18n/index.js';
 import { appIcon } from '@/utils/icon';
 
 import { createMenuTemplate, showWikiInfo, initWiki } from '@/utils/index';
@@ -16,12 +16,6 @@ import { server } from '@/utils';
 let win: BrowserWindow;
 let wikiPath: string;
 
-// 初始化日志
-logInit();
-
-// 设置应用菜单为空
-Menu.setApplicationMenu(null);
-
 // 环境变量配置
 process.env.DIST = path.join(__dirname, '../dist');
 process.env.VITE_PUBLIC = app.isPackaged
@@ -29,6 +23,9 @@ process.env.VITE_PUBLIC = app.isPackaged
   : path.join(process.env.DIST, '../public');
 
 const preload = path.join(__dirname, '../preload/index.js');
+
+// 初始化日志
+logInit();
 
 // 创建主窗口
 async function createWindow() {
@@ -97,6 +94,9 @@ const initApp = async () => {
     return;
   }
 
+  // 设置应用菜单为空
+  Menu.setApplicationMenu(null);
+
   app.on('second-instance', () => {
     if (win) {
       if (win.isMinimized()) win.restore();
@@ -121,7 +121,12 @@ const initApp = async () => {
 
   app.on('ready', async () => {
     const lang = app.getSystemLocale();
-    config.set('language', lang);
+    // 首次启动使用用户系统语言作为默认语言
+    if (!config.get('language')) {
+      log.info('init app language', lang);
+    } else {
+      log.info('app language is', lang);
+    }
     initI18n(config);
     createWindow();
 

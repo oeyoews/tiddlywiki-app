@@ -6,7 +6,7 @@ const DEFAULT_WIKI_DIR = path.resolve('wiki'); // use app.getPath('desktop')
 export const config = new Config({
   defaults: {
     wikiPath: DEFAULT_WIKI_DIR,
-    language: 'en-US',
+    language: null,
     markdown: false,
     autocorrect: false,
     'lang-CN': false,

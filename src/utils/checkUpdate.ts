@@ -5,7 +5,6 @@ import { dialog, type BrowserWindow } from 'electron';
 import { t } from '@/i18n';
 
 autoUpdater.autoDownload = false;
-log.info('disabled autoDownload');
 
 export async function checkForUpdates(win: BrowserWindow) {
   let updateAvailableHandled = false;

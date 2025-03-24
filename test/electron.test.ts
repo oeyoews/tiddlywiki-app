@@ -1,3 +1,4 @@
+// @see: https://playwright.net.cn/docs/api/class-electron
 import { _electron } from 'playwright';
 import { test, expect } from '@playwright/test';
 
