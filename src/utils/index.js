@@ -1,18 +1,15 @@
 const fs = require('fs');
 const path = require('path');
 const { app, shell, Menu, dialog, Tray } = require('electron');
-import { i18next } from '@/i18n/index.js';
-const { t } = i18next;
+import { t, i18next } from '@/i18n/index.js';
 const DEFAULT_PORT = 8080;
 const DEFAULT_WIKI_DIR = path.resolve('wiki'); // use app.getPath('desktop')
 const { default: getPorts } = require('get-port');
 const { TiddlyWiki } = require('tiddlywiki');
 const { autoUpdater } = require('electron-updater');
-let tray = null;
-let menu = null;
 import { config } from '@/utils/config';
 import { updaterConfig } from '@/utils/updater.js';
-import { iconPath, iconPathDev } from '@/utils/icon';
+import { appIcon } from '@/utils/icon';
 
 import packageInfo from '../../package.json';
 import saveToGitHub from './github-saver';
@@ -20,6 +17,8 @@ let updateAvailableHandled = false;
 let downloadFinished = false;
 let hasLatestNotify = false;
 let wikiInstances = {}; // 用于记录 port: wikipath, 便于端口复用
+let tray = null;
+let menu = null;
 
 const log = require('electron-log/main');
 
@@ -233,7 +232,7 @@ function isEmptyDirectory(directoryPath) {
 // 修改 createTray 函数中的菜单项
 function createTray(mainWindow) {
   if (!tray) {
-    tray = new Tray(app.isPackaged ? iconPath : iconPathDev);
+    tray = new Tray(appIcon);
   }
   tray.setToolTip(t('tray.tooltip'));
   tray.setTitle(t('tray.tooltip'));

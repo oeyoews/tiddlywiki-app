@@ -9,9 +9,8 @@ const {
 } = require('electron');
 import { setFindBar } from '@/main/find-bar';
 const path = require('path');
-import { initI18n, i18next } from '@/i18n/index.js';
-import { iconPath, iconPathDev } from '@/utils/icon';
-const { t } = i18next;
+import { t, initI18n, i18next } from '@/i18n/index.js';
+import { appIcon } from '@/utils/icon';
 const { autoUpdater } = require('electron-updater');
 const log = require('electron-log/main');
 
@@ -50,7 +49,7 @@ async function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1400,
     height: 800,
-    icon: app.isPackaged ? iconPath : iconPathDev,
+    icon: appIcon,
     skipTaskbar: false, // 添加此行以隐藏任务栏图标
     show: false,
     webPreferences: {

@@ -1,6 +1,5 @@
 import i18next from 'i18next';
 
-
 import enTranslation from '../locales/en-US/translation.json';
 import zhTranslation from '../locales/zh-CN/translation.json';
 
@@ -23,5 +22,6 @@ const initI18n = async (config) => {
 
   return i18next;
 };
+const t = i18next.t;
 
-export { initI18n, i18next };
+export { initI18n, i18next, t };
