@@ -6,7 +6,7 @@ interface ITWDialog {
   message: string;
 }
 
-/** handle tw dialog */
+/** handle tw dialog to fix tw vanilla alert fn cause input cannot focus bug */
 export const twDialog = (win: BrowserWindow) => {
   ipcMain.on('custom-dialog', (event: any, opt: ITWDialog) => {
     const { type, message } = opt;
