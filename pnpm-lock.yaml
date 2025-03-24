@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@types/node':
-        specifier: ^22.13.11
-        version: 22.13.11
       electron-conf:
         specifier: ^1.2.1
         version: 1.2.1(electron@35.0.3)
