@@ -1,5 +1,5 @@
 {
-  "include": ["src", "./types.d.ts", "./electron-extra.d.ts"],
+  "include": ["src", "./types.d.ts"],
   "exclude": ["dist"],
   "ts-node": {
     "files": true,
