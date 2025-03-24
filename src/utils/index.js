@@ -1,9 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 const { app, shell, Menu, dialog, Tray } = require('electron');
-import { i18next } from '../i18n/index.js';
+import { i18next } from '@/i18n/index.js';
 const { t } = i18next;
-const { Conf: Config } = require('electron-conf');
 const DEFAULT_PORT = 8080;
 const DEFAULT_WIKI_DIR = path.resolve('wiki'); // use app.getPath('desktop')
 const { default: getPorts } = require('get-port');
@@ -11,6 +10,8 @@ const { TiddlyWiki } = require('tiddlywiki');
 const { autoUpdater } = require('electron-updater');
 let tray = null;
 let menu = null;
+import { config } from './config.js';
+import { updaterConfig } from './updater.js';
 
 process.env.DIST = path.join(__dirname, '../dist');
 process.env.VITE_PUBLIC = app.isPackaged
@@ -31,22 +32,6 @@ let wikiInstances = {}; // 用于记录 port: wikipath, 便于端口复用
 
 const log = require('electron-log/main');
 
-const config = new Config({
-  defaults: {
-    wikiPath: DEFAULT_WIKI_DIR,
-    language: 'en-US',
-    markdown: false,
-    autocorrect: false,
-    'lang-CN': false,
-    recentWikis: [],
-    github: {
-      token: '',
-      owner: '',
-      repo: '',
-      branch: 'main',
-    },
-  },
-});
 let currentServer = null;
 let mainWindow = null; // 在 initwiki 初始化时赋值
 let currentPort = DEFAULT_PORT;
@@ -450,10 +435,6 @@ function createMenuTemplate() {
           role: 'togglefullscreen',
           label: t('menu.toggleFullscreen'),
           accelerator: 'F11',
-          // click: () => {
-          //   const isFullScreen = mainWindow.isFullScreen();
-          //   mainWindow.setFullScreen(!isFullScreen);
-          // },
         },
         {
           label: t('menu.toggleMenuBar'),
@@ -461,7 +442,6 @@ function createMenuTemplate() {
           click: () => {
             const isVisible = mainWindow.isMenuBarVisible();
             mainWindow.setMenuBarVisibility(!isVisible);
-            // mainWindow.setAutoHideMenuBar(menuBarVisible);
           },
         },
         {
@@ -571,17 +551,6 @@ function createMenuTemplate() {
         {
           label: t('menu.checkUpdate'),
           click: checkForUpdates,
-          // label: getUpdateText(),
-          // click: () => {
-          //   if (downloadFinished) {
-          //     autoUpdater.quitAndInstall();
-          //   } else {
-          //     checkForUpdates();
-          //     // 更新菜单
-          //     const menu = Menu.buildFromTemplate(createMenuTemplate());
-          //     Menu.setApplicationMenu(menu);
-          //   }
-          // },
           enabled: !downloadFinished,
         },
         {
@@ -631,13 +600,6 @@ async function switchLanguage(lang) {
 
   // 更新托盘菜单
   createTray(mainWindow);
-
-  // 显示语言切换成功提示
-  // dialog.showMessageBox({
-  //   type: 'info',
-  //   title: t('settings.languageChanged'),
-  //   message: t('settings.restartTips'),
-  // });
 }
 
 async function importSingleFileWiki() {
@@ -819,12 +781,7 @@ async function toggleMarkdown(
       app.relaunch();
       app.exit(0);
     }
-  } catch (err) {
-    // dialog.showErrorBox(
-    //   t('dialog.error'),
-    //   t('dialog.markdownError', { message: err.message })
-    // );
-  }
+  } catch (err) {}
 }
 
 async function toggleAutocorrect(menuItem) {
@@ -865,7 +822,6 @@ async function toggleAutocorrect(menuItem) {
   }
 }
 
-// TODO: ipc 修改 lang
 async function toggleChineseLang(
   enable,
   options = {
@@ -911,20 +867,10 @@ async function toggleChineseLang(
     }
   } catch (err) {}
 }
-// module.exports = {
-//   isEmptyDirectory,
-//   config,
-//   openWiki,
-//   initWiki,
-//   createNewWiki,
-//   showWikiInfo,
-//   createTray,
-//   createMenuTemplate,
-// };
 
 export {
-  isEmptyDirectory,
   config,
+  isEmptyDirectory,
   openWiki,
   initWiki,
   createNewWiki,
@@ -942,22 +888,11 @@ async function checkForUpdates() {
     //   });
     // }
 
-    // autoUpdater.setFeedURL({
-    //   provider: 'generic',
-    //   url: 'http://localhost:8080',
-    // });
-
-    // console.log(app.getVersion());
-
     // const checkMenu = menu.items
     //   .find((item) => item.label === t('menu.help'))
     //   .submenu.items.find((item) => item.label === t('menu.checkUpdate'));
 
-    autoUpdater.setFeedURL({
-      provider: 'github',
-      owner: 'oeyoews',
-      repo: 'tiddlywiki-app',
-    });
+    autoUpdater.setFeedURL(updaterConfig);
 
     autoUpdater.on('checking-for-update', () => {
       log.info('checking-for-update');

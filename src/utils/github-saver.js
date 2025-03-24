@@ -1,6 +1,6 @@
 const { Notification, shell, dialog } = require('electron');
 const fs = require('fs');
-import { i18next } from '../i18n/index.js';
+import { i18next } from '@/i18n/index.js';
 const { t } = i18next;
 
 const log = require('electron-log/main');
