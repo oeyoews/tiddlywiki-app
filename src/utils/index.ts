@@ -24,14 +24,14 @@ import {
   wikiStartupArgs,
 } from '@/utils/wiki';
 import { createMenubar } from './menubar';
+import { log } from '@/utils/logger';
+
 let updateAvailableHandled = false;
 let downloadFinished = false;
 let hasLatestNotify = false;
 let wikiInstances: { [port: number]: string } = {}; // 用于记录 port: wikipath, 便于端口复用
-let tray: any = null;
 
-import { log } from '@/utils/logger';
-
+let tray: Tray;
 let win: BrowserWindow; // 在 initwiki 初始化时赋值
 
 const server = {
