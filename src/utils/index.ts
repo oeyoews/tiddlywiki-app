@@ -25,13 +25,13 @@ import {
 } from '@/utils/wiki';
 import { createMenubar } from './menubar';
 import { log } from '@/utils/logger';
+import { createTray } from './createTray';
 
 let updateAvailableHandled = false;
 let downloadFinished = false;
 let hasLatestNotify = false;
 let wikiInstances: { [port: number]: string } = {}; // 用于记录 port: wikipath, 便于端口复用
 
-let tray: Tray;
 let win: BrowserWindow; // 在 initwiki 初始化时赋值
 
 const server = {
@@ -57,7 +57,7 @@ const deps = {
   var: { downloadFinished },
 };
 
-const createMenuTemplate = createMenubar(config, deps, server);
+export const createMenuTemplate = createMenubar(config, deps, server);
 
 // 添加更新最近打开的 wiki 列表的函数
 function updateRecentWikis(wikiPath: string) {
@@ -87,7 +87,7 @@ async function releaseWiki() {
   });
 }
 
-async function initWiki(
+export async function initWiki(
   wikiFolder: string,
   isFirstTime: Boolean = false,
   _mainWindow?: BrowserWindow
@@ -249,52 +249,7 @@ async function openWiki() {
   }
 }
 
-// 修改 createTray 函数中的菜单项
-function createTray(win: BrowserWindow) {
-  if (!tray) {
-    tray = new Tray(appIcon);
-  }
-  tray.setToolTip(t('tray.tooltip'));
-  tray.setTitle(t('tray.tooltip'));
-  const contextMenu = Menu.buildFromTemplate([
-    {
-      label: t('tray.showWindow'),
-      click: () => {
-        win.show();
-      },
-    },
-    {
-      label: t('tray.openInBrowser'),
-      click: () => {
-        if (server.currentPort) {
-          shell.openExternal(`http://localhost:${server.currentPort}`);
-        }
-      },
-    },
-    { type: 'separator' },
-    {
-      label: t('tray.about'),
-      click: showWikiInfo,
-    },
-    {
-      label: t('tray.exit'),
-      click: () => {
-        app.quit();
-      },
-    },
-  ]);
-  tray.setContextMenu(contextMenu);
-  tray.on('click', () => {
-    if (!win.isVisible() || win.isMinimized()) {
-      win.show();
-      win.restore();
-    } else {
-      win.minimize();
-    }
-  });
-}
-
-async function showWikiInfo() {
+export async function showWikiInfo() {
   dialog.showMessageBox({
     type: 'none',
     title: t('app.about'),
@@ -707,5 +662,3 @@ async function checkForUpdates() {
     );
   }
 }
-
-export { initWiki, showWikiInfo, createTray, createMenuTemplate };

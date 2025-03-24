@@ -5,17 +5,13 @@ import { t, initI18n } from '@/i18n/index.js';
 import { appIcon } from '@/utils/icon';
 const { autoUpdater } = require('electron-updater');
 
-import {
-  createMenuTemplate,
-  showWikiInfo,
-  createTray,
-  initWiki,
-} from '@/utils/index';
+import { createMenuTemplate, showWikiInfo, initWiki } from '@/utils/index';
 import { config } from '@/utils/config';
 import { registerContextMenu } from '@/utils/contextmenu';
 import { injectScript } from '@/utils/injectScript';
 import { logInit, log } from '@/utils/logger';
 import { twDialog } from '@/utils/tw-dialog';
+import { createTray } from '@/utils/createTray';
 
 let win: BrowserWindow;
 let wikiPath: string;
