@@ -1,7 +1,7 @@
 import fs from 'fs';
 
 /** 检查目录是否为空 */
-export function isEmptyDirectory(directoryPath) {
+export function isEmptyDirectory(directoryPath: string) {
   try {
     if (!fs.existsSync(directoryPath)) {
       return true;

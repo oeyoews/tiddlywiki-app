@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { t } from '@/i18n';
 import { Menu } from 'electron';
 

@@ -1,6 +1,7 @@
 const { Conf: Config } = require('electron-conf');
-const DEFAULT_WIKI_DIR = path.resolve('wiki'); // use app.getPath('desktop')
 import path from 'path';
+
+const DEFAULT_WIKI_DIR = path.resolve('wiki'); // use app.getPath('desktop')
 
 export const config = new Config({
   defaults: {

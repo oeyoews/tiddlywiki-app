@@ -4,7 +4,6 @@ import path from 'path';
 import { t, initI18n } from '@/i18n/index.js';
 import { appIcon } from '@/utils/icon';
 const { autoUpdater } = require('electron-updater');
-const log = require('electron-log/main');
 
 import {
   createMenuTemplate,
@@ -25,10 +24,9 @@ process.env.VITE_PUBLIC = app.isPackaged
   : path.join(process.env.DIST, '../public');
 
 const preload = path.join(__dirname, '../preload/index.js');
+import { logInit, log } from '@/utils/logger';
 
-const date = new Date().toISOString().split('T').shift()!.replace('-', '/'); // 替换第一个-
-log.transports.file.resolvePathFn = () =>
-  path.join(app.getPath('logs'), date, `main.log`);
+logInit();
 
 Menu.setApplicationMenu(null);
 

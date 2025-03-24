@@ -1,9 +1,10 @@
-const { Notification, shell, dialog } = require('electron');
-const fs = require('fs');
-import { i18next } from '@/i18n/index.js';
-const { t } = i18next;
+// @ts-nocheck
 
-const log = require('electron-log/main');
+import { Notification, shell, dialog } from 'electron';
+import fs from 'fs';
+import { t } from '@/i18n/index.js';
+
+import { log } from '@/utils/logger';
 
 /**
  * 将 Wiki 发布到 GitHub Pages
@@ -120,7 +121,7 @@ async function saveToGitHub({
 
       if (!response.ok) {
         throw new Error(
-          `${t('github.upload.apiError')}: ${response.statusText}`
+          `${t('dialog.github.apiError')}: ${response.statusText}`
         );
       }
 

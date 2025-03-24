@@ -1,13 +1,13 @@
 import fs from 'fs';
 import path from 'path';
 import { app, shell, Menu, dialog, Tray } from 'electron';
-import { t, i18next } from '@/i18n/index.js';
+import { t, i18next } from '@/i18n/index';
 
 const { default: getPorts } = require('get-port');
 const { TiddlyWiki } = require('tiddlywiki');
 const { autoUpdater } = require('electron-updater');
 import { config } from '@/utils/config';
-import { updaterConfig } from '@/utils/updater.js';
+import { updaterConfig } from '@/utils/updater';
 import { appIcon } from '@/utils/icon';
 import { isEmptyDirectory } from '@/utils/checkEmptyDir';
 
@@ -31,7 +31,7 @@ let wikiInstances = {}; // 用于记录 port: wikipath, 便于端口复用
 let tray = null;
 let menu = null;
 
-const log = require('electron-log/main');
+import { log } from '@/utils/logger';
 
 let win = null; // 在 initwiki 初始化时赋值
 

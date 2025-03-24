@@ -1,7 +1,7 @@
 // from: copyed fron npm package find-bar
 // patch: remove esc shortcut register for tiddlywiki
-const { app, BrowserWindow, ipcMain, globalShortcut } = require('electron');
-const path = require('path');
+import { app, BrowserWindow, ipcMain, globalShortcut } from 'electron';
+import path from 'path';
 
 const isMac = process.platform === 'darwin';
 const BAR_WIDTH = 376;

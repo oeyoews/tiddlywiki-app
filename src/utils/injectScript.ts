@@ -1,7 +1,8 @@
 import { config } from '@/utils/config';
 import path from 'path';
-import { app } from 'electron';
-const log = require('electron-log/main');
+import { app, type BrowserWindow } from 'electron';
+
+import { log } from '@/utils/logger';
 
 process.env.DIST = path.join(__dirname, '../dist');
 process.env.VITE_PUBLIC = app.isPackaged
@@ -15,7 +16,7 @@ const autocorrectLib = path.join(
   '../lib/autocorrect.min.js'
 );
 
-export const injectScript = (win) => {
+export const injectScript = (win: BrowserWindow) => {
   log.info('begin inject script');
   const scripts = [render, swal];
 
