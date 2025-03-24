@@ -8,6 +8,8 @@ const resources = {
   zh: { translation: zhTranslation },
 };
 
+const defaultNS = 'translation';
+
 export default resources;
 
 const initI18n = async (config: any) => {
@@ -24,4 +26,4 @@ const initI18n = async (config: any) => {
 };
 const t = i18next.t;
 
-export { initI18n, i18next, t };
+export { initI18n, i18next, t, resources, defaultNS, enTranslation };
