@@ -13,12 +13,14 @@ const iconPath = app.isPackaged
 
 export const appIcon = path.join(process.env.VITE_PUBLIC, iconPath);
 const enableIcon = config.get('icon');
-export const getMenuIcon = (name: IMenuIcon) => {
+export const getMenuIcon = (name: IMenuIcon, size?: number) => {
   if (!enableIcon) return;
   const iconPath = path.join(
     process.env.VITE_PUBLIC!,
     '../assets/menu',
     `${name}.png`
   );
-  return nativeImage.createFromPath(iconPath).resize({ width: 16, height: 16 }); // 调整图标大小
+  return nativeImage
+    .createFromPath(iconPath)
+    .resize({ width: size || 16, height: size || 16 }); // 调整图标大小
 };

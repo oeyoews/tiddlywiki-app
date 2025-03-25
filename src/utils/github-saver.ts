@@ -1,8 +1,8 @@
 import { Notification, shell, dialog, BrowserWindow } from 'electron';
 import fs from 'fs';
 import { t } from '@/i18n/index.js';
-
 import { log } from '@/utils/logger';
+import { getMenuIcon } from './icon';
 
 /**
  * 将 Wiki 发布到 GitHub Pages
@@ -128,6 +128,7 @@ async function saveToGitHub({
       new Notification({
         title: t('dialog.github.uploadSuccess'),
         body: t('dialog.github.clickToView'),
+        icon: getMenuIcon('gitHub', 256),
         silent: false,
       })
         .on('click', () => {

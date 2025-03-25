@@ -1,16 +1,28 @@
 const { autoUpdater } = require('electron-updater');
 import { log } from '@/utils/logger';
 import { updaterConfig } from '@/utils/updater';
-import { dialog, type BrowserWindow } from 'electron';
+import { dialog, Menu, type BrowserWindow } from 'electron';
 import { t } from '@/i18n';
-import { getMenuIcon } from './icon';
+import { getMenuIcon } from '@/utils/icon';
 
 autoUpdater.autoDownload = false;
 
-export async function checkForUpdates(win: BrowserWindow) {
+export async function checkForUpdates(
+  win: BrowserWindow,
+  server: {
+    menu: Menu;
+  }
+) {
   let updateAvailableHandled = false;
   let downloadFinished = false;
   let hasLatestNotify = false;
+
+  const updateMenu = server.menu.getMenuItemById('update');
+  if (updateMenu?.enabled) {
+    // updateMenu.label = t('dialog.checkingUpdate'); // not work???
+    updateMenu.enabled = false;
+    Menu.setApplicationMenu(server.menu);
+  }
 
   try {
     // 模拟打包环境
@@ -20,11 +32,7 @@ export async function checkForUpdates(win: BrowserWindow) {
     //   });
     // }
 
-    // const checkMenu = menu.items
-    //   .find((item) => item.label === t('menu.help'))
-    //   .submenu.items.find((item) => item.label === t('menu.checkUpdate'));
-
-    autoUpdater.setFeedURL(updaterConfig as any);
+    autoUpdater.setFeedURL(updaterConfig);
 
     autoUpdater.on('checking-for-update', () => {
       log.info('checking-for-update');
@@ -61,10 +69,15 @@ export async function checkForUpdates(win: BrowserWindow) {
 
     autoUpdater.on('update-not-available', () => {
       if (hasLatestNotify) return; // 防止重复弹窗
+
+      if (updateMenu?.enabled === false) {
+        updateMenu.enabled = true;
+      }
+
       hasLatestNotify = true;
       win.setProgressBar(-1);
       dialog.showMessageBox({
-        // icon: getMenuIcon('about'),
+        icon: getMenuIcon('about', 256),
         type: 'info',
         title: t('dialog.updateCheck'),
         message: t('dialog.noUpdate'),
@@ -78,15 +91,12 @@ export async function checkForUpdates(win: BrowserWindow) {
 
     autoUpdater.on('update-downloaded', async (info: any) => {
       if (downloadFinished) return; // 防止重复弹窗
-      // checkMenu.label = t('menu.restart');
-      // checkMenu.enabled = true;
-      // Menu.setApplicationMenu(menu);
       log.info('update downloaded');
 
       downloadFinished = true;
       win.setProgressBar(-1);
       const result = await dialog.showMessageBox({
-        icon: getMenuIcon('restart'),
+        icon: getMenuIcon('restart', 256),
         type: 'info',
         title: t('dialog.updateReady'),
         message: t('dialog.updateReadyMessage', { version: info.version }),
@@ -101,6 +111,11 @@ export async function checkForUpdates(win: BrowserWindow) {
     });
 
     autoUpdater.on('error', (err: any) => {
+      // TODO: 防重
+      // if (updateMenu?.enabled === false) {
+      //   updateMenu.enabled = true;
+      // }
+
       win.setProgressBar(-1);
       dialog.showErrorBox(
         t('dialog.error'),

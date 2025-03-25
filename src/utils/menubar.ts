@@ -7,6 +7,7 @@ import {
   type BrowserWindow,
   nativeImage,
   MenuItem,
+  Tray,
 } from 'electron';
 
 import { log } from '@/utils/logger';
@@ -19,7 +20,16 @@ const iconImage = nativeImage
   .createFromPath(appIcon)
   .resize({ width: 16, height: 16 }); // 调整图标大小
 
-export const createMenubar = (config: IConfig, deps: any, server: any) => {
+export const createMenubar = (
+  config: IConfig,
+  deps: any,
+  server: {
+    currentPort: number;
+    menu: Menu;
+    tray: Tray;
+    currentServer: null;
+  }
+) => {
   return function (win: BrowserWindow) {
     const recentWikis = (config.get('recentWikis') || []).filter(
       (path: string) => path !== config.get('wikiPath')
@@ -27,6 +37,7 @@ export const createMenubar = (config: IConfig, deps: any, server: any) => {
 
     const fileMenu: MenuItemConstructorOptions = {
       label: t('menu.file'),
+      id: 'File',
       // icon: getMenuIcon('File'), // 设计不支持
       submenu: [
         {
@@ -55,6 +66,7 @@ export const createMenubar = (config: IConfig, deps: any, server: any) => {
         { type: 'separator' },
         {
           label: t('menu.recentWikis'),
+          id: 'recentWikis',
           icon: getMenuIcon('recent'),
           submenu: [
             ...recentWikis.map((wikiPath: string) => ({
@@ -68,21 +80,16 @@ export const createMenubar = (config: IConfig, deps: any, server: any) => {
             })),
             { type: 'separator' },
             {
+              id: 'clearRecentWikis',
               label: t('menu.clearRecentWikis'),
               icon: getMenuIcon('clear'),
               enabled: recentWikis.length > 0,
               click: () => {
+                const recentMenu = server.menu.getMenuItemById('recentWikis');
                 config.set('recentWikis', []);
-                const updatemenu = server.menu.items
-                  // @ts-ignore
-                  .find((item) => item.label === t('menu.file'))
-                  .submenu.items.find(
-                    // @ts-ignore
-                    (item) => item.label === t('menu.recentWikis')
-                  );
-                // updatemenu.submenu.items = null;
-                // updatemenu.label = updatemenu.label + ' (0)';
-                updatemenu.enabled = false;
+                if (recentMenu) {
+                  recentMenu.enabled = false;
+                }
                 Menu.setApplicationMenu(server.menu);
               },
             },
@@ -143,6 +150,7 @@ export const createMenubar = (config: IConfig, deps: any, server: any) => {
     };
     const viewMenu: MenuItemConstructorOptions = {
       label: t('menu.view'),
+      id: 'View',
       submenu: [
         {
           role: 'reload',
@@ -209,6 +217,7 @@ export const createMenubar = (config: IConfig, deps: any, server: any) => {
     };
     const settingsMenu: MenuItemConstructorOptions = {
       label: t('menu.settings'),
+      id: 'Setting',
       submenu: [
         {
           label: t('menu.markdown'),
@@ -297,6 +306,7 @@ export const createMenubar = (config: IConfig, deps: any, server: any) => {
     };
     const helpMenu: MenuItemConstructorOptions = {
       label: t('menu.help'),
+      id: 'Help',
       submenu: [
         {
           label: t('menu.devTools'),
@@ -306,7 +316,12 @@ export const createMenubar = (config: IConfig, deps: any, server: any) => {
         },
         {
           label: t('menu.checkUpdate'),
-          click: () => checkForUpdates(win),
+          // @see https://www.electronjs.org/zh/docs/latest/api/auto-updater
+          visible: getPlatform() === 'windows' ? true : false,
+          id: 'update',
+          click: () => {
+            checkForUpdates(win, server);
+          },
           icon: getMenuIcon('update'),
         },
         {

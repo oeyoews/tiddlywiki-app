@@ -428,7 +428,7 @@ async function buildWiki() {
 async function configureGitHub() {
   const currentConfig = config.get('github');
   const result = await dialog.showMessageBox({
-    icon: getMenuIcon('gitHub'),
+    icon: getMenuIcon('gitHub', 256),
     type: 'question',
     title: t('dialog.githubConfig'),
     message: t('dialog.githubConfigMessage'),
