@@ -16,6 +16,7 @@ import { checkForUpdates } from '@/utils/checkUpdate';
 import { appIcon, getMenuIcon } from './icon';
 import { IConfig } from './index';
 import { getPlatform } from './getPlatform';
+const { autoUpdater } = require('electron-updater');
 const iconImage = nativeImage
   .createFromPath(appIcon)
   .resize({ width: 16, height: 16 }); // 调整图标大小
@@ -322,6 +323,27 @@ export const createMenubar = (
           click: () => {
             checkForUpdates(win, server);
           },
+          icon: getMenuIcon('update'),
+        },
+        {
+          label: t('dialog.checkingUpdate'),
+          id: 'updating',
+          visible: false,
+          enabled: false,
+          icon: getMenuIcon('update'),
+        },
+        {
+          label: t('dialog.downloading'),
+          id: 'downloadingApp',
+          visible: false,
+          enabled: false,
+          icon: getMenuIcon('update'),
+        },
+        {
+          label: t('dialog.restartNow'),
+          id: 'restartApp',
+          visible: false,
+          click: () => autoUpdater.quitAndInstall(),
           icon: getMenuIcon('update'),
         },
         {

@@ -42,6 +42,9 @@ async function createWindow() {
     icon: appIcon,
     skipTaskbar: false,
     show: false,
+    // transparent: true,
+    // vibrancy: 'appearance-based', // macOS 毛玻璃效果
+    // visualEffectState: 'active', // 确保 vibrancy 启用
     webPreferences: {
       spellcheck: false,
       preload,
@@ -50,6 +53,7 @@ async function createWindow() {
       webSecurity: false,
     },
   });
+  // win.setBackgroundMaterial('mica');
 
   win.once('ready-to-show', () => {
     win.show();
@@ -77,6 +81,16 @@ async function createWindow() {
     }
     return true;
   });
+
+  win.on('closed', () => {
+    // @ts-ignore
+    win = null; // 释放引用
+  });
+
+  // 捕获控制台日志
+  // win.webContents.on('console-message', (event, level, message) => {
+  //   log.info(`[Renderer Console] ${message}`);
+  // });
 
   const isFirstTime = !config.get('wikiPath');
   await initWiki(wikiPath, isFirstTime, win);

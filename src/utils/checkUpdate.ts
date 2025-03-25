@@ -17,12 +17,36 @@ export async function checkForUpdates(
   let downloadFinished = false;
   let hasLatestNotify = false;
 
-  const updateMenu = server.menu.getMenuItemById('update');
-  if (updateMenu?.enabled) {
-    // updateMenu.label = t('dialog.checkingUpdate'); // not work???
-    updateMenu.enabled = false;
+  const updateMenu = server.menu.getMenuItemById('update')!;
+  const updatingMenu = server.menu.getMenuItemById('updating')!;
+  const downloadingApp = server.menu.getMenuItemById('downloadingApp')!;
+  const restartMenu = server.menu.getMenuItemById('restartApp')!;
+
+  type IUpdateMenuType =
+    | 'updateMenu'
+    | 'updatingMenu'
+    | 'downloadingApp'
+    | 'restartMenu';
+
+  function updateMenuVisibility(menuType: IUpdateMenuType) {
+    // 存储所有菜单
+    const menus = { updateMenu, updatingMenu, downloadingApp, restartMenu };
+
+    // 将所有菜单的 visible 设置为 false
+    (Object.keys(menus) as IUpdateMenuType[]).forEach(
+      (menu) => (menus[menu].visible = false)
+    );
+
+    // 设置指定菜单的 visible 为 true
+    if (menus[menuType]) {
+      menus[menuType].visible = true;
+    }
     Menu.setApplicationMenu(server.menu);
   }
+
+  // updateMenu.label = t('dialog.checkingUpdate'); // not work 不可变属性
+
+  updateMenuVisibility('updatingMenu');
 
   try {
     // 模拟打包环境
@@ -62,17 +86,18 @@ export async function checkForUpdates(
       });
       if (result.response === 0) {
         autoUpdater.downloadUpdate();
+        updateMenuVisibility('downloadingApp');
+        log.info('updating now');
       } else {
         log.info('update canceled');
+        updateMenuVisibility('updateMenu');
       }
     });
 
     autoUpdater.on('update-not-available', () => {
       if (hasLatestNotify) return; // 防止重复弹窗
 
-      if (updateMenu?.enabled === false) {
-        updateMenu.enabled = true;
-      }
+      updateMenuVisibility('updateMenu');
 
       hasLatestNotify = true;
       win.setProgressBar(-1);
@@ -92,6 +117,8 @@ export async function checkForUpdates(
     autoUpdater.on('update-downloaded', async (info: any) => {
       if (downloadFinished) return; // 防止重复弹窗
       log.info('update downloaded');
+
+      updateMenuVisibility('restartMenu');
 
       downloadFinished = true;
       win.setProgressBar(-1);
@@ -115,6 +142,7 @@ export async function checkForUpdates(
       // if (updateMenu?.enabled === false) {
       //   updateMenu.enabled = true;
       // }
+      updateMenuVisibility('updateMenu');
 
       win.setProgressBar(-1);
       dialog.showErrorBox(
@@ -130,6 +158,7 @@ export async function checkForUpdates(
 
     await autoUpdater.checkForUpdates();
   } catch (err: any) {
+    updateMenuVisibility('updateMenu');
     dialog.showErrorBox(
       t('dialog.error'),
       t('dialog.updateError', { message: err.message })
