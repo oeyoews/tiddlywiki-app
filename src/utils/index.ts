@@ -23,7 +23,7 @@ import {
 import { createMenubar } from './menubar';
 import { log } from '@/utils/logger';
 import { createTray } from './createTray';
-import { appIcon, getMenuIcon } from './icon';
+import { getMenuIcon } from './icon';
 
 let wikiInstances: { [port: number]: string } = {}; // 用于记录 port: wikipath, 便于端口复用
 

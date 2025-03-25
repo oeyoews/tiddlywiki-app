@@ -63,14 +63,14 @@ if (window.$tw) {
   }
 
   // change tiddlywiki default sidebar layout
-  const sidebarLayout = 'fluid-fixed';
-  const sidebarLayoutTiddler =
-    '$:/themes/tiddlywiki/vanilla/options/sidebarlayout';
-  if (getText(sidebarLayoutTiddler) !== sidebarLayout) {
-    $tw.wiki.setText(sidebarLayoutTiddler, 'text', null, sidebarLayout, {
-      suppressTimestamp: true,
-    });
-  }
+  // const sidebarLayout = 'fluid-fixed';
+  // const sidebarLayoutTiddler =
+  //   '$:/themes/tiddlywiki/vanilla/options/sidebarlayout';
+  // if (getText(sidebarLayoutTiddler) !== sidebarLayout) {
+  //   $tw.wiki.setText(sidebarLayoutTiddler, 'text', null, sidebarLayout, {
+  //     suppressTimestamp: true,
+  //   });
+  // }
 }
 
 // const renderDom = async () => {
