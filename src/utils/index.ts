@@ -437,6 +437,7 @@ export async function toggleIcon(enable: Boolean) {
   });
 
   if (result.response === 0) {
+    log.info('restart');
     app.relaunch();
     app.exit(0);
   }

@@ -2,6 +2,7 @@ import { app, Menu, Tray, BrowserWindow } from 'electron';
 import { appIcon, getMenuIcon } from './icon';
 import { t } from '@/i18n';
 import { getPlatform } from './getPlatform';
+import { log } from '@/utils/logger';
 
 // 修改 createTray 函数中的菜单项
 export function createTray(
@@ -49,6 +50,7 @@ export function createTray(
       label: t('tray.exit'),
       icon: getMenuIcon('exit'),
       click: () => {
+        log.info('exit fomr tray');
         app.quit();
       },
     },
