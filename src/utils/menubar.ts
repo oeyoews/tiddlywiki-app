@@ -25,7 +25,7 @@ export const createMenubar = (config: any, deps: any, server: any) => {
     const menubars: MenuItemConstructorOptions[] = [
       {
         label: t('menu.file'),
-        icon: getMenuIcon('File'), // not support ???
+        // icon: getMenuIcon('File'), // 设计不支持
         submenu: [
           {
             label: t('menu.openExistingWiki'),
