@@ -14,6 +14,7 @@ import { log } from '@/utils/logger';
 import { checkForUpdates } from '@/utils/checkUpdate';
 import { appIcon, getMenuIcon } from './icon';
 import { IConfig } from './index';
+import { getPlatform } from './getPlatform';
 const iconImage = nativeImage
   .createFromPath(appIcon)
   .resize({ width: 16, height: 16 }); // 调整图标大小
@@ -113,10 +114,22 @@ export const createMenubar = (config: IConfig, deps: any, server: any) => {
         {
           label: t('menu.restart'),
           icon: getMenuIcon('restart'),
+          // @see https://github.com/electron-userland/electron-builder/issues/1727
+          visible: getPlatform() === 'linux' ? false : true,
           accelerator: 'CmdOrCtrl+Shift+Alt+R',
           click: () => {
             app.relaunch();
             app.exit(0);
+
+            // const options: Electron.RelaunchOptions = { args: process.argv };
+            // if (process.env.APPIMAGE) {
+            //   options.execPath = process.env.APPIMAGE;
+            //   options.args = options.args ?? [];
+            //   options.args.unshift('--appimage-extract-and-run');
+            // }
+
+            // app.relaunch(options);
+            // app.quit();
           },
         },
         { type: 'separator' },

@@ -159,13 +159,13 @@ export async function initWiki(
           twInfo.plugins.includes(item)
         );
         if (!hasAllNesPlugins) {
+          log.info(
+            bootPath,
+            'is missing some nessary plugins, has already fix it'
+          );
           const plugins = [...twInfo.plugins, ...defaultPlugins];
           twInfo.plugins = [...new Set(plugins)];
         }
-        log.info(
-          bootPath,
-          'is missing some nessary plugins, has already fix it'
-        );
       }
       fs.writeFileSync(bootPath, JSON.stringify(twInfo, null, 4), 'utf8');
     }
