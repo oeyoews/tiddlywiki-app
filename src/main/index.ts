@@ -1,4 +1,4 @@
-import { shell, ipcMain, app, BrowserWindow, Menu } from 'electron';
+import { screen, shell, ipcMain, app, BrowserWindow, Menu } from 'electron';
 import { setFindBar } from '@/main/find-bar';
 import path from 'path';
 import { initI18n } from '@/i18n/index.js';
@@ -29,9 +29,16 @@ logInit();
 
 // 创建主窗口
 async function createWindow() {
+  const primaryDisplay = screen.getPrimaryDisplay();
+  const { width, height } = primaryDisplay.workAreaSize;
+
+  // 计算 80% 尺寸，同时保持原始宽高比
+  const scaleFactor = 0.9;
+  const newWidth = Math.floor(width * scaleFactor);
+  const newHeight = Math.floor((newWidth / width) * height);
   win = new BrowserWindow({
-    width: 1400,
-    height: 800,
+    width: newWidth,
+    height: newHeight,
     icon: appIcon,
     skipTaskbar: false,
     show: false,
