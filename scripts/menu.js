@@ -1,4 +1,20 @@
 module.exports = {
+  file: {
+    'en-US': '&File',
+    'zh-CN': '文件(&F)',
+  },
+  view: {
+    'en-US': '&View',
+    'zh-CN': '视图(&V)',
+  },
+  help: {
+    'en-US': '&Help',
+    'zh-CN': '帮助(&H)',
+  },
+  settings: {
+    'en-US': '&Settings',
+    'zh-CN': '设置(&S)',
+  },
   enableIcon: {
     'en-US': 'Show Menu Icon',
     'zh-CN': '显示菜单图标',
@@ -59,14 +75,6 @@ module.exports = {
     'en-US': 'Enable Markdown',
     'zh-CN': '启用 Markdown',
   },
-  file: {
-    'en-US': 'File',
-    'zh-CN': '文件',
-  },
-  settings: {
-    'en-US': 'Settings',
-    'zh-CN': '设置',
-  },
   publish: {
     'en-US': 'Publish',
     'zh-CN': '发布',
@@ -86,14 +94,6 @@ module.exports = {
   language: {
     'en-US': 'Language',
     'zh-CN': '语言',
-  },
-  view: {
-    'en-US': 'View',
-    'zh-CN': '视图',
-  },
-  help: {
-    'en-US': 'Help',
-    'zh-CN': '帮助',
   },
   openExistingWiki: {
     'en-US': 'Open Existing Wiki',
