@@ -1,5 +1,6 @@
 {
   "menu": {
+    "enableIcon": "Show Menu Icon",
     "autocorrect": "Autocorrect",
     "twdocs": "TiddlyWiki Documentation",
     "forum": "TiddlyWiki Community Forum",

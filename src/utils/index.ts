@@ -50,7 +50,10 @@ const deps = {
   toggleAutocorrect,
   toggleChineseLang,
   toggleMarkdown,
+  toggleIcon,
 };
+
+export type IConfig = typeof config;
 
 export const createMenuTemplate = createMenubar(config, deps, server);
 
@@ -415,6 +418,27 @@ async function configureGitHub() {
   });
   if (result.response === 0) {
     win.webContents.send('config-github');
+  }
+}
+
+export async function toggleIcon(enable: Boolean) {
+  config.set('icon', enable);
+  log.info('toggle men icon', enable);
+  server.menu = Menu.buildFromTemplate(createMenuTemplate(win));
+  Menu.setApplicationMenu(server.menu);
+
+  const result = await dialog.showMessageBox({
+    type: 'info',
+    title: t('settings.settingChanged'),
+    message: t('settings.restartTips'),
+    buttons: [t('dialog.restartNow'), t('dialog.later')],
+    defaultId: 0,
+    cancelId: 1,
+  });
+
+  if (result.response === 0) {
+    app.relaunch();
+    app.exit(0);
   }
 }
 

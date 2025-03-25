@@ -1,4 +1,8 @@
 module.exports = {
+  enableIcon: {
+    'en-US': 'Show Menu Icon',
+    'zh-CN': '显示菜单图标',
+  },
   autocorrect: {
     'en-US': 'Autocorrect',
     'zh-CN': '文本格式优化',
