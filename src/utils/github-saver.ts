@@ -1,6 +1,4 @@
-// @ts-nocheck
-
-import { Notification, shell, dialog } from 'electron';
+import { Notification, shell, dialog, BrowserWindow } from 'electron';
 import fs from 'fs';
 import { t } from '@/i18n/index.js';
 
@@ -26,8 +24,8 @@ async function saveToGitHub({
   GITHUB_TOKEN,
   // + new Date().toLocaleTimeString(),
   COMMIT_MESSAGE = 'Saved by TiddlyWiki App ',
-  win, // 添加 mainWindow 参数
-}) {
+  win,
+}: ISaver & { win: BrowserWindow }) {
   log.info('begine to save tiddlywiki html to github pages...');
   const pageSite = `https://${owner}.github.io/${repo}`;
   // @see: https://github.com/settings/tokens
@@ -36,8 +34,8 @@ async function saveToGitHub({
     dialog.showMessageBox({
       type: 'error',
       title: 'Error',
-      message: t('github.error.fileNotExist'),
-      detail: t('github.error.buildFirst'),
+      message: t('dialog.github.fileNotExist'),
+      detail: t('dialog.github.buildFirst'),
     });
     return;
   }
@@ -87,7 +85,7 @@ async function saveToGitHub({
         win.setProgressBar(0.2);
       }
 
-      const body = {
+      const body: CommitBody = {
         message: COMMIT_MESSAGE,
         content,
         branch,
@@ -148,5 +146,4 @@ async function saveToGitHub({
   return uploadToGHPages();
 }
 
-// module.exports = saveToGitHub;
 export default saveToGitHub;

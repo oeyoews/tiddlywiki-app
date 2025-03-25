@@ -1,8 +1,20 @@
 import { t, i18next } from '@/i18n/index';
-import { Menu, shell, app, type BrowserWindow } from 'electron';
+import {
+  type MenuItemConstructorOptions,
+  Menu,
+  shell,
+  app,
+  type BrowserWindow,
+  nativeImage,
+} from 'electron';
+
 import { log } from '@/utils/logger';
 
 import { checkForUpdates } from '@/utils/checkUpdate';
+import { appIcon, getMenuIcon } from './icon';
+const iconImage = nativeImage
+  .createFromPath(appIcon)
+  .resize({ width: 16, height: 16 }); // 调整图标大小
 
 export const createMenubar = (config: any, deps: any, server: any) => {
   return function (win: BrowserWindow) {
@@ -10,12 +22,14 @@ export const createMenubar = (config: any, deps: any, server: any) => {
       (path: string) => path !== config.get('wikiPath')
     );
 
-    const menubars = [
+    const menubars: MenuItemConstructorOptions[] = [
       {
         label: t('menu.file'),
+        icon: getMenuIcon('File'), // not support ???
         submenu: [
           {
             label: t('menu.openExistingWiki'),
+            icon: iconImage,
             accelerator: 'CmdOrCtrl+O',
             click: async () => {
               const res = await deps.openWiki();
@@ -27,6 +41,7 @@ export const createMenubar = (config: any, deps: any, server: any) => {
           {
             label: t('menu.createNewWiki'),
             accelerator: 'CmdOrCtrl+N',
+            icon: getMenuIcon('new-wiki'),
             click: async () => {
               const res = await deps.createNewWiki();
               if (res?.port) {
@@ -37,9 +52,11 @@ export const createMenubar = (config: any, deps: any, server: any) => {
           { type: 'separator' },
           {
             label: t('menu.recentWikis'),
+            icon: getMenuIcon('recent'),
             submenu: [
               ...recentWikis.map((wikiPath: string) => ({
                 label: wikiPath,
+                icon: getMenuIcon('folder'),
                 click: async () => {
                   config.set('wikiPath', wikiPath);
                   const { port } = await deps.initWiki(wikiPath);
@@ -49,6 +66,7 @@ export const createMenubar = (config: any, deps: any, server: any) => {
               { type: 'separator' },
               {
                 label: t('menu.clearRecentWikis'),
+                icon: getMenuIcon('clear'),
                 enabled: recentWikis.length > 0,
                 click: () => {
                   config.set('recentWikis', []);
@@ -70,24 +88,29 @@ export const createMenubar = (config: any, deps: any, server: any) => {
           { type: 'separator' },
           {
             label: t('menu.importWiki'),
+            icon: getMenuIcon('import'),
             click: deps.importSingleFileWiki,
           },
           {
             label: t('menu.publish'),
-            submenu: [
-              {
-                label: t('menu.publishToGitHub'),
-                click: deps.releaseWiki,
-              },
-            ],
+            icon: getMenuIcon('release'),
+            click: deps.releaseWiki,
+            // submenu: [
+            //   {
+            //     label: t('menu.publishToGitHub'),
+            //     click: deps.releaseWiki,
+            //   },
+            // ],
           },
           {
             label: t('menu.buildWiki'),
+            icon: getMenuIcon('build'),
             click: deps.buildWiki,
           },
           { type: 'separator' },
           {
             label: t('menu.restart'),
+            icon: getMenuIcon('restart'),
             accelerator: 'CmdOrCtrl+Shift+Alt+R',
             click: () => {
               app.relaunch();
@@ -97,6 +120,7 @@ export const createMenubar = (config: any, deps: any, server: any) => {
           { type: 'separator' },
           {
             label: t('menu.exit'),
+            icon: getMenuIcon('exit'),
             accelerator: 'CmdOrCtrl+Q',
             role: 'quit',
           },
@@ -181,40 +205,38 @@ export const createMenubar = (config: any, deps: any, server: any) => {
             checked: config.get('lang-CN'),
             click: (menuItem: any) => deps.toggleChineseLang(menuItem.checked),
           },
-          ...(process.platform === 'win32' || process.platform === 'darwin'
-            ? [
-                {
-                  label: t('menu.autoStart'),
-                  type: 'checkbox',
-                  checked: app.getLoginItemSettings().openAtLogin,
-                  click() {
-                    if (!app.isPackaged) {
-                      app.setLoginItemSettings({
-                        openAtLogin: !app.getLoginItemSettings().openAtLogin,
-                        path: process.execPath, // or use app.getPath('exe'),
-                      });
-                      log.info(
-                        'dev: test autoStart',
-                        app.getLoginItemSettings().openAtLogin
-                      );
-                    } else {
-                      log.info(
-                        'before toggle autoStart',
-                        app.getLoginItemSettings().openAtLogin
-                      );
-                      app.setLoginItemSettings({
-                        openAtLogin: !app.getLoginItemSettings().openAtLogin,
-                        path: process.execPath, // or use app.getPath('exe'),
-                      });
-                      log.info(
-                        app.getLoginItemSettings().openAtLogin,
-                        'after: autoStart toggled'
-                      );
-                    }
-                  },
-                },
-              ]
-            : []),
+          {
+            label: t('menu.autoStart'),
+            visible:
+              process.platform === 'win32' || process.platform === 'darwin',
+            type: 'checkbox',
+            checked: app.getLoginItemSettings().openAtLogin,
+            click: () => {
+              if (!app.isPackaged) {
+                app.setLoginItemSettings({
+                  openAtLogin: !app.getLoginItemSettings().openAtLogin,
+                  path: process.execPath, // or use app.getPath('exe'),
+                });
+                log.info(
+                  'dev: test autoStart',
+                  app.getLoginItemSettings().openAtLogin
+                );
+              } else {
+                log.info(
+                  'before toggle autoStart',
+                  app.getLoginItemSettings().openAtLogin
+                );
+                app.setLoginItemSettings({
+                  openAtLogin: !app.getLoginItemSettings().openAtLogin,
+                  path: process.execPath, // or use app.getPath('exe'),
+                });
+                log.info(
+                  app.getLoginItemSettings().openAtLogin,
+                  'after: autoStart toggled'
+                );
+              }
+            },
+          },
           {
             label: t('menu.githubConfig'),
             click: deps.configureGitHub,

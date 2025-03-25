@@ -57,14 +57,14 @@ export const createMenuTemplate = createMenubar(config, deps, server);
 function updateRecentWikis(wikiPath: string) {
   const recentWikis = config.get('recentWikis') || [];
   // 移除当前路径和已存在的相同路径
-  const filteredWikis = recentWikis.filter(
+  const filteredWikis: string[] = recentWikis.filter(
     (path: string) => path !== wikiPath && path !== config.get('wikiPath')
   );
   filteredWikis.unshift(wikiPath);
   config.set('recentWikis', filteredWikis.slice(0, 5));
 
   // 更新菜单
-  server.menu = Menu.buildFromTemplate(createMenuTemplate(win) as any);
+  server.menu = Menu.buildFromTemplate(createMenuTemplate(win));
   Menu.setApplicationMenu(server.menu);
 }
 
