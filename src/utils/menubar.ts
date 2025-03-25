@@ -132,7 +132,7 @@ export const createMenubar = (config: IConfig, deps: any, server: any) => {
             // app.quit();
           },
         },
-        { type: 'separator' },
+        // { type: 'separator' },
         {
           label: t('menu.exit'),
           icon: getMenuIcon('exit'),
