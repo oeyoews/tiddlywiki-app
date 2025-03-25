@@ -1,15 +1,18 @@
-// @ts-nocheck
-
 import { t } from '@/i18n';
-import { Menu } from 'electron';
+import {
+  type BrowserWindow,
+  Menu,
+  type MenuItemConstructorOptions,
+} from 'electron';
+import { getMenuIcon } from './icon';
 
 /**
  * 注册右键菜单
  * @param {*} params
  * @param {*} win
  */
-export const registerContextMenu = (params, win) => {
-  const menus = [
+export const registerContextMenu = (params: any, win: BrowserWindow) => {
+  const menus: MenuItemConstructorOptions[] = [
     {
       accelerator: 'Alt+M',
       label: t('menu.toggleMenuBar'),
@@ -17,9 +20,11 @@ export const registerContextMenu = (params, win) => {
         const isVisible = win.isMenuBarVisible();
         win.setMenuBarVisibility(!isVisible);
       },
+      // acceleratorWorksWhenHidden: false,
     },
     {
       label: t('menu.copy'),
+      icon: getMenuIcon('save'),
       role: 'copy',
       accelerator: 'CmdOrCtrl+C',
       enabled: params.editFlags.canCopy,
@@ -48,14 +53,14 @@ export const registerContextMenu = (params, win) => {
   ];
 
   // 如果右键点击的是图片，添加复制图片选项
-  if (params.mediaType === 'image') {
-    menus.push({
-      label: t('menu.copyImage'),
-      click: () => {
-        win.webContents.copyImageAt(params.x, params.y);
-      },
-    });
-  }
+  // if (params.mediaType === 'image') {
+  //   menus.push({
+  //     label: t('menu.copyImage'),
+  //     click: () => {
+  //       win.webContents.copyImageAt(params.x, params.y);
+  //     },
+  //   });
+  // }
   const contextMenu = Menu.buildFromTemplate(menus);
   contextMenu.popup();
 };

@@ -15,3 +15,21 @@ interface CommitBody {
   branch: string;
   sha?: string; // 可选的 SHA 属性
 }
+
+type IMenuIconFile =
+  | 'File'
+  | 'new-wiki'
+  | 'folder'
+  | 'import'
+  | 'open-wiki'
+  | 'exit'
+  | 'restart'
+  | 'build'
+  | 'recent'
+  | 'save'
+  | 'clear'
+  | 'release';
+
+type IMenuIconSetting = 'language' | 'autostart';
+
+type IMenuIcon = IMenuIconFile | IMenuIconSetting;
