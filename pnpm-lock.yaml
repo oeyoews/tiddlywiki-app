@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       electron-conf:
-        specifier: ^1.2.1
-        version: 1.2.1(electron@35.0.3)
+        specifier: ^1.3.0
+        version: 1.3.0(electron@35.0.3)
       electron-log:
         specifier: ^5.3.2
         version: 5.3.2
@@ -769,8 +769,8 @@ packages:
     engines: {node: '>=14.0.0'}
     hasBin: true
 
-  electron-conf@1.2.1:
-    resolution: {integrity: sha512-MjREzEIA77VpwX+gSviMgCdse7KuuaQEY13rqka96DKlm9xdEP7adMOX+7Z9gFr5lZTmAxLjmHz5XJ0xweED3Q==}
+  electron-conf@1.3.0:
+    resolution: {integrity: sha512-F1F33QntbFiRsmCW4r8n+CqfTmBzw9XhCWVh27weFpfCNATo9n0K1h1UQLEG5kYBZRqMfcWr1+IHSO+Yd7seRQ==}
     peerDependencies:
       electron: '>=15.0.0'
 
@@ -2542,7 +2542,7 @@ snapshots:
       - electron-builder-squirrel-windows
       - supports-color
 
-  electron-conf@1.2.1(electron@35.0.3):
+  electron-conf@1.3.0(electron@35.0.3):
     dependencies:
       ajv: 8.17.1
       electron: 35.0.3

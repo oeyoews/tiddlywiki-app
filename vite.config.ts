@@ -39,7 +39,18 @@ export default defineConfig({
         // preserveModules: true, // 保持目录结构
         // preserveModulesRoot: 'src',
       },
-      external: ['electron', 'path', 'fs', 'url'],
+      external: [
+        'electron',
+        'path',
+        'fs',
+        'url',
+        'node:process',
+        'node:os',
+        'node:fs',
+        'node:url',
+        'node:path',
+        'node:util',
+      ],
     },
   },
 });

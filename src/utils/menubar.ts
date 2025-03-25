@@ -1,8 +1,16 @@
 import { t, i18next } from '@/i18n/index';
-import { Menu, shell, app, type BrowserWindow } from 'electron';
+import {
+  type MenuItemConstructorOptions,
+  Menu,
+  shell,
+  app,
+  type BrowserWindow,
+} from 'electron';
+
 import { log } from '@/utils/logger';
 
 import { checkForUpdates } from '@/utils/checkUpdate';
+import { appIcon } from './icon';
 
 export const createMenubar = (config: any, deps: any, server: any) => {
   return function (win: BrowserWindow) {
@@ -10,7 +18,7 @@ export const createMenubar = (config: any, deps: any, server: any) => {
       (path: string) => path !== config.get('wikiPath')
     );
 
-    const menubars = [
+    const menubars: MenuItemConstructorOptions[] = [
       {
         label: t('menu.file'),
         submenu: [
@@ -181,40 +189,38 @@ export const createMenubar = (config: any, deps: any, server: any) => {
             checked: config.get('lang-CN'),
             click: (menuItem: any) => deps.toggleChineseLang(menuItem.checked),
           },
-          ...(process.platform === 'win32' || process.platform === 'darwin'
-            ? [
-                {
-                  label: t('menu.autoStart'),
-                  type: 'checkbox',
-                  checked: app.getLoginItemSettings().openAtLogin,
-                  click() {
-                    if (!app.isPackaged) {
-                      app.setLoginItemSettings({
-                        openAtLogin: !app.getLoginItemSettings().openAtLogin,
-                        path: process.execPath, // or use app.getPath('exe'),
-                      });
-                      log.info(
-                        'dev: test autoStart',
-                        app.getLoginItemSettings().openAtLogin
-                      );
-                    } else {
-                      log.info(
-                        'before toggle autoStart',
-                        app.getLoginItemSettings().openAtLogin
-                      );
-                      app.setLoginItemSettings({
-                        openAtLogin: !app.getLoginItemSettings().openAtLogin,
-                        path: process.execPath, // or use app.getPath('exe'),
-                      });
-                      log.info(
-                        app.getLoginItemSettings().openAtLogin,
-                        'after: autoStart toggled'
-                      );
-                    }
-                  },
-                },
-              ]
-            : []),
+          {
+            label: t('menu.autoStart'),
+            visible:
+              process.platform === 'win32' || process.platform === 'darwin',
+            type: 'checkbox',
+            checked: app.getLoginItemSettings().openAtLogin,
+            click: () => {
+              if (!app.isPackaged) {
+                app.setLoginItemSettings({
+                  openAtLogin: !app.getLoginItemSettings().openAtLogin,
+                  path: process.execPath, // or use app.getPath('exe'),
+                });
+                log.info(
+                  'dev: test autoStart',
+                  app.getLoginItemSettings().openAtLogin
+                );
+              } else {
+                log.info(
+                  'before toggle autoStart',
+                  app.getLoginItemSettings().openAtLogin
+                );
+                app.setLoginItemSettings({
+                  openAtLogin: !app.getLoginItemSettings().openAtLogin,
+                  path: process.execPath, // or use app.getPath('exe'),
+                });
+                log.info(
+                  app.getLoginItemSettings().openAtLogin,
+                  'after: autoStart toggled'
+                );
+              }
+            },
+          },
           {
             label: t('menu.githubConfig'),
             click: deps.configureGitHub,
