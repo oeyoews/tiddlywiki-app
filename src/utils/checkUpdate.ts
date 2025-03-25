@@ -3,7 +3,7 @@ import { log } from '@/utils/logger';
 import { updaterConfig } from '@/utils/updater';
 import { dialog, type BrowserWindow } from 'electron';
 import { t } from '@/i18n';
-import { appIcon, getMenuIcon } from './icon';
+import { getMenuIcon } from './icon';
 
 autoUpdater.autoDownload = false;
 
