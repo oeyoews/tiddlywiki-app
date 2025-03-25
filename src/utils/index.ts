@@ -279,6 +279,7 @@ async function switchLanguage(lang: string) {
   // 更新菜单
   server.menu = Menu.buildFromTemplate(createMenuTemplate(win) as any);
   Menu.setApplicationMenu(server.menu);
+  log.info('switch lang to', lang);
 
   // 更新托盘菜单
   createTray(win, server);

@@ -26,4 +26,4 @@ const initI18n = async (config: any) => {
 };
 const t = i18next.t;
 
-export { initI18n, i18next, t, resources, defaultNS, enTranslation };
+export { initI18n, i18next, t, resources, defaultNS };
