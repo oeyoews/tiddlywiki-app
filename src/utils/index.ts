@@ -16,6 +16,7 @@ import packageInfo from '../../package.json';
 import saveToGitHub from '@/utils/github-saver';
 import {
   buildIndexHTMLArgs,
+  defaultPlugins,
   wikiBuildArgs,
   wikiInitArgs,
   wikiStartupArgs,
@@ -130,6 +131,7 @@ export async function initWiki(
 
     const bootPath = path.join(wikiFolder, WIKIINFOFILE);
 
+    // tiddlywiki.info 不存在就自动生成
     if (!fs.existsSync(bootPath)) {
       const { boot } = TiddlyWiki();
       if (!isEmptyDirectory(wikiFolder)) {
@@ -141,8 +143,31 @@ export async function initWiki(
       boot.argv = wikiInitArgs(wikiFolder);
       await boot.boot(() => {
         console.log(t('log.startInit'));
+        log.info(bootPath, 'is not exist, has already auto generate it');
       });
       console.log(t('log.finishInit'));
+    } else {
+      // 检测 tiddlywiki.info 是否有效, 并修复
+      let twInfo = JSON.parse(fs.readFileSync(bootPath, 'utf8'));
+
+      // 检查 plugins 是否异常
+      if (!twInfo.plugins || twInfo.plugins.length === 0) {
+        log.info(bootPath, 'is not correct, has already fix it');
+        twInfo.plugins = defaultPlugins;
+      } else {
+        const hasAllNesPlugins = defaultPlugins.every((item: string) =>
+          twInfo.plugins.includes(item)
+        );
+        if (!hasAllNesPlugins) {
+          const plugins = [...twInfo.plugins, ...defaultPlugins];
+          twInfo.plugins = [...new Set(plugins)];
+        }
+        log.info(
+          bootPath,
+          'is missing some nessary plugins, has already fix it'
+        );
+      }
+      fs.writeFileSync(bootPath, JSON.stringify(twInfo, null, 4), 'utf8');
     }
 
     if (server.currentServer) {

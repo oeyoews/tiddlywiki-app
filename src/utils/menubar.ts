@@ -30,7 +30,8 @@ export const createMenubar = (config: IConfig, deps: any, server: any) => {
       submenu: [
         {
           label: t('menu.openExistingWiki'),
-          icon: iconImage,
+          // @ts-ignore
+          icon: config.get('icon') ? iconImage : null,
           accelerator: 'CmdOrCtrl+O',
           click: async () => {
             const res = await deps.openWiki();

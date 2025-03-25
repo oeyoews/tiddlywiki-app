@@ -13,3 +13,9 @@ export const buildIndexHTMLArgs = [
   'index.html',
   'text/plain',
 ];
+
+export const defaultPlugins = [
+  'tiddlywiki/tiddlyweb',
+  'tiddlywiki/filesystem',
+  'tiddlywiki/highlight',
+];
