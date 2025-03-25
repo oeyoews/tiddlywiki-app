@@ -3,6 +3,7 @@ import { log } from '@/utils/logger';
 import { updaterConfig } from '@/utils/updater';
 import { dialog, type BrowserWindow } from 'electron';
 import { t } from '@/i18n';
+import { appIcon, getMenuIcon } from './icon';
 
 autoUpdater.autoDownload = false;
 
@@ -41,6 +42,7 @@ export async function checkForUpdates(win: BrowserWindow) {
       // Menu.setApplicationMenu(menu);
 
       const result = await dialog.showMessageBox({
+        // icon: appIcon,
         type: 'info',
         title: t('dialog.updateAvailable'),
         message: t('dialog.newVersion', { version: info.version }),
@@ -62,6 +64,7 @@ export async function checkForUpdates(win: BrowserWindow) {
       hasLatestNotify = true;
       win.setProgressBar(-1);
       dialog.showMessageBox({
+        // icon: getMenuIcon('about'),
         type: 'info',
         title: t('dialog.updateCheck'),
         message: t('dialog.noUpdate'),
@@ -83,6 +86,7 @@ export async function checkForUpdates(win: BrowserWindow) {
       downloadFinished = true;
       win.setProgressBar(-1);
       const result = await dialog.showMessageBox({
+        icon: getMenuIcon('restart'),
         type: 'info',
         title: t('dialog.updateReady'),
         message: t('dialog.updateReadyMessage', { version: info.version }),

@@ -1,6 +1,7 @@
 import { app, Menu, Tray, BrowserWindow } from 'electron';
-import { appIcon } from './icon';
+import { appIcon, getMenuIcon } from './icon';
 import { t } from '@/i18n';
+import { getPlatform } from './getPlatform';
 
 // 修改 createTray 函数中的菜单项
 export function createTray(
@@ -22,9 +23,11 @@ export function createTray(
   }
   server.tray.setToolTip(t('tray.tooltip'));
   server.tray.setTitle(t('tray.tooltip'));
+  const platform = getPlatform();
   const contextMenu = Menu.buildFromTemplate([
     {
       label: t('tray.showWindow'),
+      icon: getMenuIcon(platform),
       click: () => {
         win.show();
       },
@@ -44,6 +47,7 @@ export function createTray(
     // },
     {
       label: t('tray.exit'),
+      icon: getMenuIcon('exit'),
       click: () => {
         app.quit();
       },

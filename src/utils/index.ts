@@ -23,6 +23,7 @@ import {
 import { createMenubar } from './menubar';
 import { log } from '@/utils/logger';
 import { createTray } from './createTray';
+import { appIcon, getMenuIcon } from './icon';
 
 let wikiInstances: { [port: number]: string } = {}; // 用于记录 port: wikipath, 便于端口复用
 
@@ -399,6 +400,7 @@ async function buildWiki() {
 async function configureGitHub() {
   const currentConfig = config.get('github');
   const result = await dialog.showMessageBox({
+    icon: getMenuIcon('gitHub'),
     type: 'question',
     title: t('dialog.githubConfig'),
     message: t('dialog.githubConfigMessage'),

@@ -131,34 +131,41 @@ export const createMenubar = (config: any, deps: any, server: any) => {
         submenu: [
           {
             role: 'reload',
+            icon: getMenuIcon('reload'),
             label: t('menu.reload'),
           },
           {
             role: 'forceReload',
+            icon: getMenuIcon('reload'),
             label: t('menu.forceReload'),
           },
           { type: 'separator' },
           {
             role: 'resetZoom',
+            icon: getMenuIcon('reset'),
             label: t('menu.resetZoom'),
           },
           {
             role: 'zoomIn',
             label: t('menu.zoomIn'),
+            icon: getMenuIcon('zoomIn'),
             accelerator: 'CmdOrCtrl+=',
           },
           {
             role: 'zoomOut',
             label: t('menu.zoomOut'),
+            icon: getMenuIcon('zoomOut'),
           },
           { type: 'separator' },
           {
             role: 'togglefullscreen',
+            icon: getMenuIcon('screens'),
             label: t('menu.toggleFullscreen'),
             accelerator: 'F11',
           },
           {
             label: t('menu.toggleMenuBar'),
+            icon: getMenuIcon('settings'),
             accelerator: 'Alt+M',
             click: () => {
               const isVisible = win.isMenuBarVisible();
@@ -167,6 +174,7 @@ export const createMenubar = (config: any, deps: any, server: any) => {
           },
           {
             label: t('menu.openInBrowser'),
+            icon: getMenuIcon('web'),
             accelerator: 'CmdOrCtrl+Shift+O',
             click: () => {
               if (server.currentPort) {
@@ -176,6 +184,7 @@ export const createMenubar = (config: any, deps: any, server: any) => {
           },
           {
             label: t('menu.openFolder'),
+            icon: getMenuIcon('folder'),
             accelerator: 'CmdOrCtrl+E',
             click: () => {
               shell.openPath(config.get('wikiPath'));
@@ -239,14 +248,17 @@ export const createMenubar = (config: any, deps: any, server: any) => {
           },
           {
             label: t('menu.githubConfig'),
+            icon: getMenuIcon('settings'),
             click: deps.configureGitHub,
           },
           {
             label: t('menu.language'),
+            icon: getMenuIcon('i18n'),
             submenu: [
               {
                 label: '简体中文',
                 type: 'radio',
+                // icon: getMenuIcon('File'),
                 checked: i18next.language === 'zh-CN',
                 click: () => deps.switchLanguage('zh-CN'),
               },
@@ -267,19 +279,23 @@ export const createMenubar = (config: any, deps: any, server: any) => {
             label: t('menu.devTools'),
             accelerator: 'CmdOrCtrl+Shift+I',
             click: () => win.webContents.openDevTools({ mode: 'right' }),
+            icon: getMenuIcon('devtools'),
           },
           {
             label: t('menu.checkUpdate'),
             click: () => checkForUpdates(win),
+            icon: getMenuIcon('update'),
           },
           {
             label: t('menu.showLogs'),
+            icon: getMenuIcon('log'),
             click: () => {
               shell.openPath(app.getPath('logs'));
             },
           },
           {
             label: t('menu.reportIssue'),
+            icon: getMenuIcon('issue'),
             click: () =>
               shell.openExternal(
                 'https://github.com/oeyoews/tiddlywiki-app/issues'
@@ -287,6 +303,7 @@ export const createMenubar = (config: any, deps: any, server: any) => {
           },
           {
             label: t('menu.twdocs'),
+            icon: getMenuIcon('read'),
             click: () => {
               const isZH = i18next.language === 'zh-CN';
               shell.openExternal(
@@ -298,11 +315,13 @@ export const createMenubar = (config: any, deps: any, server: any) => {
           },
           {
             label: t('menu.forum'),
+            icon: getMenuIcon('link'),
             click: () => shell.openExternal('https://talk.tiddlywiki.org/'),
           },
           {
             label: t('menu.about'),
             click: deps.showWikiInfo2,
+            icon: getMenuIcon('about'),
           },
         ],
       },

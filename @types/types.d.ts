@@ -26,10 +26,37 @@ type IMenuIconFile =
   | 'restart'
   | 'build'
   | 'recent'
-  | 'save'
   | 'clear'
   | 'release';
 
-type IMenuIconSetting = 'language' | 'autostart';
+type IContextIcon = 'copy' | 'save' | 'paste' | 'cut' | 'image';
 
-type IMenuIcon = IMenuIconFile | IMenuIconSetting;
+type IMenuViewIcon =
+  | 'web'
+  | 'zoomIn'
+  | 'zoomOut'
+  | 'reset'
+  | 'reload'
+  | 'read'
+  | 'screens';
+
+type IMenuIconSetting = 'language' | 'autostart' | 'gitHub' | 'settings';
+
+type IMenuHelpIcon =
+  | 'about'
+  | 'update'
+  | 'log'
+  | 'issue'
+  | 'devtools'
+  | 'link'
+  | 'i18n';
+
+type IPlatform = 'macOS' | 'windows' | 'linux';
+
+type IMenuIcon =
+  | IMenuIconFile
+  | IMenuIconSetting
+  | IPlatform
+  | IMenuHelpIcon
+  | IContextIcon
+  | IMenuViewIcon;
