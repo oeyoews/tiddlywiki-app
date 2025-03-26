@@ -35,8 +35,7 @@
     "target": [
       "AppImage",
       "deb",
-      "rpm",
-      "pacman"
+      "rpm"
     ],
     "maintainer": "oeyoews",
     "category": "Utility"
