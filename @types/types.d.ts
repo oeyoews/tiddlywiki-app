@@ -30,6 +30,9 @@ type IMenuIconFile =
   | 'build'
   | 'recent'
   | 'clear'
+  | 'markdown'
+  | 'format'
+  | 'help'
   | 'release';
 
 type IContextIcon = 'copy' | 'save' | 'paste' | 'cut' | 'image' | 'menu';
@@ -49,9 +52,12 @@ type IMenuHelpIcon =
   | 'about'
   | 'update'
   | 'log'
+  | 'log2'
   | 'issue'
   | 'devtools'
+  | 'console'
   | 'link'
+  | 'link2'
   | 'i18n';
 
 type IPlatform = 'macOS' | 'windows' | 'linux';

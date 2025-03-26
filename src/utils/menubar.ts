@@ -226,12 +226,14 @@ export const createMenubar = (
         {
           label: t('menu.markdown'),
           type: 'checkbox',
+          icon: getMenuIcon('markdown'),
           checked: config.get('markdown'),
           click: (menuItem: MenuItem) => deps.toggleMarkdown(menuItem.checked),
         },
         {
           label: t('menu.autocorrect'),
           type: 'checkbox',
+          icon: getMenuIcon('format'),
           checked: config.get('autocorrect'),
           click: async (menuItem: MenuItem) =>
             await deps.toggleAutocorrect(menuItem),
@@ -316,7 +318,7 @@ export const createMenubar = (
           label: t('menu.devTools'),
           accelerator: 'CmdOrCtrl+Shift+I',
           click: () => win.webContents.openDevTools({ mode: 'right' }),
-          icon: getMenuIcon('devtools'),
+          icon: getMenuIcon('console'),
         },
         {
           label: t('menu.checkUpdate'),
@@ -377,7 +379,7 @@ export const createMenubar = (
         },
         {
           label: t('menu.forum'),
-          icon: getMenuIcon('link'),
+          icon: getMenuIcon('link2'),
           click: () => shell.openExternal('https://talk.tiddlywiki.org/'),
         },
         {
