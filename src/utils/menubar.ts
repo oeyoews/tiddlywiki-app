@@ -345,7 +345,7 @@ export const createMenubar = (
           label: t('dialog.restartNow'),
           id: 'restartApp',
           visible: false,
-          click: () => autoUpdater.quitAndInstall(true),
+          click: () => autoUpdater.quitAndInstall(true, true), // 静默安装并启动
           icon: getMenuIcon('update'),
         },
         {
