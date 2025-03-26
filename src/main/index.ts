@@ -1,3 +1,4 @@
+import fs from 'fs';
 import {
   screen,
   shell,
@@ -6,11 +7,11 @@ import {
   BrowserWindow,
   Menu,
   nativeTheme,
-  type ContextMenuParams,
+  dialog,
 } from 'electron';
 import { setFindBar } from '@/main/find-bar';
 import path from 'path';
-import { initI18n } from '@/i18n/index.js';
+import { initI18n, t } from '@/i18n';
 import { getAppIcon } from '@/utils/icon';
 
 import { createMenuTemplate, showWikiInfo, initWiki } from '@/utils/index';
@@ -111,6 +112,26 @@ async function createWindow() {
   const menu = Menu.buildFromTemplate(createMenuTemplate(win) as any);
   Menu.setApplicationMenu(menu);
 }
+
+ipcMain.handle('update-gh-config', async (event: any, githubConfig: any) => {
+  config.set('github', githubConfig);
+});
+
+ipcMain.on('tid-info', (_event, data) => {
+  log.info(data, 'received tid-info');
+  if (!data?.title) {
+    dialog.showErrorBox(t('dialog.openfileNotSupported'), '');
+    return;
+  }
+  const tidPath = path.join(config.get('wikiPath'), 'tiddlers', data?.title);
+  if (fs.existsSync(tidPath)) {
+    log.info('open file', tidPath);
+    shell.showItemInFolder(tidPath);
+  } else {
+    // TODO: 递归查询相应后缀的文件是否存在
+    log.error(tidPath, 'not exit');
+  }
+});
 
 // 初始化应用
 const initApp = async () => {

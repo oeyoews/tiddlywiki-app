@@ -20,6 +20,8 @@ function gotoGithubConfig() {
   goto.navigateTiddler('$:/core/ui/ControlPanel/Saving/GitHub');
 }
 
+// 暂不支持其他类型带有meta 的类型
+// 同名文件_xxx 暂时不考虑
 const extFile = {
   'text/vnd.tiddlywiki': '.tid',
   'text/markdown': '.md',
@@ -30,10 +32,13 @@ function getTiddlerTitle(data) {
   const el = document.elementFromPoint(data.x, data.y);
   const attr = 'data-tiddler-title';
   const titleEl = el?.closest(`[${attr}]`);
-  const title = titleEl?.getAttribute(attr) || null; // 获取属性值，若不存在则返回 null
+  let title = titleEl?.getAttribute(attr) || null; // 获取属性值，若不存在则返回 null
   if ($tw.wiki.tiddlerExists(title)) {
     const { type } = $tw.wiki.getTiddler(title).fields;
-    console.log(`${title}${extFile[type]}`);
+    if (title.startsWith('$')) {
+      title = title.replace(/^\$:\//, '$__');
+    }
+    if (!extFile[type]) return null;
     return {
       title: `${title}${extFile[type]}`,
     };
@@ -43,6 +48,7 @@ function getTiddlerTitle(data) {
 if (window.$tw) {
   // 发送tiddler info
   window.electronAPI.onTidInfo((data) => {
+    // console.log('render data vanilla', data);
     const res = getTiddlerTitle(data);
     if (res) {
       window.electronAPI.sendTidInfo(res);
@@ -60,7 +66,7 @@ if (window.$tw) {
 
   // 如果有 token 再存储配置
   if (githubConfig.token) {
-    window.electronAPI.sendTiddlyWikiInstance(githubConfig);
+    window.electronAPI.sendGHConfig(githubConfig);
   }
 
   // 监听 github 配置跳转

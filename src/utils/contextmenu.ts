@@ -31,30 +31,12 @@ export const registerContextMenu = (
         const isVisible = win.isMenuBarVisible();
         win.setMenuBarVisibility(!isVisible);
       },
-      // acceleratorWorksWhenHidden: false,
     },
     {
       label: t('menu.openTid'),
       icon: getMenuIcon('File'),
       click: () => {
         win.webContents.send('update-tid', { x: params.x, y: params.y });
-        ipcMain.on('tid-info', (_event, data) => {
-          if (!data?.title) {
-            dialog.showErrorBox('文件不存在', '不存在文件');
-            return;
-          }
-          const tidPath = path.join(
-            config.get('wikiPath'),
-            'tiddlers',
-            data?.title
-          );
-          if (fs.existsSync(tidPath)) {
-            log.info('open file', tidPath);
-            shell.showItemInFolder(tidPath);
-          } else {
-            log.error(tidPath, 'not exit');
-          }
-        });
       },
     },
     {
