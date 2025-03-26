@@ -50,10 +50,10 @@ export function autoUpdaterInit() {
     // Menu.setApplicationMenu(menu);
 
     const result = await dialog.showMessageBox({
-      // icon: appIcon,
       type: 'info',
       title: t('dialog.updateAvailable'),
       message: t('dialog.newVersion', { version: info.version }),
+      icon: getMenuIcon('about', 256),
       // detail: t('dialog.downloading'),
       // buttons: ['confirm', 'cancel'],
       buttons: [t('dialog.confirm'), t('dialog.cancel')],
