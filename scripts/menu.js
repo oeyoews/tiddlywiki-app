@@ -15,6 +15,10 @@ module.exports = {
     'en-US': '&Settings',
     'zh-CN': '设置(&S)',
   },
+  openTid: {
+    'en-US': 'open tid file',
+    'zh-CN': '在文件夹中打开 tid 文件',
+  },
   enableBeta: {
     'en-US': 'Use Beta Channel For Updates',
     'zh-CN': '体验内测版本',

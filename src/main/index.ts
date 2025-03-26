@@ -6,6 +6,7 @@ import {
   BrowserWindow,
   Menu,
   nativeTheme,
+  type ContextMenuParams,
 } from 'electron';
 import { setFindBar } from '@/main/find-bar';
 import path from 'path';
@@ -77,7 +78,7 @@ async function createWindow() {
 
     createTray(win, server); // 创建任务栏图标
 
-    win.webContents.on('context-menu', (event: any, params: any) => {
+    win.webContents.on('context-menu', (event, params) => {
       registerContextMenu(params, win);
     });
   });
