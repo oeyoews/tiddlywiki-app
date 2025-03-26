@@ -119,8 +119,9 @@ ipcMain.handle('update-gh-config', async (event: any, githubConfig: any) => {
 
 ipcMain.on('tid-info', (_event, data) => {
   log.info(data, 'received tid-info');
-  if (!data?.title && !data?.maybeTitle) {
+  if (!data?.title) {
     // dialog.showErrorBox(t('dialog.openfileNotSupported'), '');
+    log.info('open  default fodler');
     shell.openPath(path.join(config.get('wikiPath'), 'tiddlers'));
     return;
   }
@@ -138,6 +139,7 @@ ipcMain.on('tid-info', (_event, data) => {
     shell.showItemInFolder(tidPath);
   } else if (maybeTidPath && fs.existsSync(maybeTidPath)) {
     shell.showItemInFolder(maybeTidPath);
+    log.info('open file form maybeTitle');
   } else {
     shell.openPath(path.join(config.get('wikiPath'), 'tiddlers'));
     // TODO: 递归查询相应后缀的文件是否存在

@@ -41,6 +41,7 @@ function getTiddlerTitle(data) {
   if ($tw.wiki.tiddlerExists(title)) {
     const { type } = $tw.wiki.getTiddler(title).fields;
     if (title.startsWith('$')) {
+      console.log('replace $:? --> $__', title, type);
       newTitle = title.replace(/^\$:\//, '$__');
     }
     // if (!extFile[type]) return;
@@ -48,9 +49,12 @@ function getTiddlerTitle(data) {
     const tiddlersPath = $tw.wiki.getTiddlerData(
       '$:/config/OriginalTiddlerPaths'
     );
-
+    let lastTitle = `${newTitle}${extFile[type] || '.tid'}`;
+    if (lastTitle.endsWith('.png.png')) {
+      lastTitle = lastTitle.slice(0, -4);
+    }
     return {
-      title: extFile[type] ? `${newTitle}${extFile[type]}` : newTitle,
+      title: lastTitle,
       maybeTitle: tiddlersPath[title],
     };
   }
