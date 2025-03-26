@@ -16,7 +16,7 @@ module.exports = {
     'zh-CN': '设置(&S)',
   },
   openTid: {
-    'en-US': 'open tid file',
+    'en-US': 'Open Tiddler In Folder',
     'zh-CN': '在文件夹中打开文件',
   },
   enableBeta: {
