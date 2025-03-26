@@ -13,6 +13,7 @@
   "directories": {
     "output": "release/${version}"
   },
+  "generateUpdatesFilesForAllChannels": true,
   "extraFiles": [
     {
       "from": "LICENSE",

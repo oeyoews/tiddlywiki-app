@@ -4,6 +4,7 @@
     "view": "视图(&V)",
     "help": "帮助(&H)",
     "settings": "设置(&S)",
+    "enableBeta": "体验内测版本",
     "enableIcon": "显示菜单图标",
     "autocorrect": "文本格式优化",
     "twdocs": "TiddlyWiki 文档",

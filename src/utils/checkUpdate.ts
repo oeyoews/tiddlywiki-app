@@ -4,6 +4,7 @@ import { updaterConfig } from '@/utils/updater';
 import { dialog, Menu, type BrowserWindow } from 'electron';
 import { t } from '@/i18n';
 import { getMenuIcon } from '@/utils/icon';
+import { config } from './config';
 
 autoUpdater.autoDownload = false;
 
@@ -16,6 +17,11 @@ export async function checkForUpdates(
   let updateAvailableHandled = false;
   let downloadFinished = false;
   let hasLatestNotify = false;
+
+  if (config.get('betaChannel')) {
+    autoUpdater.channel = 'beta';
+    log.info('use beta channel for update');
+  }
 
   const updateMenu = server.menu.getMenuItemById('update')!;
   const updatingMenu = server.menu.getMenuItemById('updating')!;

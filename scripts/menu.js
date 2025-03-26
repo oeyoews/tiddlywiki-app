@@ -15,6 +15,10 @@ module.exports = {
     'en-US': '&Settings',
     'zh-CN': '设置(&S)',
   },
+  enableBeta: {
+    'en-US': 'Use Beta Channel For Updates',
+    'zh-CN': '体验内测版本',
+  },
   enableIcon: {
     'en-US': 'Show Menu Icon',
     'zh-CN': '显示菜单图标',

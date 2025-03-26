@@ -217,6 +217,13 @@ export const createMenubar = (
       id: 'Setting',
       submenu: [
         {
+          label: t('menu.enableBeta'),
+          type: 'checkbox',
+          checked: config.get('betaChannel'),
+          click: (menuItem: MenuItem) =>
+            deps.toggleEnableBeta(menuItem.checked),
+        },
+        {
           label: t('menu.markdown'),
           type: 'checkbox',
           checked: config.get('markdown'),

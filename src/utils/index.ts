@@ -44,6 +44,7 @@ const deps = {
   buildWiki,
   importSingleFileWiki,
   releaseWiki,
+  toggleEnableBeta,
   configureGitHub,
   switchLanguage,
   showWikiInfo2,
@@ -466,6 +467,11 @@ export async function toggleIcon(enable: Boolean) {
     app.relaunch();
     app.exit(0);
   }
+}
+
+export async function toggleEnableBeta(enable: Boolean) {
+  config.set('betaChannel', enable);
+  log.info('enable betaChannel', enable);
 }
 
 export async function toggleMarkdown(

@@ -4,6 +4,7 @@
     "view": "&View",
     "help": "&Help",
     "settings": "&Settings",
+    "enableBeta": "Use Beta Channel For Updates",
     "enableIcon": "Show Menu Icon",
     "autocorrect": "Autocorrect",
     "twdocs": "TiddlyWiki Documentation",
