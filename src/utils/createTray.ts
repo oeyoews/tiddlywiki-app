@@ -1,5 +1,5 @@
 import { app, Menu, Tray, BrowserWindow } from 'electron';
-import { appIcon, getMenuIcon } from './icon';
+import { getAppIcon, getMenuIcon } from './icon';
 import { t } from '@/i18n';
 import { getPlatform } from './getPlatform';
 import { log } from '@/utils/logger';
@@ -12,7 +12,7 @@ export function createTray(
   }
 ) {
   if (!server.tray) {
-    server.tray = new Tray(appIcon);
+    server.tray = new Tray(getAppIcon()!);
     server.tray.on('click', () => {
       if (!win.isVisible() || win.isMinimized()) {
         win.show();

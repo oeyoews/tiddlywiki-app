@@ -1,5 +1,5 @@
 import path from 'path';
-import { app, nativeImage } from 'electron';
+import { app, nativeImage, nativeTheme } from 'electron';
 import { config } from '@/utils/config';
 
 process.env.DIST = path.join(__dirname, '../dist');
@@ -27,3 +27,8 @@ export const getMenuIcon = (name: IMenuIcon, size?: number) => {
 
 export const twImage = (size: number = 16) =>
   nativeImage.createFromPath(appIcon).resize({ width: size, height: size }); // 调整图标大小
+
+export const getAppIcon = () =>
+  nativeTheme.shouldUseDarkColors
+    ? getMenuIcon('tw-dark', 512)
+    : getMenuIcon('tw-light', 512);

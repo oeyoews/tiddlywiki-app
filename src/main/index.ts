@@ -1,8 +1,16 @@
-import { screen, shell, ipcMain, app, BrowserWindow, Menu } from 'electron';
+import {
+  screen,
+  shell,
+  ipcMain,
+  app,
+  BrowserWindow,
+  Menu,
+  nativeTheme,
+} from 'electron';
 import { setFindBar } from '@/main/find-bar';
 import path from 'path';
 import { initI18n } from '@/i18n/index.js';
-import { appIcon } from '@/utils/icon';
+import { getAppIcon } from '@/utils/icon';
 
 import { createMenuTemplate, showWikiInfo, initWiki } from '@/utils/index';
 import { config } from '@/utils/config';
@@ -40,7 +48,7 @@ async function createWindow() {
   win = new BrowserWindow({
     width: newWidth,
     height: newHeight,
-    icon: appIcon,
+    icon: getAppIcon(),
     skipTaskbar: false,
     show: false,
     // transparent: true,
@@ -154,6 +162,12 @@ const initApp = async () => {
     createWindow();
 
     twDialog(win);
+
+    // 监听主题变化
+    nativeTheme.on('updated', () => {
+      win.setIcon(getAppIcon()!); // 更新任务栏图标
+      server.tray.setImage(getAppIcon()!); // 更新托盘icon
+    });
   });
 };
 
