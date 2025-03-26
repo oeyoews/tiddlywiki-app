@@ -104,7 +104,7 @@ export function autoUpdaterInit() {
     });
 
     if (result.response === 0) {
-      autoUpdater.quitAndInstall();
+      autoUpdater.quitAndInstall(true);
     }
   });
 
