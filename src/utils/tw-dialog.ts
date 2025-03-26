@@ -1,5 +1,11 @@
 import { t } from '@/i18n/index';
-import { ipcMain, type BrowserWindow, dialog } from 'electron';
+import {
+  ipcMain,
+  type BrowserWindow,
+  dialog,
+  type MessageBoxSyncOptions,
+} from 'electron';
+import { twImage } from './icon';
 
 interface ITWDialog {
   type: DialogType;
@@ -10,8 +16,9 @@ interface ITWDialog {
 export const twDialog = (win: BrowserWindow) => {
   ipcMain.on('custom-dialog', (event: any, opt: ITWDialog) => {
     const { type, message } = opt;
-    const options = {
+    const options: MessageBoxSyncOptions = {
       type: type === 'confirm' ? 'question' : 'info',
+      icon: twImage(256),
       buttons:
         type === 'confirm'
           ? [t('dialog.cancel'), t('dialog.confirm')]

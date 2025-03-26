@@ -5,7 +5,6 @@ import {
   shell,
   app,
   type BrowserWindow,
-  nativeImage,
   MenuItem,
   Tray,
 } from 'electron';
@@ -13,13 +12,10 @@ import {
 import { log } from '@/utils/logger';
 
 import { checkForUpdates } from '@/utils/checkUpdate';
-import { appIcon, getMenuIcon } from './icon';
+import { getMenuIcon, twImage } from './icon';
 import { IConfig } from './index';
 import { getPlatform } from './getPlatform';
 const { autoUpdater } = require('electron-updater');
-const iconImage = nativeImage
-  .createFromPath(appIcon)
-  .resize({ width: 16, height: 16 }); // 调整图标大小
 
 export const createMenubar = (
   config: IConfig,
@@ -44,7 +40,7 @@ export const createMenubar = (
         {
           label: t('menu.openExistingWiki'),
           // @ts-ignore
-          icon: config.get('icon') ? iconImage : null,
+          icon: config.get('icon') ? twImage() : null,
           accelerator: 'CmdOrCtrl+O',
           click: async () => {
             const res = await deps.openWiki();

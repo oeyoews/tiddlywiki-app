@@ -24,3 +24,6 @@ export const getMenuIcon = (name: IMenuIcon, size?: number) => {
     .createFromPath(iconPath)
     .resize({ width: size || 16, height: size || 16 }); // 调整图标大小
 };
+
+export const twImage = (size: number = 16) =>
+  nativeImage.createFromPath(appIcon).resize({ width: size, height: size }); // 调整图标大小
