@@ -1,17 +1,27 @@
 import { t } from '@/i18n';
+import path from 'path';
+import fs from 'fs';
 import {
   type BrowserWindow,
+  dialog,
+  ipcMain,
   Menu,
   type MenuItemConstructorOptions,
+  shell,
 } from 'electron';
 import { getMenuIcon } from './icon';
+import { config } from './config';
+import { log } from './logger';
 
 /**
  * 注册右键菜单
  * @param {*} params
  * @param {*} win
  */
-export const registerContextMenu = (params: any, win: BrowserWindow) => {
+export const registerContextMenu = (
+  params: Electron.ContextMenuParams,
+  win: BrowserWindow
+) => {
   const menus: MenuItemConstructorOptions[] = [
     {
       accelerator: 'Alt+M',
@@ -21,7 +31,13 @@ export const registerContextMenu = (params: any, win: BrowserWindow) => {
         const isVisible = win.isMenuBarVisible();
         win.setMenuBarVisibility(!isVisible);
       },
-      // acceleratorWorksWhenHidden: false,
+    },
+    {
+      label: t('menu.openTid'),
+      icon: getMenuIcon('File'),
+      click: () => {
+        win.webContents.send('update-tid', { x: params.x, y: params.y });
+      },
     },
     {
       label: t('menu.copy'),
@@ -29,18 +45,20 @@ export const registerContextMenu = (params: any, win: BrowserWindow) => {
       role: 'copy',
       accelerator: 'CmdOrCtrl+C',
       enabled: params.editFlags.canCopy,
+      visible: params.editFlags.canCopy,
     },
     {
       label: t('menu.paste'),
       icon: getMenuIcon('paste'),
       role: 'paste',
-      enabled: params.editFlags.canPaste,
+      // enabled: params.editFlags.canPaste,
+      visible: params.editFlags.canPaste,
     },
     {
       label: t('menu.cut'),
       role: 'cut',
       icon: getMenuIcon('cut'),
-      enabled: params.editFlags.canCut,
+      visible: params.editFlags.canCut,
     },
     { type: 'separator' },
     {

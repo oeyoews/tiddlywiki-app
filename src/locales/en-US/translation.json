@@ -4,6 +4,7 @@
     "view": "&View",
     "help": "&Help",
     "settings": "&Settings",
+    "openTid": "open tid file",
     "enableBeta": "Use Beta Channel For Updates",
     "enableIcon": "Show Menu Icon",
     "autocorrect": "Autocorrect",
@@ -63,6 +64,7 @@
     "exit": "Exit"
   },
   "dialog": {
+    "openfileNotSupported": "Not support open this file",
     "enableAutocorrect": "Autocorrect format",
     "autocorrect": "Enable this setting only if you have installed the oeyoews/autocorrect-wrapper TiddlyWiki plugin.",
     "saveImageError": "Failed to save image",

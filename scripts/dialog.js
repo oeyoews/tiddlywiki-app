@@ -1,4 +1,8 @@
 module.exports = {
+  openfileNotSupported: {
+    'en-US': 'Not support open this file',
+    'zh-CN': '暂不支持打开该文件',
+  },
   enableAutocorrect: {
     'en-US': 'Autocorrect format',
     'zh-CN': '文本格式优化',

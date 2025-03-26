@@ -1,3 +1,4 @@
+import fs from 'fs';
 import {
   screen,
   shell,
@@ -6,10 +7,11 @@ import {
   BrowserWindow,
   Menu,
   nativeTheme,
+  dialog,
 } from 'electron';
 import { setFindBar } from '@/main/find-bar';
 import path from 'path';
-import { initI18n } from '@/i18n/index.js';
+import { initI18n, t } from '@/i18n';
 import { getAppIcon } from '@/utils/icon';
 
 import { createMenuTemplate, showWikiInfo, initWiki } from '@/utils/index';
@@ -77,7 +79,7 @@ async function createWindow() {
 
     createTray(win, server); // 创建任务栏图标
 
-    win.webContents.on('context-menu', (event: any, params: any) => {
+    win.webContents.on('context-menu', (event, params) => {
       registerContextMenu(params, win);
     });
   });
@@ -111,9 +113,31 @@ async function createWindow() {
   Menu.setApplicationMenu(menu);
 }
 
-// IPC 事件处理
-ipcMain.handle('send-tw-instance', async (event: any, githubConfig: any) => {
+ipcMain.handle('update-gh-config', async (event: any, githubConfig: any) => {
   config.set('github', githubConfig);
+});
+
+ipcMain.on('tid-info', (_event, data) => {
+  log.info(data, 'received tid-info');
+  if (!data?.title) {
+    dialog.showErrorBox(t('dialog.openfileNotSupported'), '');
+    return;
+  }
+  const tidPath = path.join(config.get('wikiPath'), 'tiddlers', data?.title);
+  const maybeTidPath = path.join(
+    config.get('wikiPath'),
+    'tiddlers',
+    data?.maybeTitle
+  );
+  if (fs.existsSync(tidPath)) {
+    log.info('open file', tidPath);
+    shell.showItemInFolder(tidPath);
+  } else if (fs.existsSync(maybeTidPath)) {
+    shell.showItemInFolder(maybeTidPath);
+  } else {
+    // TODO: 递归查询相应后缀的文件是否存在
+    log.error(tidPath, 'not exit');
+  }
 });
 
 // 初始化应用
