@@ -3,6 +3,8 @@ import path from 'path';
 import fs from 'fs';
 import {
   type BrowserWindow,
+  dialog,
+  ipcMain,
   Menu,
   type MenuItemConstructorOptions,
   shell,
@@ -34,22 +36,26 @@ export const registerContextMenu = (
     {
       label: t('menu.openTid'),
       icon: getMenuIcon('File'),
-      visible: !params?.selectionText.startsWith('$'),
       click: () => {
-        console.log(params.selectionText, 'params');
-        const tidPath = path.join(
-          config.get('wikiPath'),
-          'tiddlers',
-          `${params.selectionText}.tid`
-        );
-        if (fs.existsSync(tidPath)) {
-          log.info('open file', tidPath);
-          shell.showItemInFolder(tidPath);
-        } else {
-          log.error(tidPath, 'not exit');
-        }
+        win.webContents.send('update-tid', { x: params.x, y: params.y });
+        ipcMain.on('tid-info', (_event, data) => {
+          if (!data?.title) {
+            dialog.showErrorBox('文件不存在', '不存在文件');
+            return;
+          }
+          const tidPath = path.join(
+            config.get('wikiPath'),
+            'tiddlers',
+            data?.title
+          );
+          if (fs.existsSync(tidPath)) {
+            log.info('open file', tidPath);
+            shell.showItemInFolder(tidPath);
+          } else {
+            log.error(tidPath, 'not exit');
+          }
+        });
       },
-      enabled: params.editFlags.canCopy,
     },
     {
       label: t('menu.copy'),
@@ -57,18 +63,20 @@ export const registerContextMenu = (
       role: 'copy',
       accelerator: 'CmdOrCtrl+C',
       enabled: params.editFlags.canCopy,
+      visible: params.editFlags.canCopy,
     },
     {
       label: t('menu.paste'),
       icon: getMenuIcon('paste'),
       role: 'paste',
-      enabled: params.editFlags.canPaste,
+      // enabled: params.editFlags.canPaste,
+      visible: params.editFlags.canPaste,
     },
     {
       label: t('menu.cut'),
       role: 'cut',
       icon: getMenuIcon('cut'),
-      enabled: params.editFlags.canCut,
+      visible: params.editFlags.canCut,
     },
     { type: 'separator' },
     {

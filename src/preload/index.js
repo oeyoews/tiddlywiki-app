@@ -1,16 +1,17 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {
-  sendTiddlyWikiInstance: (twInstance) => {
-    // console.log(twInstance, 'saveed instance');
-    ipcRenderer.invoke('send-tw-instance', twInstance);
-  },
   alert: (message) =>
     ipcRenderer.sendSync('custom-dialog', { type: 'alert', message }),
   confirm: (message) =>
     ipcRenderer.sendSync('custom-dialog', { type: 'confirm', message }),
   onConfigGithub: (callback) => ipcRenderer.on('config-github', callback),
   onShowWikiInfo: (callback) => ipcRenderer.on('show-wiki-info', callback),
+
+  // 双向
+  onTidInfo: (callback) =>
+    ipcRenderer.on('update-tid', (_event, value) => callback(value)),
+  sendTidInfo: (value) => ipcRenderer.send('tid-info', value),
 
   // onTwInstanceUpdate: (callback) =>
   //   ipcRenderer.on('tw-instance-update', callback),

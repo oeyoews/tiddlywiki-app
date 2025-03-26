@@ -112,11 +112,6 @@ async function createWindow() {
   Menu.setApplicationMenu(menu);
 }
 
-// IPC 事件处理
-ipcMain.handle('send-tw-instance', async (event: any, githubConfig: any) => {
-  config.set('github', githubConfig);
-});
-
 // 初始化应用
 const initApp = async () => {
   const gotTheLock = app.requestSingleInstanceLock();

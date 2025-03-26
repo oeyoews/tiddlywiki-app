@@ -20,7 +20,37 @@ function gotoGithubConfig() {
   goto.navigateTiddler('$:/core/ui/ControlPanel/Saving/GitHub');
 }
 
+const extFile = {
+  'text/vnd.tiddlywiki': '.tid',
+  'text/markdown': '.md',
+  'text/x-markdown': '.md',
+};
+
+function getTiddlerTitle(data) {
+  const el = document.elementFromPoint(data.x, data.y);
+  const attr = 'data-tiddler-title';
+  const titleEl = el?.closest(`[${attr}]`);
+  const title = titleEl?.getAttribute(attr) || null; // 获取属性值，若不存在则返回 null
+  if ($tw.wiki.tiddlerExists(title)) {
+    const { type } = $tw.wiki.getTiddler(title).fields;
+    console.log(`${title}${extFile[type]}`);
+    return {
+      title: `${title}${extFile[type]}`,
+    };
+  }
+}
+
 if (window.$tw) {
+  // 发送tiddler info
+  window.electronAPI.onTidInfo((data) => {
+    const res = getTiddlerTitle(data);
+    if (res) {
+      window.electronAPI.sendTidInfo(res);
+    } else {
+      window.electronAPI.sendTidInfo(null);
+    }
+  });
+
   const githubConfig = {
     repo: getText('$:/GitHub/Repo')?.split('/').pop(),
     owner: getText('$:/GitHub/Username'),
