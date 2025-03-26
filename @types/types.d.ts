@@ -32,7 +32,7 @@ type IMenuIconFile =
   | 'clear'
   | 'release';
 
-type IContextIcon = 'copy' | 'save' | 'paste' | 'cut' | 'image';
+type IContextIcon = 'copy' | 'save' | 'paste' | 'cut' | 'image' | 'menu';
 
 type IMenuViewIcon =
   | 'web'

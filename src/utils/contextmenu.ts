@@ -19,7 +19,7 @@ export const registerContextMenu = (
     {
       accelerator: 'Alt+M',
       label: t('menu.toggleMenuBar'),
-      icon: getMenuIcon('settings'),
+      icon: getMenuIcon('menu'),
       click: () => {
         const isVisible = win.isMenuBarVisible();
         win.setMenuBarVisibility(!isVisible);
@@ -27,7 +27,7 @@ export const registerContextMenu = (
     },
     {
       label: t('menu.openTid'),
-      icon: getMenuIcon('File'),
+      icon: getMenuIcon('folder'),
       click: () => {
         win.webContents.send('update-tid', { x: params.x, y: params.y });
       },
