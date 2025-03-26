@@ -11,4 +11,10 @@ md5sums=('SKIP')
 
 package() {
 	bsdtar -xf data.tar.xz -C "$pkgdir/"
+
+	 # 确保目标目录存在
+    install -d "$pkgdir/usr/bin"
+
+    # 创建一个符号链接到可执行文件
+    ln -s "/opt/tiddlywiki-app/tiddlywiki-app" "$pkgdir/usr/bin/tiddlywiki-app"
 }
