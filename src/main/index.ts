@@ -119,7 +119,7 @@ ipcMain.handle('update-gh-config', async (event: any, githubConfig: any) => {
 
 ipcMain.on('tid-info', (_event, data) => {
   log.info(data, 'received tid-info');
-  if (!data?.title) {
+  if (!data?.title && !data?.maybeTitle) {
     dialog.showErrorBox(t('dialog.openfileNotSupported'), '');
     return;
   }

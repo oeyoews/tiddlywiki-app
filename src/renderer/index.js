@@ -37,13 +37,14 @@ function getTiddlerTitle(data) {
   const attr = 'data-tiddler-title';
   const titleEl = el?.closest(`[${attr}]`);
   let title = titleEl?.getAttribute(attr) || null; // 获取属性值，若不存在则返回 null
-  let newTitle = null;
+  debugger;
+  let newTitle = title;
   if ($tw.wiki.tiddlerExists(title)) {
     const { type } = $tw.wiki.getTiddler(title).fields;
     if (title.startsWith('$')) {
       newTitle = title.replace(/^\$:\//, '$__');
     }
-    if (!extFile[type]) return null;
+    // if (!extFile[type]) return;
 
     const tiddlersPath = $tw.wiki.getTiddlerData(
       '$:/config/OriginalTiddlerPaths'
@@ -59,12 +60,11 @@ function getTiddlerTitle(data) {
 if (window.$tw) {
   // 发送tiddler info
   window.electronAPI.onTidInfo((data) => {
-    // console.log('render data vanilla', data);
     const res = getTiddlerTitle(data);
     if (res) {
       window.electronAPI.sendTidInfo(res);
     } else {
-      window.electronAPI.sendTidInfo(null);
+      window.electronAPI.sendTidInfo();
     }
   });
 
