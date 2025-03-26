@@ -134,9 +134,10 @@ ipcMain.on('tid-info', (_event, data) => {
     shell.showItemInFolder(tidPath);
   } else if (fs.existsSync(maybeTidPath)) {
     shell.showItemInFolder(maybeTidPath);
+  } else {
+    // TODO: 递归查询相应后缀的文件是否存在
+    log.error(tidPath, 'not exit');
   }
-  // TODO: 递归查询相应后缀的文件是否存在
-  log.error(tidPath, 'not exit');
 });
 
 // 初始化应用
