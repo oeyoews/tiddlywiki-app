@@ -37,7 +37,6 @@ function getTiddlerTitle(data) {
   const attr = 'data-tiddler-title';
   const titleEl = el?.closest(`[${attr}]`);
   let title = titleEl?.getAttribute(attr) || null; // 获取属性值，若不存在则返回 null
-  debugger;
   let newTitle = title;
   if ($tw.wiki.tiddlerExists(title)) {
     const { type } = $tw.wiki.getTiddler(title).fields;
