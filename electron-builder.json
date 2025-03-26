@@ -34,8 +34,7 @@
   "linux": {
     "target": [
       "AppImage",
-      "deb",
-      "rpm"
+      "deb"
     ],
     "maintainer": "oeyoews",
     "category": "Utility"
