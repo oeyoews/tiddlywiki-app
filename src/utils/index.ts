@@ -152,7 +152,6 @@ export async function initWiki(
     } else {
       // 检测 tiddlywiki.info 是否有效, 并修复
       let twInfo = JSON.parse(fs.readFileSync(bootPath, 'utf8'));
-
       // 检查 plugins 是否异常
       if (!twInfo.plugins || twInfo.plugins.length === 0) {
         log.info(bootPath, 'is not correct, has already fix it');
@@ -171,6 +170,19 @@ export async function initWiki(
         }
       }
       fs.writeFileSync(bootPath, JSON.stringify(twInfo, null, 4), 'utf8');
+    }
+
+    // 支持 "retain-original-tiddler-path": true
+    let twConfigInfo = JSON.parse(fs.readFileSync(bootPath, 'utf8'));
+    if (
+      !twConfigInfo.config ||
+      !twConfigInfo.config?.['retain-original-tiddler-path']
+    ) {
+      twConfigInfo.config = {
+        'retain-original-tiddler-path': true,
+      };
+      log.info('update twinfo config');
+      fs.writeFileSync(bootPath, JSON.stringify(twConfigInfo, null, 4), 'utf8');
     }
 
     if (server.currentServer) {

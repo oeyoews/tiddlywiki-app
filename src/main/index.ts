@@ -124,13 +124,19 @@ ipcMain.on('tid-info', (_event, data) => {
     return;
   }
   const tidPath = path.join(config.get('wikiPath'), 'tiddlers', data?.title);
+  const maybeTidPath = path.join(
+    config.get('wikiPath'),
+    'tiddlers',
+    data?.maybeTitle
+  );
   if (fs.existsSync(tidPath)) {
     log.info('open file', tidPath);
     shell.showItemInFolder(tidPath);
-  } else {
-    // TODO: 递归查询相应后缀的文件是否存在
-    log.error(tidPath, 'not exit');
+  } else if (fs.existsSync(maybeTidPath)) {
+    shell.showItemInFolder(maybeTidPath);
   }
+  // TODO: 递归查询相应后缀的文件是否存在
+  log.error(tidPath, 'not exit');
 });
 
 // 初始化应用

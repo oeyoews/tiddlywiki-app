@@ -26,6 +26,10 @@ const extFile = {
   'text/vnd.tiddlywiki': '.tid',
   'text/markdown': '.md',
   'text/x-markdown': '.md',
+  'application/pdf': '.pdf',
+  'application/javascript': '.js',
+  'text/css': '.css',
+  'image/png': '.png',
 };
 
 function getTiddlerTitle(data) {
@@ -33,14 +37,21 @@ function getTiddlerTitle(data) {
   const attr = 'data-tiddler-title';
   const titleEl = el?.closest(`[${attr}]`);
   let title = titleEl?.getAttribute(attr) || null; // 获取属性值，若不存在则返回 null
+  let newTitle = null;
   if ($tw.wiki.tiddlerExists(title)) {
     const { type } = $tw.wiki.getTiddler(title).fields;
     if (title.startsWith('$')) {
-      title = title.replace(/^\$:\//, '$__');
+      newTitle = title.replace(/^\$:\//, '$__');
     }
     if (!extFile[type]) return null;
+
+    const tiddlersPath = $tw.wiki.getTiddlerData(
+      '$:/config/OriginalTiddlerPaths'
+    );
+
     return {
-      title: `${title}${extFile[type]}`,
+      title: `${newTitle}${extFile[type]}`,
+      maybeTitle: tiddlersPath[title],
     };
   }
 }
