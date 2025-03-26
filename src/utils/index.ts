@@ -449,15 +449,11 @@ async function configureGitHub() {
   }
 }
 
-export async function toggleIcon(enable: Boolean) {
-  config.set('icon', enable);
-  log.info('toggle men icon', enable);
-  server.menu = Menu.buildFromTemplate(createMenuTemplate(win));
-  Menu.setApplicationMenu(server.menu);
-
+async function restartDialog() {
   const result = await dialog.showMessageBox({
     type: 'info',
     title: t('settings.settingChanged'),
+    icon: getMenuIcon('about', 256),
     message: t('settings.restartTips'),
     buttons: [t('dialog.restartNow'), t('dialog.later')],
     defaultId: 0,
@@ -469,6 +465,14 @@ export async function toggleIcon(enable: Boolean) {
     app.relaunch();
     app.exit(0);
   }
+}
+
+export async function toggleIcon(enable: Boolean) {
+  config.set('icon', enable);
+  log.info('toggle men icon', enable);
+  server.menu = Menu.buildFromTemplate(createMenuTemplate(win));
+  Menu.setApplicationMenu(server.menu);
+  restartDialog();
 }
 
 // export async function toggleEnableBeta(enable: Boolean) {
@@ -507,20 +511,7 @@ export async function toggleMarkdown(
     if (!options.notify) {
       return;
     }
-
-    const result = await dialog.showMessageBox({
-      type: 'info',
-      title: t('settings.settingChanged'),
-      message: t('settings.restartTips'),
-      buttons: [t('dialog.restartNow'), t('dialog.later')],
-      defaultId: 0,
-      cancelId: 1,
-    });
-
-    if (result.response === 0) {
-      app.relaunch();
-      app.exit(0);
-    }
+    restartDialog();
   } catch (err) {}
 }
 
@@ -529,6 +520,7 @@ async function toggleAutocorrect(menuItem: any) {
     const res = await dialog.showMessageBox({
       type: 'info',
       title: t('dialog.enableAutocorrect'),
+      icon: getMenuIcon('warning', 256),
       message: t('dialog.autocorrect'),
       buttons: [t('dialog.confirm'), t('dialog.cancel')],
       defaultId: 0,
@@ -547,19 +539,7 @@ async function toggleAutocorrect(menuItem: any) {
     config.set('autocorrect', false);
   }
 
-  const result = await dialog.showMessageBox({
-    type: 'info',
-    title: t('settings.settingChanged'),
-    message: t('settings.restartTips'),
-    buttons: [t('dialog.restartNow'), t('dialog.later')],
-    defaultId: 0,
-    cancelId: 1,
-  });
-
-  if (result.response === 0) {
-    app.relaunch();
-    app.exit(0);
-  }
+  restartDialog();
 }
 
 async function toggleChineseLang(
@@ -593,19 +573,6 @@ async function toggleChineseLang(
     if (!options.notify) {
       return;
     }
-
-    const result = await dialog.showMessageBox({
-      type: 'info',
-      title: t('settings.settingChanged'),
-      message: t('settings.restartTips'),
-      buttons: [t('dialog.restartNow'), t('dialog.later')],
-      defaultId: 0,
-      cancelId: 1,
-    });
-
-    if (result.response === 0) {
-      app.relaunch();
-      app.exit(0);
-    }
+    restartDialog();
   } catch (err) {}
 }

@@ -18,6 +18,7 @@ interface CommitBody {
 
 type IMenuIconFile =
   | 'File'
+  | 'warning'
   | 'new-wiki'
   | 'folder'
   | 'import'
