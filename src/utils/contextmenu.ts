@@ -1,17 +1,10 @@
 import { t } from '@/i18n';
-import path from 'path';
-import fs from 'fs';
 import {
   type BrowserWindow,
-  dialog,
-  ipcMain,
   Menu,
   type MenuItemConstructorOptions,
-  shell,
 } from 'electron';
 import { getMenuIcon } from './icon';
-import { config } from './config';
-import { log } from './logger';
 
 /**
  * 注册右键菜单
