@@ -120,7 +120,8 @@ ipcMain.handle('update-gh-config', async (event: any, githubConfig: any) => {
 ipcMain.on('tid-info', (_event, data) => {
   log.info(data, 'received tid-info');
   if (!data?.title && !data?.maybeTitle) {
-    dialog.showErrorBox(t('dialog.openfileNotSupported'), '');
+    // dialog.showErrorBox(t('dialog.openfileNotSupported'), '');
+    shell.openPath(path.join(config.get('wikiPath'), 'tiddlers'));
     return;
   }
   const tidPath = path.join(config.get('wikiPath'), 'tiddlers', data?.title);
