@@ -124,18 +124,22 @@ ipcMain.on('tid-info', (_event, data) => {
     shell.openPath(path.join(config.get('wikiPath'), 'tiddlers'));
     return;
   }
-  const tidPath = path.join(config.get('wikiPath'), 'tiddlers', data?.title);
-  const maybeTidPath = path.join(
-    config.get('wikiPath'),
-    'tiddlers',
-    data?.maybeTitle
-  );
+  const tidPath = path.join(config.get('wikiPath'), 'tiddlers', data.title);
+  let maybeTidPath = null;
+  if (data?.maybeTitle) {
+    maybeTidPath = path.join(
+      config.get('wikiPath'),
+      'tiddlers',
+      data?.maybeTitle
+    );
+  }
   if (fs.existsSync(tidPath)) {
     log.info('open file', tidPath);
     shell.showItemInFolder(tidPath);
-  } else if (fs.existsSync(maybeTidPath)) {
+  } else if (maybeTidPath && fs.existsSync(maybeTidPath)) {
     shell.showItemInFolder(maybeTidPath);
   } else {
+    shell.openPath(path.join(config.get('wikiPath'), 'tiddlers'));
     // TODO: 递归查询相应后缀的文件是否存在
     log.error(tidPath, 'not exit');
   }

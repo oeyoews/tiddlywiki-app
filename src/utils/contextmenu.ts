@@ -32,6 +32,7 @@ export const registerContextMenu = (
         win.webContents.send('update-tid', { x: params.x, y: params.y });
       },
     },
+    // TODO: add delete/edit btn
     {
       label: t('menu.copy'),
       icon: getMenuIcon('copy'),

@@ -50,7 +50,7 @@ function getTiddlerTitle(data) {
     );
 
     return {
-      title: `${newTitle}${extFile[type]}`,
+      title: extFile[type] ? `${newTitle}${extFile[type]}` : newTitle,
       maybeTitle: tiddlersPath[title],
     };
   }
