@@ -36,6 +36,7 @@ export const server = {
   currentServer: null,
   menu: {} as Menu,
   tray: null as any as Tray,
+  win: {} as BrowserWindow,
 };
 
 const deps = {
@@ -44,7 +45,7 @@ const deps = {
   buildWiki,
   importSingleFileWiki,
   releaseWiki,
-  toggleEnableBeta,
+  // toggleEnableBeta,
   configureGitHub,
   switchLanguage,
   showWikiInfo2,
@@ -95,6 +96,7 @@ export async function initWiki(
   log.info('begin initwiki');
   if (_mainWindow && !win) {
     win = _mainWindow;
+    server.win = _mainWindow;
   }
   try {
     // 检查当前实例的文件夹是否被初始化过
@@ -469,10 +471,10 @@ export async function toggleIcon(enable: Boolean) {
   }
 }
 
-export async function toggleEnableBeta(enable: Boolean) {
-  config.set('betaChannel', enable);
-  log.info('enable betaChannel', enable);
-}
+// export async function toggleEnableBeta(enable: Boolean) {
+//   config.set('betaChannel', enable);
+//   log.info('enable betaChannel', enable);
+// }
 
 export async function toggleMarkdown(
   enable: Boolean,

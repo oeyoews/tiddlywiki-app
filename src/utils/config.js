@@ -9,7 +9,7 @@ const DEFAULT_WIKI_DIR = path.resolve('wiki'); // use app.getPath('desktop')
 
 const options = {
   defaults: {
-    betaChannel: false,
+    // betaChannel: false,
     icon: true,
     wikiPath: DEFAULT_WIKI_DIR,
     language: null,

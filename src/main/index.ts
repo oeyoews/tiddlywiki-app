@@ -12,6 +12,7 @@ import { logInit, log } from '@/utils/logger';
 import { twDialog } from '@/utils/tw-dialog';
 import { createTray } from '@/utils/createTray';
 import { server } from '@/utils';
+import { autoUpdaterInit } from '@/utils/checkUpdate';
 
 let win: BrowserWindow;
 let wikiPath: string;
@@ -58,6 +59,7 @@ async function createWindow() {
   win.once('ready-to-show', () => {
     win.show();
     log.info('ready to show');
+    autoUpdaterInit();
 
     // 设置外部链接在默认浏览器中打开
     win.webContents.setWindowOpenHandler(({ url }: { url: string }) => {

@@ -216,13 +216,13 @@ export const createMenubar = (
       label: t('menu.settings'),
       id: 'Setting',
       submenu: [
-        {
-          label: t('menu.enableBeta'),
-          type: 'checkbox',
-          checked: config.get('betaChannel'),
-          click: (menuItem: MenuItem) =>
-            deps.toggleEnableBeta(menuItem.checked),
-        },
+        // {
+        //   label: t('menu.enableBeta'),
+        //   type: 'checkbox',
+        //   checked: config.get('betaChannel'),
+        //   click: (menuItem: MenuItem) =>
+        //     deps.toggleEnableBeta(menuItem.checked),
+        // },
         {
           label: t('menu.markdown'),
           type: 'checkbox',
@@ -321,11 +321,10 @@ export const createMenubar = (
         {
           label: t('menu.checkUpdate'),
           // @see https://www.electronjs.org/zh/docs/latest/api/auto-updater
-          visible: getPlatform() === 'windows' ? true : false,
+          visible: getPlatform() === 'windows',
           id: 'update',
-          click: () => {
-            checkForUpdates(win, server);
-          },
+          enabled: app.isPackaged,
+          click: checkForUpdates,
           icon: getMenuIcon('update'),
         },
         {

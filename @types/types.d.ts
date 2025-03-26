@@ -60,3 +60,9 @@ type IMenuIcon =
   | IMenuHelpIcon
   | IContextIcon
   | IMenuViewIcon;
+
+type IUpdateMenuType =
+  | 'updateMenu'
+  | 'updatingMenu'
+  | 'downloadingApp'
+  | 'restartMenu';
