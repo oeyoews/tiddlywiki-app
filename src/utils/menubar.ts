@@ -321,7 +321,7 @@ export const createMenubar = (
         {
           label: t('menu.checkUpdate'),
           // @see https://www.electronjs.org/zh/docs/latest/api/auto-updater
-          visible: getPlatform() === 'windows',
+          // visible: getPlatform() === 'windows',
           id: 'update',
           enabled: app.isPackaged,
           click: checkForUpdates,
