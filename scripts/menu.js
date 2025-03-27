@@ -9,7 +9,7 @@ module.exports = {
   },
   wikis: {
     'en-US': '&Wikis',
-    'zh-CN': '&Wiki',
+    'zh-CN': '知识库(&W)',
   },
   settings: {
     'en-US': '&Settings',

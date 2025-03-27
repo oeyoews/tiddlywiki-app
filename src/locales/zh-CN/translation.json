@@ -2,7 +2,7 @@
   "menu": {
     "file": "文件(&F)",
     "view": "视图(&V)",
-    "wikis": "&Wiki",
+    "wikis": "知识库(&W)",
     "settings": "设置(&S)",
     "help": "帮助(&H)",
     "openTid": "在文件夹中打开文件",

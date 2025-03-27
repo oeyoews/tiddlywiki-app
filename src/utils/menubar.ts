@@ -45,7 +45,7 @@ export const createMenubar = (
     const mwikis = recentWikis.map((wikiPath: string) => ({
       id: generateId(wikiPath),
       label: wikiPath,
-      icon: getMenuIcon('folder'),
+      icon: getMenuIcon('remove'),
       click: async (menuItem: MenuItem) => {
         const { id, label } = menuItem;
         // 检查文件是否存在
@@ -72,6 +72,7 @@ export const createMenubar = (
         );
         const res = await dialog.showMessageBox({
           title: t('dialog.delete'),
+          icon: getMenuIcon('remove', 256),
           message: t('dialog.moveToTrash', { folder: wikiPath }),
           buttons: [t('dialog.confirm'), t('dialog.cancel')],
           cancelId: 1,
