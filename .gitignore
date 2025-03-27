@@ -1,8 +1,8 @@
 node_modules/
-output/
+/output/
 src/wiki/tiddlers/
 builder*.yaml
-release
-wiki/
-dist/
+/release
+/wiki
+/dist/
 test-results/

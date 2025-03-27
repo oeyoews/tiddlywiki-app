@@ -11,7 +11,6 @@ import { isEmptyDirectory } from '@/utils/checkEmptyDir';
 
 const WIKIINFOFILE = 'tiddlywiki.info';
 const DEFAULT_PORT = 8080;
-const DEFAULT_WIKI_DIR = path.resolve('wiki'); // use app.getPath('desktop')
 
 import packageInfo from '../../package.json';
 import saveToGitHub from '@/utils/github-saver';
@@ -25,7 +24,11 @@ import { createMenubar } from './menubar';
 import { log } from '@/utils/logger';
 import { createTray } from './createTray';
 import { getMenuIcon } from './icon';
-import { checkTWPlugins, updateOriginalPath } from '@/utils/wiki/index';
+import {
+  checkBuildInfo,
+  checkTWPlugins,
+  updateOriginalPath,
+} from '@/utils/wiki/index';
 
 let wikiInstances: { [port: number]: string } = {}; // 用于记录 port: wikipath, 便于端口复用
 
@@ -142,11 +145,8 @@ export async function initWiki(
       await boot.boot(() => {
         log.info(wikiFolder, 'is empty, try init wiki');
       });
-    }
-
-    // wiki目录存在但是 tiddlywiki.info 文件不存在
-    if (!isEmptyDirectory(wikiFolder) && !fs.existsSync(bootPath)) {
-      // 直接写入tiddlywiki.info 文件
+    } else if (!isEmptyDirectory(wikiFolder) && !fs.existsSync(bootPath)) {
+      // wiki目录存在但是 tiddlywiki.info 文件不存在, 直接写入tiddlywiki.info 文件
       fs.writeFileSync(bootPath, JSON.stringify(twinfo, null, 4), 'utf8');
     }
 
@@ -171,6 +171,7 @@ export async function initWiki(
       });
     }
 
+    // 新建tw实例
     const { boot: twBoot } = TiddlyWiki();
     twBoot.argv = wikiStartupArgs(wikiFolder, server.currentPort);
 
@@ -351,18 +352,7 @@ async function importSingleFileWiki() {
 async function buildWiki() {
   try {
     const wikiPath = config.get('wikiPath');
-    const bootPath = path.join(wikiPath, WIKIINFOFILE);
-    let twInfo = JSON.parse(fs.readFileSync(bootPath, 'utf8'));
-
-    // 检查并添加构建配置，修复导入的文件夹无法构建
-    if (!twInfo.build || !twInfo.build.index) {
-      twInfo.build = {
-        ...twInfo.build,
-        index: buildIndexHTMLArgs,
-      };
-      fs.writeFileSync(bootPath, JSON.stringify(twInfo, null, 4), 'utf8');
-    }
-
+    checkBuildInfo(wikiPath);
     // 设置进度条
     win.setProgressBar(0.1);
 
