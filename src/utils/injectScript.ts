@@ -1,19 +1,23 @@
 import { config } from '@/utils/config';
 import path from 'path';
-import { app, type BrowserWindow } from 'electron';
+import { type BrowserWindow } from 'electron';
 
 import { log } from '@/utils/logger';
 
-process.env.DIST = path.join(__dirname, '../dist');
-process.env.VITE_PUBLIC = app.isPackaged
-  ? process.env.DIST
-  : path.join(process.env.DIST, '../public');
+process.env.APP_ROOT = path.join(__dirname, '../..');
+process.env.DIST = path.join(process.env.APP_ROOT, 'dist');
 
-const render = path.join(__dirname, '../renderer/index.js');
-const swal = path.join(process.env.VITE_PUBLIC, '../lib/sweetalert.min.js');
+process.env.VITE_PUBLIC = process.env.VITE_DEV_SERVER_URL
+  ? path.join(process.env.APP_ROOT, 'public')
+  : process.env.DIST;
+
+console.log('vitepublic ', process.env.VITE_PUBLIC);
+
+const render = path.join(process.env.DIST, 'renderer/index.js');
+const swal = path.join(process.env.VITE_PUBLIC, 'lib/sweetalert.min.js');
 const autocorrectLib = path.join(
   process.env.VITE_PUBLIC,
-  '../lib/autocorrect.min.js'
+  'lib/autocorrect.min.js'
 );
 
 export const injectScript = (win: BrowserWindow) => {

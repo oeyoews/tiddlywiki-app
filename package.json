@@ -10,7 +10,8 @@
   "scripts": {
     "updateIcon": "node scripts/svg2png.js ./assets/menu/ public/assets/menu/",
     "test": "playwright test",
-    "dev": "node ./scripts/generate-locales.js && vite build && electron ./dist/main/index.js",
+    "dev": "vite",
+    "preview": "vite build && electron .",
     "build": "vite build && electron-builder",
     "release": "vite build && electron-builder"
   },
@@ -44,7 +45,9 @@
     "electron-builder": "^25.1.8",
     "playwright": "^1.51.1",
     "sharp": "^0.33.5",
-    "vite": "^6.2.2"
+    "vite": "^6.2.2",
+    "vite-plugin-electron": "^0.29.0",
+    "vite-plugin-electron-renderer": "^0.14.6"
   },
   "engines": {
     "node": ">= 18"

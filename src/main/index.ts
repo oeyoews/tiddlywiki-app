@@ -9,7 +9,7 @@ import {
   nativeTheme,
 } from 'electron';
 import path from 'path';
-import { initI18n, t } from '@/i18n';
+import { initI18n } from '@/i18n/index';
 import { getAppIcon } from '@/utils/icon';
 
 import { createMenuTemplate, showWikiInfo, initWiki } from '@/utils/index';
@@ -26,12 +26,14 @@ let win: BrowserWindow;
 let wikiPath: string;
 
 // 环境变量配置
-process.env.DIST = path.join(__dirname, '../dist');
-process.env.VITE_PUBLIC = app.isPackaged
-  ? process.env.DIST
-  : path.join(process.env.DIST, '../public');
+const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL;
+process.env.APP_ROOT = path.join(__dirname, '../..');
+process.env.DIST = path.join(process.env.APP_ROOT, 'dist');
+process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL
+  ? path.join(process.env.APP_ROOT, 'public')
+  : process.env.DIST;
 
-const preload = path.join(__dirname, '../preload/index.js');
+const preload = path.join(process.env.DIST, 'preload/index.js');
 
 // 初始化日志
 logInit();

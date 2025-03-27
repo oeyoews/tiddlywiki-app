@@ -1,15 +1,17 @@
 import path from 'path';
-import { app, nativeImage, nativeTheme } from 'electron';
+import { nativeImage, nativeTheme } from 'electron';
 import { config } from '@/utils/config';
 
-process.env.DIST = path.join(__dirname, '../dist');
-process.env.VITE_PUBLIC = app.isPackaged
-  ? process.env.DIST
-  : path.join(process.env.DIST, '../public');
+process.env.APP_ROOT = path.join(__dirname, '../..');
+process.env.DIST = path.join(process.env.APP_ROOT, 'dist');
 
-const iconPath = app.isPackaged
-  ? '../assets/tray-icon.png'
-  : '../assets/tray-icon-dev.png';
+process.env.VITE_PUBLIC = process.env.VITE_DEV_SERVER_URL
+  ? path.join(process.env.APP_ROOT, 'public')
+  : process.env.DIST;
+
+const iconPath = process.env.VITE_PUBLIC
+  ? 'assets/tray-icon.png'
+  : 'assets/tray-icon-dev.png';
 
 export const appIcon = path.join(process.env.VITE_PUBLIC, iconPath);
 const enableIcon = config.get('icon');
@@ -17,9 +19,10 @@ export const getMenuIcon = (name: IMenuIcon, size?: number) => {
   if (!enableIcon) return;
   const iconPath = path.join(
     process.env.VITE_PUBLIC!,
-    '../assets/menu',
+    'assets/menu',
     `${name}.png`
   );
+
   return nativeImage
     .createFromPath(iconPath)
     .resize({ width: size || 16, height: size || 16 }); // 调整图标大小
