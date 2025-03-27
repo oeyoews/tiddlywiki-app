@@ -9,6 +9,7 @@ import {
   Tray,
 } from 'electron';
 
+import { setFindBar } from '@/main/find-bar';
 import { log } from '@/utils/logger';
 
 import { checkForUpdates } from '@/utils/checkUpdate';
@@ -16,6 +17,12 @@ import { getMenuIcon, twImage } from './icon';
 import { IConfig } from './index';
 import { getPlatform } from './getPlatform';
 const { autoUpdater } = require('electron-updater');
+
+let showFindBar: any;
+
+app.on('browser-window-created', async (_: any, win: any) => {
+  showFindBar = setFindBar(win, { top: 55 });
+});
 
 export const createMenubar = (
   config: IConfig,
@@ -149,6 +156,12 @@ export const createMenubar = (
       label: t('menu.view'),
       id: 'View',
       submenu: [
+        {
+          icon: getMenuIcon('search'),
+          label: t('menu.search'),
+          accelerator: 'CmdOrCtrl+F',
+          click: showFindBar,
+        },
         {
           role: 'reload',
           icon: getMenuIcon('reload'),

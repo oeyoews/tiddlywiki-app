@@ -7,9 +7,7 @@ import {
   BrowserWindow,
   Menu,
   nativeTheme,
-  dialog,
 } from 'electron';
-import { setFindBar } from '@/main/find-bar';
 import path from 'path';
 import { initI18n, t } from '@/i18n';
 import { getAppIcon } from '@/utils/icon';
@@ -208,10 +206,6 @@ app.on('window-all-closed', () => {
     app.isQuitting = true;
     app.quit();
   }
-});
-
-app.on('browser-window-created', async (_: any, win: any) => {
-  setFindBar(win, { top: 55 });
 });
 
 app.on('open-url', (event: any, url: string) => {

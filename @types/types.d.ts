@@ -33,6 +33,7 @@ type IMenuIconFile =
   | 'markdown'
   | 'format'
   | 'help'
+  | 'search'
   | 'release';
 
 type IContextIcon = 'copy' | 'save' | 'paste' | 'cut' | 'image' | 'menu';

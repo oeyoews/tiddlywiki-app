@@ -207,4 +207,5 @@ export const setFindBar = (win, options) => {
   ipcMain.on(FIND_START, findStart);
   ipcMain.on(FIND_PREV, findPrev);
   ipcMain.on(FIND_NEXT, findNext);
+  return showFindBar;
 };

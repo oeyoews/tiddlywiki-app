@@ -23,6 +23,10 @@ module.exports = {
     'en-US': 'Use Beta Channel For Updates',
     'zh-CN': '体验内测版本',
   },
+  search: {
+    'en-US': 'Search',
+    'zh-CN': '搜索',
+  },
   enableIcon: {
     'en-US': 'Show Menu Icon',
     'zh-CN': '显示菜单图标',
