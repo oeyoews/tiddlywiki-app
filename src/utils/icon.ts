@@ -1,5 +1,5 @@
 import path from 'path';
-import { app, nativeImage, nativeTheme } from 'electron';
+import { nativeImage, nativeTheme } from 'electron';
 import { config } from '@/utils/config';
 
 process.env.APP_ROOT = path.join(__dirname, '../..');
@@ -9,7 +9,7 @@ process.env.VITE_PUBLIC = process.env.VITE_DEV_SERVER_URL
   ? path.join(process.env.APP_ROOT, 'public')
   : process.env.DIST;
 
-const iconPath = app.isPackaged
+const iconPath = process.env.VITE_PUBLIC
   ? 'assets/tray-icon.png'
   : 'assets/tray-icon-dev.png';
 
@@ -22,6 +22,7 @@ export const getMenuIcon = (name: IMenuIcon, size?: number) => {
     'assets/menu',
     `${name}.png`
   );
+
   return nativeImage
     .createFromPath(iconPath)
     .resize({ width: size || 16, height: size || 16 }); // 调整图标大小

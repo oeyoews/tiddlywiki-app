@@ -11,6 +11,7 @@
     "updateIcon": "node scripts/svg2png.js ./assets/menu/ public/assets/menu/",
     "test": "playwright test",
     "dev": "vite",
+    "preview": "vite build && electron .",
     "build": "vite build && electron-builder",
     "release": "vite build && electron-builder"
   },
