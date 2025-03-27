@@ -136,7 +136,17 @@ export const setFindBar = (win, options) => {
     findBar.once('closed', () => {
       findBar = null;
     });
-    findBar.loadFile(path.join(__dirname, '../find.html'), { hash, search });
+
+    const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL;
+    process.env.APP_ROOT = path.join(__dirname, '../..');
+    process.env.DIST = path.join(process.env.APP_ROOT, 'dist');
+    process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL
+      ? path.join(process.env.APP_ROOT, 'public')
+      : process.env.DIST;
+    findBar.loadFile(path.join(process.env.VITE_PUBLIC, 'find.html'), {
+      hash,
+      search,
+    });
   };
   const findInPage = async (opts) => {
     editorMatchedCount = 0;
