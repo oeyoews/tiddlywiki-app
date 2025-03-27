@@ -1,4 +1,5 @@
 import fs from 'fs';
+import { log } from '@/utils/logger';
 
 /** 检查目录是否为空 */
 export function isEmptyDirectory(directoryPath: string) {
@@ -9,7 +10,7 @@ export function isEmptyDirectory(directoryPath: string) {
     const files = fs.readdirSync(directoryPath);
     return files.length === 0;
   } catch (err) {
-    console.error('检查目录失败：', err);
+    log.error('check dir error：', directoryPath, err);
     return false;
   }
 }

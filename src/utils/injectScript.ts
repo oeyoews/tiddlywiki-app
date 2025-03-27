@@ -11,8 +11,6 @@ process.env.VITE_PUBLIC = process.env.VITE_DEV_SERVER_URL
   ? path.join(process.env.APP_ROOT, 'public')
   : process.env.DIST;
 
-console.log('vitepublic ', process.env.VITE_PUBLIC);
-
 const render = path.join(process.env.DIST, 'renderer/index.js');
 const swal = path.join(process.env.VITE_PUBLIC, 'lib/sweetalert.min.js');
 const autocorrectLib = path.join(

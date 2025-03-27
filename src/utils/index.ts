@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { app, shell, Menu, dialog, Tray, BrowserWindow } from 'electron';
 import { t, i18next } from '@/i18n/index';
+import twinfo from '@/utils/tiddlywiki.json';
 
 const { default: getPorts } = require('get-port');
 const { TiddlyWiki } = require('tiddlywiki');
@@ -10,21 +11,24 @@ import { isEmptyDirectory } from '@/utils/checkEmptyDir';
 
 const WIKIINFOFILE = 'tiddlywiki.info';
 const DEFAULT_PORT = 8080;
-const DEFAULT_WIKI_DIR = path.resolve('wiki'); // use app.getPath('desktop')
 
 import packageInfo from '../../package.json';
 import saveToGitHub from '@/utils/github-saver';
 import {
   buildIndexHTMLArgs,
-  defaultPlugins,
   wikiBuildArgs,
   wikiInitArgs,
   wikiStartupArgs,
-} from '@/utils/wiki';
+} from '@/utils/wiki/constant';
 import { createMenubar } from './menubar';
 import { log } from '@/utils/logger';
 import { createTray } from './createTray';
 import { getMenuIcon } from './icon';
+import {
+  checkBuildInfo,
+  checkTWPlugins,
+  updateOriginalPath,
+} from '@/utils/wiki/index';
 
 let wikiInstances: { [port: number]: string } = {}; // 用于记录 port: wikipath, 便于端口复用
 
@@ -90,7 +94,7 @@ async function releaseWiki() {
 
 export async function initWiki(
   wikiFolder: string,
-  isFirstTime: Boolean = false,
+  isFirstTime: Boolean = false, // 用于手动新建 wiki
   _mainWindow?: BrowserWindow
 ) {
   log.info('begin initwiki');
@@ -107,7 +111,6 @@ export async function initWiki(
     // 新实例：记录端口和路径
     if (!existingPort) {
       server.currentPort = await getPorts({ port: DEFAULT_PORT });
-      log.info('start new server on', server.currentPort);
       wikiInstances[server.currentPort] = wikiFolder;
     } else {
       server.currentPort = Number(existingPort); // 更新端口
@@ -124,7 +127,6 @@ export async function initWiki(
         const selectedPath = result.filePaths[0];
         if (path.basename(selectedPath) === 'tiddlers') {
           dialog.showErrorBox(t('dialog.error'), t('dialog.invalidFolderName'));
-          // @ts-ignore
           return await initWiki(wikiFolder, true);
         }
         wikiFolder = selectedPath;
@@ -134,55 +136,23 @@ export async function initWiki(
 
     const bootPath = path.join(wikiFolder, WIKIINFOFILE);
 
-    // tiddlywiki.info 不存在就自动生成
-    if (!fs.existsSync(bootPath)) {
-      const { boot } = TiddlyWiki();
-      if (!isEmptyDirectory(wikiFolder)) {
-        wikiFolder = DEFAULT_WIKI_DIR;
-        if (!isFirstTime) {
-          return;
-        }
-      }
+    const { boot } = TiddlyWiki();
+
+    // 空目录就自动生成(wiki 目录文件被手动删除的情况和手动进行初始化)
+    if (isEmptyDirectory(wikiFolder)) {
+      // 空目录进行初始化
       boot.argv = wikiInitArgs(wikiFolder);
       await boot.boot(() => {
-        console.log(t('log.startInit'));
-        log.info(bootPath, 'is not exist, has already auto generate it');
+        log.info(wikiFolder, 'is empty, try init wiki');
       });
-      log.info(t('log.finishInit'), bootPath, 'is not found, has already generate new tiddlywiki.info file');
-    } else {
-      // 检测 tiddlywiki.info 是否有效, 并修复
-      let twInfo = JSON.parse(fs.readFileSync(bootPath, 'utf8'));
-      // 检查 plugins 是否异常
-      if (!twInfo.plugins || twInfo.plugins.length === 0) {
-        log.info(bootPath, 'is not correct, has already fix it');
-        twInfo.plugins = defaultPlugins;
-      } else {
-        const hasAllNesPlugins = defaultPlugins.every((item: string) =>
-          twInfo.plugins.includes(item)
-        );
-        if (!hasAllNesPlugins) {
-          log.info(
-            bootPath,
-            'is missing some nessary plugins, has already fix it'
-          );
-          const plugins = [...twInfo.plugins, ...defaultPlugins];
-          twInfo.plugins = [...new Set(plugins)];
-        }
-      }
-      fs.writeFileSync(bootPath, JSON.stringify(twInfo, null, 4), 'utf8');
+    } else if (!isEmptyDirectory(wikiFolder) && !fs.existsSync(bootPath)) {
+      // wiki目录存在但是 tiddlywiki.info 文件不存在, 直接写入tiddlywiki.info 文件
+      fs.writeFileSync(bootPath, JSON.stringify(twinfo, null, 4), 'utf8');
     }
 
-    // 支持 "retain-original-tiddler-path": true
-    let twConfigInfo = JSON.parse(fs.readFileSync(bootPath, 'utf8'));
-    if (
-      !twConfigInfo.config ||
-      !twConfigInfo.config?.['retain-original-tiddler-path']
-    ) {
-      twConfigInfo.config = {
-        'retain-original-tiddler-path': true,
-      };
-      log.info('update twinfo config');
-      fs.writeFileSync(bootPath, JSON.stringify(twConfigInfo, null, 4), 'utf8');
+    if (fs.existsSync(bootPath)) {
+      checkTWPlugins(bootPath);
+      updateOriginalPath(bootPath);
     }
 
     if (server.currentServer) {
@@ -201,6 +171,7 @@ export async function initWiki(
       });
     }
 
+    // 新建tw实例
     const { boot: twBoot } = TiddlyWiki();
     twBoot.argv = wikiStartupArgs(wikiFolder, server.currentPort);
 
@@ -216,9 +187,11 @@ export async function initWiki(
     server.currentServer = twBoot;
     if (!existingPort) {
       twBoot.boot(startServer(server.currentPort));
+      log.info('start new server on', server.currentPort);
     } else {
       // 直接加载已存在的服务器
       startServer(server.currentPort);
+      log.info('open exist wiki', existingPort);
     }
     updateRecentWikis(wikiFolder);
     return { port: server.currentPort };
@@ -379,18 +352,7 @@ async function importSingleFileWiki() {
 async function buildWiki() {
   try {
     const wikiPath = config.get('wikiPath');
-    const bootPath = path.join(wikiPath, WIKIINFOFILE);
-    let twInfo = JSON.parse(fs.readFileSync(bootPath, 'utf8'));
-
-    // 检查并添加构建配置，修复导入的文件夹无法构建
-    if (!twInfo.build || !twInfo.build.index) {
-      twInfo.build = {
-        ...twInfo.build,
-        index: buildIndexHTMLArgs,
-      };
-      fs.writeFileSync(bootPath, JSON.stringify(twInfo, null, 4), 'utf8');
-    }
-
+    checkBuildInfo(wikiPath);
     // 设置进度条
     win.setProgressBar(0.1);
 
