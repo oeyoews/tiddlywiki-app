@@ -2,8 +2,9 @@
   "menu": {
     "file": "&File",
     "view": "&View",
-    "help": "&Help",
+    "wikis": "&Wikis",
     "settings": "&Settings",
+    "help": "&Help",
     "openTid": "Open Tiddler In Folder",
     "searchText": "Search Google for \"{{text}}\"",
     "enableBeta": "Use Beta Channel For Updates",
@@ -66,6 +67,10 @@
     "exit": "Exit"
   },
   "dialog": {
+    "open2": "The {{ folder }} folder does not exist. Are you sure you want to create this folder?",
+    "open": "Open",
+    "delete": "Delete",
+    "moveToTrash": "Are you sure you want to move {{folder}} to the trash ?",
     "openfileNotSupported": "Not support open this file",
     "enableAutocorrect": "Autocorrect format",
     "autocorrect": "Enable this setting only if you have installed the oeyoews/autocorrect-wrapper TiddlyWiki plugin.",

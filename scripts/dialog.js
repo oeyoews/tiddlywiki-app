@@ -1,4 +1,21 @@
 module.exports = {
+  open2: {
+    'en-US':
+      'The {{ folder }} folder does not exist. Are you sure you want to create this folder?',
+    'zh-CN': '{{ folder }} 文件夹不存在， 确定新建该文件夹吗？',
+  },
+  open: {
+    'en-US': 'Open',
+    'zh-CN': '打开',
+  },
+  delete: {
+    'en-US': 'Delete',
+    'zh-CN': '删除',
+  },
+  moveToTrash: {
+    'en-US': 'Are you sure you want to move {{folder}} to the trash ?',
+    'zh-CN': '确定将 {{folder}} 移动到垃圾桶吗 ?',
+  },
   openfileNotSupported: {
     'en-US': 'Not support open this file',
     'zh-CN': '暂不支持打开该文件',

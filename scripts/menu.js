@@ -7,13 +7,17 @@ module.exports = {
     'en-US': '&View',
     'zh-CN': '视图(&V)',
   },
-  help: {
-    'en-US': '&Help',
-    'zh-CN': '帮助(&H)',
+  wikis: {
+    'en-US': '&Wikis',
+    'zh-CN': '知识库(&W)',
   },
   settings: {
     'en-US': '&Settings',
     'zh-CN': '设置(&S)',
+  },
+  help: {
+    'en-US': '&Help',
+    'zh-CN': '帮助(&H)',
   },
   openTid: {
     'en-US': 'Open Tiddler In Folder',
