@@ -7,7 +7,9 @@ import {
   type BrowserWindow,
   MenuItem,
   Tray,
+  dialog,
 } from 'electron';
+import fs from 'fs';
 
 import { setFindBar } from '@/main/find-bar';
 import { log } from '@/utils/logger';
@@ -77,6 +79,7 @@ export const createMenubar = (
               label: wikiPath,
               icon: getMenuIcon('folder'),
               click: async () => {
+                // TODO: 提示用户该文件是否存在
                 config.set('wikiPath', wikiPath);
                 const { port } = await deps.initWiki(wikiPath);
                 server.currentPort = port;
@@ -223,6 +226,53 @@ export const createMenubar = (
             shell.openPath(config.get('wikiPath'));
           },
         },
+      ],
+    };
+    const manageWikiMenu: MenuItemConstructorOptions = {
+      label: 'WIKIS',
+      submenu: [
+        ...recentWikis.map((wikiPath: string) => ({
+          id: wikiPath,
+          label: wikiPath,
+          visible: true,
+          icon: getMenuIcon('folder'),
+          click: async (menuItem: MenuItem) => {
+            const id = menuItem.id;
+            // 检查文件是否存在
+            const folderExist = fs.existsSync(id); // 自定义函数检查文件是否存在
+            if (!folderExist) {
+              // 更新 recent
+
+              const newRecentWikis = (config.get('recentWikis') || []).filter(
+                (path: string) => path !== config.get('wikiPath') && path !== id
+              );
+              config.set('recentWikis', newRecentWikis);
+              log.info(id, 'folder not exist');
+              const item = server.menu.getMenuItemById(id);
+              if (item?.visible) {
+                item.visible = false;
+                Menu.setApplicationMenu(server.menu);
+              }
+              return;
+            }
+            const res = await dialog.showMessageBox({
+              title: 'delete wiki folder',
+              message: 'remove wikifodler' + id,
+              buttons: ['yes', 'no'],
+              cancelId: 1,
+              defaultId: 1,
+            });
+            if (res.response === 0) {
+              fs.rmSync(id, { force: true, recursive: true });
+              const item = server.menu.getMenuItemById(id);
+              if (item?.visible) {
+                item.visible = false;
+                Menu.setApplicationMenu(server.menu);
+              }
+              dialog.showMessageBox({ title: 'success', message: 'done' });
+            }
+          },
+        })),
       ],
     };
     const settingsMenu: MenuItemConstructorOptions = {
@@ -406,6 +456,7 @@ export const createMenubar = (
     const menubars: MenuItemConstructorOptions[] = [
       fileMenu,
       viewMenu,
+      manageWikiMenu,
       settingsMenu,
       helpMenu,
     ];

@@ -2,8 +2,9 @@
   "menu": {
     "file": "文件(&F)",
     "view": "视图(&V)",
-    "help": "帮助(&H)",
+    "wikis": "管理 Wiki(&M)",
     "settings": "设置(&S)",
+    "help": "帮助(&H)",
     "openTid": "在文件夹中打开文件",
     "searchText": "搜索 \"{{text}}\"",
     "enableBeta": "体验内测版本",

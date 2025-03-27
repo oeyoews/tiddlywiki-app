@@ -2,8 +2,9 @@
   "menu": {
     "file": "&File",
     "view": "&View",
-    "help": "&Help",
+    "wikis": "&Manage Wikis ",
     "settings": "&Settings",
+    "help": "&Help",
     "openTid": "Open Tiddler In Folder",
     "searchText": "Search Google for \"{{text}}\"",
     "enableBeta": "Use Beta Channel For Updates",
