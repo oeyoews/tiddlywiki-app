@@ -333,7 +333,7 @@ async function importSingleFileWiki() {
   try {
     const result = await dialog.showOpenDialog({
       title: t('dialog.selectHtmlFile'),
-      filters: [{ name: t('dialog.htmlFilter'), extensions: ['html'] }],
+      filters: [{ name: t('dialog.htmlFilter'), extensions: ['html', 'htm'] }],
       properties: ['openFile'],
     });
 
