@@ -246,7 +246,8 @@ async function openWiki() {
     const bootPath = path.join(selectedPath, WIKIINFOFILE);
     if (!fs.existsSync(bootPath)) {
       dialog.showErrorBox(t('dialog.error'), t('dialog.noTiddlyWikiInfo'));
-      return await openWiki();
+      // return await openWiki();
+      return;
     }
 
     if (config.get('wikiPath') === selectedPath) {

@@ -2,7 +2,7 @@
   "menu": {
     "file": "&File",
     "view": "&View",
-    "wikis": "&Manage Wikis ",
+    "wikis": "&Wikis",
     "settings": "&Settings",
     "help": "&Help",
     "openTid": "Open Tiddler In Folder",

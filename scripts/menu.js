@@ -8,8 +8,8 @@ module.exports = {
     'zh-CN': '视图(&V)',
   },
   wikis: {
-    'en-US': '&Manage Wikis ',
-    'zh-CN': '管理 Wiki(&M)',
+    'en-US': '&Wikis',
+    'zh-CN': '&Wiki',
   },
   settings: {
     'en-US': '&Settings',

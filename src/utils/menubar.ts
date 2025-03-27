@@ -41,6 +41,59 @@ export const createMenubar = (
       (path: string) => path !== config.get('wikiPath')
     );
 
+    const mwikis = recentWikis.map((wikiPath: string) => ({
+      id: wikiPath,
+      label: wikiPath,
+      icon: getMenuIcon('folder'),
+      click: async (menuItem: MenuItem) => {
+        const id = menuItem.id;
+        // 检查文件是否存在
+        const folderExist = fs.existsSync(id); // 自定义函数检查文件是否存在
+        let newRecentWikis;
+        if (!folderExist) {
+          // 更新 recent
+          newRecentWikis = (config.get('recentWikis') || []).filter(
+            (path: string) => id !== path
+          );
+
+          config.set('recentWikis', newRecentWikis);
+          log.info(id, 'folder not exist');
+          const item = server.menu.getMenuItemById(id);
+          if (item?.visible) {
+            item.visible = false;
+            log.info(item, id, 'hidden');
+            Menu.setApplicationMenu(server.menu);
+          }
+          return;
+        }
+        const res = await dialog.showMessageBox({
+          title: 'delete wiki folder',
+          message: 'remove wikifodler' + id,
+          buttons: [t('dialog.confirm'), t('dialog.cancel')],
+          cancelId: 1,
+          defaultId: 1,
+        });
+
+        const item = server.menu.getMenuItemById(id);
+        if (item?.visible) {
+          item.visible = false;
+          Menu.setApplicationMenu(server.menu);
+        }
+        if (res.response === 0) {
+          // fs.rmSync(id, { force: true, recursive: true }); // NOTE: 永久删除
+          // await shell.trashItem(id); // 移动到垃圾桶
+          // config.set('recentWikis', newRecentWikis);
+          const item = server.menu.getMenuItemById(id);
+          if (item?.visible) {
+            item.visible = false;
+            console.log(item.visible, 'item');
+            Menu.setApplicationMenu(server.menu);
+          }
+          // dialog.showMessageBox({ title: 'success', message: 'done' });
+        }
+      },
+    }));
+
     const fileMenu: MenuItemConstructorOptions = {
       label: t('menu.file'),
       id: 'File',
@@ -77,12 +130,24 @@ export const createMenubar = (
           submenu: [
             ...recentWikis.map((wikiPath: string) => ({
               label: wikiPath,
+              id: wikiPath,
               icon: getMenuIcon('folder'),
-              click: async () => {
-                // TODO: 提示用户该文件是否存在
-                config.set('wikiPath', wikiPath);
-                const { port } = await deps.initWiki(wikiPath);
-                server.currentPort = port;
+              click: async (menuItem: MenuItem) => {
+                if (!fs.existsSync(menuItem.id)) {
+                  const res = await dialog.showMessageBox({
+                    title: 'not exist',
+                    message: 'continux',
+                    buttons: [t('dialog.confirm'), t('dialog.cancel')],
+                    defaultId: 0,
+                    cancelId: 0,
+                  });
+                  if (res.response === 1) {
+                  }
+                } else {
+                  config.set('wikiPath', wikiPath);
+                  const { port } = await deps.initWiki(wikiPath);
+                  server.currentPort = port;
+                }
               },
             })),
             { type: 'separator' },
@@ -229,50 +294,22 @@ export const createMenubar = (
       ],
     };
     const manageWikiMenu: MenuItemConstructorOptions = {
-      label: 'WIKIS',
+      label: t('menu.wikis'),
       submenu: [
-        ...recentWikis.map((wikiPath: string) => ({
-          id: wikiPath,
-          label: wikiPath,
-          visible: true,
-          icon: getMenuIcon('folder'),
-          click: async (menuItem: MenuItem) => {
-            const id = menuItem.id;
-            // 检查文件是否存在
-            const folderExist = fs.existsSync(id); // 自定义函数检查文件是否存在
-            if (!folderExist) {
-              // 更新 recent
+        {
+          label: 'C:\\Users\\Lenovo\\Desktop\\chat-app\\wiki-tes',
+          id: 'C:\\Users\\Lenovo\\Desktop\\chat-app\\wiki-tes',
+          click: () => {
+            console.log('test');
+            const item = server.menu.getMenuItemById(
+              'C:\\Users\\Lenovo\\Desktop\\chat-app\\wiki-tes'
+            );
+            item?.visible && (item.visible = false);
 
-              const newRecentWikis = (config.get('recentWikis') || []).filter(
-                (path: string) => path !== config.get('wikiPath') && path !== id
-              );
-              config.set('recentWikis', newRecentWikis);
-              log.info(id, 'folder not exist');
-              const item = server.menu.getMenuItemById(id);
-              if (item?.visible) {
-                item.visible = false;
-                Menu.setApplicationMenu(server.menu);
-              }
-              return;
-            }
-            const res = await dialog.showMessageBox({
-              title: 'delete wiki folder',
-              message: 'remove wikifodler' + id,
-              buttons: ['yes', 'no'],
-              cancelId: 1,
-              defaultId: 1,
-            });
-            if (res.response === 0) {
-              fs.rmSync(id, { force: true, recursive: true });
-              const item = server.menu.getMenuItemById(id);
-              if (item?.visible) {
-                item.visible = false;
-                Menu.setApplicationMenu(server.menu);
-              }
-              dialog.showMessageBox({ title: 'success', message: 'done' });
-            }
+            Menu.setApplicationMenu(server.menu);
           },
-        })),
+        },
+        ...mwikis,
       ],
     };
     const settingsMenu: MenuItemConstructorOptions = {
