@@ -34,6 +34,7 @@ type IMenuIconFile =
   | 'format'
   | 'help'
   | 'search'
+  | 'searchGoogle'
   | 'release';
 
 type IContextIcon = 'copy' | 'save' | 'paste' | 'cut' | 'image' | 'menu';

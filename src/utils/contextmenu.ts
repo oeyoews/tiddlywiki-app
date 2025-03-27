@@ -3,6 +3,7 @@ import {
   type BrowserWindow,
   Menu,
   type MenuItemConstructorOptions,
+  shell,
 } from 'electron';
 import { getMenuIcon } from './icon';
 
@@ -32,13 +33,22 @@ export const registerContextMenu = (
         win.webContents.send('update-tid', { x: params.x, y: params.y });
       },
     },
+    {
+      label: t('menu.searchText', { text: params.selectionText.slice(0, 20) }),
+      icon: getMenuIcon('searchGoogle'),
+      click: () => {
+        shell.openExternal(
+          `https://google.com/search?q=${params.selectionText}`
+        );
+      },
+      visible: params.editFlags.canCopy,
+    },
     // TODO: add delete/edit btn
     {
       label: t('menu.copy'),
       icon: getMenuIcon('copy'),
       role: 'copy',
       accelerator: 'CmdOrCtrl+C',
-      enabled: params.editFlags.canCopy,
       visible: params.editFlags.canCopy,
     },
     {

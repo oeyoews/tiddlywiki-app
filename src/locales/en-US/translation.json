@@ -5,6 +5,7 @@
     "help": "&Help",
     "settings": "&Settings",
     "openTid": "Open Tiddler In Folder",
+    "searchText": "Search Google for \"{{text}}\"",
     "enableBeta": "Use Beta Channel For Updates",
     "search": "Search",
     "enableIcon": "Show Menu Icon",

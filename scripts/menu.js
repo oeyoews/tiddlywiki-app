@@ -19,6 +19,10 @@ module.exports = {
     'en-US': 'Open Tiddler In Folder',
     'zh-CN': '在文件夹中打开文件',
   },
+  searchText: {
+    'en-US': 'Search Google for "{{text}}"',
+    'zh-CN': '搜索 "{{text}}"',
+  },
   enableBeta: {
     'en-US': 'Use Beta Channel For Updates',
     'zh-CN': '体验内测版本',

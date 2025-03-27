@@ -5,6 +5,7 @@
     "help": "帮助(&H)",
     "settings": "设置(&S)",
     "openTid": "在文件夹中打开文件",
+    "searchText": "搜索 \"{{text}}\"",
     "enableBeta": "体验内测版本",
     "search": "搜索",
     "enableIcon": "显示菜单图标",
