@@ -18,6 +18,7 @@ import { checkForUpdates } from '@/utils/checkUpdate';
 import { getAppIcon, getFolderIcon, getMenuIcon } from '@/utils/icon';
 import { type IConfig } from '@/utils';
 import { getPlatform } from './getPlatform';
+import { generateId } from './generateId';
 const { autoUpdater } = require('electron-updater');
 
 let showFindBar: any;
@@ -42,54 +43,50 @@ export const createMenubar = (
     );
 
     const mwikis = recentWikis.map((wikiPath: string) => ({
-      id: wikiPath,
+      id: generateId(wikiPath),
       label: wikiPath,
       icon: getMenuIcon('folder'),
       click: async (menuItem: MenuItem) => {
-        const id = menuItem.id;
+        const { id, label } = menuItem;
         // 检查文件是否存在
-        const folderExist = fs.existsSync(id); // 自定义函数检查文件是否存在
+        const folderExist = fs.existsSync(label); // 自定义函数检查文件是否存在
         let newRecentWikis;
         if (!folderExist) {
-          // 更新 recent
           newRecentWikis = (config.get('recentWikis') || []).filter(
-            (path: string) => id !== path
+            (path: string) => label !== path
           );
 
+          // 更新 recent
           config.set('recentWikis', newRecentWikis);
-          log.info(id, 'folder not exist');
+          log.info(label, 'folder not exist');
           const item = server.menu.getMenuItemById(id);
           if (item?.visible) {
             item.visible = false;
-            log.info(item, id, 'hidden');
             Menu.setApplicationMenu(server.menu);
           }
           return;
         }
+
+        newRecentWikis = (config.get('recentWikis') || []).filter(
+          (path: string) => label !== path && label !== path
+        );
         const res = await dialog.showMessageBox({
-          title: 'delete wiki folder',
-          message: 'remove wikifodler' + id,
+          title: t('dialog.delete'),
+          message: t('dialog.moveToTrash', { folder: wikiPath }),
           buttons: [t('dialog.confirm'), t('dialog.cancel')],
           cancelId: 1,
           defaultId: 1,
         });
 
-        const item = server.menu.getMenuItemById(id);
-        if (item?.visible) {
-          item.visible = false;
-          Menu.setApplicationMenu(server.menu);
-        }
         if (res.response === 0) {
-          // fs.rmSync(id, { force: true, recursive: true }); // NOTE: 永久删除
-          // await shell.trashItem(id); // 移动到垃圾桶
-          // config.set('recentWikis', newRecentWikis);
+          // fs.rmSync(label, { force: true, recursive: true }); // NOTE: 永久删除
+          await shell.trashItem(label); // 移动到垃圾桶
+          config.set('recentWikis', newRecentWikis);
           const item = server.menu.getMenuItemById(id);
           if (item?.visible) {
             item.visible = false;
-            console.log(item.visible, 'item');
             Menu.setApplicationMenu(server.menu);
           }
-          // dialog.showMessageBox({ title: 'success', message: 'done' });
         }
       },
     }));
@@ -135,13 +132,16 @@ export const createMenubar = (
               click: async (menuItem: MenuItem) => {
                 if (!fs.existsSync(menuItem.id)) {
                   const res = await dialog.showMessageBox({
-                    title: 'not exist',
-                    message: 'continux',
+                    title: t('dialog.open'),
+                    message: t('dialog.open2', { folder: wikiPath }),
                     buttons: [t('dialog.confirm'), t('dialog.cancel')],
                     defaultId: 0,
-                    cancelId: 0,
+                    cancelId: 1,
                   });
-                  if (res.response === 1) {
+                  if (res.response === 0) {
+                    config.set('wikiPath', wikiPath);
+                    const { port } = await deps.initWiki(wikiPath);
+                    server.currentPort = port;
                   }
                 } else {
                   config.set('wikiPath', wikiPath);
@@ -296,19 +296,7 @@ export const createMenubar = (
     const manageWikiMenu: MenuItemConstructorOptions = {
       label: t('menu.wikis'),
       submenu: [
-        {
-          label: 'C:\\Users\\Lenovo\\Desktop\\chat-app\\wiki-tes',
-          id: 'C:\\Users\\Lenovo\\Desktop\\chat-app\\wiki-tes',
-          click: () => {
-            console.log('test');
-            const item = server.menu.getMenuItemById(
-              'C:\\Users\\Lenovo\\Desktop\\chat-app\\wiki-tes'
-            );
-            item?.visible && (item.visible = false);
-
-            Menu.setApplicationMenu(server.menu);
-          },
-        },
+        // C:\\Users\\Lenovo\\Desktop\\chat-app\\wiki-test 长度过长， 少一位刚刚好???
         ...mwikis,
       ],
     };

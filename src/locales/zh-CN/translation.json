@@ -67,6 +67,10 @@
     "exit": "退出"
   },
   "dialog": {
+    "open2": "{{ folder }} 文件夹不存在， 确定新建该文件夹吗？",
+    "open": "打开",
+    "delete": "删除",
+    "moveToTrash": "确定将 {{folder}} 移动到垃圾桶吗 ?",
     "openfileNotSupported": "暂不支持打开该文件",
     "enableAutocorrect": "文本格式优化",
     "autocorrect": "开启此设置请确保已经安装了 oeyoews/autocorrect-wrapper tiddlywiki 插件",
