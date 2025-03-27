@@ -5,7 +5,7 @@ import {
   type MenuItemConstructorOptions,
   shell,
 } from 'electron';
-import { getMenuIcon } from './icon';
+import { getFolderIcon, getMenuIcon } from '@/utils/icon';
 
 /**
  * 注册右键菜单
@@ -28,7 +28,7 @@ export const registerContextMenu = (
     },
     {
       label: t('menu.openTid'),
-      icon: getMenuIcon('folder'),
+      icon: getFolderIcon(),
       click: () => {
         win.webContents.send('update-tid', { x: params.x, y: params.y });
       },

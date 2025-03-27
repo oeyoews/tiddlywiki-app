@@ -1,6 +1,7 @@
 import path from 'path';
 import { nativeImage, nativeTheme } from 'electron';
 import { config } from '@/utils/config';
+import { getPlatform } from '@/utils/getPlatform';
 
 process.env.APP_ROOT = path.join(__dirname, '../..');
 process.env.DIST = path.join(process.env.APP_ROOT, 'dist');
@@ -43,3 +44,5 @@ export const getAppIcon = (
       : getMenuIcon('tw-light', size);
   }
 };
+
+export const getFolderIcon = () => getMenuIcon(`folder-${getPlatform()}`);

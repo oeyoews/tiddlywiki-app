@@ -13,8 +13,8 @@ import { setFindBar } from '@/main/find-bar';
 import { log } from '@/utils/logger';
 
 import { checkForUpdates } from '@/utils/checkUpdate';
-import { getAppIcon, getMenuIcon } from './icon';
-import { IConfig } from './index';
+import { getAppIcon, getFolderIcon, getMenuIcon } from '@/utils/icon';
+import { type IConfig } from '@/utils';
 import { getPlatform } from './getPlatform';
 const { autoUpdater } = require('electron-updater');
 
@@ -217,7 +217,7 @@ export const createMenubar = (
         },
         {
           label: t('menu.openFolder'),
-          icon: getMenuIcon('folder'),
+          icon: getFolderIcon(),
           accelerator: 'CmdOrCtrl+E',
           click: () => {
             shell.openPath(config.get('wikiPath'));
