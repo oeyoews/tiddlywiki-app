@@ -148,7 +148,7 @@ export async function initWiki(
         console.log(t('log.startInit'));
         log.info(bootPath, 'is not exist, has already auto generate it');
       });
-      console.log(t('log.finishInit'));
+      log.info(t('log.finishInit'), bootPath, 'is not found, has already generate new tiddlywiki.info file');
     } else {
       // 检测 tiddlywiki.info 是否有效, 并修复
       let twInfo = JSON.parse(fs.readFileSync(bootPath, 'utf8'));

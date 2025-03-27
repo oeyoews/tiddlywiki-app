@@ -222,7 +222,7 @@ app.on('open-url', (event: any, url: string) => {
 
 app.on('before-quit', () => {
   app.isQuitting = true;
-  log.info('exit');
+  log.info('tiddlywiki app exit');
 });
 
 // 启动应用
