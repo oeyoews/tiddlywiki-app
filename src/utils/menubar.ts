@@ -13,7 +13,7 @@ import { setFindBar } from '@/main/find-bar';
 import { log } from '@/utils/logger';
 
 import { checkForUpdates } from '@/utils/checkUpdate';
-import { getMenuIcon, twImage } from './icon';
+import { getAppIcon, getMenuIcon } from './icon';
 import { IConfig } from './index';
 import { getPlatform } from './getPlatform';
 const { autoUpdater } = require('electron-updater');
@@ -47,7 +47,7 @@ export const createMenubar = (
         {
           label: t('menu.openExistingWiki'),
           // @ts-ignore
-          icon: config.get('icon') ? twImage() : null,
+          icon: config.get('icon') ? getAppIcon(16) : null,
           accelerator: 'CmdOrCtrl+O',
           click: async () => {
             const res = await deps.openWiki();

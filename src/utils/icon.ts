@@ -28,7 +28,15 @@ export const getMenuIcon = (name: IMenuIcon, size?: number) => {
 export const twImage = (size: number = 16) =>
   nativeImage.createFromPath(appIcon).resize({ width: size, height: size }); // 调整图标大小
 
-export const getAppIcon = () =>
-  nativeTheme.shouldUseDarkColors
-    ? getMenuIcon('tw-dark', 512)
-    : getMenuIcon('tw-light', 512);
+export const getAppIcon = (
+  size: number = 512,
+  darkmode: 'auto' | 'tw-dark' | 'tw-light' = 'auto'
+) => {
+  if (darkmode !== 'auto') {
+    return getMenuIcon(darkmode, size);
+  } else {
+    return nativeTheme.shouldUseDarkColors
+      ? getMenuIcon('tw-dark', size)
+      : getMenuIcon('tw-light', size);
+  }
+};

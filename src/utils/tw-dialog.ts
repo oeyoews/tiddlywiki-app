@@ -5,7 +5,7 @@ import {
   dialog,
   type MessageBoxSyncOptions,
 } from 'electron';
-import { twImage } from './icon';
+import { getAppIcon } from './icon';
 
 interface ITWDialog {
   type: DialogType;
@@ -18,7 +18,7 @@ export const twDialog = (win: BrowserWindow) => {
     const { type, message } = opt;
     const options: MessageBoxSyncOptions = {
       type: type === 'confirm' ? 'question' : 'info',
-      icon: twImage(256),
+      icon: getAppIcon(256, 'tw-light'),
       buttons:
         type === 'confirm'
           ? [t('dialog.cancel'), t('dialog.confirm')]
