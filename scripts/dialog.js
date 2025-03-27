@@ -192,8 +192,8 @@ module.exports = {
     'zh-CN': '构建完成',
   },
   buildCompleteMessage: {
-    'en-US': 'Wiki build completed, preview in browser?',
-    'zh-CN': 'Wiki 已构建完成，是否在浏览器中预览？',
+    'en-US': 'Wiki build completed ({{size}}), preview in browser?',
+    'zh-CN': 'Wiki 已构建完成({{size}})，是否在浏览器中预览？',
   },
   preview: {
     'en-US': 'Preview',

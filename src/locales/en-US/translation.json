@@ -111,7 +111,7 @@
     "importSuccess": "Import Success",
     "importSuccessMessage": "Single-file Wiki has been successfully imported to Node.js version",
     "buildComplete": "Build Complete",
-    "buildCompleteMessage": "Wiki build completed, preview in browser?",
+    "buildCompleteMessage": "Wiki build completed ({{size}}), preview in browser?",
     "preview": "Preview",
     "showInFolder": "Reveal in File Explorer",
     "github": {

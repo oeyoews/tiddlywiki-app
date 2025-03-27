@@ -15,7 +15,6 @@ const DEFAULT_PORT = 8080;
 import packageInfo from '../../package.json';
 import saveToGitHub from '@/utils/github-saver';
 import {
-  buildIndexHTMLArgs,
   wikiBuildArgs,
   wikiInitArgs,
   wikiStartupArgs,
@@ -29,6 +28,7 @@ import {
   checkTWPlugins,
   updateOriginalPath,
 } from '@/utils/wiki/index';
+import { getFileSizeInMB } from './getFileSize';
 
 let wikiInstances: { [port: number]: string } = {}; // 用于记录 port: wikipath, 便于端口复用
 
@@ -49,7 +49,6 @@ const deps = {
   buildWiki,
   importSingleFileWiki,
   releaseWiki,
-  // toggleEnableBeta,
   configureGitHub,
   switchLanguage,
   showWikiInfo2,
@@ -362,37 +361,39 @@ async function buildWiki() {
     // 更新进度条
     win.setProgressBar(0.4);
 
-    await boot.boot(() => {
-      win.setProgressBar(0.7);
+    boot.boot(async () => {
+      // 构建完成
+      win.setProgressBar(1);
       log.log(t('log.startBuild'));
+
+      setTimeout(() => win.setProgressBar(-1), 1000); // 1 秒后移除进度条
+
+      const outputPath = path.join(wikiPath, 'output', 'index.html');
+      // 统计当前index.html 文件大小
+      const indexHTMLSize = getFileSizeInMB(outputPath);
+
+      const result = await dialog.showMessageBox({
+        type: 'info',
+        title: t('dialog.buildComplete'),
+        message: t('dialog.buildCompleteMessage', { size: indexHTMLSize }),
+        buttons: [
+          t('dialog.preview'),
+          t('dialog.showInFolder'),
+          t('menu.publish'),
+          t('dialog.close'),
+        ],
+        defaultId: 0,
+        cancelId: 2,
+      });
+
+      if (result.response === 0) {
+        shell.openExternal(`file://${outputPath}`);
+      } else if (result.response === 1) {
+        shell.showItemInFolder(outputPath);
+      } else if (result.response === 2) {
+        await releaseWiki();
+      }
     });
-
-    // 构建完成
-    win.setProgressBar(1);
-    setTimeout(() => win.setProgressBar(-1), 1000); // 1 秒后移除进度条
-
-    const outputPath = path.join(wikiPath, 'output', 'index.html');
-    const result = await dialog.showMessageBox({
-      type: 'info',
-      title: t('dialog.buildComplete'),
-      message: t('dialog.buildCompleteMessage'),
-      buttons: [
-        t('dialog.preview'),
-        t('dialog.showInFolder'),
-        t('menu.publish'),
-        t('dialog.close'),
-      ],
-      defaultId: 0,
-      cancelId: 2,
-    });
-
-    if (result.response === 0) {
-      shell.openExternal(`file://${outputPath}`);
-    } else if (result.response === 1) {
-      shell.showItemInFolder(outputPath);
-    } else if (result.response === 2) {
-      await releaseWiki();
-    }
   } catch (err: any) {
     win.setProgressBar(-1); // 出错时移除进度条
     dialog.showErrorBox(

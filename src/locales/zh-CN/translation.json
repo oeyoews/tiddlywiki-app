@@ -111,7 +111,7 @@
     "importSuccess": "导入成功",
     "importSuccessMessage": "单文件 Wiki 已成功导入到 Node.js 版本",
     "buildComplete": "构建完成",
-    "buildCompleteMessage": "Wiki 已构建完成，是否在浏览器中预览？",
+    "buildCompleteMessage": "Wiki 已构建完成({{size}})，是否在浏览器中预览？",
     "preview": "预览",
     "showInFolder": "在文件资源管理器中显示",
     "github": {
