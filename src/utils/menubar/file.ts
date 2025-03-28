@@ -59,9 +59,13 @@ export const fileMenu = (
           label: capitalizeWords(tpl[0]),
           icon: getMenuIcon('html'),
           click: () => {
-            downloadTpl(tpl, (templatePath: string) => {
-              importSingleFileWiki(templatePath);
-            });
+            downloadTpl(
+              tpl,
+              (templatePath: string) => {
+                importSingleFileWiki(templatePath);
+              },
+              server.downloadNotify
+            );
           },
         };
       }),

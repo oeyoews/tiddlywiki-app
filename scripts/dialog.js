@@ -187,6 +187,10 @@ module.exports = {
     'en-US': 'TiddlyWiki HTML',
     'zh-CN': 'TiddlyWiki HTML',
   },
+  templateDownloading: {
+    'en-US': 'template downloading',
+    'zh-CN': '模板下载中',
+  },
   import: {
     'en-US': 'Import',
     'zh-CN': '导入',

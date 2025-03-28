@@ -52,6 +52,7 @@ export const server = {
   menu: {} as Menu,
   tray: null as any as Tray,
   win: {} as BrowserWindow,
+  downloadNotify: {} as Notification,
 };
 
 export type IConfig = typeof config;
@@ -108,6 +109,12 @@ export async function initWiki(
       title: t('dialog.importSuccess'),
       body: t('dialog.importSuccessMessage'),
       icon: getAppIcon(256),
+      silent: false,
+    });
+    server.downloadNotify = new Notification({
+      title: t('dialog.templateDownloading'),
+      icon: getAppIcon(256),
+      timeoutType: 'never',
       silent: false,
     });
   }

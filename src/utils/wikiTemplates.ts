@@ -5,4 +5,5 @@ export const wikiTemplates = {
   xp: 'https://keatonlao.github.io/tiddlywiki-xp/index.html',
   mptw5: 'https://mptw5.tiddlyhost.com',
   'delphes-notes': 'https://delphes-notes.tiddlyhost.com',
+  grok: 'https://grok-tiddlywiki-official.tiddlyhost.com/',
 };

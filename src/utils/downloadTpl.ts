@@ -1,4 +1,4 @@
-import { app, net } from 'electron';
+import { Notification, app, net } from 'electron';
 import path from 'path';
 import fs from 'fs';
 const tempDir = app.getPath('temp'); // 获取系统的临时目录
@@ -8,7 +8,8 @@ const cacheDuration = 24 * 60 * 60 * 1000; // 24小时
 
 export const downloadTpl = (
   tpl: [content: string, label: string],
-  cbl: Function
+  cbl: Function,
+  notify: Notification
 ) => {
   const content = tpl[1];
   const label = tpl[0];
@@ -38,6 +39,7 @@ export const downloadTpl = (
 
       request.on('response', (response) => {
         let data = '';
+        notify.show();
 
         response.on('data', (chunk) => {
           data += chunk.toString();
@@ -47,11 +49,15 @@ export const downloadTpl = (
           fs.writeFileSync(filePath, data, 'utf-8');
           cbl(filePath);
           log.log(`${filePath} template has downloaded!`);
+          setTimeout(() => {
+            notify.close();
+          }, 600);
         });
       });
 
       request.on('error', (error) => {
         log.error('下载失败:', error);
+        notify.close();
       });
 
       request.end();

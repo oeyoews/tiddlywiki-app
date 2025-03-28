@@ -114,6 +114,7 @@
     "selectWikiFolderMessage": "Please select a folder for Wiki storage",
     "selectHtmlFile": "Select TiddlyWiki HTML File",
     "htmlFilter": "TiddlyWiki HTML",
+    "templateDownloading": "template downloading",
     "import": "Import",
     "convertIng": "HTML File is converting ...",
     "selectImportFolder": "Please Select The Folder To Save",
