@@ -146,16 +146,13 @@ export async function initWiki(
     }
 
     // 启动实例前的检查
-    if (config.get('markdown')) {
-      toggleMarkdown(true, {
-        notify: false,
-      });
-    }
-    if (config.get('lang-CN')) {
-      toggleChineseLang(true, {
-        notify: false,
-      });
-    }
+    toggleMarkdown(!!config.get('markdown'), {
+      notify: false,
+    });
+
+    toggleChineseLang(!!config.get('lang-CN'), {
+      notify: false,
+    });
 
     // 新建tw实例
     const { boot: twBoot } = TiddlyWiki();
