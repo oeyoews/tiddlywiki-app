@@ -3,6 +3,7 @@ import fs from 'fs';
 import { t } from '@/i18n/index.js';
 import { log } from '@/utils/logger';
 import { getMenuIcon } from './icon';
+let githubNotify: Notification;
 
 /**
  * 将 Wiki 发布到 GitHub Pages
@@ -124,13 +125,16 @@ async function saveToGitHub({
       }
 
       const data = await response.json();
-      console.log('File uploaded to GitHub Pages:', data.content.html_url);
-      new Notification({
-        title: t('dialog.github.uploadSuccess'),
-        body: t('dialog.github.clickToView'),
-        icon: getMenuIcon('gitHub', 256),
-        silent: false,
-      })
+      log.info('File uploaded to GitHub Pages:', data.content.html_url);
+      if (!githubNotify) {
+        githubNotify = new Notification({
+          title: t('dialog.github.uploadSuccess'),
+          body: t('dialog.github.clickToView'),
+          icon: getMenuIcon('gitHub', 256),
+          silent: false,
+        });
+      }
+      githubNotify
         .on('click', () => {
           shell.openExternal(pageSite);
         })
