@@ -479,7 +479,7 @@ export const createMenubar = (
         },
         {
           label: t('menu.about'),
-          click: deps.showWikiInfo2,
+          click: deps.showWikiInfo,
           icon: getMenuIcon('about'),
         },
       ],

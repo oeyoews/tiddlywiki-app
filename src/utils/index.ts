@@ -51,7 +51,7 @@ const deps = {
   releaseWiki,
   configureGitHub,
   switchLanguage,
-  showWikiInfo2,
+  showWikiInfo,
   createNewWiki,
   toggleAutocorrect,
   toggleChineseLang,
@@ -271,6 +271,7 @@ export async function showWikiInfo() {
     type: 'none',
     title: t('app.about'),
     message: t('app.name'),
+    icon: getMenuIcon('about', 256),
     detail: `${t('app.version')}: ${packageInfo.version}\n${t(
       'app.currentWikiPath'
     )}：${config.get('wikiPath')}\n${t('app.runningPort')}：${
@@ -284,16 +285,16 @@ export async function showWikiInfo() {
   });
 }
 
-async function showWikiInfo2() {
-  win.webContents.send('show-wiki-info', {
-    appName: t('app.name'),
-    version: packageInfo.version,
-    wikiPath: config.get('wikiPath'),
-    port: server.currentPort || t('app.notRunning'),
-    configPath: config.fileName,
-    closeText: t('dialog.close'),
-  });
-}
+// async function showWikiInfo2() {
+//   win.webContents.send('show-wiki-info', {
+//     appName: t('app.name'),
+//     version: packageInfo.version,
+//     wikiPath: config.get('wikiPath'),
+//     port: server.currentPort || t('app.notRunning'),
+//     configPath: config.fileName,
+//     closeText: t('dialog.close'),
+//   });
+// }
 
 async function switchLanguage(lang: string) {
   config.set('language', lang);

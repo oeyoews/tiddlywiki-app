@@ -1,13 +1,19 @@
 const platform = process.platform;
 
 export function getPlatform() {
-  let osType: IPlatform = 'windows';
-  if (platform === 'linux') {
-    osType = 'linux';
-  } else if (platform === 'win32') {
-    osType = 'windows';
-  } else if (platform === 'darwin') {
-    osType = 'macOS';
-  }
-  return osType;
+  // @ts-ignore
+  const osTypes: Record<NodeJS.Platform, string> = {
+    win32: 'windows',
+    darwin: 'macOs',
+    linux: 'linux',
+    // cygwin: 'windows',
+    // aix: 'linux',
+    // freebsd: 'linux',
+    // openbsd: 'linux',
+    // android: 'linux',
+    // haiku: 'linux',
+    // sunos: 'linux',
+    // netbsd: 'linux',
+  };
+  return osTypes[platform] || osTypes.win32;
 }

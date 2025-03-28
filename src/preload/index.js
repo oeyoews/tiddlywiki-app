@@ -6,7 +6,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   confirm: (message) =>
     ipcRenderer.sendSync('custom-dialog', { type: 'confirm', message }),
   onConfigGithub: (callback) => ipcRenderer.on('config-github', callback),
-  onShowWikiInfo: (callback) => ipcRenderer.on('show-wiki-info', callback),
+  // onShowWikiInfo: (callback) => ipcRenderer.on('show-wiki-info', callback),
   sendGHConfig: (data) => ipcRenderer.invoke('update-gh-config', data),
   // 双向
   onTidInfo: (callback) =>

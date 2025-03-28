@@ -12,7 +12,7 @@ process.env.VITE_PUBLIC = process.env.VITE_DEV_SERVER_URL
   : process.env.DIST;
 
 const render = path.join(process.env.DIST, 'renderer/index.js');
-const swal = path.join(process.env.VITE_PUBLIC, 'lib/sweetalert.min.js');
+// const swal = path.join(process.env.VITE_PUBLIC, 'lib/sweetalert.min.js');
 const autocorrectLib = path.join(
   process.env.VITE_PUBLIC,
   'lib/autocorrect.min.js'
@@ -20,7 +20,7 @@ const autocorrectLib = path.join(
 
 export const injectScript = (win: BrowserWindow) => {
   log.info('begin inject script');
-  const scripts = [render, swal];
+  const scripts = [render];
 
   if (config.get('autocorrect')) {
     scripts.push(autocorrectLib);

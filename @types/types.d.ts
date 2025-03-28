@@ -20,6 +20,7 @@ type IMenuIconFile =
   | 'File'
   | 'warning'
   | 'trash'
+  | 'error'
   | 'minimize'
   | 'tw-light'
   | 'tw-dark'
