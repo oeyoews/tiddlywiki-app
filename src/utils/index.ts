@@ -116,7 +116,7 @@ export async function initWiki(
       title: t('dialog.templateDownloading'),
       icon: getAppIcon(256),
       timeoutType: 'never',
-      silent: false,
+      silent: true,
     });
   }
   if (!win) {
