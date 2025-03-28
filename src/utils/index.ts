@@ -404,6 +404,7 @@ export async function buildWiki() {
         type: 'info',
         title: t('dialog.buildComplete'),
         message: t('dialog.buildCompleteMessage', { size: indexHTMLSize }),
+        icon: getMenuIcon('about', 256),
         buttons: [
           t('dialog.preview'),
           t('dialog.showInFolder'),

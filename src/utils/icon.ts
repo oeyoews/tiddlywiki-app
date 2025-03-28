@@ -20,7 +20,7 @@ const enableIcon = config.get('icon');
 // **缓存对象**（key: `name-size`，value: `nativeImage`）
 const iconCache = new Map<string, Electron.NativeImage>();
 
-export const getMenuIcon = (name: string, size: number = 16) => {
+export const getMenuIcon = (name: IMenuIcon, size: number = 16) => {
   if (!enableIcon) return;
 
   const cacheKey = `${name}-${size}`;
