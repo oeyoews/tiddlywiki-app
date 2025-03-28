@@ -1,10 +1,12 @@
 import { t } from '@/i18n';
+import path from 'path';
 import {
   Menu,
   app,
   dialog,
   type MenuItem,
   type MenuItemConstructorOptions,
+  net,
 } from 'electron';
 import {
   buildWiki,
@@ -19,6 +21,13 @@ import { getAppIcon, getMenuIcon } from '@/utils/icon';
 import fs from 'fs';
 import { config } from '@/utils/config';
 import { getPlatform } from '../getPlatform';
+
+const tempDir = app.getPath('temp'); // 获取系统的临时目录
+const wikiTemplates = {
+  'tiddlywiki starter kit': 'https://neotw.vercel.app/offline.html',
+  xp: 'https://tiddlywiki-starter-kit.tiddlyhost.com/index.html',
+  mptw5: 'https://mptw5.tiddlyhost.com/index.html',
+};
 
 export const fileMenu = (
   recentWikis: string[]
@@ -38,6 +47,22 @@ export const fileMenu = (
           server.currentPort = res.port;
         }
       },
+    },
+    {
+      label: t('menu.wikiTemplate'),
+      icon: getMenuIcon('new-folder-template'),
+      submenu: Object.entries(wikiTemplates).map((tpl) => {
+        return {
+          label: capitalizeWords(tpl[0]),
+          icon: getMenuIcon('html'),
+          click: async () => {
+            const templatePath = await downloadTpl(tpl);
+            if (templatePath) {
+              // import singlewiki
+            }
+          },
+        };
+      }),
     },
     {
       label: t('menu.createNewWiki'),
@@ -155,3 +180,47 @@ export const fileMenu = (
     },
   ],
 });
+
+const downloadTpl = async (tpl: [content: string, label: string]) => {
+  const content = tpl[1];
+  const label = tpl[0];
+  const filePath = path.join(tempDir, `${label}.html`);
+  let done = false;
+  try {
+    if (content.startsWith('http')) {
+      console.log('downloading 1');
+      const request = net.request(content);
+
+      request.on('response', (response) => {
+        let data = '';
+
+        response.on('data', (chunk) => {
+          data += chunk.toString();
+          console.log('downloading');
+        });
+
+        response.on('end', () => {
+          fs.writeFileSync(filePath, data, 'utf-8');
+          console.log(`文件已保存到: ${filePath}`);
+          done = true;
+        });
+      });
+
+      request.on('error', (error) => {
+        console.error('下载失败:', error);
+      });
+
+      request.end();
+      if (done) {
+        return filePath;
+      } else {
+        return null;
+      }
+    }
+  } catch (error) {
+    console.error('下载失败:', error);
+  }
+};
+
+const capitalizeWords = (str: string) =>
+  str.replace(/\b\w/g, (char) => char.toUpperCase());

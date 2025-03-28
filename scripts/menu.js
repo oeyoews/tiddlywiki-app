@@ -19,6 +19,10 @@ module.exports = {
     'en-US': '&Help',
     'zh-CN': '帮助(&H)',
   },
+  wikiTemplate: {
+    'en-US': 'Create a Wiki Using Templates',
+    'zh-CN': '使用模板创建Wiki',
+  },
   minimize: {
     'en-US': 'Minimize Window',
     'zh-CN': '最小化窗口',

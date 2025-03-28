@@ -5,6 +5,7 @@
     "wikis": "知识库(&W)",
     "settings": "设置(&S)",
     "help": "帮助(&H)",
+    "wikiTemplate": "使用模板创建Wiki",
     "minimize": "最小化窗口",
     "openTid": "在文件夹中打开文件",
     "searchText": "搜索 \"{{text}}\"",

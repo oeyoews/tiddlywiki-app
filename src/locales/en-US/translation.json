@@ -5,6 +5,7 @@
     "wikis": "&Wikis",
     "settings": "&Settings",
     "help": "&Help",
+    "wikiTemplate": "Create a Wiki Using Templates",
     "minimize": "Minimize Window",
     "openTid": "Open Tiddler In Folder",
     "searchText": "Search Google for \"{{text}}\"",
