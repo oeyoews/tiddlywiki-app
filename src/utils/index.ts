@@ -101,6 +101,9 @@ export async function initWiki(
     win = _mainWindow;
     server.win = _mainWindow;
   }
+  if (!win) {
+    log.error('_mainWindow not founded');
+  }
   try {
     // 检查当前实例的文件夹是否被初始化过
     const existingPort = Object.entries(wikiInstances).find(
