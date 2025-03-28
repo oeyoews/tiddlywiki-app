@@ -62,6 +62,7 @@ export function autoUpdaterInit() {
     });
     if (result.response === 0) {
       autoUpdater.downloadUpdate();
+      server.win.setProgressBar(-1); // 取消进度条
       updateMenuVisibility('downloadingApp');
       log.info('updating now');
     } else {
