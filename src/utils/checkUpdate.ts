@@ -65,6 +65,7 @@ export function autoUpdaterInit() {
       updateMenuVisibility('downloadingApp');
       log.info('updating now');
     } else {
+      server.win.setProgressBar(-1); // 取消进度条
       log.info('update canceled');
       updateMenuVisibility('updateMenu');
     }

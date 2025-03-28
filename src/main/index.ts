@@ -53,9 +53,6 @@ async function createWindow() {
     icon: getAppIcon(),
     skipTaskbar: false,
     show: false,
-    // transparent: true,
-    // vibrancy: 'appearance-based', // macOS 毛玻璃效果
-    // visualEffectState: 'active', // 确保 vibrancy 启用
     webPreferences: {
       spellcheck: false,
       preload,
