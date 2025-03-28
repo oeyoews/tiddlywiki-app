@@ -232,6 +232,12 @@ export const createMenubar = (
           click: showFindBar,
         },
         {
+          icon: getMenuIcon('minimize'),
+          label: t('menu.minimize'),
+          accelerator: 'CmdOrCtrl+W',
+          click: win.hide.bind(win),
+        },
+        {
           role: 'reload',
           icon: getMenuIcon('reload'),
           label: t('menu.reload'),

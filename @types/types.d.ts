@@ -20,6 +20,7 @@ type IMenuIconFile =
   | 'File'
   | 'warning'
   | 'remove'
+  | 'minimize'
   | 'tw-light'
   | 'tw-dark'
   | 'new-wiki'
