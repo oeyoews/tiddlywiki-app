@@ -3,7 +3,6 @@ import {
   type MenuItemConstructorOptions,
   Menu,
   shell,
-  type BrowserWindow,
   MenuItem,
   Tray,
   dialog,
