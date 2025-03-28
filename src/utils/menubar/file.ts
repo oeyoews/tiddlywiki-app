@@ -21,12 +21,15 @@ import { getAppIcon, getMenuIcon } from '@/utils/icon';
 import fs from 'fs';
 import { config } from '@/utils/config';
 import { getPlatform } from '../getPlatform';
+import { log } from '../logger';
 
 const tempDir = app.getPath('temp'); // 获取系统的临时目录
 const wikiTemplates = {
+  default: 'server',
+  '-': '',
   'tiddlywiki starter kit': 'https://neotw.vercel.app/offline.html',
-  xp: 'https://tiddlywiki-starter-kit.tiddlyhost.com/index.html',
-  mptw5: 'https://mptw5.tiddlyhost.com/index.html',
+  xp: 'https://keatonlao.github.io/tiddlywiki-xp/index.html',
+  mptw5: 'https://mptw5.tiddlyhost.com',
 };
 
 export const fileMenu = (
@@ -52,14 +55,23 @@ export const fileMenu = (
       label: t('menu.wikiTemplate'),
       icon: getMenuIcon('new-folder-template'),
       submenu: Object.entries(wikiTemplates).map((tpl) => {
+        if (tpl[0] === 'default') {
+          return {
+            label: t('menu.importWiki'),
+            icon: getMenuIcon('import'),
+            click: () => importSingleFileWiki(),
+          };
+        }
+        if (tpl[0] === '-') {
+          return { type: 'separator' };
+        }
         return {
           label: capitalizeWords(tpl[0]),
           icon: getMenuIcon('html'),
-          click: async () => {
-            const templatePath = await downloadTpl(tpl);
-            if (templatePath) {
-              // import singlewiki
-            }
+          click: () => {
+            downloadTpl(tpl, (templatePath: string) => {
+              importSingleFileWiki(templatePath);
+            });
           },
         };
       }),
@@ -128,11 +140,11 @@ export const fileMenu = (
       ],
     },
     { type: 'separator' },
-    {
-      label: t('menu.importWiki'),
-      icon: getMenuIcon('import'),
-      click: importSingleFileWiki,
-    },
+    // {
+    //   label: t('menu.importWiki'),
+    //   icon: getMenuIcon('import'),
+    //   click: () => importSingleFileWiki(),
+    // },
     {
       label: t('menu.publish'),
       icon: getMenuIcon('release'),
@@ -181,28 +193,27 @@ export const fileMenu = (
   ],
 });
 
-const downloadTpl = async (tpl: [content: string, label: string]) => {
+// 缓存
+const downloadTpl = (tpl: [content: string, label: string], cbl: Function) => {
   const content = tpl[1];
   const label = tpl[0];
   const filePath = path.join(tempDir, `${label}.html`);
-  let done = false;
   try {
     if (content.startsWith('http')) {
-      console.log('downloading 1');
       const request = net.request(content);
 
+      log.log(`${content} template is downloading !`);
       request.on('response', (response) => {
         let data = '';
 
         response.on('data', (chunk) => {
           data += chunk.toString();
-          console.log('downloading');
         });
 
         response.on('end', () => {
           fs.writeFileSync(filePath, data, 'utf-8');
-          console.log(`文件已保存到: ${filePath}`);
-          done = true;
+          cbl(filePath);
+          log.log(`${filePath} template has donwloaded !`);
         });
       });
 
@@ -211,11 +222,6 @@ const downloadTpl = async (tpl: [content: string, label: string]) => {
       });
 
       request.end();
-      if (done) {
-        return filePath;
-      } else {
-        return null;
-      }
     }
   } catch (error) {
     console.error('下载失败:', error);

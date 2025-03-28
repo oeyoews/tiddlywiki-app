@@ -1,6 +1,14 @@
 import fs from 'fs';
 import path from 'path';
-import { app, shell, Menu, dialog, Tray, BrowserWindow } from 'electron';
+import {
+  app,
+  shell,
+  Menu,
+  dialog,
+  Tray,
+  BrowserWindow,
+  Notification,
+} from 'electron';
 import { t, i18next } from '@/i18n/index';
 import twinfo from '@/utils/tiddlywiki.json';
 
@@ -12,6 +20,9 @@ import { isEmptyDirectory } from '@/utils/checkEmptyDir';
 const WIKIINFOFILE = 'tiddlywiki.info';
 const DEFAULT_PORT = 8080;
 
+let importIngNotify: Notification;
+let successImportNotify: Notification;
+
 import packageInfo from '../../package.json';
 import saveToGitHub from '@/utils/github-saver';
 import {
@@ -22,7 +33,7 @@ import {
 import { createMenubar } from '@/utils/menubar';
 import { log } from '@/utils/logger';
 import { createTray } from '@/utils/createTray';
-import { getMenuIcon } from '@/utils/icon';
+import { getAppIcon, getMenuIcon } from '@/utils/icon';
 import {
   checkBuildInfo,
   checkTWPlugins,
@@ -55,7 +66,7 @@ function updateRecentWikis(wikiPath: string) {
     (path: string) => path !== wikiPath && path !== config.get('wikiPath')
   );
   filteredWikis.unshift(wikiPath);
-  config.set('recentWikis', filteredWikis.slice(0, 5));
+  config.set('recentWikis', filteredWikis.slice(0, 15));
 
   // 更新菜单
   server.menu = Menu.buildFromTemplate(createMenuTemplate());
@@ -84,6 +95,20 @@ export async function initWiki(
   if (_mainWindow && !win) {
     win = _mainWindow;
     server.win = _mainWindow;
+
+    // 初始化notification
+    importIngNotify = new Notification({
+      title: t('dialog.import'),
+      body: t('dialog.convertIng'),
+      icon: getAppIcon(256),
+      silent: true,
+    });
+    successImportNotify = new Notification({
+      title: t('dialog.importSuccess'),
+      body: t('dialog.importSuccessMessage'),
+      icon: getAppIcon(256),
+      silent: false,
+    });
   }
   if (!win) {
     log.error('_mainWindow not founded');
@@ -227,7 +252,8 @@ export async function openWiki() {
     const selectedPath = result.filePaths[0];
     if (path.basename(selectedPath) === 'tiddlers') {
       dialog.showErrorBox(t('dialog.error'), t('dialog.invalidFolderName'));
-      return await openWiki();
+      return;
+      // return await openWiki();
     }
 
     // 检查是否存在 tiddlywiki.info 文件
@@ -291,45 +317,57 @@ export async function switchLanguage(lang: string) {
   createTray(win, server);
 }
 
-export async function importSingleFileWiki() {
+export async function importSingleFileWiki(html?: string) {
+  const { boot } = TiddlyWiki();
   try {
-    const result = await dialog.showOpenDialog({
-      title: t('dialog.selectHtmlFile'),
-      filters: [{ name: t('dialog.htmlFilter'), extensions: ['html', 'htm'] }],
-      properties: ['openFile'],
-    });
+    let htmlPath = html;
 
-    if (!result.canceled && result.filePaths.length > 0) {
-      const htmlPath = result.filePaths[0];
-      const targetFolder = await dialog.showOpenDialog({
-        title: t('dialog.selectImportFolder'),
-        properties: ['openDirectory'],
-        message: t('dialog.selectImportFolderMessage'),
+    if (!htmlPath) {
+      const result = await dialog.showOpenDialog({
+        title: t('dialog.selectHtmlFile'),
+        filters: [
+          { name: t('dialog.htmlFilter'), extensions: ['html', 'htm'] },
+        ],
+        properties: ['openFile'],
       });
 
-      if (!targetFolder.canceled && targetFolder.filePaths.length > 0) {
-        const targetPath = targetFolder.filePaths[0];
-
-        const { boot } = TiddlyWiki();
-        boot.argv = ['--load', htmlPath, '--savewikifolder', targetPath];
-        await boot.boot(() => {
-          console.log(t('log.startImport'));
-        });
-
-        // 更新当前 Wiki 路径并重新初始化
-        config.set('wikiPath', targetPath);
-        const wikiRes = await initWiki(targetPath);
-        if (wikiRes?.port) {
-          server.currentPort = wikiRes.port;
-        }
-
-        dialog.showMessageBox({
-          type: 'info',
-          title: t('dialog.importSuccess'),
-          message: t('dialog.importSuccessMessage'),
-        });
+      if (result.canceled || result.filePaths.length === 0) {
+        return;
       }
+      htmlPath = result.filePaths[0];
     }
+
+    const targetFolder = await dialog.showOpenDialog({
+      title: t('dialog.selectImportFolder'),
+      properties: ['openDirectory'],
+      message: t('dialog.selectImportFolderMessage'),
+    });
+
+    if (targetFolder.canceled || targetFolder.filePaths.length === 0) {
+      return;
+    }
+
+    const targetPath = targetFolder.filePaths[0];
+
+    importIngNotify.show();
+
+    boot.argv = ['--load', htmlPath, '--savewikifolder', targetPath];
+    await boot.boot(() => {
+      console.log(t('log.startImport'));
+    });
+
+    config.set('wikiPath', targetPath);
+    const wikiRes = await initWiki(targetPath);
+    if (wikiRes?.port) {
+      server.currentPort = wikiRes.port;
+    }
+    setTimeout(() => {
+      importIngNotify.close();
+      successImportNotify.show();
+      setTimeout(() => {
+        successImportNotify.close();
+      }, 3000);
+    }, 1000);
   } catch (err: any) {
     dialog.showErrorBox(
       t('dialog.error'),
