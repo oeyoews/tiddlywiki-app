@@ -19,10 +19,10 @@ import {
   wikiInitArgs,
   wikiStartupArgs,
 } from '@/utils/wiki/constant';
-import { createMenubar } from './menubar';
+import { createMenubar } from '@/utils/menubar';
 import { log } from '@/utils/logger';
-import { createTray } from './createTray';
-import { getMenuIcon } from './icon';
+import { createTray } from '@/utils/createTray';
+import { getMenuIcon } from '@/utils/icon';
 import {
   checkBuildInfo,
   checkTWPlugins,
@@ -43,25 +43,9 @@ export const server = {
   win: {} as BrowserWindow,
 };
 
-const deps = {
-  initWiki,
-  openWiki,
-  buildWiki,
-  importSingleFileWiki,
-  releaseWiki,
-  configureGitHub,
-  switchLanguage,
-  showWikiInfo,
-  createNewWiki,
-  toggleAutocorrect,
-  toggleChineseLang,
-  toggleMarkdown,
-  toggleIcon,
-};
-
 export type IConfig = typeof config;
 
-export const createMenuTemplate = createMenubar(config, deps, server);
+export const createMenuTemplate = createMenubar(config, server);
 
 // 添加更新最近打开的 wiki 列表的函数
 function updateRecentWikis(wikiPath: string) {
@@ -74,11 +58,11 @@ function updateRecentWikis(wikiPath: string) {
   config.set('recentWikis', filteredWikis.slice(0, 5));
 
   // 更新菜单
-  server.menu = Menu.buildFromTemplate(createMenuTemplate(win));
+  server.menu = Menu.buildFromTemplate(createMenuTemplate());
   Menu.setApplicationMenu(server.menu);
 }
 
-async function releaseWiki() {
+export async function releaseWiki() {
   const wikiFolder = config.get('wikiPath');
   const { repo, owner, token, branch } = config.get('github');
   await saveToGitHub({
@@ -209,7 +193,7 @@ export async function initWiki(
   }
 }
 
-async function createNewWiki() {
+export async function createNewWiki() {
   const result = await dialog.showOpenDialog({
     title: t('dialog.selectNewWikiFolder'),
     properties: ['openDirectory'],
@@ -220,13 +204,14 @@ async function createNewWiki() {
     const selectedPath = result.filePaths[0];
     if (path.basename(selectedPath) === 'tiddlers') {
       dialog.showErrorBox(t('dialog.error'), t('dialog.invalidFolderName'));
-      return await createNewWiki();
+      return;
+      // return await createNewWiki();
     }
 
     // 检查文件夹是否为空
     if (!isEmptyDirectory(selectedPath)) {
       dialog.showErrorBox(t('dialog.error'), t('dialog.folderNotEmpty'));
-      return await createNewWiki();
+      return;
     }
 
     config.set('wikiPath', selectedPath);
@@ -235,7 +220,7 @@ async function createNewWiki() {
   }
 }
 
-async function openWiki() {
+export async function openWiki() {
   const result = await dialog.showOpenDialog({
     title: t('dialog.selectWikiFolder'),
     properties: ['openDirectory'],
@@ -296,12 +281,12 @@ export async function showWikiInfo() {
 //   });
 // }
 
-async function switchLanguage(lang: string) {
+export async function switchLanguage(lang: string) {
   config.set('language', lang);
   await i18next.changeLanguage(lang);
 
   // 更新菜单
-  server.menu = Menu.buildFromTemplate(createMenuTemplate(win) as any);
+  server.menu = Menu.buildFromTemplate(createMenuTemplate());
   Menu.setApplicationMenu(server.menu);
   log.info('switch lang to', lang);
 
@@ -309,7 +294,7 @@ async function switchLanguage(lang: string) {
   createTray(win, server);
 }
 
-async function importSingleFileWiki() {
+export async function importSingleFileWiki() {
   try {
     const result = await dialog.showOpenDialog({
       title: t('dialog.selectHtmlFile'),
@@ -356,7 +341,7 @@ async function importSingleFileWiki() {
   }
 }
 
-async function buildWiki() {
+export async function buildWiki() {
   try {
     const wikiPath = config.get('wikiPath');
     checkBuildInfo(wikiPath);
@@ -411,7 +396,7 @@ async function buildWiki() {
   }
 }
 
-async function configureGitHub() {
+export async function configureGitHub() {
   const currentConfig = config.get('github');
   const result = await dialog.showMessageBox({
     icon: getMenuIcon('gitHub', 256),
@@ -453,7 +438,7 @@ async function restartDialog() {
 export async function toggleIcon(enable: Boolean) {
   config.set('icon', enable);
   log.info('toggle men icon', enable);
-  server.menu = Menu.buildFromTemplate(createMenuTemplate(win));
+  server.menu = Menu.buildFromTemplate(createMenuTemplate());
   Menu.setApplicationMenu(server.menu);
   restartDialog();
 }
@@ -498,7 +483,7 @@ export async function toggleMarkdown(
   } catch (err) {}
 }
 
-async function toggleAutocorrect(menuItem: any) {
+export async function toggleAutocorrect(menuItem: any) {
   if (menuItem.checked) {
     const res = await dialog.showMessageBox({
       type: 'info',
@@ -525,7 +510,7 @@ async function toggleAutocorrect(menuItem: any) {
   restartDialog();
 }
 
-async function toggleChineseLang(
+export async function toggleChineseLang(
   enable: Boolean,
   options = {
     notify: true,
