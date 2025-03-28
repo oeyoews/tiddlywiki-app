@@ -19,6 +19,10 @@ module.exports = {
     'en-US': '&Help',
     'zh-CN': '帮助(&H)',
   },
+  minimize: {
+    'en-US': 'Minimize Window',
+    'zh-CN': '最小化窗口',
+  },
   openTid: {
     'en-US': 'Open Tiddler In Folder',
     'zh-CN': '在文件夹中打开文件',
