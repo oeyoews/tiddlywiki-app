@@ -16,21 +16,33 @@ const iconPath = process.env.VITE_PUBLIC
 
 export const appIcon = path.join(process.env.VITE_PUBLIC, iconPath);
 const enableIcon = config.get('icon');
-export const getMenuIcon = (name: IMenuIcon, size?: number) => {
+
+// **缓存对象**（key: `name-size`，value: `nativeImage`）
+const iconCache = new Map<string, Electron.NativeImage>();
+
+export const getMenuIcon = (name: string, size: number = 16) => {
   if (!enableIcon) return;
+
+  const cacheKey = `${name}-${size}`;
+  if (iconCache.has(cacheKey)) {
+    return iconCache.get(cacheKey)!;
+  }
+
   const iconPath = path.join(
     process.env.VITE_PUBLIC!,
     'assets/menu',
     `${name}.png`
   );
-
-  return nativeImage
+  const image = nativeImage
     .createFromPath(iconPath)
-    .resize({ width: size || 16, height: size || 16 }); // 调整图标大小
+    .resize({ width: size, height: size });
+
+  // **缓存结果**
+  iconCache.set(cacheKey, image);
+  return image;
 };
 
-export const twImage = (size: number = 16) =>
-  nativeImage.createFromPath(appIcon).resize({ width: size, height: size }); // 调整图标大小
+export const twImage = (size: number = 16) => getMenuIcon('tw-light', size); // 使用缓存
 
 export const getAppIcon = (
   size: number = 512,
@@ -45,4 +57,5 @@ export const getAppIcon = (
   }
 };
 
+// @ts-ignore
 export const getFolderIcon = () => getMenuIcon(`folder-${getPlatform()}`);
