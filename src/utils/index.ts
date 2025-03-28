@@ -178,6 +178,9 @@ export async function initWiki(
     twBoot.argv = wikiStartupArgs(wikiFolder, server.currentPort);
 
     const startServer = (port: number) => {
+      if (!win) {
+        log.error('mainwindow not founded on start server');
+      }
       log.info(`start begin: http://localhost:${server.currentPort}`);
       win.loadURL(`http://localhost:${port}`);
       win.webContents.once('did-finish-load', () => {
