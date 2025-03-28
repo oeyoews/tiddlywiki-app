@@ -19,7 +19,7 @@ interface CommitBody {
 type IMenuIconFile =
   | 'File'
   | 'warning'
-  | 'remove'
+  | 'trash'
   | 'minimize'
   | 'tw-light'
   | 'tw-dark'
