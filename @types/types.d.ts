@@ -25,6 +25,8 @@ type IMenuIconFile =
   | 'tw-light'
   | 'tw-dark'
   | 'new-wiki'
+  | 'html'
+  | 'new-folder-template'
   | 'folder'
   | 'folder-windows'
   | 'folder-linux'

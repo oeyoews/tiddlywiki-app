@@ -1,8 +1,11 @@
-import { Notification, shell, dialog, BrowserWindow } from 'electron';
+// @ts-nocheck
+import { Notification, shell, dialog, BrowserWindow, net } from 'electron';
 import fs from 'fs';
 import { t } from '@/i18n/index.js';
 import { log } from '@/utils/logger';
 import { getMenuIcon } from './icon';
+
+let githubNotify: Notification;
 
 /**
  * 将 Wiki 发布到 GitHub Pages
@@ -22,14 +25,13 @@ async function saveToGitHub({
   branch = 'main',
   wikiFolder,
   GITHUB_TOKEN,
-  // + new Date().toLocaleTimeString(),
   COMMIT_MESSAGE = 'Saved by TiddlyWiki App ',
   win,
 }: ISaver & { win: BrowserWindow }) {
-  log.info('begine to save tiddlywiki html to github pages...');
+  log.info('begin to save tiddlywiki html to github pages...');
   const pageSite = `https://${owner}.github.io/${repo}`;
-  // @see: https://github.com/settings/tokens
   const FILE_PATH = wikiFolder + '/output/index.html';
+
   if (!fs.existsSync(FILE_PATH)) {
     dialog.showMessageBox({
       type: 'error',
@@ -41,105 +43,142 @@ async function saveToGitHub({
   }
 
   if (!owner || !repo || !GITHUB_TOKEN) {
-    // dialog.showMessageBox({
-    //   type: 'info',
-    // })
-    log.info('github config not corrected');
+    log.info('GitHub config is not correct');
     return;
   }
 
   const baseURL = 'https://api.github.com/repos';
-  const url = baseURL + `/${owner}/${repo}/contents/index.html`;
+  const url = `${baseURL}/${owner}/${repo}/contents/index.html`;
 
   async function getFileSha() {
-    try {
+    return new Promise((resolve, reject) => {
       log.info('begin getfilesha ...', url);
-      const response = await fetch(url, {
+
+      const request = net.request({
         method: 'GET',
+        url,
         headers: {
           Authorization: `Basic ${GITHUB_TOKEN}`,
           Accept: 'application/vnd.github.v3+json',
         },
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        log.info('github file sha', data.sha);
-        return data.sha; // 返回文件的 SHA 值
-      } else {
-        log.error('response has crashed', response);
-      }
+      request.on('response', (response) => {
+        let body = '';
 
-      return null; // 文件不存在，返回 null
-    } catch (e) {
-      log.error('getfilesha', e);
-    }
+        response.on('data', (chunk) => {
+          body += chunk;
+        });
+
+        response.on('end', () => {
+          if (response.statusCode === 200) {
+            try {
+              const data = JSON.parse(body);
+              log.info('GitHub file SHA:', data.sha);
+              resolve(data.sha);
+            } catch (error) {
+              log.error('Error parsing SHA response', error);
+              reject(null);
+            }
+          } else {
+            log.error('Failed to get SHA:', response.statusCode);
+            resolve(null);
+          }
+        });
+      });
+
+      request.on('error', (error) => {
+        log.error('getfilesha error', error);
+        reject(null);
+      });
+
+      request.end();
+    });
   }
 
   async function uploadToGHPages() {
     try {
       const content = fs.readFileSync(FILE_PATH, 'base64');
 
-      // 开始上传时显示进度条
-      if (win) {
-        win.setProgressBar(0.2);
-      }
+      if (win) win.setProgressBar(0.2);
 
-      const body: CommitBody = {
+      const body = {
         message: COMMIT_MESSAGE,
         content,
         branch,
       };
+
       const sha = await getFileSha();
       if (sha) {
         body.sha = sha;
       }
 
-      // 上传过程中更新进度
-      if (win) {
-        win.setProgressBar(0.6);
-      }
+      if (win) win.setProgressBar(0.6);
       log.info('github-saver url is (start)', url);
 
-      const response = await fetch(url, {
-        method: 'PUT',
-        headers: {
-          Authorization: `token ${GITHUB_TOKEN}`,
-          Accept: 'application/vnd.github.v3+json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
+      return new Promise((resolve, reject) => {
+        const request = net.request({
+          method: 'PUT',
+          url,
+          headers: {
+            Authorization: `token ${GITHUB_TOKEN}`,
+            Accept: 'application/vnd.github.v3+json',
+            'Content-Type': 'application/json',
+          },
+        });
+
+        request.on('response', (response) => {
+          let responseBody = '';
+
+          response.on('data', (chunk) => {
+            responseBody += chunk;
+          });
+
+          response.on('end', () => {
+            if (response.statusCode === 200 || response.statusCode === 201) {
+              const data = JSON.parse(responseBody);
+              log.info('File uploaded to GitHub Pages:', data.content.html_url);
+
+              if (!githubNotify) {
+                githubNotify = new Notification({
+                  title: t('dialog.github.uploadSuccess'),
+                  body: t('dialog.github.clickToView'),
+                  icon: getMenuIcon('gitHub', 256),
+                  silent: false,
+                });
+              }
+              githubNotify
+                .on('click', () => {
+                  shell.openExternal(pageSite);
+                })
+                .show();
+
+              resolve(data);
+            } else {
+              log.error('Upload failed:', responseBody);
+              reject(
+                new Error(
+                  `${t('dialog.github.apiError')}: ${response.statusCode}`
+                )
+              );
+            }
+
+            if (win) win.setProgressBar(-1);
+          });
+        });
+
+        request.on('error', (error) => {
+          log.error('Upload request error:', error);
+          if (win) win.setProgressBar(-1);
+          reject(error);
+        });
+
+        request.write(JSON.stringify(body));
+        request.end();
       });
-      log.info('github-saver url is (uploading)', url);
-
-      // 上传完成，移除进度条
-      if (win) {
-        win.setProgressBar(-1);
-      }
-
-      if (!response.ok) {
-        throw new Error(
-          `${t('dialog.github.apiError')}: ${response.statusText}`
-        );
-      }
-
-      const data = await response.json();
-      console.log('File uploaded to GitHub Pages:', data.content.html_url);
-      new Notification({
-        title: t('dialog.github.uploadSuccess'),
-        body: t('dialog.github.clickToView'),
-        icon: getMenuIcon('gitHub', 256),
-        silent: false,
-      })
-        .on('click', () => {
-          shell.openExternal(pageSite);
-        })
-        .show();
     } catch (error) {
-      // 发生错误时移除进度条
-      if (win) {
-        win.setProgressBar(-1);
-      }
+      if (win) win.setProgressBar(-1);
+      log.error('Upload failed:', error);
       throw error;
     }
   }

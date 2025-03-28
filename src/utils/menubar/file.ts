@@ -1,10 +1,12 @@
 import { t } from '@/i18n';
+import path from 'path';
 import {
   Menu,
   app,
   dialog,
   type MenuItem,
   type MenuItemConstructorOptions,
+  net,
 } from 'electron';
 import {
   buildWiki,
@@ -19,6 +21,16 @@ import { getAppIcon, getMenuIcon } from '@/utils/icon';
 import fs from 'fs';
 import { config } from '@/utils/config';
 import { getPlatform } from '../getPlatform';
+import { log } from '../logger';
+
+const tempDir = app.getPath('temp'); // 获取系统的临时目录
+const wikiTemplates = {
+  default: 'server',
+  '-': '',
+  'tiddlywiki starter kit': 'https://neotw.vercel.app/offline.html',
+  xp: 'https://keatonlao.github.io/tiddlywiki-xp/index.html',
+  mptw5: 'https://mptw5.tiddlyhost.com',
+};
 
 export const fileMenu = (
   recentWikis: string[]
@@ -38,6 +50,31 @@ export const fileMenu = (
           server.currentPort = res.port;
         }
       },
+    },
+    {
+      label: t('menu.wikiTemplate'),
+      icon: getMenuIcon('new-folder-template'),
+      submenu: Object.entries(wikiTemplates).map((tpl) => {
+        if (tpl[0] === 'default') {
+          return {
+            label: t('menu.importWiki'),
+            icon: getMenuIcon('import'),
+            click: () => importSingleFileWiki(),
+          };
+        }
+        if (tpl[0] === '-') {
+          return { type: 'separator' };
+        }
+        return {
+          label: capitalizeWords(tpl[0]),
+          icon: getMenuIcon('html'),
+          click: () => {
+            downloadTpl(tpl, (templatePath: string) => {
+              importSingleFileWiki(templatePath);
+            });
+          },
+        };
+      }),
     },
     {
       label: t('menu.createNewWiki'),
@@ -103,11 +140,11 @@ export const fileMenu = (
       ],
     },
     { type: 'separator' },
-    {
-      label: t('menu.importWiki'),
-      icon: getMenuIcon('import'),
-      click: importSingleFileWiki,
-    },
+    // {
+    //   label: t('menu.importWiki'),
+    //   icon: getMenuIcon('import'),
+    //   click: () => importSingleFileWiki(),
+    // },
     {
       label: t('menu.publish'),
       icon: getMenuIcon('release'),
@@ -155,3 +192,41 @@ export const fileMenu = (
     },
   ],
 });
+
+// 缓存
+const downloadTpl = (tpl: [content: string, label: string], cbl: Function) => {
+  const content = tpl[1];
+  const label = tpl[0];
+  const filePath = path.join(tempDir, `${label}.html`);
+  try {
+    if (content.startsWith('http')) {
+      const request = net.request(content);
+
+      log.log(`${content} template is downloading !`);
+      request.on('response', (response) => {
+        let data = '';
+
+        response.on('data', (chunk) => {
+          data += chunk.toString();
+        });
+
+        response.on('end', () => {
+          fs.writeFileSync(filePath, data, 'utf-8');
+          cbl(filePath);
+          log.log(`${filePath} template has donwloaded !`);
+        });
+      });
+
+      request.on('error', (error) => {
+        console.error('下载失败:', error);
+      });
+
+      request.end();
+    }
+  } catch (error) {
+    console.error('下载失败:', error);
+  }
+};
+
+const capitalizeWords = (str: string) =>
+  str.replace(/\b\w/g, (char) => char.toUpperCase());
