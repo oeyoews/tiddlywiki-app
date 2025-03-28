@@ -187,9 +187,17 @@ module.exports = {
     'en-US': 'TiddlyWiki HTML',
     'zh-CN': 'TiddlyWiki HTML',
   },
+  import: {
+    'en-US': 'Import',
+    'zh-CN': '导入',
+  },
+  convertIng: {
+    'en-US': 'HTML File is converting ...',
+    'zh-CN': '文件导入处理中...',
+  },
   selectImportFolder: {
-    'en-US': 'Select Import Target Folder',
-    'zh-CN': '选择导入目标文件夹',
+    'en-US': 'Please Select The Folder To Save',
+    'zh-CN': '请选择要保存到的文件夹',
   },
   selectImportFolderMessage: {
     'en-US': 'Please select a target folder to import the Wiki',
