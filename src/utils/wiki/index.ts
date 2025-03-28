@@ -57,3 +57,13 @@ export function checkBuildInfo(wikiPath: string) {
     fs.writeFileSync(bootPath, JSON.stringify(twInfo, null, 4), 'utf8');
   }
 }
+
+export function checkThemes(infoPath: string) {
+  let twInfo = JSON.parse(fs.readFileSync(infoPath, 'utf8'));
+
+  // 检查并添加构建配置，修复导入的文件夹无法构建
+  if (!twInfo.themes || !twInfo.themes.index) {
+    twInfo.themes = ['tiddlywiki/vanilla'];
+    fs.writeFileSync(infoPath, JSON.stringify(twInfo, null, 4), 'utf8');
+  }
+}

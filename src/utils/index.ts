@@ -36,6 +36,7 @@ import { createTray } from '@/utils/createTray';
 import { getAppIcon, getMenuIcon } from '@/utils/icon';
 import {
   checkBuildInfo,
+  checkThemes,
   checkTWPlugins,
   updateOriginalPath,
 } from '@/utils/wiki/index';
@@ -172,6 +173,7 @@ export async function initWiki(
     if (fs.existsSync(bootPath)) {
       checkTWPlugins(bootPath);
       updateOriginalPath(bootPath);
+      checkThemes(bootPath);
     }
 
     if (server.currentServer) {
@@ -329,8 +331,12 @@ export async function importSingleFileWiki(html?: string) {
   const { boot } = TiddlyWiki();
   try {
     let htmlPath = html;
+    if (html) {
+      log.info(html, 'import wiki use template');
+    }
 
     if (!htmlPath) {
+      log.info('create new wiki server template');
       const result = await dialog.showOpenDialog({
         title: t('dialog.selectHtmlFile'),
         filters: [
@@ -359,7 +365,13 @@ export async function importSingleFileWiki(html?: string) {
 
     importIngNotify.show();
 
-    boot.argv = ['--load', htmlPath, '--savewikifolder', targetPath];
+    boot.argv = [
+      '--load',
+      htmlPath,
+      '--savewikifolder',
+      targetPath,
+      '--verbose',
+    ];
     await boot.boot(() => {
       console.log(t('log.startImport'));
     });

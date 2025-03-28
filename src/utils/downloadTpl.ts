@@ -46,12 +46,23 @@ export const downloadTpl = (
         });
 
         response.on('end', () => {
-          fs.writeFileSync(filePath, data, 'utf-8');
-          cbl(filePath);
-          log.log(`${filePath} template has downloaded!`);
-          setTimeout(() => {
+          // 使用流式写入避免卡顿 ??
+          const writeStream = fs.createWriteStream(filePath, 'utf-8');
+          writeStream.write(data);
+          writeStream.end();
+
+          writeStream.on('finish', () => {
+            cbl(filePath);
+            log.log(`${filePath} template has downloaded!`);
+            setTimeout(() => {
+              notify.close();
+            }, 600);
+          });
+
+          writeStream.on('error', (error) => {
+            log.error('写入文件时出错:', error);
             notify.close();
-          }, 600);
+          });
         });
       });
 
