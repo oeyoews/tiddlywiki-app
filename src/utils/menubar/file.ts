@@ -1,12 +1,10 @@
 import { t } from '@/i18n';
-import path from 'path';
 import {
   Menu,
   app,
   dialog,
   type MenuItem,
   type MenuItemConstructorOptions,
-  net,
 } from 'electron';
 import {
   buildWiki,
@@ -21,9 +19,8 @@ import { getAppIcon, getMenuIcon } from '@/utils/icon';
 import fs from 'fs';
 import { config } from '@/utils/config';
 import { getPlatform } from '../getPlatform';
-import { log } from '../logger';
+import { capitalizeWords, downloadTpl } from '../downloadTpl';
 
-const tempDir = app.getPath('temp'); // 获取系统的临时目录
 const wikiTemplates = {
   default: 'server',
   '-': '',
@@ -192,41 +189,3 @@ export const fileMenu = (
     },
   ],
 });
-
-// 缓存
-const downloadTpl = (tpl: [content: string, label: string], cbl: Function) => {
-  const content = tpl[1];
-  const label = tpl[0];
-  const filePath = path.join(tempDir, `${label}.html`);
-  try {
-    if (content.startsWith('http')) {
-      const request = net.request(content);
-
-      log.log(`${content} template is downloading !`);
-      request.on('response', (response) => {
-        let data = '';
-
-        response.on('data', (chunk) => {
-          data += chunk.toString();
-        });
-
-        response.on('end', () => {
-          fs.writeFileSync(filePath, data, 'utf-8');
-          cbl(filePath);
-          log.log(`${filePath} template has donwloaded !`);
-        });
-      });
-
-      request.on('error', (error) => {
-        console.error('下载失败:', error);
-      });
-
-      request.end();
-    }
-  } catch (error) {
-    console.error('下载失败:', error);
-  }
-};
-
-const capitalizeWords = (str: string) =>
-  str.replace(/\b\w/g, (char) => char.toUpperCase());
