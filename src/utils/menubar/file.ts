@@ -20,14 +20,7 @@ import fs from 'fs';
 import { config } from '@/utils/config';
 import { getPlatform } from '../getPlatform';
 import { capitalizeWords, downloadTpl } from '../downloadTpl';
-
-const wikiTemplates = {
-  default: 'server',
-  '-': '',
-  'tiddlywiki starter kit': 'https://neotw.vercel.app/offline.html',
-  xp: 'https://keatonlao.github.io/tiddlywiki-xp/index.html',
-  mptw5: 'https://mptw5.tiddlyhost.com',
-};
+import { wikiTemplates } from '@/utils/wikiTemplates';
 
 export const fileMenu = (
   recentWikis: string[]

@@ -102,6 +102,7 @@ export async function initWiki(
       body: t('dialog.convertIng'),
       icon: getAppIcon(256),
       silent: true,
+      timeoutType: 'never',
     });
     successImportNotify = new Notification({
       title: t('dialog.importSuccess'),

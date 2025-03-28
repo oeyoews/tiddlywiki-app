@@ -51,13 +51,13 @@ export const downloadTpl = (
       });
 
       request.on('error', (error) => {
-        console.error('下载失败:', error);
+        log.error('下载失败:', error);
       });
 
       request.end();
     }
   } catch (error) {
-    console.error('下载失败:', error);
+    log.error('下载失败:', error);
   }
 };
 
