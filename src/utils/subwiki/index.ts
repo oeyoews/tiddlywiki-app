@@ -1,6 +1,7 @@
 // 给定一个目标文件夹， 和软连接的文件夹， 使用fs-extra进行软连接生成， 如果目标文件夹不存在就手动创建，如果软链接文件夹已存在就跳过
 
 import fs from 'fs-extra';
+import { log } from '@/utils/logger';
 
 /**
  * 创建软链接
@@ -19,15 +20,17 @@ export async function createSymlink(
 
     // 检查软链接是否已存在
     if (await fs.pathExists(symlinkPath)) {
-      console.log(`软链接 ${symlinkPath} 已存在，跳过创建`);
+      log.info(`softlink ${symlinkPath} has exist, skip`);
       return;
     }
 
     // 创建软链接
     await fs.ensureSymlink(targetPath, symlinkPath);
-    console.log(`成功创建软链接: ${symlinkPath} -> ${targetPath}`);
+    log.info(
+      `successfully create subwiki softlink: ${symlinkPath} -> ${targetPath}`
+    );
   } catch (error) {
-    console.error(`创建软链接失败:`, error);
+    log.error(`failed to create softlink:`, error);
     throw error;
   }
 }

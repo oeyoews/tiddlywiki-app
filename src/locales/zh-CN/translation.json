@@ -5,6 +5,7 @@
     "wikis": "知识库(&W)",
     "settings": "设置(&S)",
     "help": "帮助(&H)",
+    "subwiki": "打开子 Wiki",
     "wikiTemplate": "从模板创建维基",
     "minimize": "最小化窗口",
     "openTid": "在资源管理器中显示",

@@ -38,7 +38,7 @@ export const helpMenu = (): MenuItemConstructorOptions => ({
       id: 'downloadingApp',
       visible: false,
       enabled: false,
-      icon: getMenuIcon('update'),
+      icon: getMenuIcon('downloading'),
     },
     {
       label: t('dialog.restartNow'),

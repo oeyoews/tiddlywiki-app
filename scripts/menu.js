@@ -19,6 +19,10 @@ module.exports = {
     'en-US': '&Help',
     'zh-CN': '帮助(&H)',
   },
+  subwiki: {
+    'en-US': 'Open subwiki',
+    'zh-CN': '打开子 Wiki',
+  },
   wikiTemplate: {
     'en-US': 'Create Wiki from Template',
     'zh-CN': '从模板创建维基',
