@@ -29,7 +29,6 @@
     "markdown": "Enable Markdown",
     "publish": "Publish to GitHub",
     "githubConfig": "GitHub Settings",
-    "publishToGitHub": "Publish to GitHub",
     "autoStart": "Auto Start",
     "language": "Language",
     "openExistingWiki": "Open Existing Wiki",

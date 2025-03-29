@@ -109,15 +109,11 @@ module.exports = {
   },
   publish: {
     'en-US': 'Publish to GitHub',
-    'zh-CN': '发布到GitHub',
+    'zh-CN': '发布到 GitHub',
   },
   githubConfig: {
     'en-US': 'GitHub Settings',
     'zh-CN': 'GitHub 发布设置',
-  },
-  publishToGitHub: {
-    'en-US': 'Publish to GitHub',
-    'zh-CN': '发布到 GitHub',
   },
   autoStart: {
     'en-US': 'Auto Start',
