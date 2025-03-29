@@ -11,7 +11,7 @@ export const wikiTemplates = {
   'delphes-notes': 'https://delphes-notes.tiddlyhost.com',
   grok: 'https://grok-tiddlywiki-official.tiddlyhost.com/',
   'tiddly-template':
-    'https://tiddly-gittly.github.io/Tiddlywiki-NodeJS-Github-Template/offline.html',
+    'https://oeyoews.github.io/tiddlywiki-templates/tiddly-template.html',
 };
 
 export type IWikiTemplate = Omit<typeof wikiTemplates, 'default' | '-'>;

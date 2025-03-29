@@ -11,7 +11,7 @@ import { log } from '@/utils/logger';
 import { shell } from 'electron';
 const cacheDuration = 7 * 24 * 60 * 60 * 1000; // 24小时
 
-export const downloadTpl = (
+export const downloadTpl = async (
   tpl: [content: string, label: string],
   cbl: Function,
   notify: Notification
@@ -32,7 +32,7 @@ export const downloadTpl = (
       if (currentTime - lastModified < cacheDuration) {
         log.log(`${filePath} template is still valid, using cached version.`);
         if (!fs.existsSync(labelHTMLDir)) {
-          convertHTML2Folder(label, filePath, notify, cbl);
+          await convertHTML2Folder(label, filePath, notify, cbl);
         } else {
           cbl(filePath);
         }
@@ -61,8 +61,8 @@ export const downloadTpl = (
           writeStream.write(data);
           writeStream.end();
 
-          writeStream.on('finish', () => {
-            convertHTML2Folder(label, filePath, notify, cbl),
+          writeStream.on('finish', async () => {
+            await convertHTML2Folder(label, filePath, notify, cbl),
               log.log(`${filePath} template has downloaded!`);
           });
 
@@ -88,7 +88,7 @@ export const downloadTpl = (
 export const capitalizeWords = (str: string) =>
   str.replace(/\b\w/g, (char) => char.toUpperCase());
 
-function convertHTML2Folder(
+async function convertHTML2Folder(
   label: string,
   filePath: string,
   notify: Notification,
@@ -98,7 +98,7 @@ function convertHTML2Folder(
   const { boot } = TiddlyWiki();
   const labelHTMLDir = tempHTMLFolder(label);
   if (fs.existsSync(labelHTMLDir)) {
-    shell.trashItem(labelHTMLDir);
+    await shell.trashItem(labelHTMLDir);
   }
   fs.mkdirSync(labelHTMLDir);
 

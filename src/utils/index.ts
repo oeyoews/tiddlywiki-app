@@ -391,7 +391,10 @@ export async function importSingleFileWiki(
     }
     config.set('wikiPath', targetPath);
     // 避免启动大的wiki导致卡顿， 需要重启
-    await restartDialog(t('dialog.importSuccessMessage'));
+    await restartDialog(
+      t('dialog.importSuccessMessage'),
+      t('dialog.restartNow')
+    );
     // successImportNotify.show()
     // restartDialog("")
     // const wikiRes = await initWiki(targetPath);
@@ -489,12 +492,15 @@ export async function configureGitHub() {
   }
 }
 
-async function restartDialog(title = t('settings.settingChanged')) {
+async function restartDialog(
+  title = t('settings.settingChanged'),
+  message = t('settings.restartTips')
+) {
   const result = await dialog.showMessageBox({
     type: 'info',
     title,
     icon: getMenuIcon('about', 256),
-    message: t('settings.restartTips'),
+    message,
     buttons: [t('dialog.restartNow'), t('dialog.later')],
     defaultId: 0,
     cancelId: 1,

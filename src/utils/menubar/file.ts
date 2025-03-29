@@ -57,10 +57,10 @@ export const fileMenu = (
         }
         return {
           label: capitalizeWords(tpl[0]),
-          visible: tpl[0] !== 'tiddly-template', // 暂时隐藏tiddly-template
+          // visible: tpl[0] !== 'tiddly-template', // 暂时隐藏tiddly-template
           icon: getMenuIcon('html'),
-          click: () => {
-            downloadTpl(
+          click: async () => {
+            await downloadTpl(
               tpl,
               (templatePath: string) => {
                 importSingleFileWiki(templatePath, tpl[0] as any);
