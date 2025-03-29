@@ -34,7 +34,7 @@ export const registerContextMenu = (
       },
     },
     {
-      label: t('menu.searchText', { text: params.selectionText.slice(0, 20) }),
+      label: t('menu.searchText', { text: params.selectionText.slice(0, 35) }),
       icon: getMenuIcon('searchGoogle'),
       click: () => {
         shell.openExternal(
