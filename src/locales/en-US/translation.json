@@ -120,7 +120,7 @@
     "selectImportFolder": "Please Select The Folder To Save",
     "selectImportFolderMessage": "Please select a target folder to import the Wiki",
     "importSuccess": "Import Success",
-    "importSuccessMessage": "Single-file Wiki has been successfully imported to Node.js version",
+    "importSuccessMessage": "Single-file Wiki has been successfully imported !",
     "buildComplete": "Build Complete",
     "buildCompleteMessage": "Wiki build completed ({{size}}), preview in browser?",
     "preview": "Preview",

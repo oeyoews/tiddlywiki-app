@@ -70,7 +70,7 @@ function updateRecentWikis(wikiPath: string) {
     (path: string) => path !== wikiPath && path !== config.get('wikiPath')
   );
   filteredWikis.unshift(wikiPath);
-  config.set('recentWikis', filteredWikis.slice(0, 15));
+  config.set('recentWikis', filteredWikis.slice(0, 8));
 
   // 更新菜单
   server.menu = Menu.buildFromTemplate(createMenuTemplate());
@@ -100,10 +100,16 @@ export async function initWiki(
     win = _mainWindow;
     server.win = _mainWindow;
 
+    win.webContents.once('did-finish-load', () => {
+      // 获取页面标题并设置窗口标题
+      const pageTitle = win.webContents.getTitle();
+      win.setTitle(`${pageTitle} - ${wikiFolder}`);
+    });
+
     // 初始化notification
     importIngNotify = new Notification({
-      title: t('dialog.import'),
-      body: t('dialog.convertIng'),
+      title: t('dialog.convertIng'),
+      // body: t('dialog.convertIng'),
       icon: getAppIcon(256),
       silent: true,
       timeoutType: 'never',
@@ -199,17 +205,13 @@ export async function initWiki(
       if (!win) {
         log.error('mainwindow not founded on start server');
       }
-      log.info(`start begin: http://localhost:${server.currentPort}`);
       win.loadURL(`http://localhost:${port}`);
-      win.webContents.once('did-finish-load', () => {
-        // 获取页面标题并设置窗口标题
-        const pageTitle = win.webContents.getTitle();
-        win.setTitle(`${pageTitle} - ${wikiFolder}`);
-      });
     };
     server.currentServer = twBoot;
     if (!existingPort) {
-      twBoot.boot(startServer(server.currentPort));
+      log.log('starting, please wait a moment...');
+      twBoot.boot();
+      startServer(server.currentPort);
       log.info('start new server on', server.currentPort);
     } else {
       // 直接加载已存在的服务器
@@ -341,7 +343,7 @@ export async function importSingleFileWiki(
     }
 
     if (!htmlPath) {
-      log.info('create new wiki server template');
+      log.info('create new wiki');
       const result = await dialog.showOpenDialog({
         title: t('dialog.selectHtmlFile'),
         filters: [
@@ -368,40 +370,36 @@ export async function importSingleFileWiki(
 
     const targetPath = targetFolder.filePaths[0];
 
-    const templateDir = path.join(app.getPath('temp'), template as any);
     // 复制文件夹
-    if (template && templateDir) {
-      // copyFolder(templateDir, targetPath);
-      console.log('开始复制文件夹');
+    if (template) {
+      const templateDir = path.join(app.getPath('temp'), template as any);
+      log.info('begin copy file to', templateDir);
       await fs2.copy(templateDir, targetPath);
+      log.info('copy file done', templateDir);
     } else {
-      // 不使用 --init server, 直接写入标准版 server
-      fs.writeFileSync(targetPath, JSON.stringify(twinfo, null, 4), 'utf8');
+      // 手动转换
+      const { boot } = TiddlyWiki();
+      boot.argv = [
+        '--load',
+        htmlPath,
+        '--savewikifolder',
+        targetPath,
+        '--verbose',
+      ];
+      boot.boot();
+      log.log('import file successfully', htmlPath, boot.argv);
     }
-    // importIngNotify.show();
-
-    // boot.argv = [
-    //   '--load',
-    //   htmlPath,
-    //   '--savewikifolder',
-    //   targetPath,
-    //   '--verbose',
-    // ];
-    // await boot.boot(() => {
-    //   console.log(t('log.startImport'));
-    // });
-
     config.set('wikiPath', targetPath);
+    importIngNotify.show();
     const wikiRes = await initWiki(targetPath);
+    setTimeout(() => {
+      importIngNotify.close();
+    }, 800);
     if (wikiRes?.port) {
       server.currentPort = wikiRes.port;
     }
     setTimeout(() => {
-      // importIngNotify.close();
       successImportNotify.show();
-      setTimeout(() => {
-        successImportNotify.close();
-      }, 3000);
     }, 1000);
   } catch (err: any) {
     dialog.showErrorBox(
