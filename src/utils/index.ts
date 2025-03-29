@@ -97,6 +97,7 @@ export async function initWiki(
   _mainWindow?: BrowserWindow
 ) {
   log.info('begin initwiki');
+  // TODO: check wikifodler in admin
   if (_mainWindow && !win) {
     win = _mainWindow;
     server.win = _mainWindow;

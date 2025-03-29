@@ -8,6 +8,9 @@ import path from 'path';
 
 // NOTE: C:/program files 需要提权
 const DEFAULT_WIKI_DIR = path.join(app.getPath('desktop'), 'wiki'); // use app.getPath('desktop')
+// test
+// const DEFAULT_WIKI_DIR = path.resolve('wiki'); // use app.getPath('desktop')
+// C:\\Program Files
 
 const options = {
   defaults: {
