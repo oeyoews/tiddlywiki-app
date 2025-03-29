@@ -179,7 +179,7 @@ export async function initWiki(
       fs.writeFileSync(bootPath, JSON.stringify(twinfo, null, 4), 'utf8');
     }
 
-    createSymlink(
+    await createSymlink(
       path.join(wikiFolder, 'subwiki'),
       path.join(wikiFolder, 'tiddlers/subwiki')
     );
