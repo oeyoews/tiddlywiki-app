@@ -43,6 +43,7 @@ import {
 } from '@/utils/wiki/index';
 import { getFileSizeInMB } from './getFileSize';
 import { IWikiTemplate } from './wikiTemplates';
+import { createSymlink } from './subwiki';
 
 let wikiInstances: { [port: number]: string } = {}; // 用于记录 port: wikipath, 便于端口复用
 
@@ -177,6 +178,11 @@ export async function initWiki(
       // wiki目录存在但是 tiddlywiki.info 文件不存在, 直接写入tiddlywiki.info 文件
       fs.writeFileSync(bootPath, JSON.stringify(twinfo, null, 4), 'utf8');
     }
+
+    createSymlink(
+      path.join(wikiFolder, 'subwiki'),
+      path.join(wikiFolder, 'tiddlers/subwiki')
+    );
 
     if (fs.existsSync(bootPath)) {
       checkTWPlugins(bootPath);
