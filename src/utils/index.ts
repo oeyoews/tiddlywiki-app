@@ -41,6 +41,7 @@ import {
   updateOriginalPath,
 } from '@/utils/wiki/index';
 import { getFileSizeInMB } from './getFileSize';
+import { IWikiTemplate } from './wikiTemplates';
 
 let wikiInstances: { [port: number]: string } = {}; // 用于记录 port: wikipath, 便于端口复用
 
@@ -327,8 +328,11 @@ export async function switchLanguage(lang: string) {
   createTray(win, server);
 }
 
-export async function importSingleFileWiki(html?: string) {
-  const { boot } = TiddlyWiki();
+export async function importSingleFileWiki(
+  html?: string,
+  template?: IWikiTemplate
+) {
+  // const { boot } = TiddlyWiki();
   try {
     let htmlPath = html;
     if (html) {
@@ -363,18 +367,26 @@ export async function importSingleFileWiki(html?: string) {
 
     const targetPath = targetFolder.filePaths[0];
 
-    importIngNotify.show();
+    const templateDir = path.join(app.getPath('temp'), template as any);
+    // 复制文件夹
+    if (template && templateDir) {
+      copyFolder(templateDir, targetPath);
+    } else {
+      // 不使用 --init server, 直接写入标准版 server
+      fs.writeFileSync(targetPath, JSON.stringify(twinfo, null, 4), 'utf8');
+    }
+    // importIngNotify.show();
 
-    boot.argv = [
-      '--load',
-      htmlPath,
-      '--savewikifolder',
-      targetPath,
-      '--verbose',
-    ];
-    await boot.boot(() => {
-      console.log(t('log.startImport'));
-    });
+    // boot.argv = [
+    //   '--load',
+    //   htmlPath,
+    //   '--savewikifolder',
+    //   targetPath,
+    //   '--verbose',
+    // ];
+    // await boot.boot(() => {
+    //   console.log(t('log.startImport'));
+    // });
 
     config.set('wikiPath', targetPath);
     const wikiRes = await initWiki(targetPath);
@@ -382,7 +394,7 @@ export async function importSingleFileWiki(html?: string) {
       server.currentPort = wikiRes.port;
     }
     setTimeout(() => {
-      importIngNotify.close();
+      // importIngNotify.close();
       successImportNotify.show();
       setTimeout(() => {
         successImportNotify.close();
@@ -600,3 +612,20 @@ export async function toggleChineseLang(
     restartDialog();
   } catch (err) {}
 }
+
+const copyFolder = (src: string, dest: string) => {
+  if (!fs.existsSync(dest)) {
+    fs.mkdirSync(dest, { recursive: true });
+  }
+
+  fs.readdirSync(src).forEach((file) => {
+    const srcFile = path.join(src, file);
+    const destFile = path.join(dest, file);
+
+    if (fs.lstatSync(srcFile).isDirectory()) {
+      copyFolder(srcFile, destFile);
+    } else {
+      fs.copyFileSync(srcFile, destFile);
+    }
+  });
+};

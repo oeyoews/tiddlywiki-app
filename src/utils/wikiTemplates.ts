@@ -1,4 +1,6 @@
 // @version: 5.3.6
+
+// @version: 5.3.6
 export const wikiTemplates = {
   default: 'server',
   '-': '',
@@ -11,3 +13,5 @@ export const wikiTemplates = {
   'tiddly-template':
     'https://tiddly-gittly.github.io/Tiddlywiki-NodeJS-Github-Template/offline.html',
 };
+
+export type IWikiTemplate = Omit<typeof wikiTemplates, 'default' | '-'>;

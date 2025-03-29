@@ -1,9 +1,14 @@
+// @TODO: 缓存转换的文件夹, 使用模板的时候直接复制文件夹即可
 import { Notification, app, net } from 'electron';
 import path from 'path';
 import fs from 'fs';
+const { TiddlyWiki } = require('tiddlywiki');
+
 const tempDir = app.getPath('temp'); // 获取系统的临时目录
+const tempHTMLFolder = (template: string) => path.join(tempDir, template);
 
 import { log } from '@/utils/logger';
+import { shell } from 'electron';
 const cacheDuration = 24 * 60 * 60 * 1000; // 24小时
 
 export const downloadTpl = (
@@ -14,6 +19,7 @@ export const downloadTpl = (
   const content = tpl[1];
   const label = tpl[0];
   const filePath = path.join(tempDir, `${label}.html`);
+  const labelHTMLDir = tempHTMLFolder(label);
 
   // 检查文件是否存在且是否过期
   try {
@@ -25,7 +31,11 @@ export const downloadTpl = (
       // 如果文件在24小时内修改过，则直接复用缓存
       if (currentTime - lastModified < cacheDuration) {
         log.log(`${filePath} template is still valid, using cached version.`);
-        cbl(filePath);
+        if (!fs.existsSync(labelHTMLDir)) {
+          convertHTML2Folder(label, filePath, notify, cbl);
+        } else {
+          cbl(filePath);
+        }
         return;
       } else {
         log.log(`${filePath} template is outdated, downloading again.`);
@@ -52,11 +62,8 @@ export const downloadTpl = (
           writeStream.end();
 
           writeStream.on('finish', () => {
-            cbl(filePath);
-            log.log(`${filePath} template has downloaded!`);
-            setTimeout(() => {
-              notify.close();
-            }, 600);
+            convertHTML2Folder(label, filePath, notify, cbl),
+              log.log(`${filePath} template has downloaded!`);
           });
 
           writeStream.on('error', (error) => {
@@ -80,3 +87,34 @@ export const downloadTpl = (
 
 export const capitalizeWords = (str: string) =>
   str.replace(/\b\w/g, (char) => char.toUpperCase());
+
+function convertHTML2Folder(
+  label: string,
+  filePath: string,
+  notify: Notification,
+  cbl?: Function
+) {
+  // 转换文件夹
+  const { boot } = TiddlyWiki();
+  const labelHTMLDir = tempHTMLFolder(label);
+  if (fs.existsSync(labelHTMLDir)) {
+    shell.trashItem(labelHTMLDir);
+  }
+  fs.mkdirSync(labelHTMLDir);
+
+  boot.argv = [
+    '--load',
+    filePath,
+    '--savewikifolder',
+    labelHTMLDir,
+    '--verbose',
+  ];
+
+  boot.boot(() => {
+    log.info(label, 'convert successfully');
+    typeof cbl === 'function' && cbl(filePath);
+    setTimeout(() => {
+      notify.close();
+    }, 600);
+  });
+}
