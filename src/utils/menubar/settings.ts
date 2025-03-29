@@ -38,20 +38,9 @@ export const settingsMenu = (): MenuItemConstructorOptions => ({
       click: async (menuItem: MenuItem) => await toggleAutocorrect(menuItem),
     },
     {
-      label: t('menu.enableIcon'),
-      type: 'checkbox',
-      checked: config.get('icon'),
-      click: async (menuItem: MenuItem) => await toggleIcon(menuItem.checked),
-    },
-    {
-      label: t('menu.langCN'),
-      type: 'checkbox',
-      checked: config.get('lang-CN'),
-      click: (menuItem: MenuItem) => toggleChineseLang(menuItem.checked),
-    },
-    {
       label: t('menu.autoStart'),
       visible: process.platform === 'win32' || process.platform === 'darwin',
+      icon: getMenuIcon('power'),
       type: 'checkbox',
       checked: app.getLoginItemSettings().openAtLogin,
       click: () => {
@@ -103,6 +92,18 @@ export const settingsMenu = (): MenuItemConstructorOptions => ({
           click: () => switchLanguage('en-US'),
         },
       ],
+    },
+    {
+      label: t('menu.enableIcon'),
+      type: 'checkbox',
+      checked: config.get('icon'),
+      click: async (menuItem: MenuItem) => await toggleIcon(menuItem.checked),
+    },
+    {
+      label: t('menu.langCN'),
+      type: 'checkbox',
+      checked: config.get('lang-CN'),
+      click: (menuItem: MenuItem) => toggleChineseLang(menuItem.checked),
     },
   ],
 });

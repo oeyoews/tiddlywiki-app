@@ -56,7 +56,12 @@ type IMenuViewIcon =
   | 'read'
   | 'screens';
 
-type IMenuIconSetting = 'language' | 'autostart' | 'gitHub' | 'settings';
+type IMenuIconSetting =
+  | 'language'
+  | 'autostart'
+  | 'gitHub'
+  | 'settings'
+  | 'power';
 
 type IMenuHelpIcon =
   | 'about'
