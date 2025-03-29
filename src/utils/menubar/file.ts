@@ -151,6 +151,7 @@ export const fileMenu = (
       //   },
       // ],
     },
+    { type: 'separator' },
     {
       label: t('menu.buildWiki'),
       icon: getMenuIcon('build'),

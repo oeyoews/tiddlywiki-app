@@ -457,7 +457,7 @@ export async function buildWiki() {
           t('dialog.close'),
         ],
         defaultId: 0,
-        cancelId: 2,
+        cancelId: 3,
       });
 
       if (result.response === 0) {
