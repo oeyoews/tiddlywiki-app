@@ -107,7 +107,7 @@ function convertHTML2Folder(
     filePath,
     '--savewikifolder',
     labelHTMLDir,
-    '--verbose',
+    // '--verbose',
   ];
 
   boot.boot(() => {

@@ -219,7 +219,7 @@ app.on('open-url', (event: any, url: string) => {
 
 app.on('before-quit', () => {
   app.isQuitting = true;
-  log.info('tiddlywiki app exit');
+  log.info('tiddlywiki app before quit.');
 });
 
 // 启动应用

@@ -384,23 +384,26 @@ export async function importSingleFileWiki(
         htmlPath,
         '--savewikifolder',
         targetPath,
-        '--verbose',
+        // '--verbose',
       ];
       boot.boot();
       log.log('import file successfully', htmlPath, boot.argv);
     }
     config.set('wikiPath', targetPath);
-    importIngNotify.show();
-    const wikiRes = await initWiki(targetPath);
-    setTimeout(() => {
-      importIngNotify.close();
-    }, 800);
-    if (wikiRes?.port) {
-      server.currentPort = wikiRes.port;
-    }
-    setTimeout(() => {
-      successImportNotify.show();
-    }, 1000);
+    // 避免启动大的wiki导致卡顿， 需要重启
+    await restartDialog(t('dialog.importSuccessMessage'));
+    // successImportNotify.show()
+    // restartDialog("")
+    // const wikiRes = await initWiki(targetPath);
+    // setTimeout(() => {
+    //   importIngNotify.close();
+    // }, 800);
+    // if (wikiRes?.port) {
+    //   server.currentPort = wikiRes.port;
+    // }
+    // setTimeout(() => {
+    //   successImportNotify.show();
+    // }, 1000);
   } catch (err: any) {
     dialog.showErrorBox(
       t('dialog.error'),
@@ -486,10 +489,10 @@ export async function configureGitHub() {
   }
 }
 
-async function restartDialog() {
+async function restartDialog(title = t('settings.settingChanged')) {
   const result = await dialog.showMessageBox({
     type: 'info',
-    title: t('settings.settingChanged'),
+    title,
     icon: getMenuIcon('about', 256),
     message: t('settings.restartTips'),
     buttons: [t('dialog.restartNow'), t('dialog.later')],
