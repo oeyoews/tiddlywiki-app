@@ -25,7 +25,7 @@ export async function createSymlink(
     }
 
     // 创建软链接
-    await fs.ensureSymlink(targetPath, symlinkPath);
+    await fs.ensureSymlink(targetPath, symlinkPath, 'junction');
     log.info(
       `successfully create subwiki softlink: ${symlinkPath} -> ${targetPath}`
     );
