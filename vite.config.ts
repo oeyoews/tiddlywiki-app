@@ -25,7 +25,7 @@ export default defineConfig(({ command }) => {
             },
           },
           build: {
-            emptyOutDir: true, // 会把public 删除
+            // emptyOutDir: true, // build 时会把public 删除
             minify: isBuild,
             outDir: 'dist',
             rollupOptions: {

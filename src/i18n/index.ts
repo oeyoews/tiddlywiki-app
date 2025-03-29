@@ -10,8 +10,6 @@ const resources = {
 
 const defaultNS = 'translation';
 
-export default resources;
-
 const initI18n = async (config: any) => {
   await i18next.init({
     resources,

@@ -21,8 +21,8 @@ import { isEmptyDirectory } from '@/utils/checkEmptyDir';
 const WIKIINFOFILE = 'tiddlywiki.info';
 const DEFAULT_PORT = 8080;
 
-let importIngNotify: Notification;
-let successImportNotify: Notification;
+// let importIngNotify: Notification;
+// let successImportNotify: Notification;
 
 import packageInfo from '../../package.json';
 import saveToGitHub from '@/utils/github-saver';
@@ -108,19 +108,19 @@ export async function initWiki(
     });
 
     // 初始化notification
-    importIngNotify = new Notification({
-      title: t('dialog.convertIng'),
-      // body: t('dialog.convertIng'),
-      icon: getAppIcon(256),
-      silent: true,
-      timeoutType: 'never',
-    });
-    successImportNotify = new Notification({
-      title: t('dialog.importSuccess'),
-      body: t('dialog.importSuccessMessage'),
-      icon: getAppIcon(256),
-      silent: false,
-    });
+    // importIngNotify = new Notification({
+    //   title: t('dialog.convertIng'),
+    //   // body: t('dialog.convertIng'),
+    //   icon: getAppIcon(256),
+    //   silent: true,
+    //   timeoutType: 'never',
+    // });
+    // successImportNotify = new Notification({
+    //   title: t('dialog.importSuccess'),
+    //   body: t('dialog.importSuccessMessage'),
+    //   icon: getAppIcon(256),
+    //   silent: false,
+    // });
     server.downloadNotify = new Notification({
       title: t('dialog.templateDownloading'),
       icon: getAppIcon(256),

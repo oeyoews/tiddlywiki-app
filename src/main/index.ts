@@ -9,15 +9,11 @@ import {
   nativeTheme,
 } from 'electron';
 import path from 'path';
-import { initI18n } from '@/i18n/index';
 import { getAppIcon } from '@/utils/icon';
 
 import { createMenuTemplate, showWikiInfo, initWiki } from '@/utils/index';
 import { config } from '@/utils/config';
-import { registerContextMenu } from '@/utils/contextmenu';
 import { logInit, log } from '@/utils/logger';
-import { twDialog } from '@/utils/tw-dialog';
-import { createTray } from '@/utils/createTray';
 import { server } from '@/utils';
 import { autoUpdaterInit } from '@/utils/checkUpdate';
 
@@ -79,9 +75,12 @@ async function createWindow() {
       return { action: 'deny' };
     });
 
-    createTray(win, server); // 创建任务栏图标
-
-    win.webContents.on('context-menu', (event, params) => {
+    // createTray(win, server); // 创建任务栏图标
+    import('@/utils/createTray').then(({ createTray }) =>
+      createTray(win, server)
+    );
+    win.webContents.on('context-menu', async (event, params) => {
+      const { registerContextMenu } = await import('@/utils/contextmenu');
       registerContextMenu(params, win);
     });
   });
@@ -194,9 +193,12 @@ const initApp = async () => {
     } else {
       log.info('app language is', lang);
     }
-    initI18n(config);
     createWindow();
 
+    const { initI18n } = await import('@/i18n');
+    const { twDialog } = await import('@/utils/tw-dialog');
+
+    initI18n(config);
     twDialog(win);
 
     // 监听主题变化
