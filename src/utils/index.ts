@@ -1,4 +1,5 @@
 import fs from 'fs';
+import fs2 from 'fs-extra';
 import path from 'path';
 import {
   app,
@@ -370,7 +371,9 @@ export async function importSingleFileWiki(
     const templateDir = path.join(app.getPath('temp'), template as any);
     // 复制文件夹
     if (template && templateDir) {
-      copyFolder(templateDir, targetPath);
+      // copyFolder(templateDir, targetPath);
+      console.log('开始复制文件夹');
+      await fs2.copy(templateDir, targetPath);
     } else {
       // 不使用 --init server, 直接写入标准版 server
       fs.writeFileSync(targetPath, JSON.stringify(twinfo, null, 4), 'utf8');
@@ -612,20 +615,3 @@ export async function toggleChineseLang(
     restartDialog();
   } catch (err) {}
 }
-
-const copyFolder = (src: string, dest: string) => {
-  if (!fs.existsSync(dest)) {
-    fs.mkdirSync(dest, { recursive: true });
-  }
-
-  fs.readdirSync(src).forEach((file) => {
-    const srcFile = path.join(src, file);
-    const destFile = path.join(dest, file);
-
-    if (fs.lstatSync(srcFile).isDirectory()) {
-      copyFolder(srcFile, destFile);
-    } else {
-      fs.copyFileSync(srcFile, destFile);
-    }
-  });
-};
