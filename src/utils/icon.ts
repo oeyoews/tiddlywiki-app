@@ -2,23 +2,11 @@ import path from 'path';
 import { nativeImage, nativeTheme } from 'electron';
 import { config } from '@/utils/config';
 import { getPlatform } from '@/utils/getPlatform';
-
-process.env.APP_ROOT = path.join(__dirname, '../..');
-process.env.DIST = path.join(process.env.APP_ROOT, 'dist');
-
-process.env.VITE_PUBLIC = process.env.VITE_DEV_SERVER_URL
-  ? path.join(process.env.APP_ROOT, 'public')
-  : process.env.DIST;
-
-const iconPath = process.env.VITE_PUBLIC
-  ? 'assets/tray-icon.png'
-  : 'assets/tray-icon-dev.png';
-
-export const appIcon = path.join(process.env.VITE_PUBLIC, iconPath);
-const enableIcon = config.get('icon');
+import { processEnv } from '@/main';
 
 // **缓存对象**（key: `name-size`，value: `nativeImage`）
 const iconCache = new Map<string, Electron.NativeImage>();
+const enableIcon = config.get('icon');
 
 export const getMenuIcon = (name: IMenuIcon, size: number = 16) => {
   if (!enableIcon) return;
@@ -29,7 +17,7 @@ export const getMenuIcon = (name: IMenuIcon, size: number = 16) => {
   }
 
   const iconPath = path.join(
-    process.env.VITE_PUBLIC!,
+    processEnv.VITE_PUBLIC,
     'assets/menu',
     `${name}.png`
   );

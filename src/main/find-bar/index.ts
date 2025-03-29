@@ -3,6 +3,7 @@
 // patch: remove esc shortcut register for tiddlywiki
 import { app, BrowserWindow, ipcMain, globalShortcut } from 'electron';
 import path from 'path';
+import { processEnv } from '@/main';
 
 const isMac = process.platform === 'darwin';
 const BAR_WIDTH = 376;
@@ -137,13 +138,7 @@ export const setFindBar = (win, options) => {
       findBar = null;
     });
 
-    const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL;
-    process.env.APP_ROOT = path.join(__dirname, '../..');
-    process.env.DIST = path.join(process.env.APP_ROOT, 'dist');
-    process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL
-      ? path.join(process.env.APP_ROOT, 'public')
-      : process.env.DIST;
-    findBar.loadFile(path.join(process.env.VITE_PUBLIC, 'find.html'), {
+    findBar.loadFile(path.join(processEnv.VITE_PUBLIC, 'find.html'), {
       hash,
       search,
     });

@@ -161,19 +161,8 @@ export const fileMenu = (
       click: () => {
         app.relaunch();
         app.exit(0);
-
-        // const options: Electron.RelaunchOptions = { args: process.argv };
-        // if (process.env.APPIMAGE) {
-        //   options.execPath = process.env.APPIMAGE;
-        //   options.args = options.args ?? [];
-        //   options.args.unshift('--appimage-extract-and-run');
-        // }
-
-        // app.relaunch(options);
-        // app.quit();
       },
     },
-    // { type: 'separator' },
     {
       label: t('menu.exit'),
       icon: getMenuIcon('exit'),

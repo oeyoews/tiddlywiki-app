@@ -3,12 +3,12 @@ import { app, type MenuItemConstructorOptions, shell } from 'electron';
 import path from 'path';
 
 import { getFolderIcon, getMenuIcon } from '@/utils/icon';
-import { setFindBar } from '@/main/find-bar';
 import { server } from '@/utils';
 import { config } from '../config';
 let showFindBar: any;
 
 app.on('browser-window-created', async (_: any, win: any) => {
+  const { setFindBar } = await import('@/main/find-bar');
   showFindBar = setFindBar(win, { top: 55 });
 });
 

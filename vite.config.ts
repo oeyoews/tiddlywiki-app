@@ -29,6 +29,9 @@ export default defineConfig(({ command }) => {
             minify: isBuild,
             outDir: 'dist',
             rollupOptions: {
+              // output: {
+              //   manualChunks: undefined,
+              // },
               external: Object.keys(
                 'dependencies' in pkg ? pkg.dependencies : {}
               ),

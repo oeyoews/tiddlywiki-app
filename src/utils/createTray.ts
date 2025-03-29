@@ -28,7 +28,7 @@ export function createTray(
   const contextMenu = Menu.buildFromTemplate([
     {
       label: t('tray.showWindow'),
-      icon: getMenuIcon(platform),
+      icon: getMenuIcon(platform as any),
       click: () => {
         win.show();
       },

@@ -15,7 +15,6 @@ import { getAppIcon } from '@/utils/icon';
 import { createMenuTemplate, showWikiInfo, initWiki } from '@/utils/index';
 import { config } from '@/utils/config';
 import { registerContextMenu } from '@/utils/contextmenu';
-import { injectScript } from '@/utils/injectScript';
 import { logInit, log } from '@/utils/logger';
 import { twDialog } from '@/utils/tw-dialog';
 import { createTray } from '@/utils/createTray';
@@ -27,11 +26,17 @@ let wikiPath: string;
 
 // 环境变量配置
 const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL;
-process.env.APP_ROOT = path.join(__dirname, '../..');
+process.env.APP_ROOT = path.join(__dirname, '..');
+
 process.env.DIST = path.join(process.env.APP_ROOT, 'dist');
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL
   ? path.join(process.env.APP_ROOT, 'public')
   : process.env.DIST;
+
+export const processEnv = {
+  VITE_PUBLIC: process.env.VITE_PUBLIC,
+  VITE_DIST: process.env.DIST,
+};
 
 const preload = path.join(process.env.DIST, 'preload/index.js');
 
@@ -104,7 +109,10 @@ async function createWindow() {
   const isFirstTime = !config.get('wikiPath');
   await initWiki(wikiPath, isFirstTime, win);
 
-  win.webContents.on('did-finish-load', () => injectScript(win));
+  win.webContents.on('did-finish-load', async () => {
+    const { injectScript } = await import('@/utils/injectScript');
+    injectScript(win);
+  });
 
   const menu = Menu.buildFromTemplate(createMenuTemplate());
   Menu.setApplicationMenu(menu);

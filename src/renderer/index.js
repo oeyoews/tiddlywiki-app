@@ -123,9 +123,9 @@ if (window.$tw) {
     let oldText = $tw.wiki.getTiddlerText(twFilePathConfigTiddler);
     if (!oldText.includes(subwikiText)) {
       oldText = `${oldText}\n${subwikiText}`;
+      console.log(twFilePathConfigTiddler, 'updated');
+      // 更新tiddler
+      $tw.wiki.setText(twFilePathConfigTiddler, 'text', null, oldText);
     }
-    console.log(twFilePathConfigTiddler, 'updated');
-    // 更新tiddler
-    $tw.wiki.setText(twFilePathConfigTiddler, 'text', null, oldText);
   }
 }
