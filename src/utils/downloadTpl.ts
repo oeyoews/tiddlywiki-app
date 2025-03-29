@@ -9,7 +9,7 @@ const tempHTMLFolder = (template: string) => path.join(tempDir, template);
 
 import { log } from '@/utils/logger';
 import { shell } from 'electron';
-const cacheDuration = 24 * 60 * 60 * 1000; // 24小时
+const cacheDuration = 7 * 24 * 60 * 60 * 1000; // 24小时
 
 export const downloadTpl = (
   tpl: [content: string, label: string],
