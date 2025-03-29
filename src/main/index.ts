@@ -20,6 +20,8 @@ import { autoUpdaterInit } from '@/utils/checkUpdate';
 let win: BrowserWindow;
 let wikiPath: string;
 
+const startTime = performance.now(); // 记录启动时间
+
 // 环境变量配置
 const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL;
 process.env.APP_ROOT = path.join(__dirname, '..');
@@ -65,6 +67,13 @@ async function createWindow() {
   // win.setBackgroundMaterial('mica');
 
   win.once('ready-to-show', () => {
+    if (!app.isPackaged) {
+      console.log(
+        `Electron Main Process Startup Time(to show): ${(
+          performance.now() - startTime
+        ).toFixed(2)} ms`
+      );
+    }
     win.show();
     log.info('ready to show');
     autoUpdaterInit();
@@ -186,6 +195,13 @@ const initApp = async () => {
   log.info('WikiPath is', wikiPath);
 
   app.on('ready', async () => {
+    if (!app.isPackaged) {
+      console.log(
+        `Electron Main Process Startup Time(ready): ${(
+          performance.now() - startTime
+        ).toFixed(2)} ms`
+      );
+    }
     const lang = app.getSystemLocale();
     // 首次启动使用用户系统语言作为默认语言
     if (!config.get('language')) {
