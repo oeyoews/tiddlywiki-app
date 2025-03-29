@@ -19,6 +19,10 @@ module.exports = {
     'en-US': '&Help',
     'zh-CN': '帮助(&H)',
   },
+  subwiki: {
+    'en-US': 'Open subwiki',
+    'zh-CN': '打开子 Wiki',
+  },
   wikiTemplate: {
     'en-US': 'Create Wiki from Template',
     'zh-CN': '从模板创建维基',
@@ -105,15 +109,11 @@ module.exports = {
   },
   publish: {
     'en-US': 'Publish to GitHub',
-    'zh-CN': '发布到GitHub',
+    'zh-CN': '发布到 GitHub',
   },
   githubConfig: {
     'en-US': 'GitHub Settings',
     'zh-CN': 'GitHub 发布设置',
-  },
-  publishToGitHub: {
-    'en-US': 'Publish to GitHub',
-    'zh-CN': '发布到 GitHub',
   },
   autoStart: {
     'en-US': 'Auto Start',

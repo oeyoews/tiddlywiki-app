@@ -43,12 +43,14 @@ type IMenuIconFile =
   | 'help'
   | 'search'
   | 'searchGoogle'
+  | 'downloading'
   | 'release';
 
 type IContextIcon = 'copy' | 'save' | 'paste' | 'cut' | 'image' | 'menu';
 
 type IMenuViewIcon =
   | 'web'
+  | 'subwiki'
   | 'zoomIn'
   | 'zoomOut'
   | 'reset'

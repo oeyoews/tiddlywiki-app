@@ -13,7 +13,10 @@
 			"--render",
 			"$:/plugins/tiddlywiki/tiddlyweb/save/offline",
 			"index.html",
-			"text/plain"
+			"text/plain",
+			"",
+			"publishFilter",
+			"-[tag[private]] -[is[draft]]"
 		]
 	},
 	"languages": [],

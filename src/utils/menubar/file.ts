@@ -144,13 +144,8 @@ export const fileMenu = (
       label: t('menu.publish'),
       icon: getMenuIcon('release'),
       click: releaseWiki,
-      // submenu: [
-      //   {
-      //     label: t('menu.publishToGitHub'),
-      //     click: deps.releaseWiki,
-      //   },
-      // ],
     },
+    { type: 'separator' },
     {
       label: t('menu.buildWiki'),
       icon: getMenuIcon('build'),

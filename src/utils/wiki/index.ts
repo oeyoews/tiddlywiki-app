@@ -54,8 +54,13 @@ export function checkBuildInfo(wikiPath: string) {
       ...twInfo.build,
       index: buildIndexHTMLArgs,
     };
-    fs.writeFileSync(bootPath, JSON.stringify(twInfo, null, 4), 'utf8');
+  } else {
+    if (twInfo.build.index.length !== 7) {
+      twInfo.build.index = buildIndexHTMLArgs;
+      log.info('update', bootPath, 'to support ignore subwiki on build');
+    }
   }
+  fs.writeFileSync(bootPath, JSON.stringify(twInfo, null, 4), 'utf8');
 }
 
 export function checkThemes(infoPath: string) {

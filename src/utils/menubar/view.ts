@@ -1,5 +1,6 @@
 import { t } from '@/i18n/index';
 import { app, type MenuItemConstructorOptions, shell } from 'electron';
+import path from 'path';
 
 import { getFolderIcon, getMenuIcon } from '@/utils/icon';
 import { setFindBar } from '@/main/find-bar';
@@ -87,6 +88,14 @@ export const viewMenu = (): MenuItemConstructorOptions => ({
       accelerator: 'CmdOrCtrl+E',
       click: () => {
         shell.openPath(config.get('wikiPath'));
+      },
+    },
+    {
+      label: t('menu.subwiki'),
+      accelerator: 'CmdOrCtrl+Shift+E',
+      icon: getMenuIcon('subwiki'),
+      click: () => {
+        shell.openPath(path.join(config.get('wikiPath'), 'subwiki'));
       },
     },
   ],

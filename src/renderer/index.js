@@ -28,35 +28,35 @@ const extFile = {
   'image/png': '.png',
 };
 
-function getTiddlerTitle(data) {
-  const el = document.elementFromPoint(data.x, data.y);
-  const attr = 'data-tiddler-title';
-  const titleEl = el?.closest(`[${attr}]`);
-  let title = titleEl?.getAttribute(attr) || null; // 获取属性值，若不存在则返回 null
-  let newTitle = title;
-  if ($tw.wiki.tiddlerExists(title)) {
-    const { type } = $tw.wiki.getTiddler(title).fields;
-    if (title.startsWith('$')) {
-      console.log('replace $:? --> $__', title, type);
-      newTitle = title.replace(/^\$:\//, '$__');
-    }
-    // if (!extFile[type]) return;
-
-    const tiddlersPath = $tw.wiki.getTiddlerData(
-      '$:/config/OriginalTiddlerPaths'
-    );
-    let lastTitle = `${newTitle}${extFile[type] || '.tid'}`;
-    if (lastTitle.endsWith('.png.png')) {
-      lastTitle = lastTitle.slice(0, -4);
-    }
-    return {
-      title: lastTitle,
-      maybeTitle: tiddlersPath[title],
-    };
-  }
-}
-
 if (window.$tw) {
+  function getTiddlerTitle(data) {
+    const el = document.elementFromPoint(data.x, data.y);
+    const attr = 'data-tiddler-title';
+    const titleEl = el?.closest(`[${attr}]`);
+    let title = titleEl?.getAttribute(attr) || null; // 获取属性值，若不存在则返回 null
+    let newTitle = title;
+    if ($tw.wiki.tiddlerExists(title)) {
+      const { type } = $tw.wiki.getTiddler(title).fields;
+      if (title.startsWith('$')) {
+        console.log('replace $:? --> $__', title, type);
+        newTitle = title.replace(/^\$:\//, '$__');
+      }
+      // if (!extFile[type]) return;
+
+      const tiddlersPath = $tw.wiki.getTiddlerData(
+        '$:/config/OriginalTiddlerPaths'
+      );
+      let lastTitle = `${newTitle}${extFile[type] || '.tid'}`;
+      if (lastTitle.endsWith('.png.png')) {
+        lastTitle = lastTitle.slice(0, -4);
+      }
+      return {
+        title: lastTitle,
+        maybeTitle: tiddlersPath[title],
+      };
+    }
+  }
+
   let getText = null; // 手动清空
   getText = (title) => {
     return $tw.wiki.getTiddlerText(title);
@@ -107,5 +107,25 @@ if (window.$tw) {
     $tw.wiki.setText(sidebarLayoutTiddler, 'text', null, sidebarLayout, {
       suppressTimestamp: true,
     });
+  }
+
+  // support subwiki
+  const twFilePathConfigTiddler = '$:/config/FileSystemPaths';
+  const subwikiText = '[tag[private]addprefix[subwiki/]]';
+  if (
+    !$tw.wiki.tiddlerExists(twFilePathConfigTiddler) ||
+    !$tw.wiki.getTiddlerText(twFilePathConfigTiddler)
+  ) {
+    // 直接写入
+    $tw.wiki.setText(twFilePathConfigTiddler, 'text', null, subwikiText);
+    console.log(twFilePathConfigTiddler, 'not exist');
+  } else {
+    let oldText = $tw.wiki.getTiddlerText(twFilePathConfigTiddler);
+    if (!oldText.includes(subwikiText)) {
+      oldText = `${oldText}\n${subwikiText}`;
+    }
+    console.log(twFilePathConfigTiddler, 'updated');
+    // 更新tiddler
+    $tw.wiki.setText(twFilePathConfigTiddler, 'text', null, oldText);
   }
 }

@@ -44,6 +44,8 @@ async function saveToGitHub({
 
   if (!owner || !repo || !GITHUB_TOKEN) {
     log.info('GitHub config is not correct');
+    // 跳转 config tiddler
+    win.webContents.send('config-github');
     return;
   }
 
