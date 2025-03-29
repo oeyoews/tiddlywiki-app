@@ -20,24 +20,24 @@ module.exports = {
     'zh-CN': '帮助(&H)',
   },
   wikiTemplate: {
-    'en-US': 'Create a Wiki Using Templates',
-    'zh-CN': '使用模板创建Wiki',
+    'en-US': 'Create Wiki from Template',
+    'zh-CN': '从模板创建维基',
   },
   minimize: {
     'en-US': 'Minimize Window',
     'zh-CN': '最小化窗口',
   },
   openTid: {
-    'en-US': 'Open Tiddler In Folder',
-    'zh-CN': '在文件夹中打开文件',
+    'en-US': 'Open in File Explorer',
+    'zh-CN': '在资源管理器中显示',
   },
   searchText: {
-    'en-US': 'Search Google for "{{text}}"',
-    'zh-CN': '搜索 "{{text}}"',
+    'en-US': 'Search Text "{{text}}"',
+    'zh-CN': '搜索文本"{{text}}"',
   },
   enableBeta: {
-    'en-US': 'Use Beta Channel For Updates',
-    'zh-CN': '体验内测版本',
+    'en-US': 'Enable Beta Releases',
+    'zh-CN': '启用测试版更新',
   },
   search: {
     'en-US': 'Search',
@@ -48,7 +48,7 @@ module.exports = {
     'zh-CN': '显示菜单图标',
   },
   autocorrect: {
-    'en-US': 'Autocorrect',
+    'en-US': 'Text Format Optimization',
     'zh-CN': '文本格式优化',
   },
   twdocs: {
@@ -64,12 +64,12 @@ module.exports = {
     'zh-CN': '重新加载',
   },
   showLogs: {
-    'en-US': 'Show logs on Explorer',
-    'zh-CN': '打开日志文件夹',
+    'en-US': 'Open Application Logs',
+    'zh-CN': '打开日志目录',
   },
   forceReload: {
-    'en-US': 'Force Reload',
-    'zh-CN': '强制重新加载',
+    'en-US': 'Force Refresh',
+    'zh-CN': '强制刷新',
   },
   resetZoom: {
     'en-US': 'Reset Zoom',
@@ -77,39 +77,39 @@ module.exports = {
   },
   zoomIn: {
     'en-US': 'Zoom In',
-    'zh-CN': '放大',
+    'zh-CN': '放大视图',
   },
   zoomOut: {
     'en-US': 'Zoom Out',
-    'zh-CN': '缩小',
+    'zh-CN': '缩小视图',
   },
   copyImage: {
-    'en-US': 'Copy image',
-    'zh-CN': '复制图片',
+    'en-US': 'Copy Image to Clipboard',
+    'zh-CN': '复制图片到剪贴板',
   },
   saveImageAs: {
     'en-US': 'Save Image As...',
     'zh-CN': '图片另存为...',
   },
   checkUpdate: {
-    'en-US': 'Check for Updates',
-    'zh-CN': '检查更新',
+    'en-US': 'Check For Updates',
+    'zh-CN': '检查软件更新',
   },
   langCN: {
-    'en-US': 'Enable TiddlyWiki Chinese Language',
-    'zh-CN': '启用 TiddlyWiki 中文语言',
+    'en-US': 'Enable Chinese Interface',
+    'zh-CN': '启用中文界面',
   },
   markdown: {
     'en-US': 'Enable Markdown',
-    'zh-CN': '启用 Markdown',
+    'zh-CN': '启用 Markdown 支持',
   },
   publish: {
-    'en-US': 'Publish',
-    'zh-CN': '发布',
+    'en-US': 'Publish to GitHub',
+    'zh-CN': '发布到GitHub',
   },
   githubConfig: {
     'en-US': 'GitHub Settings',
-    'zh-CN': 'GitHub 设置',
+    'zh-CN': 'GitHub 发布设置',
   },
   publishToGitHub: {
     'en-US': 'Publish to GitHub',
@@ -133,11 +133,11 @@ module.exports = {
   },
   importWiki: {
     'en-US': 'Import Single-file Wiki',
-    'zh-CN': '导入单文件 Wiki',
+    'zh-CN': '导入单文件维基',
   },
   toggleTitleBar: {
     'en-US': 'Toggle Title Bar',
-    'zh-CN': '切换标题栏',
+    'zh-CN': '切换窗口标题栏',
   },
   restart: {
     'en-US': 'Restart App',
@@ -145,18 +145,18 @@ module.exports = {
   },
   toggleMenuBar: {
     'en-US': 'Toggle Menu Bar',
-    'zh-CN': '显示/隐藏菜单栏',
+    'zh-CN': '切换菜单栏',
   },
   buildWiki: {
-    'en-US': 'Build Wiki',
-    'zh-CN': '构建 Wiki',
+    'en-US': 'Export as Single File',
+    'zh-CN': '导出HTML文件',
   },
   openInBrowser: {
     'en-US': 'Open in Browser',
     'zh-CN': '在浏览器中打开',
   },
   openFolder: {
-    'en-US': 'Open Wiki Folder',
+    'en-US': 'Open Current Wiki Folder',
     'zh-CN': '打开当前 Wiki 文件夹',
   },
   exit: {
@@ -164,12 +164,12 @@ module.exports = {
     'zh-CN': '退出',
   },
   devTools: {
-    'en-US': 'Open DevTools',
-    'zh-CN': '打开开发者工具',
+    'en-US': 'Developer Tools',
+    'zh-CN': '开发者工具',
   },
   toggleFullscreen: {
-    'en-US': 'Toggle Fullscreen',
-    'zh-CN': '切换全屏',
+    'en-US': 'Toggle Full Screen',
+    'zh-CN': '切换全屏模式',
   },
   copy: {
     'en-US': 'Copy',
@@ -187,24 +187,20 @@ module.exports = {
     'en-US': 'Select All',
     'zh-CN': '全选',
   },
-  reload: {
-    'en-US': 'Reload',
-    'zh-CN': '刷新',
-  },
   about: {
     'en-US': 'About',
     'zh-CN': '关于',
   },
   reportIssue: {
-    'en-US': 'Report Issue',
-    'zh-CN': '报告问题',
+    'en-US': 'Submit Feedback',
+    'zh-CN': '反馈问题',
   },
   recentWikis: {
-    'en-US': 'Recent Wikis',
+    'en-US': 'Recently Opened Wikis',
     'zh-CN': '最近打开的 Wiki',
   },
   clearRecentWikis: {
-    'en-US': 'Clear Recent List',
-    'zh-CN': '清除最近记录',
+    'en-US': 'Clear Recent History',
+    'zh-CN': '清空最近历史',
   },
 };

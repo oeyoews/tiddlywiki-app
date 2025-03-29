@@ -1,11 +1,11 @@
 module.exports = {
   name: {
     'en-US': 'TiddlyWiki App',
-    'zh-CN': 'TiddlyWiki App',
+    'zh-CN': 'TiddlyWiki 应用',
   },
   about: {
     'en-US': 'About Wiki',
-    'zh-CN': '关于 Wiki',
+    'zh-CN': '关于维基',
   },
   version: {
     'en-US': 'Version',
@@ -13,18 +13,18 @@ module.exports = {
   },
   configPath: {
     'en-US': 'Config Path',
-    'zh-CN': '配置文件路径',
+    'zh-CN': '配置路径',
   },
   currentWikiPath: {
     'en-US': 'Current Wiki Path',
-    'zh-CN': '当前 Wiki 路径',
+    'zh-CN': '当前维基路径',
   },
   runningPort: {
     'en-US': 'Running Port',
-    'zh-CN': '运行端口',
+    'zh-CN': '当前端口',
   },
   notRunning: {
     'en-US': 'Not Running',
-    'zh-CN': '未启动',
+    'zh-CN': '未运行',
   },
 };
