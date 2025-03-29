@@ -3,9 +3,11 @@
 // const { Conf: Config } = require('electron-conf');
 const { Conf } = require('electron-conf');
 
+import { app } from 'electron';
 import path from 'path';
 
-const DEFAULT_WIKI_DIR = path.resolve('wiki'); // use app.getPath('desktop')
+// NOTE: C:/program files 需要提权
+const DEFAULT_WIKI_DIR = path.join(app.getPath('desktop'), 'wiki'); // use app.getPath('desktop')
 
 const options = {
   defaults: {
