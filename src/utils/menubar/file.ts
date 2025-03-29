@@ -63,7 +63,7 @@ export const fileMenu = (
             downloadTpl(
               tpl,
               (templatePath: string) => {
-                importSingleFileWiki(templatePath);
+                importSingleFileWiki(templatePath, tpl[0] as any);
               },
               server.downloadNotify
             );

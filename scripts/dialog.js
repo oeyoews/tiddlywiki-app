@@ -197,7 +197,7 @@ module.exports = {
   },
   convertIng: {
     'en-US': 'HTML File is converting ...',
-    'zh-CN': '文件导入处理中...',
+    'zh-CN': '文件正在处理中...',
   },
   selectImportFolder: {
     'en-US': 'Please Select The Folder To Save',
@@ -212,9 +212,8 @@ module.exports = {
     'zh-CN': '导入成功',
   },
   importSuccessMessage: {
-    'en-US':
-      'Single-file Wiki has been successfully imported to Node.js version',
-    'zh-CN': '单文件 Wiki 已成功导入到 Node.js 版本',
+    'en-US': 'Single-file Wiki has been successfully imported !',
+    'zh-CN': '单文件 Wiki 导入成功',
   },
   buildComplete: {
     'en-US': 'Build Complete',
