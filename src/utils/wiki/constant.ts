@@ -12,6 +12,9 @@ export const buildIndexHTMLArgs = [
   '$:/plugins/tiddlywiki/tiddlyweb/save/offline',
   'index.html',
   'text/plain',
+  '',
+  'publishFilter',
+  '-[tag[private]] -[is[draft]]',
 ];
 
 export const defaultPlugins = [
