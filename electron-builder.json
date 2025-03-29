@@ -54,7 +54,9 @@
     "allowElevation": true,
     "perMachine": false,
     "allowToChangeInstallationDirectory": true,
-    "deleteAppDataOnUninstall": false
+    "deleteAppDataOnUninstall": false,
+    "displayLanguageSelector": false,
+    "shortcutName": "TiddlyWiki5"
   },
   "publish": {
     "provider": "github",
