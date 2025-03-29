@@ -70,7 +70,7 @@ function updateRecentWikis(wikiPath: string) {
     (path: string) => path !== wikiPath && path !== config.get('wikiPath')
   );
   filteredWikis.unshift(wikiPath);
-  config.set('recentWikis', filteredWikis.slice(0, 8));
+  config.set('recentWikis', filteredWikis.slice(0, 15));
 
   // 更新菜单
   server.menu = Menu.buildFromTemplate(createMenuTemplate());
