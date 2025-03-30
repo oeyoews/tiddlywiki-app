@@ -6,6 +6,7 @@ import {
   MenuItem,
   Tray,
   dialog,
+  BrowserWindow,
 } from 'electron';
 import fs from 'fs';
 
@@ -26,7 +27,7 @@ export const createMenubar = (
     menu: Menu;
     tray: Tray;
     currentServer: null;
-    win: null;
+    win: BrowserWindow;
   }
 ) => {
   return function () {

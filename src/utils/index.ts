@@ -55,7 +55,7 @@ export const server = {
   currentServer: null,
   menu: {} as Menu,
   tray: null as any as Tray,
-  win: {} as BrowserWindow,
+  win: null as any as BrowserWindow,
   downloadNotify: {} as Notification,
 };
 

@@ -28,9 +28,8 @@ export function showInputBox(
           spellcheck: false,
         },
       });
+      inputWin.loadFile(path.join(processEnv.VITE_PUBLIC, 'input.html'));
     }
-
-    inputWin.loadFile(path.join(processEnv.VITE_PUBLIC, 'input.html'));
 
     inputWin.webContents.on('did-finish-load', () => {
       inputWin?.webContents.send('set-title', message);
