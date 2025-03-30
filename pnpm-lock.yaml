@@ -39,9 +39,6 @@ importers:
       '@playwright/test':
         specifier: ^1.51.1
         version: 1.51.1
-      '@types/node':
-        specifier: ^22.13.14
-        version: 22.13.14
       electron:
         specifier: ^35.0.3
         version: 35.0.3
