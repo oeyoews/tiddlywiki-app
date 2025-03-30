@@ -24,8 +24,8 @@
     "dist",
     "LICENSE"
   ],
-  "artifactName": "${productName}_${version}.${ext}",
   "mac": {
+    "artifactName": "${productName}_${version}-${arch}.${ext}",
     "target": [
       {
         "target": "dmg",
@@ -37,6 +37,7 @@
     ]
   },
   "linux": {
+    "artifactName": "${productName}_${version}.${ext}",
     "target": [
       "AppImage",
       "deb"
@@ -45,6 +46,7 @@
     "category": "Utility"
   },
   "win": {
+    "artifactName": "${productName}_${version}.${ext}",
     "target": [
       "nsis"
     ]
