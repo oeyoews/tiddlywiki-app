@@ -6,3 +6,4 @@ builder*.yaml
 /wiki
 /dist/
 test-results/
+/.VSCodeCounter

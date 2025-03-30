@@ -15,8 +15,8 @@ export default defineConfig(({ command }) => {
       electron({
         entry: {
           'main/index': 'src/main/index.ts',
-          'preload/index': 'src/preload/index.js',
-          'renderer/index': 'src/renderer/index.js',
+          'preload/index': 'src/preload/index.ts',
+          'renderer/index': 'src/renderer/index.ts',
         },
         vite: {
           resolve: {
