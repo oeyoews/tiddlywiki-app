@@ -24,37 +24,27 @@
     "dist",
     "LICENSE"
   ],
-  "artifactName": "${productName}_${version}.${ext}",
+  "artifactName": "${productName}_${version}-${arch}.${ext}",
   "mac": {
     "target": [
       {
         "target": "dmg",
         "arch": [
-          "universal"
+          "x64"
         ]
       },
       {
-        "target": "pkg",
+        "target": "dmg",
         "arch": [
-          "universal"
+          "arm64"
         ]
       }
     ]
   },
   "linux": {
     "target": [
-      {
-        "target": "AppImage",
-        "arch": "x64"
-      },
-      {
-        "target": "deb",
-        "arch": "x64"
-      },
-      {
-        "target": "deb",
-        "arch": "arm64"
-      }
+      "AppImage",
+      "deb"
     ],
     "maintainer": "oeyoews",
     "category": "Utility"
