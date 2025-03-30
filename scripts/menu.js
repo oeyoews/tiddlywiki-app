@@ -147,6 +147,10 @@ module.exports = {
     'en-US': 'Toggle Menu Bar',
     'zh-CN': '切换菜单栏',
   },
+  importMarkdown: {
+    'en-US': 'Import Markdown files',
+    'zh-CN': '导入 Markdown 文件',
+  },
   buildWikiWithPassWord: {
     'en-US': 'Export as Single File With Password',
     'zh-CN': '导出加密HTML文件',

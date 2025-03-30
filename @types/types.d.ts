@@ -22,6 +22,7 @@ type IMenuIconFile =
   | 'trash'
   | 'error'
   | 'lock'
+  | 'import'
   | 'minimize'
   | 'tw-light'
   | 'tw-dark'
