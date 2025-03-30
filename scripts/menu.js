@@ -148,7 +148,7 @@ module.exports = {
     'zh-CN': '切换菜单栏',
   },
   importMarkdown: {
-    'en-US': 'Import Markdown files',
+    'en-US': 'Import Markdown Files',
     'zh-CN': '导入 Markdown 文件',
   },
   buildWikiWithPassWord: {
