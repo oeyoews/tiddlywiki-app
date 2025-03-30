@@ -25,6 +25,7 @@ export const helpMenu = (): MenuItemConstructorOptions => ({
           server.win,
           t('dialog.inputPassword')
         );
+        console.log(result, 'result');
         if (!result) return;
         dialog.showMessageBox({
           title: result as string,
