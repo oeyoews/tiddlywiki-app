@@ -1,12 +1,13 @@
-import { i18next, t } from '@/i18n';
-import { shell, app, MenuItemConstructorOptions } from 'electron';
+import { shell, app, MenuItemConstructorOptions, dialog } from 'electron';
 import { getMenuIcon } from '@/utils/icon';
 import { checkForUpdates } from '@/utils/checkUpdate';
 import { showWikiInfo, server } from '@/utils';
+import { showInputBox } from '@/modules/showInputBox';
+import { i18next, t } from '@/i18n';
 
 const { autoUpdater } = require('electron-updater');
 
-// 需要等到t 初始化
+// 需要等到 t 初始化
 export const helpMenu = (): MenuItemConstructorOptions => ({
   label: t('menu.help'),
   id: 'Help',
@@ -14,7 +15,14 @@ export const helpMenu = (): MenuItemConstructorOptions => ({
     {
       label: t('menu.devTools'),
       accelerator: 'CmdOrCtrl+Shift+I',
-      click: () => server.win.webContents.openDevTools({ mode: 'right' }),
+      // click: () => server.win.webContents.openDevTools({ mode: 'right' }),
+      click: async () => {
+        const result = await showInputBox(server.win, '请输入你的名称:');
+        dialog.showMessageBox({
+          title: JSON.stringify(result),
+          message: 'dmeo',
+        });
+      },
       icon: getMenuIcon('console'),
     },
     {

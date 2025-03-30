@@ -16,6 +16,7 @@ import { config } from '@/utils/config';
 import { logInit, log } from '@/utils/logger';
 import { server } from '@/utils';
 import { autoUpdaterInit } from '@/utils/checkUpdate';
+import { showInputBox } from '@/modules/showInputBox';
 
 let win: BrowserWindow;
 let wikiPath: string;
@@ -125,6 +126,12 @@ async function createWindow() {
   const menu = Menu.buildFromTemplate(createMenuTemplate());
   Menu.setApplicationMenu(menu);
 }
+
+// 监听渲染进程请求并调用 `showInputBox`
+ipcMain.handle('show-input-box', async (event) => {
+  const result = await showInputBox(win, '请输入你的名称:');
+  return result;
+});
 
 ipcMain.handle('update-gh-config', async (event: any, githubConfig: any) => {
   config.set('github', githubConfig);

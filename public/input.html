@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+	<meta charset="UTF-8">
+	<title>输入框</title>
+</head>
+
+<body>
+	<h2 id="message">请输入内容</h2>
+	<input type="text" id="inputField">
+	<button id="submit">确认</button>
+
+	<script>
+		const { ipcRenderer } = require('electron');
+
+		ipcRenderer.on('set-message', (event, message) => {
+			document.getElementById('message').innerText = message;
+		});
+
+		document.getElementById('submit').addEventListener('click', () => {
+			const value = document.getElementById('inputField').value;
+			ipcRenderer.send('input-value', value);
+		});
+	</script>
+</body>
+
+</html>
