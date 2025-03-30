@@ -431,7 +431,6 @@ export async function buildWiki(password?: string) {
 
     const { boot } = TiddlyWiki();
     boot.argv = wikiBuildArgs(wikiPath, password);
-    console.log(boot.argv);
 
     // 更新进度条
     win.setProgressBar(0.4);
