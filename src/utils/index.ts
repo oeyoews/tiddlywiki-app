@@ -422,7 +422,7 @@ export async function importSingleFileWiki(
   }
 }
 
-export async function buildWiki() {
+export async function buildWiki(password?: string) {
   try {
     const wikiPath = config.get('wikiPath');
     checkBuildInfo(wikiPath);
@@ -430,7 +430,8 @@ export async function buildWiki() {
     win.setProgressBar(0.1);
 
     const { boot } = TiddlyWiki();
-    boot.argv = wikiBuildArgs(wikiPath);
+    boot.argv = wikiBuildArgs(wikiPath, password);
+    console.log(boot.argv);
 
     // 更新进度条
     win.setProgressBar(0.4);

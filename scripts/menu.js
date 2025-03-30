@@ -147,6 +147,10 @@ module.exports = {
     'en-US': 'Toggle Menu Bar',
     'zh-CN': '切换菜单栏',
   },
+  buildWikiWithPassWord: {
+    'en-US': 'Export as Single File With Password',
+    'zh-CN': '导出加密HTML文件',
+  },
   buildWiki: {
     'en-US': 'Export as Single File',
     'zh-CN': '导出HTML文件',

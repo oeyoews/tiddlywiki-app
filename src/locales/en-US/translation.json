@@ -37,6 +37,7 @@
     "toggleTitleBar": "Toggle Title Bar",
     "restart": "Restart App",
     "toggleMenuBar": "Toggle Menu Bar",
+    "buildWikiWithPassWord": "Export as Single File With Password",
     "buildWiki": "Export as Single File",
     "openInBrowser": "Open in Browser",
     "openFolder": "Open Current Wiki Folder",

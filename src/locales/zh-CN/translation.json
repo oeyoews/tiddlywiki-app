@@ -37,6 +37,7 @@
     "toggleTitleBar": "切换窗口标题栏",
     "restart": "重启应用",
     "toggleMenuBar": "切换菜单栏",
+    "buildWikiWithPassWord": "导出加密HTML文件",
     "buildWiki": "导出HTML文件",
     "openInBrowser": "在浏览器中打开",
     "openFolder": "打开当前 Wiki 文件夹",

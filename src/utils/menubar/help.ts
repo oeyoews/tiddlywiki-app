@@ -1,8 +1,7 @@
-import { shell, app, MenuItemConstructorOptions, dialog } from 'electron';
+import { shell, app, MenuItemConstructorOptions } from 'electron';
 import { getMenuIcon } from '@/utils/icon';
 import { checkForUpdates } from '@/utils/checkUpdate';
 import { showWikiInfo, server } from '@/utils';
-import { showInputBox } from '@/modules/showInputBox';
 import { i18next, t } from '@/i18n';
 
 const { autoUpdater } = require('electron-updater');
@@ -16,22 +15,6 @@ export const helpMenu = (): MenuItemConstructorOptions => ({
       label: t('menu.devTools'),
       accelerator: 'CmdOrCtrl+Shift+I',
       click: () => server.win.webContents.openDevTools({ mode: 'right' }),
-      icon: getMenuIcon('console'),
-    },
-    {
-      label: t('menu.devTools'),
-      click: async () => {
-        const result = await showInputBox(
-          server.win,
-          t('dialog.inputPassword')
-        );
-        console.log(result, 'result');
-        if (!result) return;
-        dialog.showMessageBox({
-          title: result as string,
-          message: result as string,
-        });
-      },
       icon: getMenuIcon('console'),
     },
     {
