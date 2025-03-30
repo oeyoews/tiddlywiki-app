@@ -28,7 +28,9 @@
   "mac": {
     "target": [
       "dmg",
-      "zip"
+      "zip",
+      "pkg",
+      "mas"
     ]
   },
   "linux": {
