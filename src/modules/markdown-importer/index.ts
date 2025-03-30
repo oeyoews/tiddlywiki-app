@@ -16,6 +16,7 @@ type MarkdownFile = {
   title: string;
   text: string;
   modified: string;
+  created: string; // 添加创建时间字段
   tags?: string[];
 } & FlattenObject;
 
@@ -40,14 +41,20 @@ async function readMarkdownFolder(
       if (entry.isFile() && entry.name.endsWith('.md')) {
         const text = fs.readFileSync(fullPath, 'utf-8');
         const { data: fields, content: body } = matter(text);
+        const stats = fs.statSync(fullPath);
 
-        const modified = (new Date(fs.statSync(fullPath).mtime) || new Date())
+        const modified = (new Date(stats.mtime) || new Date())
+          .toISOString()
+          .replace(/\D/g, '');
+
+        const created = (new Date(stats.birthtime) || new Date())
           .toISOString()
           .replace(/\D/g, '');
 
         const mdFile: MarkdownFile = {
           title: entry.name.slice(0, -3),
           text: body,
+          created,
           ...fields,
           modified,
         };
