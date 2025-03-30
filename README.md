@@ -1,81 +1,83 @@
 # TiddlyWiki App 🌟
 
+[简体中文](./README.zh-CN.md)
+
 ![img](./banner04.png)
 ![img](./banner03.png)
 
-一个 TiddlyWiki 桌面应用，提供更加丝滑的桌面端使用体验。
+A TiddlyWiki desktop application that provides a smoother desktop experience.
 
-## ✨ 功能特点
+## ✨ Features
 
-- 🔧 系统托盘支持，最小化到托盘
-- 📂 支持模板导入, 单文件导入
-- 📂 支持 Markdown 批量导入
-- 🔒 支持加密构建 HTML
-- 🚀 支持多种启动方式：
-  - 💻 本地服务器模式
-  - 🌐 浏览器打开
-- 📄 支持子Wiki
-- 📝 Wiki 管理功能：
-  - 📂 打开/切换 Wiki
-  - 🔨 构建静态 Wiki
-  - 📁 在系统文件管理器中打开
-  - 🚀 一键部署到 GitHub Pages
-- 🌍 国际化支持
-  - 🇨🇳 简体中文
+- 🔧 System tray support, minimize to tray
+- 📂 Template import and single file import support
+- 📂 Markdown batch import support
+- 🔒 Encrypted HTML build support
+- 🚀 Multiple startup modes:
+  - 💻 Local server mode
+  - 🌐 Browser opening
+- 📄 Sub-Wiki support
+- 📝 Wiki management features:
+  - 📂 Open/switch Wiki
+  - 🔨 Build static Wiki
+  - 📁 Open in system file manager
+  - 🚀 One-click deploy to GitHub Pages
+- 🌍 Internationalization support
+  - 🇨🇳 Simplified Chinese
   - 🇺🇸 English
-- 🔄 自动更新功能
+- 🔄 Auto-update functionality
 
-## 📖 使用说明
+## 📖 Usage Guide
 
-### 🔰 安装
+### 🔰 Installation
 
-下载并安装最新版本的应用。
+Download and install the latest version of the application.
 
-* Manjaro 系列：`pacman -S appimagelauncher and use appimage install, or use pacman package`
-* Windows: 下载 exe 即可
-* Macos: 下载 dmg 安装包（未测试）
+* Manjaro Series: `pacman -S appimagelauncher and use appimage install, or use pacman package`
+* Windows: Download the exe file
+* macOS: Download the dmg installer (untested)
 
-### ⚡ 基本操作
+### ⚡ Basic Operations
 
-1. 使用菜单栏或系统托盘进行操作：
-   - 📋 文件菜单：
-     - 📂 打开 Wiki：选择其他 Wiki 文件夹
-     - 🔨 构建 Wiki：生成静态 HTML 文件
-     - 🌐 在浏览器中打开：使用默认浏览器打开当前 Wiki
-     - 📁 打开当前 Wiki 文件夹：在文件管理器中查看
-   - 🔽 系统托盘：
-     - 🖱️ 左键点击：切换窗口显示/隐藏
-     - 📌 右键菜单：快速访问常用功能
+1. Use the menu bar or system tray:
+   - 📋 File menu:
+     - 📂 Open Wiki: Select other Wiki folders
+     - 🔨 Build Wiki: Generate static HTML files
+     - 🌐 Open in browser: Open current Wiki in default browser
+     - 📁 Open current Wiki folder: View in file manager
+   - 🔽 System tray:
+     - 🖱️ Left click: Toggle window show/hide
+     - 📌 Right-click menu: Quick access to common features
 
-### ⌨️ 快捷操作
+### ⌨️ Shortcuts
 
-- 🔽 最小化：窗口会自动隐藏到系统托盘
-- ❌ 关闭按钮：默认最小化到托盘，可通过托盘菜单完全退出
+- 🔽 Minimize: Window automatically hides to system tray
+- ❌ Close button: Defaults to minimize to tray, can fully exit via tray menu
 
-## 👨‍💻 开发
+## 👨‍💻 Development
 
-### 🛠️ 环境要求
+### 🛠️ Requirements
 
 - 📦 Node.js
-- 📦 npm 或 yarn
+- 📦 npm or yarn
 - 📦 git
 
-### 🚀 本地开发
+### 🚀 Local Development
 
 ```bash
-# 安装依赖
+# Install dependencies
 npm install
 
-# 启动开发服务
+# Start development server
 npm run dev
 ```
 
 ## 🤔 Why create Tiddlywiki APP?
 
-首先是解决 TiddlyWiki 长期困扰用户的保存问题。尽管社区已经提供了许多解决方案，但还有什么方法能比直接下载 exe 软件，双击安装来得更简单、更方便呢？
+The primary goal is to solve TiddlyWiki's long-standing save issues. While the community has provided many solutions, what could be simpler than downloading and installing an exe file?
 
-其次，Tiddlywiki APP 和类似应用的主要区别在于，它完全不侵入用户的 Wiki，也不会对其进行任何改动，真正意义上的开箱即用。我希望它尽可能简单，让初次尝试 TiddlyWiki 的用户无需额外学习其他知识。
+Secondly, what sets Tiddlywiki APP apart is that it doesn't interfere with users' Wikis or make any modifications - truly plug-and-play. I want it to be as simple as possible, allowing first-time TiddlyWiki users to start without learning additional concepts.
 
-关于空白版本，我希望用户在初次接触 TiddlyWiki 时，能够体验到 100% 纯正的原始 TiddlyWiki，而不是被各种插件包围，导致困惑不已。这也许就是 Jermolene 选择提供空白版本作为用户入门体验 TiddlyWIki 的初衷吧。
+Regarding the blank version, I want users to experience 100% pure TiddlyWiki when first encountering it, rather than being overwhelmed by plugins. This might be why Jermolene chose to provide a blank version for users' initial TiddlyWiki experience.
 
-至于“空白版本可能吓跑新用户”的说法，这里不作过多讨论。我希望更多人了解 TiddlyWiki，但不会刻意推广它。毕竟，就当前而言，TiddlyWiki 的易用性并没有太大的推广优势。
+As for concerns about "blank versions scaring away new users," I won't discuss that much here. While I hope more people learn about TiddlyWiki, I won't actively promote it, as currently, TiddlyWiki's ease of use doesn't offer significant promotional advantages.
