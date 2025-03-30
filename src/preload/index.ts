@@ -1,11 +1,15 @@
-const { contextBridge, ipcRenderer } = require('electron');
+// @ts-nocheck
 
-contextBridge.exposeInMainWorld('electronAPI', {
+import { contextBridge, ipcRenderer } from 'electron';
+
+export const electronAPI = {
   alert: (message) =>
     ipcRenderer.sendSync('custom-dialog', { type: 'alert', message }),
   confirm: (message) =>
     ipcRenderer.sendSync('custom-dialog', { type: 'confirm', message }),
   onConfigGithub: (callback) => ipcRenderer.on('config-github', callback),
+  // markdown importer
+  onImportMarkdown: (callback) => ipcRenderer.on('import-markdown', callback),
   // onShowWikiInfo: (callback) => ipcRenderer.on('show-wiki-info', callback),
   sendGHConfig: (data) => ipcRenderer.invoke('update-gh-config', data),
   // 双向
@@ -19,4 +23,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // buildWiki: () => ipcRenderer.invoke('wiki:build'),
   // openInBrowser: () => ipcRenderer.invoke('wiki:openInBrowser'),
   // getWikiInfo: () => ipcRenderer.invoke('wiki:getInfo'),
-});
+};
+
+contextBridge.exposeInMainWorld('electronAPI', electronAPI);

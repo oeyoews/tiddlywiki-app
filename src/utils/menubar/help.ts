@@ -3,6 +3,7 @@ import { getMenuIcon } from '@/utils/icon';
 import { checkForUpdates } from '@/utils/checkUpdate';
 import { showWikiInfo, server } from '@/utils';
 import { i18next, t } from '@/i18n';
+import readMarkdownFolder from '@/modules/markdown-importer';
 
 const { autoUpdater } = require('electron-updater');
 
@@ -15,6 +16,19 @@ export const helpMenu = (): MenuItemConstructorOptions => ({
       label: t('menu.devTools'),
       accelerator: 'CmdOrCtrl+Shift+I',
       click: () => server.win.webContents.openDevTools({ mode: 'right' }),
+      icon: getMenuIcon('console'),
+    },
+    {
+      label: t('menu.devTools'),
+      click: async () => {
+        const content = await readMarkdownFolder();
+        if (content.length === 0) {
+          console.log('No markdown tiddlers found');
+          return;
+        }
+        console.log('begin import markdown');
+        server.win.webContents.send('import-markdown', content);
+      },
       icon: getMenuIcon('console'),
     },
     {

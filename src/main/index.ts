@@ -8,7 +8,6 @@ import {
   Menu,
   nativeTheme,
 } from 'electron';
-import path from 'path';
 import { getAppIcon } from '@/utils/icon';
 
 import { createMenuTemplate, showWikiInfo, initWiki } from '@/utils/index';
@@ -17,6 +16,7 @@ import { logInit, log } from '@/utils/logger';
 import { server } from '@/utils';
 import { autoUpdaterInit } from '@/utils/checkUpdate';
 import { showInputBox } from '@/modules/showInputBox';
+import path from 'path';
 
 let win: BrowserWindow;
 let wikiPath: string;

@@ -32,6 +32,7 @@
     "electron-updater": "^6.3.9",
     "fs-extra": "^11.3.0",
     "get-port": "^7.1.0",
+    "gray-matter": "^4.0.3",
     "i18next": "^24.2.2",
     "tiddlywiki": "npm:@oeyoews/tiddlywiki-lite@5.3.6-lite-20250323-1"
   },
@@ -43,6 +44,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.51.1",
+    "@types/node": "^22.13.14",
     "electron": "^35.0.3",
     "electron-builder": "^26.0.12",
     "playwright": "^1.51.1",

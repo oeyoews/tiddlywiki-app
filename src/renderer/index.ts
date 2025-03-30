@@ -1,14 +1,23 @@
+// @ts-nocheck
 // 监听 DOM 加载完成
 // document.addEventListener('DOMContentLoaded', () => {
 // 	console.log('loaded')
 // });
+type IMarkdownTiddler = {
+  title: string;
+  text: string;
+  modified: string;
+};
+electronAPI.onImportMarkdown((event: Event, data: IMarkdownTiddler) => {
+  console.log(data);
+});
 
 window.confirm = function (message) {
-  return window.electronAPI.confirm(message);
+  return electronAPI.confirm(message);
 };
 
 window.alert = function (message) {
-  return window.electronAPI.alert(message);
+  return electronAPI.alert(message);
 };
 
 function gotoGithubConfig() {
