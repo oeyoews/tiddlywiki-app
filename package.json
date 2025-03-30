@@ -13,7 +13,7 @@
     "dev": "vite",
     "preview": "vite build && electron .",
     "build": "vite build && electron-builder",
-    "release": "vite build && electron-builder -mwl"
+    "release": "vite build && electron-builder"
   },
   "keywords": [
     "tiddlywiki"
