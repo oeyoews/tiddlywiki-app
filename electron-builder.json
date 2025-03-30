@@ -24,7 +24,7 @@
     "dist",
     "LICENSE"
   ],
-  "artifactName": "${productName}_${version}-${arch}.${ext}",
+  "artifactName": "${productName}_${version}.${ext}",
   "mac": {
     "target": [
       {
