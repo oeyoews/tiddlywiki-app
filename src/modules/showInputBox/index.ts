@@ -4,12 +4,13 @@ import path from 'path';
 
 export function showInputBox(
   parentWindow: BrowserWindow,
-  message = '请输入内容'
+  message: string = '请输入'
 ) {
+  console.log(message);
   return new Promise((resolve) => {
     let inputWin = new BrowserWindow({
       width: 400,
-      height: 200,
+      height: 150,
       parent: parentWindow,
       modal: true,
       resizable: false,
@@ -28,7 +29,7 @@ export function showInputBox(
 
     // 传递消息到渲染进程
     inputWin.webContents.once('did-finish-load', () => {
-      inputWin.webContents.send('set-message', message);
+      inputWin.webContents.send('set-title', message);
     });
 
     ipcMain.once('input-value', (event, value) => {

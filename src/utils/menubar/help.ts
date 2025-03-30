@@ -15,12 +15,20 @@ export const helpMenu = (): MenuItemConstructorOptions => ({
     {
       label: t('menu.devTools'),
       accelerator: 'CmdOrCtrl+Shift+I',
-      // click: () => server.win.webContents.openDevTools({ mode: 'right' }),
+      click: () => server.win.webContents.openDevTools({ mode: 'right' }),
+      icon: getMenuIcon('console'),
+    },
+    {
+      label: t('menu.devTools'),
       click: async () => {
-        const result = await showInputBox(server.win, '请输入你的名称:');
+        const result = await showInputBox(
+          server.win,
+          t('dialog.inputPassword')
+        );
+        if (!result) return;
         dialog.showMessageBox({
-          title: JSON.stringify(result),
-          message: 'dmeo',
+          title: result as string,
+          message: result as string,
         });
       },
       icon: getMenuIcon('console'),

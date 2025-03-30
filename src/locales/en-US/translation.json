@@ -116,6 +116,7 @@
     "htmlFilter": "TiddlyWiki HTML",
     "templateDownloading": "template downloading",
     "import": "Import",
+    "inputPassword": "Please input password",
     "convertIng": "HTML File is converting ...",
     "selectImportFolder": "Please Select The Folder To Save",
     "selectImportFolderMessage": "Please select a target folder to import the Wiki",
