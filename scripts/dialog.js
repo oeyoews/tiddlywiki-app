@@ -195,6 +195,10 @@ module.exports = {
     'en-US': 'Import',
     'zh-CN': '导入',
   },
+  inputPassword: {
+    'en-US': 'Please input password',
+    'zh-CN': '请输入密码',
+  },
   convertIng: {
     'en-US': 'HTML File is converting ...',
     'zh-CN': '文件正在处理中...',

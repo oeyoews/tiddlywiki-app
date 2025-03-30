@@ -6,7 +6,14 @@ export const wikiStartupArgs = (path: string, port: number) => [
   'root-tiddler=$:/core/save/all-external-js',
 ];
 
-export const wikiBuildArgs = (path: string) => [path, '--build', 'index'];
+export const wikiBuildArgs = (path: string, password?: string) => {
+  let args = [path, '--build', 'index'];
+  if (password) {
+    args = [path, '--password', password, ...buildIndexHTMLArgs];
+  }
+  return args;
+};
+
 export const buildIndexHTMLArgs = [
   '--render',
   '$:/plugins/tiddlywiki/tiddlyweb/save/offline',

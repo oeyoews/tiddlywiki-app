@@ -1,12 +1,12 @@
-import { i18next, t } from '@/i18n';
 import { shell, app, MenuItemConstructorOptions } from 'electron';
 import { getMenuIcon } from '@/utils/icon';
 import { checkForUpdates } from '@/utils/checkUpdate';
 import { showWikiInfo, server } from '@/utils';
+import { i18next, t } from '@/i18n';
 
 const { autoUpdater } = require('electron-updater');
 
-// 需要等到t 初始化
+// 需要等到 t 初始化
 export const helpMenu = (): MenuItemConstructorOptions => ({
   label: t('menu.help'),
   id: 'Help',

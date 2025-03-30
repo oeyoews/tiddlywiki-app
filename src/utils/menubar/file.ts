@@ -21,6 +21,7 @@ import { config } from '@/utils/config';
 import { getPlatform } from '../getPlatform';
 import { capitalizeWords, downloadTpl } from '../downloadTpl';
 import { wikiTemplates } from '@/utils/wikiTemplates';
+import { showInputBox } from '@/modules/showInputBox';
 
 export const fileMenu = (
   recentWikis: string[]
@@ -143,13 +144,23 @@ export const fileMenu = (
     {
       label: t('menu.publish'),
       icon: getMenuIcon('release'),
-      click: releaseWiki,
+      click: () => releaseWiki(),
     },
     { type: 'separator' },
     {
       label: t('menu.buildWiki'),
       icon: getMenuIcon('build'),
-      click: buildWiki,
+      click: () => buildWiki(),
+    },
+    {
+      label: t('menu.buildWikiWithPassWord'),
+      icon: getMenuIcon('lock'),
+      click: async () => {
+        const res = await showInputBox(server.win, '输入密码');
+        if (res) {
+          buildWiki(res);
+        }
+      },
     },
     { type: 'separator' },
     {

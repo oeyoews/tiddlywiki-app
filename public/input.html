@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+	<meta charset="UTF-8">
+	<title>输入框</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: sans-serif;
+		}
+
+		body {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+			background: rgba(0, 0, 0, 0.5);
+		}
+
+		.input-box {
+			background: #1e1e1e;
+			padding: 15px;
+			width: 400px;
+			height: 100%;
+			border-radius: 8px;
+			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+			/* animation: fadeIn 0.2s ease-out; */
+			position: relative;
+		}
+
+		@keyframes fadeIn {
+			from {
+				opacity: 0;
+				transform: translateY(-10px);
+			}
+
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		/* 头部 */
+		.title-bar {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			color: #fff;
+			padding-bottom: 10px;
+			border-bottom: 1px solid #333;
+		}
+
+		.title {
+			font-size: 16px;
+		}
+
+		/* 右上角 X 按钮 */
+		#close {
+			cursor: pointer;
+			font-size: 18px;
+			font-weight: bold;
+			color: #aaa;
+			background: none;
+			border: none;
+		}
+
+		#close:hover {
+			color: #fff;
+		}
+
+		/* 输入框 */
+		#inputField {
+			width: 100%;
+			padding: 10px;
+			border: none;
+			outline: none;
+			border-radius: 5px;
+			font-size: 16px;
+			background: #252526;
+			color: #fff;
+			margin-top: 10px;
+		}
+
+		/* 确认按钮 */
+		.button-group {
+			display: flex;
+			justify-content: flex-end;
+			margin-top: 10px;
+		}
+
+		#submit {
+			padding: 8px 15px;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+			font-size: 14px;
+			background: #007acc;
+			color: white;
+			transition: 0.2s;
+		}
+
+		#submit:hover {
+			background: #005f9e;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="input-box">
+		<div class="title-bar">
+			<span class="title" id="title">输入内容</span>
+			<button id="close">×</button>
+		</div>
+		<input type="password" id="inputField" placeholder="请输入">
+		<div class="button-group">
+			<button id="submit">确认</button>
+		</div>
+	</div>
+
+	<script>
+		const { ipcRenderer } = require('electron');
+
+		// 自动聚焦输入框
+		document.getElementById('inputField').focus();
+
+		// 监听主进程传入的标题
+		ipcRenderer.on('set-title', (event, title) => {
+			console.log(event, title)
+			document.getElementById('title').innerText = title;
+		});
+
+		// 监听 ESC 关闭
+		document.addEventListener('keydown', (event) => {
+			if (event.key === 'Escape') {
+				ipcRenderer.send('input-value', null);
+			}
+		});
+
+		// 监听回车（Enter）确认
+		document.getElementById('inputField').addEventListener('keydown', (event) => {
+			if (event.key === 'Enter') {
+				submitValue();
+			}
+		});
+
+		// 确认按钮点击事件
+		document.getElementById('submit').addEventListener('click', submitValue);
+
+		// 关闭窗口（右上角 X）
+		document.getElementById('close').addEventListener('click', () => {
+			ipcRenderer.send('input-value', null);
+		});
+
+		// 发送输入值到主进程
+		function submitValue() {
+			const value = document.getElementById('inputField').value.trim();
+			ipcRenderer.send('input-value', value || null);
+		}
+	</script>
+</body>
+
+</html>
