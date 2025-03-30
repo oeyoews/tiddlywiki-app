@@ -22,7 +22,7 @@ import { getPlatform } from '../getPlatform';
 import { capitalizeWords, downloadTpl } from '../downloadTpl';
 import { wikiTemplates } from '@/utils/wikiTemplates';
 import { showInputBox } from '@/modules/showInputBox';
-import readMarkdownFolder from '@/modules/markdown-importer';
+import { readMarkdownFolder } from '@/modules/markdown-importer';
 import { log } from '../logger';
 
 export const fileMenu = (

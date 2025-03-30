@@ -1,65 +1,4 @@
 // @ts-nocheck
-// 监听 DOM 加载完成
-// document.addEventListener('DOMContentLoaded', () => {
-// 	console.log('loaded')
-// });
-type IMarkdownTiddler = {
-  title: string;
-  text: string;
-  modified: string;
-};
-electronAPI.onImportMarkdown((event: Event, content: IMarkdownTiddler) => {
-  console.log(content);
-  let tiddlers = {
-    tiddlers: {},
-  };
-  content.forEach((content) => {
-    let renameTitle = null;
-    // if (
-    //   // $tw.wiki.filterTiddlers(`[[${content.title}]!is[missing]]`).length > 0
-    //   $tw.wiki.tiddlerExists(content.title)
-    // ) {
-    //   renameTitle = window.prompt(
-    //     `${content.title} tiddler has exist, please rename this tiddler`,
-    //     content.title + '-' + Date.now()
-    //   );
-    //   // 跳过此条目的导入
-    //   if (!renameTitle) {
-    //     return;
-    //   }
-    // }
-    // if (renameTitle) {
-    //   content.title = renameTitle;
-    // }
-    const tiddler = {
-      tags: ['markdown'],
-      title: content.title,
-      ...content,
-      type: 'text/markdown', // 放到最后面， 防止frontmatter 修改
-    };
-    tiddlers.tiddlers[content.title] = tiddler;
-  });
-
-  const importedTitle = '$:/markdownImported';
-  // $tw.wiki.deleteTiddler(importedTitle);
-  $tw.wiki.addTiddler({
-    title: importedTitle,
-    'plugin-type': 'import',
-    type: 'application/json',
-    text: JSON.stringify(tiddlers),
-    status: 'pending',
-  });
-  const goto = new $tw.Story();
-  goto.navigateTiddler(importedTitle);
-});
-
-window.confirm = function (message) {
-  return electronAPI.confirm(message);
-};
-
-window.alert = function (message) {
-  return electronAPI.alert(message);
-};
 
 function gotoGithubConfig() {
   const goto = new $tw.Story();
@@ -79,6 +18,19 @@ const extFile = {
 };
 
 if (window.$tw) {
+  // console.log('renderer init');
+  window.confirm = function (message) {
+    return electronAPI.confirm(message);
+  };
+
+  window.alert = function (message) {
+    return electronAPI.alert(message);
+  };
+
+  electronAPI.onImportMarkdown((event: Event, content: IMarkdownTiddler[]) => {
+    importMarkdown(content);
+  });
+
   function getTiddlerTitle(data) {
     const el = document.elementFromPoint(data.x, data.y);
     const attr = 'data-tiddler-title';
@@ -178,4 +130,50 @@ if (window.$tw) {
       $tw.wiki.setText(twFilePathConfigTiddler, 'text', null, oldText);
     }
   }
+}
+
+function importMarkdown(content: IMarkdownTiddler[]) {
+  const importedTitle = '$:/markdownImported';
+  let tiddlers = {
+    tiddlers: {},
+  };
+  content.forEach((content) => {
+    // let renameTitle = null;
+    // if (
+    //   // $tw.wiki.filterTiddlers(`[[${content.title}]!is[missing]]`).length > 0
+    //   $tw.wiki.tiddlerExists(content.title)
+    // ) {
+    //   renameTitle = window.prompt(
+    //     `${content.title} tiddler has exist, please rename this tiddler`,
+    //     content.title + '-' + Date.now()
+    //   );
+    //   // 跳过此条目的导入
+    //   if (!renameTitle) {
+    //     return;
+    //   }
+    // }
+    // if (renameTitle) {
+    //   content.title = renameTitle;
+    // }
+    const tiddler = {
+      tags: ['markdown'],
+      // @ts-ignore
+      title: content.title,
+      ...content,
+      type: 'text/markdown', // 放到最后面， 防止frontmatter 修改
+    };
+    // @ts-ignore
+    tiddlers.tiddlers[content.title] = tiddler;
+  });
+
+  // $tw.wiki.deleteTiddler(importedTitle);
+  $tw.wiki.addTiddler({
+    title: importedTitle,
+    'plugin-type': 'import',
+    type: 'application/json',
+    text: JSON.stringify(tiddlers),
+    status: 'pending',
+  });
+  const goto = new $tw.Story();
+  goto.navigateTiddler(importedTitle);
 }

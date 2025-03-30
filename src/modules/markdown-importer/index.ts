@@ -20,7 +20,7 @@ type MarkdownFile = {
   tags?: string[];
 } & FlattenObject;
 
-async function readMarkdownFolder(
+export async function readMarkdownFolder(
   dirPath: string | null = null,
   ignoreFolders: string[] = defaultIgnoreFolders
 ): Promise<MarkdownFile[]> {
@@ -76,5 +76,3 @@ async function readMarkdownFolder(
   readDir(dirPath);
   return mdFiles;
 }
-
-export default readMarkdownFolder;

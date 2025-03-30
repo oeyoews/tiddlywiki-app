@@ -94,3 +94,9 @@ type IUpdateMenuType =
   | 'updatingMenu'
   | 'downloadingApp'
   | 'restartMenu';
+
+type IMarkdownTiddler = {
+  title: string;
+  text: string;
+  modified: string;
+};
