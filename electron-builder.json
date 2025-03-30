@@ -29,8 +29,7 @@
     "target": [
       "dmg",
       "zip",
-      "pkg",
-      "mas"
+      "pkg"
     ]
   },
   "linux": {
