@@ -5,6 +5,7 @@ import { showWikiInfo, server } from '@/utils';
 import { i18next } from '@/i18n';
 import { t } from 'i18next';
 import { logPath } from '../logger';
+import { getPlatform } from '@/utils/getPlatform';
 
 const { autoUpdater } = require('electron-updater');
 
@@ -22,7 +23,7 @@ export const helpMenu = (): MenuItemConstructorOptions => ({
     {
       label: t('menu.checkUpdate'),
       // @see https://www.electronjs.org/zh/docs/latest/api/auto-updater
-      // visible: getPlatform() === 'windows',
+      visible: getPlatform() !== 'macOS', // macos update need application sign
       id: 'update',
       enabled: app.isPackaged,
       click: () => checkForUpdates(),

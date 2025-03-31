@@ -152,7 +152,7 @@ export const fileMenu = (
     {
       label: t('menu.buildWiki'),
       icon: getMenuIcon('build'),
-      click: () => buildWiki(),
+      click: () => buildWiki({}),
     },
     {
       label: t('menu.buildWikiWithPassWord'),
@@ -160,7 +160,7 @@ export const fileMenu = (
       click: async () => {
         const res = await showInputBox(server.win, '输入密码');
         if (res) {
-          buildWiki(res);
+          buildWiki({ password: res });
         }
       },
     },

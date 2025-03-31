@@ -21,10 +21,7 @@ export const electronAPI = {
   onTitleFetched: (callback) =>
     ipcRenderer.on('title-fetched', (_event, value) => callback(value)),
 
-  startFetchData: (data, cbl) =>
-    ipcRenderer.invoke('get-data', data).then((newData) => {
-      cbl(newData);
-    }),
+  startFetchData: async (data) => ipcRenderer.invoke('get-data', data),
 
   // onTwInstanceUpdate: (callback) =>
   //   ipcRenderer.on('tw-instance-update', callback),
