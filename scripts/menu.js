@@ -69,7 +69,7 @@ module.exports = {
   },
   showLogs: {
     'en-US': 'Open Application Logs',
-    'zh-CN': '打开日志目录',
+    'zh-CN': '打开日志',
   },
   forceReload: {
     'en-US': 'Force Refresh',

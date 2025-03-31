@@ -4,6 +4,7 @@ import { checkForUpdates } from '@/utils/checkUpdate';
 import { showWikiInfo, server } from '@/utils';
 import { i18next } from '@/i18n';
 import { t } from 'i18next';
+import { logPath } from '../logger';
 
 const { autoUpdater } = require('electron-updater');
 
@@ -52,7 +53,7 @@ export const helpMenu = (): MenuItemConstructorOptions => ({
       label: t('menu.showLogs'),
       icon: getMenuIcon('log'),
       click: () => {
-        shell.openPath(app.getPath('logs'));
+        shell.openPath(logPath);
       },
     },
     {
