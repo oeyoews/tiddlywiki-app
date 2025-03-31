@@ -25,7 +25,7 @@ export const helpMenu = (): MenuItemConstructorOptions => ({
       // visible: getPlatform() === 'windows',
       id: 'update',
       enabled: app.isPackaged,
-      click: checkForUpdates,
+      click: () => checkForUpdates(),
       icon: getMenuIcon('update'),
     },
     {
