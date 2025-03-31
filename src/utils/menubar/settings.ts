@@ -83,7 +83,7 @@ export const settingsMenu = (): MenuItemConstructorOptions => ({
           label: '简体中文',
           type: 'radio',
           // icon: getMenuIcon('File'),
-          checked: i18next.language === 'zh-CN',
+          checked: i18next.language.startsWith('zh'),
           click: () => switchLanguage('zh-CN'),
         },
         {

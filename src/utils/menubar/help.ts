@@ -65,7 +65,7 @@ export const helpMenu = (): MenuItemConstructorOptions => ({
       label: t('menu.twdocs'),
       icon: getMenuIcon('read'),
       click: () => {
-        const isZH = i18next.language === 'zh-CN';
+        const isZH = i18next.language.startsWith('zh');
         shell.openExternal(
           isZH
             ? 'https://bramchen.github.io/tw5-docs/zh-Hans'
