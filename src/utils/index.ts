@@ -464,7 +464,7 @@ export async function buildWiki({ password }: IBuildOptions) {
           t('dialog.preview'),
           t('dialog.showInFolder'),
           t('menu.publish'),
-          '另存为',
+          t('dialog.saveAs'),
           t('dialog.close'),
         ],
         defaultId: 0,
