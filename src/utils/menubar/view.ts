@@ -1,10 +1,10 @@
-import { t } from '@/i18n/index';
 import { app, type MenuItemConstructorOptions, shell } from 'electron';
 import path from 'path';
 
 import { getFolderIcon, getMenuIcon } from '@/utils/icon';
 import { server } from '@/utils';
 import { config } from '../config';
+import { t } from 'i18next';
 let showFindBar: any;
 
 app.on('browser-window-created', async (_: any, win: any) => {

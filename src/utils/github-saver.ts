@@ -1,9 +1,9 @@
 // @ts-nocheck
 import { Notification, shell, dialog, BrowserWindow, net } from 'electron';
 import fs from 'fs';
-import { t } from '@/i18n/index.js';
 import { log } from '@/utils/logger';
 import { getMenuIcon } from './icon';
+import { t } from 'i18next';
 
 let githubNotify: Notification;
 

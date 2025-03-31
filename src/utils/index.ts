@@ -10,7 +10,7 @@ import {
   BrowserWindow,
   Notification,
 } from 'electron';
-import { t, i18next } from '@/i18n/index';
+import { i18next } from '@/i18n/index';
 import twinfo from '@/utils/tiddlywiki.json';
 
 const { default: getPorts } = require('get-port');
@@ -33,7 +33,6 @@ import {
 } from '@/utils/wiki/constant';
 import { createMenubar } from '@/utils/menubar';
 import { log } from '@/utils/logger';
-import { createTray } from '@/utils/createTray';
 import { getAppIcon, getMenuIcon } from '@/utils/icon';
 import {
   checkBuildInfo,
@@ -44,6 +43,7 @@ import {
 import { getFileSizeInMB } from './getFileSize';
 import { IWikiTemplate } from './wikiTemplates';
 import { createSymlink } from './subwiki';
+import { t } from 'i18next';
 
 let wikiInstances: { [port: number]: string } = {}; // 用于记录 port: wikipath, 便于端口复用
 
@@ -335,7 +335,9 @@ export async function switchLanguage(lang: string) {
   log.info('switch lang to', lang);
 
   // 更新托盘菜单
-  createTray(win, server);
+  import('@/utils/createTray').then(({ createTray }) =>
+    createTray(win, server)
+  );
 }
 
 export async function importSingleFileWiki(

@@ -1,8 +1,8 @@
 import { app, Menu, Tray, BrowserWindow } from 'electron';
 import { getAppIcon, getMenuIcon } from './icon';
-import { t } from '@/i18n';
 import { getPlatform } from './getPlatform';
 import { log } from '@/utils/logger';
+import { t } from 'i18next';
 
 // 修改 createTray 函数中的菜单项
 export function createTray(

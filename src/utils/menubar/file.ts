@@ -1,4 +1,3 @@
-import { t } from '@/i18n';
 import {
   Menu,
   app,
@@ -24,6 +23,7 @@ import { wikiTemplates } from '@/utils/wikiTemplates';
 import { showInputBox } from '@/modules/showInputBox';
 import { readMarkdownFolder } from '@/modules/markdown-importer';
 import { log } from '../logger';
+import { t } from 'i18next';
 
 export const fileMenu = (
   recentWikis: string[]

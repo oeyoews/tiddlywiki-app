@@ -1,4 +1,3 @@
-import { t } from '@/i18n/index';
 import {
   type MenuItemConstructorOptions,
   Menu,
@@ -19,6 +18,7 @@ import { helpMenu } from '@/utils/menubar/help';
 import { settingsMenu } from '@/utils/menubar/settings';
 import { viewMenu } from './view';
 import { fileMenu } from './file';
+import { t } from 'i18next';
 
 export const createMenubar = (
   config: IConfig,

@@ -2,9 +2,9 @@ const { autoUpdater } = require('electron-updater');
 import { log } from '@/utils/logger';
 import { updaterConfig } from '@/utils/updater';
 import { app, dialog, Menu, MenuItem } from 'electron';
-import { t } from '@/i18n';
 import { getMenuIcon } from '@/utils/icon';
 import { server } from '@/utils';
+import { t } from 'i18next';
 
 let updateMenu: MenuItem;
 let updatingMenu: MenuItem;

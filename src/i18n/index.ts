@@ -1,16 +1,16 @@
 import i18next from 'i18next';
 
-import enTranslation from '../locales/en-US/translation.json';
-import zhTranslation from '../locales/zh-CN/translation.json';
-
-const resources = {
-  en: { translation: enTranslation },
-  zh: { translation: zhTranslation },
-};
-
 const defaultNS = 'translation';
 
 const initI18n = async (config: any) => {
+  const enTranslation = await import('@/locales/en-US/translation.json');
+  const zhTranslation = await import('@/locales/zh-CN/translation.json');
+
+  const resources = {
+    en: { translation: enTranslation },
+    zh: { translation: zhTranslation },
+  };
+
   await i18next.init({
     resources,
     lng: config.get('language') || 'en-US',
@@ -22,6 +22,6 @@ const initI18n = async (config: any) => {
 
   return i18next;
 };
-const t = i18next.t;
+// const t = i18next.t;
 
-export { initI18n, i18next, t, resources, defaultNS };
+export { initI18n, i18next, defaultNS };

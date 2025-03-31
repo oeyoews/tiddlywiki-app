@@ -2,7 +2,8 @@ import { shell, app, MenuItemConstructorOptions } from 'electron';
 import { getMenuIcon } from '@/utils/icon';
 import { checkForUpdates } from '@/utils/checkUpdate';
 import { showWikiInfo, server } from '@/utils';
-import { i18next, t } from '@/i18n';
+import { i18next } from '@/i18n';
+import { t } from 'i18next';
 
 const { autoUpdater } = require('electron-updater');
 

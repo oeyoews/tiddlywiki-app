@@ -1,4 +1,3 @@
-import { t } from '@/i18n';
 import {
   type BrowserWindow,
   Menu,
@@ -6,6 +5,7 @@ import {
   shell,
 } from 'electron';
 import { getFolderIcon, getMenuIcon } from '@/utils/icon';
+import { t } from 'i18next';
 
 /**
  * 注册右键菜单

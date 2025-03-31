@@ -1,4 +1,4 @@
-import { t, i18next } from '@/i18n/index';
+import { i18next } from '@/i18n/index';
 import { type MenuItemConstructorOptions, app, MenuItem } from 'electron';
 import { log } from '@/utils/logger';
 import { getMenuIcon } from '../icon';
@@ -11,6 +11,7 @@ import {
   configureGitHub,
   toggleChineseLang,
 } from '@/utils';
+import { t } from 'i18next';
 
 export const settingsMenu = (): MenuItemConstructorOptions => ({
   label: t('menu.settings'),

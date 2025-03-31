@@ -1,4 +1,3 @@
-import { t } from '@/i18n/index';
 import {
   ipcMain,
   type BrowserWindow,
@@ -6,6 +5,7 @@ import {
   type MessageBoxSyncOptions,
 } from 'electron';
 import { getAppIcon } from './icon';
+import { t } from 'i18next';
 
 interface ITWDialog {
   type: DialogType;
