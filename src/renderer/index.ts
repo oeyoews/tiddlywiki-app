@@ -31,6 +31,28 @@ if (window.$tw) {
     importMarkdown(content);
   });
 
+  electronAPI.onTitleFetched((data: any) => {
+    const imageData = getImage(data);
+    if (!imageData) return;
+    electronAPI.startFetchData(data, (newData) => {
+      console.log(newData, 'get data');
+    });
+  });
+
+  function getImage(data) {
+    const el = document.elementFromPoint(data.x, data.y);
+    const attr = 'data-tiddler-title';
+    const titleEl = el?.closest(`[${attr}]`);
+    let title = titleEl?.getAttribute(attr) || null; // 获取属性值，若不存在则返回 null
+
+    if ($tw.wiki.tiddlerExists(title)) {
+      const { type } = $tw.wiki.getTiddler(title).fields;
+      if (type === 'image/png') {
+        return;
+      }
+    }
+  }
+
   function getTiddlerTitle(data) {
     const el = document.elementFromPoint(data.x, data.y);
     const attr = 'data-tiddler-title';

@@ -22,6 +22,7 @@ let win: BrowserWindow;
 let wikiPath: string;
 
 const startTime = performance.now(); // 记录启动时间
+const tempDir = app.getPath('temp');
 
 // 环境变量配置
 const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL;
@@ -126,6 +127,15 @@ async function createWindow() {
   const menu = Menu.buildFromTemplate(createMenuTemplate());
   Menu.setApplicationMenu(menu);
 }
+
+// 主进程
+ipcMain.handle('get-data', async (_event, data) => {
+  console.log('original data', data);
+  const minifiedImagePath = path.join(tempDir, 'pngquant.png');
+  fs.writeFileSync(minifiedImagePath, 'data', 'utf-8');
+  // pngquant minify it
+  return 'new image data';
+});
 
 // 监听渲染进程请求并调用 `showInputBox`
 ipcMain.handle('show-input-box', async (event) => {

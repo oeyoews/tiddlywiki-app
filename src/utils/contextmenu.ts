@@ -85,7 +85,11 @@ export const registerContextMenu = (
       label: t('menu.copyImage'),
       icon: getMenuIcon('image'),
       click: () => {
-        win.webContents.copyImageAt(params.x, params.y);
+        // win.webContents.copyImageAt(params.x, params.y);
+        win.webContents.send('title-fetched', {
+          x: params.x,
+          y: params.y,
+        });
       },
     });
   }

@@ -34,6 +34,7 @@
     "get-port": "^7.1.0",
     "gray-matter": "^4.0.3",
     "i18next": "^24.2.2",
+    "pngquant-bin": "^9.0.0",
     "tiddlywiki": "npm:@oeyoews/tiddlywiki-lite@5.3.6-lite-20250323-1"
   },
   "pnpm": {

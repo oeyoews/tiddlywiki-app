@@ -17,6 +17,15 @@ export const electronAPI = {
     ipcRenderer.on('update-tid', (_event, value) => callback(value)),
   sendTidInfo: (value) => ipcRenderer.send('tid-info', value),
 
+  // 接收图片坐标
+  onTitleFetched: (callback) =>
+    ipcRenderer.on('title-fetched', (_event, value) => callback(value)),
+
+  startFetchData: (data, cbl) =>
+    ipcRenderer.invoke('get-data', data).then((newData) => {
+      cbl(newData);
+    }),
+
   // onTwInstanceUpdate: (callback) =>
   //   ipcRenderer.on('tw-instance-update', callback),
   // openWiki: () => ipcRenderer.invoke('dialog:openWiki'),
