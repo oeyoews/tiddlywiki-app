@@ -47,7 +47,7 @@ export const helpMenu = (): MenuItemConstructorOptions => ({
       id: 'restartApp',
       visible: false,
       click: () => autoUpdater.quitAndInstall(true, true), // 静默安装并启动
-      icon: getMenuIcon('update'),
+      icon: getMenuIcon('restart'),
     },
     {
       label: t('menu.showLogs'),
