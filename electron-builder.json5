@@ -1,80 +1,65 @@
 {
-  "protocols": [
+  protocols: [
     {
-      "name": "TiddlyWiki Protocol",
-      "schemes": [
-        "tiddlywiki"
-      ]
-    }
+      name: 'TiddlyWiki Protocol',
+      schemes: ['tiddlywiki'],
+    },
   ],
-  "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
-  "appId": "tiddlywiki.app",
-  "asar": true,
-  "directories": {
-    "output": "release/${version}"
+  $schema: 'https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json',
+  appId: 'tiddlywiki.app',
+  asar: true,
+  directories: {
+    output: 'release/${version}',
   },
-  "generateUpdatesFilesForAllChannels": true,
-  "extraFiles": [
+  generateUpdatesFilesForAllChannels: true,
+  extraFiles: [
     {
-      "from": "LICENSE",
-      "to": "LICENSE"
-    }
+      from: 'LICENSE',
+      to: 'LICENSE',
+    },
   ],
-  "files": [
-    "dist",
-    "LICENSE"
-  ],
-  "mac": {
-    "artifactName": "${productName}_${version}-${arch}.${ext}",
-    "target": [
+  files: ['dist', 'LICENSE'],
+  mac: {
+    artifactName: '${productName}_${version}-${arch}.${ext}',
+    target: [
       {
-        "target": "dmg",
-        "arch": [
-          "x64",
-          "arm64"
-        ]
-      }
-    ]
+        target: 'dmg',
+        arch: ['x64', 'arm64'],
+      },
+      'zip',
+    ],
   },
-  "linux": {
-    "artifactName": "${productName}_${version}-${arch}.${ext}",
-    "target": [
+  linux: {
+    artifactName: '${productName}_${version}-${arch}.${ext}',
+    target: [
       {
-        "target": "deb",
-        "arch": [
-          "arm64",
-          "x64"
-        ]
+        target: 'deb',
+        arch: ['arm64', 'x64'],
       },
       {
-        "target": "AppImage",
-        "arch": [
-          "arm64",
-          "x64"
-        ]
-      }
+        target: 'AppImage',
+        arch: ['arm64', 'x64'],
+      },
     ],
-    "maintainer": "oeyoews",
-    "category": "Utility"
+    maintainer: 'oeyoews',
+    category: 'Utility',
   },
-  "win": {
-    "artifactName": "${productName}_${version}.${ext}",
-    "target": [
-      "nsis"
-    ]
+  win: {
+    artifactName: '${productName}_${version}.${ext}',
+    target: ['nsis'],
   },
-  "nsis": {
-    "oneClick": false,
-    "allowElevation": true,
-    "perMachine": false,
-    "allowToChangeInstallationDirectory": true,
-    "deleteAppDataOnUninstall": false,
-    "displayLanguageSelector": false,
-    "shortcutName": "TiddlyWiki5"
+  nsis: {
+    oneClick: false,
+    allowElevation: true,
+    perMachine: false,
+    allowToChangeInstallationDirectory: true,
+    deleteAppDataOnUninstall: false,
+    displayLanguageSelector: false,
+    shortcutName: 'TiddlyWiki5',
   },
-  "publish": {
-    "provider": "github",
-    "owner": "oeyoews",
-    "repo": "tiddlywiki-app"
-  }
+  publish: {
+    provider: 'github',
+    owner: 'oeyoews',
+    repo: 'tiddlywiki-app',
+  },
 }
