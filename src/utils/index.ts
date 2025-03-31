@@ -380,6 +380,11 @@ export async function importSingleFileWiki(
     }
 
     const targetPath = targetFolder.filePaths[0];
+    // 不直接判断路径和当前wiki 一致， 只要为空即可
+    if (!isEmptyDirectory(targetPath)) {
+      dialog.showErrorBox(t('dialog.error'), t('dialog.folderNotEmpty'));
+      return;
+    }
 
     // 复制文件夹
     if (template) {
