@@ -45,5 +45,19 @@ export const getAppIcon = (
   }
 };
 
+// TODO: 动态更新监听
+export const getWikiFolderIcon = (
+  size: number = 16,
+  darkmode: 'auto' | 'folder-wiki1-dark' | 'folder-wiki1-light' = 'auto'
+) => {
+  if (darkmode !== 'auto') {
+    return getMenuIcon(darkmode, size);
+  } else {
+    return nativeTheme.shouldUseDarkColors
+      ? getMenuIcon('folder-wiki1-dark', size)
+      : getMenuIcon('folder-wiki1-light', size);
+  }
+};
+
 // @ts-ignore
 export const getFolderIcon = () => getMenuIcon(`folder-${getPlatform()}`);

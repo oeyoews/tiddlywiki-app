@@ -14,7 +14,7 @@ import {
   openWiki,
   server,
 } from '@/utils';
-import { getAppIcon, getMenuIcon } from '@/utils/icon';
+import { getMenuIcon, getWikiFolderIcon } from '@/utils/icon';
 import fs from 'fs';
 import { config } from '@/utils/config';
 import { getPlatform } from '../getPlatform';
@@ -35,7 +35,7 @@ export const fileMenu = (
     {
       label: t('menu.openExistingWiki'),
       // @ts-ignore
-      icon: config.get('icon') ? getAppIcon(16) : null,
+      icon: config.get('icon') ? getWikiFolderIcon() : null,
       accelerator: 'CmdOrCtrl+O',
       click: async () => {
         const res = await openWiki();

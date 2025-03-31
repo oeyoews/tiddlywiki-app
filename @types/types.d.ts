@@ -19,6 +19,9 @@ interface CommitBody {
 type IMenuIconFile =
   | 'File'
   | 'warning'
+  | 'folder-wiki'
+  | 'folder-wiki1-dark'
+  | 'folder-wiki1-light'
   | 'trash'
   | 'error'
   | 'lock'
