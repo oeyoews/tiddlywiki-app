@@ -6,7 +6,7 @@ import {
 } from 'electron';
 import { getFolderIcon, getMenuIcon } from '@/utils/icon';
 import { t } from 'i18next';
-import { getPlatform } from './getPlatform';
+import { TPlatform } from '@/main';
 
 /**
  * 注册右键菜单
@@ -82,7 +82,7 @@ export const registerContextMenu = (
 
   // 如果右键点击的是图片，添加复制图片选项
   if (params.mediaType === 'image') {
-    if (getPlatform() === 'windows') {
+    if (['windows', 'macOs'].includes(TPlatform)) {
       menus.push({
         label: t('menu.minifyImage'),
         icon: getMenuIcon('panda'),

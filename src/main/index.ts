@@ -52,7 +52,7 @@ let pngquantMacos = path.join(
   'pngquant',
   'pngquant-macOs'
 );
-const platform = getPlatform();
+export const TPlatform = getPlatform();
 let pngquant: any;
 
 const preload = path.join(process.env.DIST, 'preload/index.js');
@@ -146,7 +146,7 @@ async function createWindow() {
 }
 
 // 目前仅开始针对windows 进行支持
-if (platform === 'windows' || platform === 'macOs') {
+if (TPlatform === 'windows' || TPlatform === 'macOs') {
   // 主进程
   ipcMain.handle('get-data', async (_event, data) => {
     const imagePath = path.join(tempDir, 'pngquant.png');
@@ -169,9 +169,9 @@ if (platform === 'windows' || platform === 'macOs') {
       spawn = crossSpawn.default;
     }
     if (!pngquant) {
-      if (platform === 'windows') {
+      if (TPlatform === 'windows') {
         pngquant = pngquantWindows;
-      } else if (platform === 'macOs') {
+      } else if (TPlatform === 'macOs') {
         pngquant === pngquantMacos;
       }
     }
