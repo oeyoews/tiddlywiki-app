@@ -41,14 +41,17 @@ export const processEnv = {
 };
 // let pngquant: any;
 let pngquantWindows = path.join(
-  processEnv.VITE_PUBLIC,
-  'lib',
+  // processEnv.VITE_PUBLIC,
+  app.isPackaged
+    ? process.resourcesPath
+    : path.join(__dirname, '..', 'resources'),
   'pngquant',
   'pngquant-windows.exe'
 );
 let pngquantMacos = path.join(
-  processEnv.VITE_PUBLIC,
-  'lib',
+  app.isPackaged
+    ? process.resourcesPath
+    : path.join(__dirname, '..', 'resources'),
   'pngquant',
   'pngquant-macOs'
 );
@@ -183,8 +186,7 @@ if (TPlatform === 'windows' || TPlatform === 'macOs') {
     );
     return new Promise((resolve, reject) => {
       child.on('error', (error: any) => {
-        console.log('error', 'r');
-        console.error('Error:', error);
+        log.error('Error(pngquant):', error);
       });
       // fs.writeFileSync(minifiedImagePath, buffer); // 图片写入
       child.on('close', () => {
