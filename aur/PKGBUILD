@@ -3,16 +3,31 @@ pkgname=tiddlywiki-app
 pkgver=2.4.11
 pkgrel=1
 pkgdesc="你的最后一个 TiddlyWiki 桌面应用，提供更加丝滑的TiddlyWiki使用体验"
-arch=(x86_64)
+arch=('x86_64' 'aarch64')
 url="https://github.com/oeyoews/tiddlywiki-app"
 license=('MIT')
-source=("https://github.com/oeyoews/tiddlywiki-app/releases/download/v${pkgver}/${pkgname}_${pkgver}.deb")
+
+# 根据架构选择正确的 DEB 包
+case "$CARCH" in
+  x86_64)
+    deb_arch="amd64"
+    ;;
+  aarch64)
+    deb_arch="arm64"
+    ;;
+  *)
+    echo "Unsupported architecture: $CARCH"
+    exit 1
+    ;;
+esac
+
+source=("https://github.com/oeyoews/tiddlywiki-app/releases/download/v${pkgver}/${pkgname}_${pkgver}-${deb_arch}.deb")
 md5sums=('SKIP')
 
 package() {
-	bsdtar -xf data.tar.xz -C "$pkgdir/"
+    bsdtar -xf data.tar.xz -C "$pkgdir/"
 
-	 # 确保目标目录存在
+    # 确保目标目录存在
     install -d "$pkgdir/usr/bin"
 
     # 创建一个符号链接到可执行文件
