@@ -138,14 +138,15 @@ ipcMain.handle('update-gh-config', async (event: any, githubConfig: any) => {
 });
 
 ipcMain.on('tid-info', (_event, data) => {
+  const tiddlerFolder = path.join(config.get('wikiPath'), 'tiddlers');
   log.info(data, 'received tid-info');
   if (!data?.title) {
     // dialog.showErrorBox(t('dialog.openfileNotSupported'), '');
     log.info('open  default fodler');
-    shell.openPath(path.join(config.get('wikiPath'), 'tiddlers'));
+    shell.openPath(tiddlerFolder);
     return;
   }
-  const tidPath = path.join(config.get('wikiPath'), 'tiddlers', data.title);
+  const tidPath = path.join(tiddlerFolder, data.title);
   let maybeTidPath = null;
   if (data?.maybeTitle) {
     maybeTidPath = path.join(
@@ -161,7 +162,14 @@ ipcMain.on('tid-info', (_event, data) => {
     shell.showItemInFolder(maybeTidPath);
     log.info('open file form maybeTitle');
   } else {
-    shell.openPath(path.join(config.get('wikiPath'), 'tiddlers'));
+    const subwikiTid = path.join(tiddlerFolder, 'subwiki', data.title);
+    // 尝试读取 subwiki
+    if (fs.existsSync(subwikiTid)) {
+      shell.showItemInFolder(subwikiTid);
+    } else {
+      // 默认打开 文件夹
+      shell.openPath(tiddlerFolder);
+    }
     // TODO: 递归查询相应后缀的文件是否存在
     log.error(tidPath, 'not exit');
   }
