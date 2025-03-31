@@ -40,7 +40,20 @@ export const processEnv = {
   VITE_DIST: process.env.DIST,
 };
 // let pngquant: any;
-let pngquant = path.join(processEnv.VITE_PUBLIC, 'lib', 'pngquant.exe');
+let pngquantWindows = path.join(
+  processEnv.VITE_PUBLIC,
+  'lib',
+  'pngquant',
+  'pngquant-windows.exe'
+);
+let pngquantMacos = path.join(
+  processEnv.VITE_PUBLIC,
+  'lib',
+  'pngquant',
+  'pngquant-macOs'
+);
+const platform = getPlatform();
+let pngquant: any;
 
 const preload = path.join(process.env.DIST, 'preload/index.js');
 
@@ -133,7 +146,7 @@ async function createWindow() {
 }
 
 // 目前仅开始针对windows 进行支持
-if (getPlatform() === 'windows') {
+if (platform === 'windows' || platform === 'macOs') {
   // 主进程
   ipcMain.handle('get-data', async (_event, data) => {
     const imagePath = path.join(tempDir, 'pngquant.png');
@@ -154,6 +167,13 @@ if (getPlatform() === 'windows') {
       // @ts-ignore
       const crossSpawn = await import('cross-spawn');
       spawn = crossSpawn.default;
+    }
+    if (!pngquant) {
+      if (platform === 'windows') {
+        pngquant = pngquantWindows;
+      } else if (platform === 'macOs') {
+        pngquant === pngquantMacos;
+      }
     }
     // @ts-ignore
     const child = spawn(
