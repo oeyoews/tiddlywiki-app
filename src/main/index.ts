@@ -9,6 +9,7 @@ import {
   nativeTheme,
 } from 'electron';
 import { getAppIcon } from '@/utils/icon';
+let spawn: null;
 
 import { createMenuTemplate, showWikiInfo, initWiki } from '@/utils/index';
 import { config } from '@/utils/config';
@@ -17,11 +18,13 @@ import { server } from '@/utils';
 import { autoUpdaterInit } from '@/utils/checkUpdate';
 import { showInputBox } from '@/modules/showInputBox';
 import path from 'path';
+import { getPlatform } from '@/utils/getPlatform';
 
 let win: BrowserWindow;
 let wikiPath: string;
 
 const startTime = performance.now(); // 记录启动时间
+const tempDir = app.getPath('temp');
 
 // 环境变量配置
 const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL;
@@ -36,6 +39,8 @@ export const processEnv = {
   VITE_PUBLIC: process.env.VITE_PUBLIC,
   VITE_DIST: process.env.DIST,
 };
+// let pngquant: any;
+let pngquant = path.join(processEnv.VITE_PUBLIC, 'lib', 'pngquant.exe');
 
 const preload = path.join(process.env.DIST, 'preload/index.js');
 
@@ -125,6 +130,55 @@ async function createWindow() {
 
   const menu = Menu.buildFromTemplate(createMenuTemplate());
   Menu.setApplicationMenu(menu);
+}
+
+// 目前仅开始针对windows 进行支持
+if (getPlatform() === 'windows') {
+  // 主进程
+  ipcMain.handle('get-data', async (_event, data) => {
+    const imagePath = path.join(tempDir, 'pngquant.png');
+    const minifiedImagePath = path.join(tempDir, 'pngquant-minified.png');
+    const buffer = Buffer.from(data, 'base64');
+    fs.writeFileSync(imagePath, buffer); // 图片写入
+    if (fs.existsSync(minifiedImagePath)) {
+      fs.rmSync(minifiedImagePath); // 清空就图片
+    }
+
+    // TODO: 兼容性待测试, postinstall 下载exe 会失败了??
+    // if (!pngquant) {
+    //   // @ts-ignore
+    //   pngquant = (await import('pngquant-bin')).default;
+    // }
+
+    if (!spawn) {
+      // @ts-ignore
+      const crossSpawn = await import('cross-spawn');
+      spawn = crossSpawn.default;
+    }
+    // @ts-ignore
+    const child = spawn(
+      pngquant,
+      ['--quality=65-80', '--output', minifiedImagePath, imagePath],
+      { stdio: 'inherit' }
+    );
+    return new Promise((resolve, reject) => {
+      child.on('error', (error: any) => {
+        console.log('error', 'r');
+        console.error('Error:', error);
+      });
+      // fs.writeFileSync(minifiedImagePath, buffer); // 图片写入
+      child.on('close', () => {
+        if (!fs.existsSync(minifiedImagePath)) {
+          return reject(
+            new Error('Minified image not found, maybe this image has minifed')
+          );
+        }
+        const buffer = fs.readFileSync(minifiedImagePath);
+        const newData = buffer.toString('base64');
+        resolve(newData);
+      });
+    });
+  });
 }
 
 // 监听渲染进程请求并调用 `showInputBox`

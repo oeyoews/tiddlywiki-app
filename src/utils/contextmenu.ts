@@ -6,6 +6,7 @@ import {
 } from 'electron';
 import { getFolderIcon, getMenuIcon } from '@/utils/icon';
 import { t } from 'i18next';
+import { getPlatform } from './getPlatform';
 
 /**
  * 注册右键菜单
@@ -81,6 +82,18 @@ export const registerContextMenu = (
 
   // 如果右键点击的是图片，添加复制图片选项
   if (params.mediaType === 'image') {
+    if (getPlatform() === 'windows') {
+      menus.push({
+        label: t('menu.minifyImage'),
+        icon: getMenuIcon('panda'),
+        click: () => {
+          win.webContents.send('title-fetched', {
+            x: params.x,
+            y: params.y,
+          });
+        },
+      });
+    }
     menus.push({
       label: t('menu.copyImage'),
       icon: getMenuIcon('image'),

@@ -48,6 +48,7 @@ import { t } from 'i18next';
 let wikiInstances: { [port: number]: string } = {}; // 用于记录 port: wikipath, 便于端口复用
 
 let win: BrowserWindow; // 在 initwiki 初始化时赋值
+const desktopDir = app.getPath('desktop');
 
 // NOTE： 这里使用使用对象引用, 便于更新值
 export const server = {
@@ -239,6 +240,7 @@ export async function initWiki(
 export async function createNewWiki() {
   const result = await dialog.showOpenDialog({
     title: t('dialog.selectNewWikiFolder'),
+    defaultPath: path.join(desktopDir, 'index.html'),
     properties: ['openDirectory'],
     message: t('dialog.selectNewWikiFolderMessage'),
   });
@@ -424,7 +426,7 @@ export async function importSingleFileWiki(
   }
 }
 
-export async function buildWiki(password?: string) {
+export async function buildWiki({ password }: IBuildOptions) {
   try {
     const wikiPath = config.get('wikiPath');
     checkBuildInfo(wikiPath);
@@ -457,18 +459,47 @@ export async function buildWiki(password?: string) {
           t('dialog.preview'),
           t('dialog.showInFolder'),
           t('menu.publish'),
+          '另存为',
           t('dialog.close'),
         ],
         defaultId: 0,
-        cancelId: 3,
+        cancelId: 4,
       });
 
-      if (result.response === 0) {
-        shell.openExternal(`file://${outputPath}`);
-      } else if (result.response === 1) {
-        shell.showItemInFolder(outputPath);
-      } else if (result.response === 2) {
-        await releaseWiki();
+      switch (result.response) {
+        case 0:
+          shell.openExternal(`file://${outputPath}`);
+          break;
+        case 1:
+          shell.showItemInFolder(outputPath);
+          break;
+        case 2:
+          await releaseWiki();
+          break;
+        case 3:
+          const { filePath } = await dialog.showSaveDialog({
+            title: t('dialog.saveAs'),
+            defaultPath: path.join(desktopDir, Date.now() + '-index.html'),
+            filters: [{ name: 'HTML', extensions: ['html'] }],
+          });
+
+          if (filePath) {
+            try {
+              await fs.promises.copyFile(outputPath, filePath);
+              dialog.showMessageBox({
+                type: 'info',
+                title: t('dialog.saveAsSuccess'),
+                message: `${t('dialog.saveAsSuccess')}: ${filePath}`,
+                buttons: [t('dialog.confirm')],
+              });
+            } catch (error: any) {
+              // log.log('保存失败: ' + error.message);
+              // dialog.showErrorBox('保存失败', '无法保存文件: ' + error.message);
+            }
+          }
+          break;
+        default:
+          break;
       }
     });
   } catch (err: any) {

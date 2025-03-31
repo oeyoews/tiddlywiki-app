@@ -20,6 +20,7 @@ type IMenuIconFile =
   | 'File'
   | 'warning'
   | 'folder-wiki'
+  | 'panda'
   | 'folder-wiki1-dark'
   | 'folder-wiki1-light'
   | 'trash'
@@ -103,3 +104,8 @@ type IMarkdownTiddler = {
   text: string;
   modified: string;
 };
+
+interface IBuildOptions {
+  password?: string;
+  // outputPath?: string
+}

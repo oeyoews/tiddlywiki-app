@@ -31,6 +31,37 @@ if (window.$tw) {
     importMarkdown(content);
   });
 
+  // TODO: 判断 windows  注册
+  // 尺寸变化写入 description
+  electronAPI.onTitleFetched(async (data: any) => {
+    const { text, title } = getImage(data);
+    if (!title) {
+      console.log('no imagedata');
+      return;
+    }
+    const newImage = await electronAPI.startFetchData(text);
+    if (!newImage) {
+      console.log('newimage not exist');
+      return;
+    }
+    $tw.wiki.setText(title, 'text', null, newImage);
+    // TODO: 提示压缩成功
+  });
+
+  function getImage(data) {
+    const el = document.elementFromPoint(data.x, data.y);
+    const attr = 'data-tiddler-title';
+    const titleEl = el?.closest(`[${attr}]`);
+    const title = titleEl?.getAttribute(attr) || null; // 获取属性值，若不存在则返回 null
+
+    if ($tw.wiki.tiddlerExists(title)) {
+      const { type, text } = $tw.wiki.getTiddler(title).fields;
+      if (type === 'image/png') {
+        return { text, title };
+      }
+    }
+  }
+
   function getTiddlerTitle(data) {
     const el = document.elementFromPoint(data.x, data.y);
     const attr = 'data-tiddler-title';

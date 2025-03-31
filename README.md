@@ -81,3 +81,6 @@ Secondly, what sets Tiddlywiki APP apart is that it doesn't interfere with users
 Regarding the blank version, I want users to experience 100% pure TiddlyWiki when first encountering it, rather than being overwhelmed by plugins. This might be why Jermolene chose to provide a blank version for users' initial TiddlyWiki experience.
 
 As for concerns about "blank versions scaring away new users," I won't discuss that much here. While I hope more people learn about TiddlyWiki, I won't actively promote it, as currently, TiddlyWiki's ease of use doesn't offer significant promotional advantages.
+
+<!-- 1. 文件夹首次进行图片压缩.
+2. 单个图片压缩 -->

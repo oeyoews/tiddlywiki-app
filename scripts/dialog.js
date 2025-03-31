@@ -195,6 +195,14 @@ module.exports = {
     'en-US': 'Import',
     'zh-CN': '导入',
   },
+  saveAsSuccess: {
+    'en-US': 'File Saved successfully',
+    'zh-CN': '文件已成功保存',
+  },
+  saveAs: {
+    'en-US': 'Save as',
+    'zh-CN': '另存为',
+  },
   inputPassword: {
     'en-US': 'Please input password',
     'zh-CN': '请输入密码',

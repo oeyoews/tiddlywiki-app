@@ -67,6 +67,10 @@ module.exports = {
     'en-US': 'Reload',
     'zh-CN': '重新加载',
   },
+  minifyImage: {
+    'en-US': 'Minify Image',
+    'zh-CN': '压缩图片',
+  },
   showLogs: {
     'en-US': 'Open Application Logs',
     'zh-CN': '打开日志',
