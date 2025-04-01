@@ -23,6 +23,8 @@ export const electronAPI = {
 
   startFetchData: async (data) => ipcRenderer.invoke('get-data', data),
 
+  onConfetti: (callback) => ipcRenderer.on('wiki-imported', callback),
+
   // onTwInstanceUpdate: (callback) =>
   //   ipcRenderer.on('tw-instance-update', callback),
   // openWiki: () => ipcRenderer.invoke('dialog:openWiki'),

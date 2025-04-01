@@ -31,6 +31,11 @@ if (window.$tw) {
     importMarkdown(content);
   });
 
+  // imported successfully
+  electronAPI.onConfetti(() => {
+    pride();
+  });
+
   // TODO: 判断 windows  注册
   // 尺寸变化写入 description
   electronAPI.onTitleFetched(async (data: any) => {
@@ -208,3 +213,15 @@ function importMarkdown(content: IMarkdownTiddler[]) {
   const goto = new $tw.Story();
   goto.navigateTiddler(importedTitle);
 }
+
+const pride = () => {
+  var duration = 0.5 * 1000;
+  var end = Date.now() + duration;
+  (function frame() {
+    confetti({ particleCount: 7, angle: 60, spread: 55, origin: { x: 0 } });
+    confetti({ particleCount: 7, angle: 120, spread: 55, origin: { x: 1 } });
+    if (Date.now() < end) {
+      requestAnimationFrame(frame);
+    }
+  })();
+};

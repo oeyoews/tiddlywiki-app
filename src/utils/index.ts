@@ -418,6 +418,7 @@ export async function importSingleFileWiki(
     }
     config.set('wikiPath', targetPath);
     // 避免启动大的wiki导致卡顿， 需要重启
+    win.webContents.send('wiki-imported');
     await restartDialog(
       t('dialog.importSuccessMessage'),
       t('dialog.restartNow')
