@@ -39,22 +39,20 @@ export const processEnv = {
   VITE_PUBLIC: process.env.VITE_PUBLIC,
   VITE_DIST: process.env.DIST,
 };
+
+let pngquantDir = path.join(
+  app.isPackaged
+    ? process.resourcesPath
+    : path.join(__dirname, '..', 'resources'),
+  'pngquant'
+);
 // let pngquant: any;
 let pngquantWindows = path.join(
+  pngquantDir,
   // processEnv.VITE_PUBLIC,
-  app.isPackaged
-    ? process.resourcesPath
-    : path.join(__dirname, '..', 'resources'),
-  'pngquant',
   'pngquant-windows.exe'
 );
-let pngquantMacos = path.join(
-  app.isPackaged
-    ? process.resourcesPath
-    : path.join(__dirname, '..', 'resources'),
-  'pngquant',
-  'pngquant-macOs'
-);
+let pngquantMacos = path.join(pngquantDir, 'pngquant', 'pngquant-macOs');
 export const TPlatform = getPlatform();
 let pngquant: any;
 
@@ -173,16 +171,16 @@ if (TPlatform === 'windows' || TPlatform === 'macOs') {
     }
     if (!pngquant) {
       if (TPlatform === 'windows') {
-        pngquant = pngquantWindows;
+        pngquant = `"${pngquantWindows}"`;
       } else if (TPlatform === 'macOs') {
-        pngquant = pngquantMacos;
+        pngquant = `"${pngquantMacos}"`;
       }
     }
     // @ts-ignore
     const child = spawn(
       pngquant,
       ['--quality=65-80', '--output', minifiedImagePath, imagePath],
-      { stdio: 'inherit', shell: true }
+      { stdio: 'inherit', shell: false }
     );
     return new Promise((resolve, reject) => {
       child.on('error', (error: any) => {
