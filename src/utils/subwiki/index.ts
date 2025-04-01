@@ -35,7 +35,8 @@ export async function createSymlink(
   }
 }
 
-// TODO: 检查subwiki 是否有效， 如果无效就创建
+// TODO: 导入时产生的files,需要检测是否有效， 如果无效就创建
+// TODO: 由于output/files 是嵌套软连接， 构建的时候也需要检测
 /**
  * 检查软链接是否有效
  * @param symlinkPath 软链接路径
