@@ -34,3 +34,36 @@ export async function createSymlink(
     throw error;
   }
 }
+
+// TODO: 检查subwiki 是否有效， 如果无效就创建
+/**
+ * 检查软链接是否有效
+ * @param symlinkPath 软链接路径
+ * @returns 是否有效
+ */
+export async function isSymlinkValid(symlinkPath: string): Promise<boolean> {
+  try {
+    if (!(await fs.pathExists(symlinkPath))) {
+      log.info(`softlink ${symlinkPath} does not exist`);
+      return false;
+    }
+
+    const stats = await fs.lstat(symlinkPath);
+    if (!stats.isSymbolicLink()) {
+      log.info(`${symlinkPath} is not a symlink`);
+      return false;
+    }
+
+    const target = await fs.readlink(symlinkPath);
+    if (!(await fs.pathExists(target))) {
+      log.info(`softlink ${symlinkPath} points to invalid target: ${target}`);
+      return false;
+    }
+
+    log.info(`softlink ${symlinkPath} is valid`);
+    return true;
+  } catch (error) {
+    log.error(`failed to check softlink:`, error);
+    return false;
+  }
+}
