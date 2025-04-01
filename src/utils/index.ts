@@ -404,6 +404,17 @@ export async function importSingleFileWiki(
       ];
       boot.boot();
       log.log('import file successfully', htmlPath, boot.argv);
+      // 尝试创建files软连接
+      if (!html) {
+        const htmlDir = path.dirname(htmlPath);
+        const filesDir = path.join(htmlDir, 'files');
+        const targetFolderFile = path.join(targetPath, 'files');
+        // 检测是否已经存在files文件夹
+        if (fs.existsSync(filesDir) && !fs.existsSync(targetFolderFile)) {
+          await createSymlink(filesDir, targetFolderFile);
+          log.info('create file symlink', filesDir, targetFolderFile);
+        }
+      }
     }
     config.set('wikiPath', targetPath);
     // 避免启动大的wiki导致卡顿， 需要重启
@@ -448,6 +459,15 @@ export async function buildWiki({ password }: IBuildOptions) {
       // 构建完成
       win.setProgressBar(1);
       log.log(t('log.startBuild'));
+
+      const filesDir = path.join(wikiPath, 'files');
+      const targetFolderFile = path.join(wikiPath, 'output', 'files');
+      // 尝试创建files软连接
+      // 检测是否已经存在files文件夹
+      if (fs.existsSync(filesDir) && !fs.existsSync(targetFolderFile)) {
+        await createSymlink(filesDir, targetFolderFile);
+        log.info('create file symlink(build)', filesDir, targetFolderFile);
+      }
 
       setTimeout(() => win.setProgressBar(-1), 1000); // 1 秒后移除进度条
 
