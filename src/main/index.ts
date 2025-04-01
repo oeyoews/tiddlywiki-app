@@ -180,7 +180,7 @@ if (TPlatform === 'windows' || TPlatform === 'macOs') {
     const child = spawn(
       pngquant,
       ['--quality=65-80', '--output', minifiedImagePath, imagePath],
-      { stdio: 'inherit', shell: false }
+      { stdio: 'inherit', shell: true } // shell muse be true
     );
     return new Promise((resolve, reject) => {
       child.on('error', (error: any) => {
