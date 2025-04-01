@@ -175,14 +175,14 @@ if (TPlatform === 'windows' || TPlatform === 'macOs') {
       if (TPlatform === 'windows') {
         pngquant = pngquantWindows;
       } else if (TPlatform === 'macOs') {
-        pngquant === pngquantMacos;
+        pngquant = pngquantMacos;
       }
     }
     // @ts-ignore
     const child = spawn(
       pngquant,
       ['--quality=65-80', '--output', minifiedImagePath, imagePath],
-      { stdio: 'inherit' }
+      { stdio: 'inherit', shell: true }
     );
     return new Promise((resolve, reject) => {
       child.on('error', (error: any) => {
