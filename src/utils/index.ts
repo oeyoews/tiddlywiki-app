@@ -421,7 +421,7 @@ export async function importSingleFileWiki(
     // TODO: 移除提示， 直接强制重启
     await restartDialog(
       t('dialog.importSuccessMessage'),
-      t('dialog.cancel'),
+      t('dialog.importSuccess'),
       () => {
         config.set('wikiPath', targetPath);
       }
