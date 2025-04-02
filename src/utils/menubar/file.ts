@@ -47,7 +47,7 @@ export const fileMenu = (
     },
     {
       label: t('menu.wikiTemplate'),
-      icon: getMenuIcon('new-folder-template'),
+      icon: getMenuIcon('plus2'),
       submenu: Object.entries(wikiTemplates).map((tpl) => {
         if (tpl[0] === 'default') {
           return {
@@ -83,7 +83,7 @@ export const fileMenu = (
         return {
           label: capitalizeWords(tpl[0]),
           // visible: tpl[0] !== 'tiddly-template', // 暂时隐藏tiddly-template
-          icon: getMenuIcon('html'),
+          icon: getMenuIcon('web_app'),
           click: async () => {
             await downloadTpl(
               tpl,
@@ -99,7 +99,7 @@ export const fileMenu = (
     {
       label: t('menu.createNewWiki'),
       accelerator: 'CmdOrCtrl+N',
-      icon: getMenuIcon('new-wiki'),
+      icon: getMenuIcon('plus'),
       click: async () => {
         const res = await createNewWiki();
         if (res?.port) {
@@ -173,7 +173,7 @@ export const fileMenu = (
     { type: 'separator' },
     {
       label: t('menu.buildWiki'),
-      icon: getMenuIcon('build'),
+      icon: getMenuIcon('export'),
       click: () => buildWiki({}),
     },
     {

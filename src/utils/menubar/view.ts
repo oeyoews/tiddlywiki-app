@@ -65,7 +65,7 @@ export const viewMenu = (): MenuItemConstructorOptions => ({
     },
     {
       label: t('menu.toggleMenuBar'),
-      icon: getMenuIcon('settings'),
+      icon: getMenuIcon('gear'),
       accelerator: 'Alt+M',
       click: () => {
         const isVisible = server.win.isMenuBarVisible();

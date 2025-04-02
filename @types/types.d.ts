@@ -20,6 +20,11 @@ type IMenuIconFile =
   | 'File'
   | 'warning'
   | 'config'
+  | 'export'
+  | 'gear'
+  | 'plus'
+  | 'plus2'
+  | 'web_app'
   | 'folder-wiki'
   | 'folder-opened'
   | 'panda'
@@ -75,6 +80,7 @@ type IMenuIconSetting =
 
 type IMenuHelpIcon =
   | 'about'
+  | 'info'
   | 'update'
   | 'log'
   | 'log2'

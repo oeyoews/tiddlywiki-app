@@ -77,7 +77,7 @@ export const settingsMenu = (): MenuItemConstructorOptions => ({
     },
     {
       label: t('menu.githubConfig'),
-      icon: getMenuIcon('settings'),
+      icon: getMenuIcon('gear'),
       click: configureGitHub,
     },
     {

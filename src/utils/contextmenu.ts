@@ -21,7 +21,7 @@ export const registerContextMenu = (
     {
       accelerator: 'Alt+M',
       label: t('menu.toggleMenuBar'),
-      icon: getMenuIcon('menu'),
+      icon: getMenuIcon('gear'),
       click: () => {
         const isVisible = win.isMenuBarVisible();
         win.setMenuBarVisibility(!isVisible);
