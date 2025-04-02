@@ -94,8 +94,19 @@ export const createMenubar = (
       ],
     };
 
+    const recentWikisWithTag = recentWikis.map((item) => {
+      const wiki = {
+        path: item,
+        running: false,
+      };
+      if (runningWikis.includes(item)) {
+        wiki.running = true;
+      }
+      return wiki;
+    });
+
     const menubars: MenuItemConstructorOptions[] = [
-      fileMenu(recentWikis, runningWikis),
+      fileMenu(recentWikisWithTag),
       viewMenu(),
       manageWikiMenu,
       settingsMenu(),

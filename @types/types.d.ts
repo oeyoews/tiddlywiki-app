@@ -111,3 +111,8 @@ interface IBuildOptions {
   password?: string;
   // outputPath?: string
 }
+
+type IRecentWikisWithTag = {
+  path: string;
+  running: boolean;
+};
