@@ -416,12 +416,15 @@ export async function importSingleFileWiki(
         }
       }
     }
-    config.set('wikiPath', targetPath);
     // 避免启动大的wiki导致卡顿， 需要重启
     win.webContents.send('wiki-imported');
+    // TODO: 移除提示， 直接强制重启
     await restartDialog(
       t('dialog.importSuccessMessage'),
-      t('dialog.restartNow')
+      t('dialog.cancel'),
+      () => {
+        config.set('wikiPath', targetPath);
+      }
     );
     // successImportNotify.show()
     // restartDialog("")
@@ -560,7 +563,8 @@ export async function configureGitHub() {
 
 async function restartDialog(
   title = t('settings.settingChanged'),
-  message = t('settings.restartTips')
+  message = t('settings.restartTips'),
+  cbl?: Function
 ) {
   const result = await dialog.showMessageBox({
     type: 'info',
@@ -573,6 +577,9 @@ async function restartDialog(
   });
 
   if (result.response === 0) {
+    if (typeof cbl === 'function') {
+      cbl();
+    }
     log.info('restart');
     app.relaunch();
     app.exit(0);
