@@ -240,7 +240,7 @@ export async function initWiki(
 export async function createNewWiki() {
   const result = await dialog.showOpenDialog({
     title: t('dialog.selectNewWikiFolder'),
-    defaultPath: path.join(desktopDir, 'index.html'),
+    defaultPath: path.join(desktopDir),
     properties: ['openDirectory'],
     message: t('dialog.selectNewWikiFolderMessage'),
   });
@@ -269,6 +269,7 @@ export async function openWiki() {
   const result = await dialog.showOpenDialog({
     title: t('dialog.selectWikiFolder'),
     properties: ['openDirectory'],
+    defaultPath: path.join(config.get('wikiPath'), '..'),
   });
 
   if (!result.canceled && result.filePaths.length > 0) {
