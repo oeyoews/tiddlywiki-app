@@ -32,9 +32,6 @@ importers:
       i18next:
         specifier: ^24.2.2
         version: 24.2.2(typescript@5.8.2)
-      svgo:
-        specifier: ^3.3.2
-        version: 3.3.2
       tiddlywiki:
         specifier: npm:@oeyoews/tiddlywiki-lite@5.3.6-lite-20250402
         version: '@oeyoews/tiddlywiki-lite@5.3.6-lite-20250402'
@@ -57,6 +54,9 @@ importers:
       sharp:
         specifier: ^0.33.5
         version: 0.33.5
+      svgo:
+        specifier: ^3.3.2
+        version: 3.3.2
       vite:
         specifier: ^6.2.2
         version: 6.2.2(@types/node@22.13.14)
