@@ -1,5 +1,10 @@
 import { i18next } from '@/i18n/index';
-import { type MenuItemConstructorOptions, app, MenuItem } from 'electron';
+import {
+  type MenuItemConstructorOptions,
+  app,
+  MenuItem,
+  shell,
+} from 'electron';
 import { log } from '@/utils/logger';
 import { getMenuIcon } from '../icon';
 import { config } from '../config';
@@ -93,6 +98,13 @@ export const settingsMenu = (): MenuItemConstructorOptions => ({
           click: () => switchLanguage('en-US'),
         },
       ],
+    },
+    {
+      label: t('menu.openSettings'),
+      icon: getMenuIcon('config'),
+      click: () => {
+        shell.openPath(config.fileName);
+      },
     },
     {
       label: t('menu.enableIcon'),

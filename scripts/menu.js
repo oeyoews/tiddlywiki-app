@@ -67,6 +67,10 @@ module.exports = {
     'en-US': 'Reload',
     'zh-CN': '重新加载',
   },
+  openSettings: {
+    'en-US': 'Open Configuration',
+    'zh-CN': '打开配置文件',
+  },
   minifyImage: {
     'en-US': 'Minify Image',
     'zh-CN': '压缩图片',

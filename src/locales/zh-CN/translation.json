@@ -17,6 +17,7 @@
     "twdocs": "TiddlyWiki 文档",
     "forum": "TiddlyWiki 社区论坛",
     "reload": "重新加载",
+    "openSettings": "打开配置文件",
     "minifyImage": "压缩图片",
     "showLogs": "打开日志",
     "forceReload": "强制刷新",

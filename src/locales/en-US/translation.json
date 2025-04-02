@@ -17,6 +17,7 @@
     "twdocs": "TiddlyWiki Documentation",
     "forum": "TiddlyWiki Community Forum",
     "reload": "Reload",
+    "openSettings": "Open Configuration",
     "minifyImage": "Minify Image",
     "showLogs": "Open Application Logs",
     "forceReload": "Force Refresh",
