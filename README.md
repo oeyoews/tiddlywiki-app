@@ -31,11 +31,11 @@ A TiddlyWiki desktop application that provides a smoother desktop experience.
 
 ### 🔰 Installation
 
-Download and install the latest version of the application.
+[Download tiddlywiki-app](https://github.com/oeyoews/tiddlywiki-app/releases)
 
-* Manjaro Series: `pacman -S appimagelauncher and use appimage install, or use pacman package`
+<!-- * Manjaro Series: `pacman -S appimagelauncher and use appimage install, or use pacman package`
 * Windows: Download the exe file
-* macOS: Download the dmg installer (untested)
+* macOS: Download the dmg installer (untested) -->
 
 ### ⚡ Basic Operations
 
