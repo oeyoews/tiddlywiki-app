@@ -36,8 +36,8 @@ importers:
         specifier: ^24.2.2
         version: 24.2.2(typescript@5.8.2)
       tiddlywiki:
-        specifier: npm:@oeyoews/tiddlywiki-lite@5.3.6-lite-20250323-1
-        version: '@oeyoews/tiddlywiki-lite@5.3.6-lite-20250323-1'
+        specifier: npm:@oeyoews/tiddlywiki-lite@5.3.6-lite-20250402
+        version: '@oeyoews/tiddlywiki-lite@5.3.6-lite-20250402'
     devDependencies:
       '@playwright/test':
         specifier: ^1.51.1
@@ -95,8 +95,8 @@ packages:
     resolution: {integrity: sha512-Qkzpg2s9GnVV2I2BjRksUi43U5e6+zaQMcjoJy0C+C5oxaKl+fmckGDQFtRpZpZV0NQekuZZ+tGz7EA9TVnQtQ==}
     engines: {node: '>=12'}
 
-  '@electron/node-gyp@https://codeload.github.com/electron/node-gyp/tar.gz/06b29aafb7708acef8b3669835c8a7857ebc92d2':
-    resolution: {tarball: https://codeload.github.com/electron/node-gyp/tar.gz/06b29aafb7708acef8b3669835c8a7857ebc92d2}
+  '@electron/node-gyp@git+https://git@github.com:electron/node-gyp.git#06b29aafb7708acef8b3669835c8a7857ebc92d2':
+    resolution: {commit: 06b29aafb7708acef8b3669835c8a7857ebc92d2, repo: git@github.com:electron/node-gyp.git, type: git}
     version: 10.2.0-electron.1
     engines: {node: '>=12.13.0'}
     hasBin: true
@@ -418,8 +418,8 @@ packages:
     engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
     deprecated: This functionality has been moved to @npmcli/fs
 
-  '@oeyoews/tiddlywiki-lite@5.3.6-lite-20250323-1':
-    resolution: {integrity: sha512-b9E44WUxyM3mspgh0p2zc0DOHX1Oj6NiL5fy9SvMgEoRqkPa5c8ACxUUjBMVlkRNyJI4dJqC4OFqDz53JOswgg==}
+  '@oeyoews/tiddlywiki-lite@5.3.6-lite-20250402':
+    resolution: {integrity: sha512-kD4DhUdhjOxcQrgFjCeNN8Rlg5abBvfuk+xmO0jqzRUOfZJDSzDckeyz6DTW7f+wDV+04wiN4BDzsnIIrrblTg==}
     engines: {node: '>=0.8.2'}
     hasBin: true
     bundledDependencies: []
@@ -2079,7 +2079,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@electron/node-gyp@https://codeload.github.com/electron/node-gyp/tar.gz/06b29aafb7708acef8b3669835c8a7857ebc92d2':
+  '@electron/node-gyp@git+https://git@github.com:electron/node-gyp.git#06b29aafb7708acef8b3669835c8a7857ebc92d2':
     dependencies:
       env-paths: 2.2.1
       exponential-backoff: 3.1.2
@@ -2136,7 +2136,7 @@ snapshots:
 
   '@electron/rebuild@3.7.0':
     dependencies:
-      '@electron/node-gyp': https://codeload.github.com/electron/node-gyp/tar.gz/06b29aafb7708acef8b3669835c8a7857ebc92d2
+      '@electron/node-gyp': git+https://git@github.com:electron/node-gyp.git#06b29aafb7708acef8b3669835c8a7857ebc92d2
       '@malept/cross-spawn-promise': 2.0.0
       chalk: 4.1.2
       debug: 4.4.0
@@ -2355,7 +2355,7 @@ snapshots:
       mkdirp: 1.0.4
       rimraf: 3.0.2
 
-  '@oeyoews/tiddlywiki-lite@5.3.6-lite-20250323-1': {}
+  '@oeyoews/tiddlywiki-lite@5.3.6-lite-20250402': {}
 
   '@pkgjs/parseargs@0.11.0':
     optional: true

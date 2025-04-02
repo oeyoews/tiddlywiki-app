@@ -1,6 +1,6 @@
 {
   "name": "tiddlywiki-app",
-  "version": "3.3.5",
+  "version": "3.3.6",
   "description": "TiddlyWiki App",
   "main": "./dist/main/index.js",
   "repository": {
@@ -35,7 +35,7 @@
     "get-port": "^7.1.0",
     "gray-matter": "^4.0.3",
     "i18next": "^24.2.2",
-    "tiddlywiki": "npm:@oeyoews/tiddlywiki-lite@5.3.6-lite-20250323-1"
+    "tiddlywiki": "npm:@oeyoews/tiddlywiki-lite@5.3.6-lite-20250402"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
