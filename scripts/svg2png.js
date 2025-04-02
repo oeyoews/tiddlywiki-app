@@ -20,17 +20,39 @@
 const fs = require('fs');
 const path = require('path');
 const sharp = require('sharp');
+const { optimize } = require('svgo');
+
+async function optimizeSvg(inputBuffer) {
+  try {
+    const result = optimize(inputBuffer.toString(), {
+      multipass: true,
+      plugins: [
+        'removeComments',
+        'mergePaths',
+        'removeEditorsNSData',
+        'removeMetadata',
+      ],
+    });
+    return Buffer.from(result.data);
+  } catch (error) {
+    console.error('SVG优化失败:', error);
+    return inputBuffer;
+  }
+}
 
 async function convertSvgToPng(inputPath, outputPath, options = {}) {
   const { width = 256, height = 256 } = options;
 
   try {
     const svgBuffer = fs.readFileSync(inputPath);
-    await sharp(svgBuffer).resize(width, height).png().toFile(outputPath);
+    // 先优化SVG
+    const optimizedSvg = await optimizeSvg(svgBuffer);
+    // 然后转换为PNG
+    await sharp(optimizedSvg).resize(width, height).png().toFile(outputPath);
 
-    console.log(`Converted ${inputPath} to ${outputPath}`);
+    console.log(`已转换 ${inputPath} 为 ${outputPath}`);
   } catch (error) {
-    console.error(`Error converting ${inputPath}:`, error);
+    console.error(`转换 ${inputPath} 时出错:`, error);
   }
 }
 
