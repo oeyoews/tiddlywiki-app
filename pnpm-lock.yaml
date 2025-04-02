@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@types/fs-extra':
-        specifier: ^11.0.4
-        version: 11.0.4
       cross-spawn:
         specifier: ^7.0.6
         version: 7.0.6
@@ -42,6 +39,9 @@ importers:
       '@playwright/test':
         specifier: ^1.51.1
         version: 1.51.1
+      '@types/fs-extra':
+        specifier: ^11.0.4
+        version: 11.0.4
       electron:
         specifier: ^35.0.3
         version: 35.0.3
