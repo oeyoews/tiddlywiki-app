@@ -221,6 +221,7 @@ export async function initWiki(
       twBoot.boot();
       startServer(server.currentPort);
       log.info('start new server on', server.currentPort);
+      config.set('runningWikis', [...config.get('runningWikis'), wikiFolder]);
     } else {
       // 直接加载已存在的服务器
       startServer(server.currentPort);

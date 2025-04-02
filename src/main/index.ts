@@ -135,6 +135,7 @@ async function createWindow() {
   // });
 
   const isFirstTime = !config.get('wikiPath');
+  config.set('runningWikis', []);
   await initWiki(wikiPath, isFirstTime, win);
 
   win.webContents.on('did-finish-load', async () => {
@@ -335,6 +336,7 @@ app.on('open-url', (event: any, url: string) => {
 app.on('before-quit', () => {
   app.isQuitting = true;
   log.info('tiddlywiki app before quit.');
+  // config.set('runningWikis', []);
 });
 
 // 启动应用

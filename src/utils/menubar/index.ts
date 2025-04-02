@@ -34,6 +34,7 @@ export const createMenubar = (
     const recentWikis = (config.get('recentWikis') || []).filter(
       (path: string) => path !== config.get('wikiPath')
     );
+    const runningWikis = config.get('runningWikis') || [];
 
     const mwikis = recentWikis.map((wikiPath: string) => ({
       id: generateId(wikiPath),
@@ -94,7 +95,7 @@ export const createMenubar = (
     };
 
     const menubars: MenuItemConstructorOptions[] = [
-      fileMenu(recentWikis),
+      fileMenu(recentWikis, runningWikis),
       viewMenu(),
       manageWikiMenu,
       settingsMenu(),

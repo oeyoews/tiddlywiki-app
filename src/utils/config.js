@@ -15,6 +15,7 @@ const DEFAULT_WIKI_DIR = path.join(app.getPath('desktop'), 'wiki'); // use app.g
 const options = {
   defaults: {
     // betaChannel: false,
+    runningWikis: [],
     icon: true,
     wikiPath: DEFAULT_WIKI_DIR,
     language: null,

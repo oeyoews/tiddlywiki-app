@@ -26,7 +26,8 @@ import { log } from '../logger';
 import { t } from 'i18next';
 
 export const fileMenu = (
-  recentWikis: string[]
+  recentWikis: string[],
+  runningWikis: string[]
 ): MenuItemConstructorOptions => ({
   label: t('menu.file'),
   id: 'File',
@@ -92,9 +93,13 @@ export const fileMenu = (
       icon: getMenuIcon('recent'),
       submenu: [
         ...recentWikis.map((wikiPath: string) => ({
-          label: wikiPath,
+          label: runningWikis.includes(wikiPath)
+            ? wikiPath + ' (Runing)'
+            : wikiPath,
           id: wikiPath,
-          icon: getMenuIcon('folder'),
+          icon: getMenuIcon(
+            runningWikis.includes(wikiPath) ? 'folder-opened' : 'folder'
+          ),
           click: async (menuItem: MenuItem) => {
             if (!fs.existsSync(menuItem.id)) {
               const res = await dialog.showMessageBox({

@@ -21,6 +21,7 @@ type IMenuIconFile =
   | 'warning'
   | 'config'
   | 'folder-wiki'
+  | 'folder-opened'
   | 'panda'
   | 'folder-wiki1-dark'
   | 'folder-wiki1-light'
