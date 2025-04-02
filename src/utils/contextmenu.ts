@@ -55,6 +55,7 @@ export const registerContextMenu = (
     {
       label: t('menu.paste'),
       icon: getMenuIcon('paste'),
+      accelerator: 'CmdOrCtrl+V',
       role: 'paste',
       // enabled: params.editFlags.canPaste,
       visible: params.editFlags.canPaste,
