@@ -1,6 +1,3 @@
-// @version: 5.3.6
-
-// @version: 5.3.6
 export const wikiTemplates = {
   default: 'server',
   '-': '',
@@ -12,6 +9,8 @@ export const wikiTemplates = {
   grok: 'https://grok-tiddlywiki-official.tiddlyhost.com/',
   'tiddly-template':
     'https://oeyoews.github.io/tiddlywiki-templates/tiddly-template.html',
+  '--': '',
+  help: '',
 };
 
-export type IWikiTemplate = Omit<typeof wikiTemplates, 'default' | '-'>;
+export type IWikiTemplate = Omit<typeof wikiTemplates, 'default' | '-' | '--'>;

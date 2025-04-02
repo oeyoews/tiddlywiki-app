@@ -1,4 +1,8 @@
 module.exports = {
+  title: {
+    'en-US': 'TiddlyWiki App',
+    'zh-CN': 'TiddlyWiki App',
+  },
   name: {
     'en-US': 'TiddlyWiki App',
     'zh-CN': 'TiddlyWiki 应用',

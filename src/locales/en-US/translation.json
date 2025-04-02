@@ -57,6 +57,7 @@
     "clearRecentWikis": "Clear Recent History"
   },
   "app": {
+    "title": "TiddlyWiki App",
     "name": "TiddlyWiki App",
     "about": "About Wiki",
     "version": "Version",
@@ -120,6 +121,7 @@
     "htmlFilter": "TiddlyWiki HTML",
     "templateDownloading": "template downloading",
     "import": "Import",
+    "checkTemplates": "Check TiddlyWiki Templates",
     "saveAsSuccess": "File Saved successfully",
     "saveAs": "Save as",
     "inputPassword": "Please input password",

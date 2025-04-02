@@ -57,6 +57,7 @@
     "clearRecentWikis": "清空最近历史"
   },
   "app": {
+    "title": "TiddlyWiki App",
     "name": "TiddlyWiki 应用",
     "about": "关于维基",
     "version": "版本",
@@ -120,6 +121,7 @@
     "htmlFilter": "TiddlyWiki HTML",
     "templateDownloading": "模板下载中",
     "import": "导入",
+    "checkTemplates": "检查TiddlyWiki模板",
     "saveAsSuccess": "文件已成功保存",
     "saveAs": "另存为",
     "inputPassword": "请输入密码",

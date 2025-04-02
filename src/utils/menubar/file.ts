@@ -2,6 +2,7 @@ import {
   Menu,
   app,
   dialog,
+  shell,
   type MenuItem,
   type MenuItemConstructorOptions,
 } from 'electron';
@@ -55,8 +56,29 @@ export const fileMenu = (
             click: () => importSingleFileWiki(),
           };
         }
-        if (tpl[0] === '-') {
+        if (tpl[0].startsWith('-')) {
           return { type: 'separator' };
+        }
+        if (tpl[0] === 'help') {
+          return {
+            label: t('menu.help'),
+            icon: getMenuIcon('help'),
+            click: async () => {
+              const res = await dialog.showMessageBox({
+                title: t('app.title'),
+                icon: getMenuIcon('help', 256),
+                message: '',
+                buttons: [t('dialog.checkTemplates'), t('dialog.close')],
+                defaultId: 0,
+                cancelId: 1,
+              });
+              if (res.response === 0) {
+                shell.openExternal(
+                  'https://github.com/oeyoews/tiddlywiki-app/blob/main/src/utils/wikiTemplates.ts'
+                );
+              }
+            },
+          };
         }
         return {
           label: capitalizeWords(tpl[0]),

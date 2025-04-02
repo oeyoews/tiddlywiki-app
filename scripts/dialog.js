@@ -195,6 +195,10 @@ module.exports = {
     'en-US': 'Import',
     'zh-CN': '导入',
   },
+  checkTemplates: {
+    'en-US': 'Check TiddlyWiki Templates',
+    'zh-CN': '检查TiddlyWiki模板',
+  },
   saveAsSuccess: {
     'en-US': 'File Saved successfully',
     'zh-CN': '文件已成功保存',
