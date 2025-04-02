@@ -81,6 +81,7 @@ type IMenuIconSetting =
 type IMenuHelpIcon =
   | 'about'
   | 'info'
+  | 'bug'
   | 'update'
   | 'log'
   | 'log2'

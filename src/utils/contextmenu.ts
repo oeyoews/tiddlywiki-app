@@ -63,6 +63,7 @@ export const registerContextMenu = (
     {
       label: t('menu.cut'),
       role: 'cut',
+      accelerator: 'CmdOrCtrl+X',
       icon: getMenuIcon('cut'),
       visible: params.editFlags.canCut,
     },

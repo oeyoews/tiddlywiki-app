@@ -59,7 +59,7 @@ export const helpMenu = (): MenuItemConstructorOptions => ({
     },
     {
       label: t('menu.reportIssue'),
-      icon: getMenuIcon('info'),
+      icon: getMenuIcon('bug'),
       click: () =>
         shell.openExternal('https://github.com/oeyoews/tiddlywiki-app/issues'),
     },
