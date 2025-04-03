@@ -181,7 +181,7 @@ export const fileMenu = (
       icon: getMenuIcon('lock'),
       accelerator: 'CmdOrCtrl+Shift+S',
       click: async () => {
-        const res = await showInputBox(server.win, '输入密码');
+        const res = await showInputBox(server.win, t('dialog.inputPassword'));
         if (res) {
           buildWiki({ password: res });
         }

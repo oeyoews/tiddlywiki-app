@@ -16,6 +16,7 @@ const options = {
   defaults: {
     // betaChannel: false,
     runningWikis: [],
+    username: null,
     icon: false,
     wikiPath: DEFAULT_WIKI_DIR,
     language: null,

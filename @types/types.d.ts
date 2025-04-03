@@ -21,6 +21,7 @@ type IMenuIconFile =
   | 'warning'
   | 'config'
   | 'export'
+  | 'username'
   | 'gear'
   | 'plus'
   | 'plus2'

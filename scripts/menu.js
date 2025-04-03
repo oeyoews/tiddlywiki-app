@@ -219,6 +219,10 @@ module.exports = {
     'en-US': 'Select All',
     'zh-CN': '全选',
   },
+  username: {
+    'en-US': 'Setup username',
+    'zh-CN': '设置用户名',
+  },
   about: {
     'en-US': 'About',
     'zh-CN': '关于',

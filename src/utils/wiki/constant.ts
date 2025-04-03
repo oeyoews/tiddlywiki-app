@@ -1,8 +1,11 @@
+import { config } from '../config';
+
 export const wikiInitArgs = (path: string) => [path, '--init', 'server'];
 export const wikiStartupArgs = (path: string, port: number) => [
   path,
   '--listen',
   `port=${port}`,
+  `anon-username=${config.get('username') || ''}`,
   // 'root-tiddler=$:/core/save/all-external-js',
   // 'use-browser-cache=yes',
 ];

@@ -15,8 +15,11 @@ import {
   toggleMarkdown,
   configureGitHub,
   toggleChineseLang,
+  server,
+  restartDialog,
 } from '@/utils';
 import { t } from 'i18next';
+import { showInputBox } from '@/modules/showInputBox';
 
 export const settingsMenu = (): MenuItemConstructorOptions => ({
   label: t('menu.settings'),
@@ -79,6 +82,17 @@ export const settingsMenu = (): MenuItemConstructorOptions => ({
       label: t('menu.githubConfig'),
       icon: getMenuIcon('gear'),
       click: configureGitHub,
+    },
+    {
+      label: t('menu.username'),
+      icon: getMenuIcon('username'),
+      click: async () => {
+        const res = await showInputBox(server.win, t('dialog.inputUsername'));
+        if (res) {
+          config.set('username', res);
+          restartDialog();
+        }
+      },
     },
     {
       label: t('menu.language'),

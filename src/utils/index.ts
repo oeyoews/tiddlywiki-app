@@ -570,7 +570,7 @@ export async function configureGitHub() {
   }
 }
 
-async function restartDialog(
+export async function restartDialog(
   title = t('settings.settingChanged'),
   message = t('settings.restartTips'),
   cbl?: Function

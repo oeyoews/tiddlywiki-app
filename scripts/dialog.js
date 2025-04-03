@@ -195,6 +195,14 @@ module.exports = {
     'en-US': 'Import',
     'zh-CN': '导入',
   },
+  inputUsername: {
+    'en-US': 'Please input your username',
+    'zh-CN': '请输入用户名',
+  },
+  inputPassword: {
+    'en-US': 'Please input your password',
+    'zh-CN': '请输入密码',
+  },
   checkTemplates: {
     'en-US': 'Check TiddlyWiki Templates',
     'zh-CN': '检查TiddlyWiki模板',
