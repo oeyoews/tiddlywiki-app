@@ -19,7 +19,7 @@ import { config } from '@/utils/config';
 import { isEmptyDirectory } from '@/utils/checkEmptyDir';
 
 const WIKIINFOFILE = 'tiddlywiki.info';
-const DEFAULT_PORT = 8080;
+const DEFAULT_PORT = generateRandomPrivatePort();
 
 // let importIngNotify: Notification;
 // let successImportNotify: Notification;
@@ -44,6 +44,7 @@ import { getFileSizeInMB } from './getFileSize';
 import { IWikiTemplate } from './wikiTemplates';
 import { createSymlink } from './subwiki';
 import { t } from 'i18next';
+import { generateRandomPrivatePort } from './generateRandomPort';
 
 let wikiInstances: { [port: number]: string } = {}; // 用于记录 port: wikipath, 便于端口复用
 
