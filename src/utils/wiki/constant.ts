@@ -3,7 +3,7 @@ export const wikiStartupArgs = (path: string, port: number) => [
   path,
   '--listen',
   `port=${port}`,
-  'root-tiddler=$:/core/save/all-external-js',
+  // 'root-tiddler=$:/core/save/all-external-js',
 ];
 
 export const wikiBuildArgs = (path: string, password?: string) => {

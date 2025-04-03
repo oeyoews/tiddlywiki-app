@@ -18,7 +18,6 @@ import {
 import { getMenuIcon, getWikiFolderIcon } from '@/utils/icon';
 import fs from 'fs';
 import { config } from '@/utils/config';
-import { getPlatform } from '../getPlatform';
 import { capitalizeWords, downloadTpl } from '../downloadTpl';
 import { wikiTemplates } from '@/utils/wikiTemplates';
 import { showInputBox } from '@/modules/showInputBox';
