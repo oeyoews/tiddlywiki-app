@@ -5,19 +5,30 @@ function gotoGithubConfig() {
   goto.navigateTiddler('$:/core/ui/ControlPanel/Saving/GitHub');
 }
 
-// 暂不支持其他类型带有meta 的类型
-// 同名文件_xxx 暂时不考虑
-const extFile = {
-  'text/vnd.tiddlywiki': '.tid',
-  'text/markdown': '.md',
-  'text/x-markdown': '.md',
-  'application/pdf': '.pdf',
-  'application/javascript': '.js',
-  'text/css': '.css',
-  'image/png': '.png',
-};
-
 if (window.$tw) {
+  const pride = () => {
+    var duration = 0.5 * 1000;
+    var end = Date.now() + duration;
+    (function frame() {
+      confetti({ particleCount: 7, angle: 60, spread: 55, origin: { x: 0 } });
+      confetti({ particleCount: 7, angle: 120, spread: 55, origin: { x: 1 } });
+      if (Date.now() < end) {
+        requestAnimationFrame(frame);
+      }
+    })();
+  };
+  // 暂不支持其他类型带有meta 的类型
+  // 同名文件_xxx 暂时不考虑
+  const extFile = {
+    'text/vnd.tiddlywiki': '.tid',
+    'text/markdown': '.md',
+    'text/x-markdown': '.md',
+    'application/pdf': '.pdf',
+    'application/javascript': '.js',
+    'text/css': '.css',
+    'image/png': '.png',
+  };
+
   // console.log('renderer init');
   window.confirm = function (message) {
     return electronAPI.confirm(message);
@@ -213,15 +224,3 @@ function importMarkdown(content: IMarkdownTiddler[]) {
   const goto = new $tw.Story();
   goto.navigateTiddler(importedTitle);
 }
-
-const pride = () => {
-  var duration = 0.5 * 1000;
-  var end = Date.now() + duration;
-  (function frame() {
-    confetti({ particleCount: 7, angle: 60, spread: 55, origin: { x: 0 } });
-    confetti({ particleCount: 7, angle: 120, spread: 55, origin: { x: 1 } });
-    if (Date.now() < end) {
-      requestAnimationFrame(frame);
-    }
-  })();
-};

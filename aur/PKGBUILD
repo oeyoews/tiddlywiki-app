@@ -21,7 +21,7 @@ case "$CARCH" in
     ;;
 esac
 
-source=("https://github.com/oeyoews/tiddlywiki-app/releases/download/v${pkgver}/${pkgname}_${pkgver}-${deb_arch}.deb")
+source=("https://github.com/oeyoews/tiddlywiki-app/releases/download/v${pkgver}/${pkgname}-${pkgver}-${deb_arch}.deb")
 md5sums=('SKIP')
 
 package() {

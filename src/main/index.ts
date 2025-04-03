@@ -84,7 +84,6 @@ async function createWindow() {
       webSecurity: false,
     },
   });
-  // win.setBackgroundMaterial('mica');
 
   win.once('ready-to-show', () => {
     if (!app.isPackaged) {

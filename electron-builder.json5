@@ -26,7 +26,7 @@
   ],
   files: ['dist', 'LICENSE'],
   mac: {
-    artifactName: '${productName}_${version}-${arch}.${ext}',
+    artifactName: '${productName}-${version}-${arch}.${ext}',
     target: [
       {
         target: 'dmg',
@@ -39,7 +39,7 @@
     ],
   },
   linux: {
-    artifactName: '${productName}_${version}-${arch}.${ext}',
+    artifactName: '${productName}-${version}-${arch}.${ext}',
     target: [
       {
         target: 'deb',
@@ -54,7 +54,7 @@
     category: 'Utility',
   },
   win: {
-    artifactName: '${productName}_${version}.${ext}',
+    artifactName: '${productName}-${version}.${ext}',
     target: ['nsis'],
   },
   nsis: {
