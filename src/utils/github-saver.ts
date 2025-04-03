@@ -53,55 +53,33 @@ async function saveToGitHub({
   const url = `${baseURL}/${owner}/${repo}/contents/index.html`;
 
   async function getFileSha() {
-    return new Promise((resolve, reject) => {
-      log.info('begin getfilesha ...', url);
-
-      const request = net.request({
+    log.info('begin getfilesha ...', url);
+    try {
+      const response = await net.fetch(url, {
         method: 'GET',
-        url,
         headers: {
           Authorization: `Basic ${GITHUB_TOKEN}`,
           Accept: 'application/vnd.github.v3+json',
         },
       });
 
-      request.on('response', (response) => {
-        let body = '';
-
-        response.on('data', (chunk) => {
-          body += chunk;
-        });
-
-        response.on('end', () => {
-          if (response.statusCode === 200) {
-            try {
-              const data = JSON.parse(body);
-              log.info('GitHub file SHA:', data.sha);
-              resolve(data.sha);
-            } catch (error) {
-              log.error('Error parsing SHA response', error);
-              reject(null);
-            }
-          } else {
-            log.error('Failed to get SHA:', response.statusCode);
-            resolve(null);
-          }
-        });
-      });
-
-      request.on('error', (error) => {
-        log.error('getfilesha error', error);
-        reject(null);
-      });
-
-      request.end();
-    });
+      if (response.status === 200) {
+        const data = await response.json();
+        log.info('GitHub file SHA:', data.sha);
+        return data.sha;
+      } else {
+        log.error('Failed to get SHA:', response.status);
+        return null;
+      }
+    } catch (error) {
+      log.error('getfilesha error', error);
+      return null;
+    }
   }
 
   async function uploadToGHPages() {
     try {
       const content = fs.readFileSync(FILE_PATH, 'base64');
-
       if (win) win.setProgressBar(0.2);
 
       const body = {
@@ -111,73 +89,41 @@ async function saveToGitHub({
       };
 
       const sha = await getFileSha();
-      if (sha) {
-        body.sha = sha;
+      if (sha) body.sha = sha;
+      if (win) win.setProgressBar(0.6);
+
+      const response = await net.fetch(url, {
+        method: 'PUT',
+        headers: {
+          Authorization: `token ${GITHUB_TOKEN}`,
+          Accept: 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+
+      const responseBody = await response.json();
+      if (response.status === 200 || response.status === 201) {
+        log.info(
+          'File uploaded to GitHub Pages:',
+          responseBody.content.html_url
+        );
+
+        if (!githubNotify) {
+          githubNotify = new Notification({
+            title: t('dialog.github.uploadSuccess'),
+            body: t('dialog.github.clickToView'),
+            icon: getMenuIcon('gitHub', 256),
+            silent: false,
+          });
+        }
+        githubNotify.on('click', () => shell.openExternal(pageSite)).show();
+      } else {
+        log.error('Upload failed:', responseBody);
+        throw new Error(`${t('dialog.github.apiError')}: ${response.status}`);
       }
 
-      if (win) win.setProgressBar(0.6);
-      log.info('github-saver url is (start)', url);
-
-      return new Promise((resolve, reject) => {
-        const request = net.request({
-          method: 'PUT',
-          url,
-          headers: {
-            Authorization: `token ${GITHUB_TOKEN}`,
-            Accept: 'application/vnd.github.v3+json',
-            'Content-Type': 'application/json',
-          },
-        });
-
-        request.on('response', (response) => {
-          let responseBody = '';
-
-          response.on('data', (chunk) => {
-            responseBody += chunk;
-          });
-
-          response.on('end', () => {
-            if (response.statusCode === 200 || response.statusCode === 201) {
-              const data = JSON.parse(responseBody);
-              log.info('File uploaded to GitHub Pages:', data.content.html_url);
-
-              if (!githubNotify) {
-                githubNotify = new Notification({
-                  title: t('dialog.github.uploadSuccess'),
-                  body: t('dialog.github.clickToView'),
-                  icon: getMenuIcon('gitHub', 256),
-                  silent: false,
-                });
-              }
-              githubNotify
-                .on('click', () => {
-                  shell.openExternal(pageSite);
-                })
-                .show();
-
-              resolve(data);
-            } else {
-              log.error('Upload failed:', responseBody);
-              reject(
-                new Error(
-                  `${t('dialog.github.apiError')}: ${response.statusCode}`
-                )
-              );
-            }
-
-            if (win) win.setProgressBar(-1);
-          });
-        });
-
-        request.on('error', (error) => {
-          log.error('Upload request error:', error);
-          if (win) win.setProgressBar(-1);
-          reject(error);
-        });
-
-        request.write(JSON.stringify(body));
-        request.end();
-      });
+      if (win) win.setProgressBar(-1);
     } catch (error) {
       if (win) win.setProgressBar(-1);
       log.error('Upload failed:', error);
