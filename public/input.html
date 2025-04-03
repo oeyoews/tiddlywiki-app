@@ -114,7 +114,7 @@
 			<span class="title" id="title">输入内容</span>
 			<button id="close">×</button>
 		</div>
-		<input type="password" id="inputField" placeholder="请输入">
+		<input type="text" id="inputField" placeholder="请输入">
 		<div class="button-group">
 			<button id="submit">确认</button>
 		</div>
@@ -127,9 +127,14 @@
 		document.getElementById('inputField').focus();
 
 		// 监听主进程传入的标题
-		ipcRenderer.on('set-title', (event, title) => {
-			console.log(event, title)
-			document.getElementById('title').innerText = title;
+		ipcRenderer.on('set-title', (event, message) => {
+			const inputBox = document.getElementById('title')
+			inputBox.innerText = message;
+		});
+		ipcRenderer.on('set-inputvalue', (event, { inputValue, type }) => {
+			const inputEl = document.getElementById('inputField')
+			inputEl.value = inputValue;
+			inputEl.type = type;
 		});
 
 		// 监听 ESC 关闭

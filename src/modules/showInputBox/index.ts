@@ -6,11 +6,20 @@ let inputWin: BrowserWindow | null = null;
 
 export function showInputBox(
   parentWindow: BrowserWindow,
-  message: string = '请输入'
+  message: string = '请输入',
+  type: 'text' | 'password',
+  inputValue?: string
 ): Promise<string> {
   return new Promise((resolve) => {
+    console.log(message, type);
     if (inputWin) {
       inputWin.show();
+      inputWin?.webContents.send('set-title', message);
+      inputWin?.webContents.send('set-inputvalue', {
+        inputValue: inputValue ?? '',
+        type,
+      });
+      inputWin.focus();
     } else {
       inputWin = new BrowserWindow({
         width: 400,
@@ -22,6 +31,7 @@ export function showInputBox(
         maximizable: false,
         autoHideMenuBar: true,
         frame: false,
+        show: false,
         webPreferences: {
           nodeIntegration: true,
           contextIsolation: false,
@@ -29,10 +39,18 @@ export function showInputBox(
         },
       });
       inputWin.loadFile(path.join(processEnv.VITE_PUBLIC, 'input.html'));
+
+      inputWin.once('ready-to-show', () => {
+        inputWin!.show();
+        inputWin?.focus();
+      });
     }
 
     inputWin.webContents.on('did-finish-load', () => {
       inputWin?.webContents.send('set-title', message);
+      if (inputValue) {
+        inputWin?.webContents.send('set-inputvalue', { inputValue, type });
+      }
     });
 
     ipcMain.on('input-value', (event, value) => {

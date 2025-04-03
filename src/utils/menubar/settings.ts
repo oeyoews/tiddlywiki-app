@@ -87,7 +87,12 @@ export const settingsMenu = (): MenuItemConstructorOptions => ({
       label: t('menu.username'),
       icon: getMenuIcon('username'),
       click: async () => {
-        const res = await showInputBox(server.win, t('dialog.inputUsername'));
+        const res = await showInputBox(
+          server.win,
+          t('dialog.inputUsername'),
+          'text',
+          config.get('username')!
+        );
         if (res) {
           config.set('username', res);
           restartDialog();
