@@ -206,7 +206,14 @@ export async function initWiki(
     });
 
     // 新建tw实例
-    const { boot: twBoot } = TiddlyWiki();
+    const { boot: twBoot, preloadTiddler } = TiddlyWiki();
+
+    // prevent tiddlywiki ctrl+s
+    preloadTiddler({
+      title: '$:/config/shortcuts/save-wiki',
+      text: '',
+    });
+
     twBoot.argv = wikiStartupArgs(wikiFolder, server.currentPort);
 
     const startServer = (port: number) => {

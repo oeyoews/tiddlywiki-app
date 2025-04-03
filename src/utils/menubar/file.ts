@@ -174,11 +174,13 @@ export const fileMenu = (
     {
       label: t('menu.buildWiki'),
       icon: getMenuIcon('export'),
+      accelerator: 'CmdOrCtrl+S',
       click: () => buildWiki({}),
     },
     {
       label: t('menu.buildWikiWithPassWord'),
       icon: getMenuIcon('lock'),
+      accelerator: 'CmdOrCtrl+Shift+S',
       click: async () => {
         const res = await showInputBox(server.win, '输入密码');
         if (res) {
