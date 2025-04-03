@@ -223,6 +223,10 @@ module.exports = {
     'en-US': 'Setup username',
     'zh-CN': '设置用户名',
   },
+  winState: {
+    'en-US': 'Remember last window position',
+    'zh-CN': '记住上次窗口位置',
+  },
   about: {
     'en-US': 'About',
     'zh-CN': '关于',

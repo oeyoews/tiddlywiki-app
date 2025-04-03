@@ -22,6 +22,7 @@ type IMenuIconFile =
   | 'config'
   | 'export'
   | 'username'
+  | 'winState'
   | 'gear'
   | 'plus'
   | 'plus2'

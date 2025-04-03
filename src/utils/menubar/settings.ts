@@ -79,6 +79,16 @@ export const settingsMenu = (): MenuItemConstructorOptions => ({
       },
     },
     {
+      label: t('menu.winState'),
+      icon: getMenuIcon('winState'),
+      type: 'checkbox',
+      checked: !!config.get('winState'),
+      click: (menuItem) => {
+        config.set('winState', menuItem.checked);
+        restartDialog();
+      },
+    },
+    {
       label: t('menu.githubConfig'),
       icon: getMenuIcon('gear'),
       click: configureGitHub,

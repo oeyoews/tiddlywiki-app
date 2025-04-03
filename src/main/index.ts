@@ -69,7 +69,13 @@ async function createWindow() {
   const scaleFactor = 0.9;
   const defaultWidth = Math.floor(width * scaleFactor);
   const defaultHeight = Math.floor((defaultWidth / width) * height);
-  const winState: IWinState = config.get('window');
+  let winState: IWinState | null = null;
+  const enableWinState = config.get('winState');
+  if (!enableWinState) {
+    config.set('window', null);
+  } else {
+    winState = config.get('window');
+  }
 
   win = new BrowserWindow({
     // @ts-ignore
@@ -87,14 +93,8 @@ async function createWindow() {
       contextIsolation: true,
       webSecurity: false,
     },
-    fullscreen: winState.isFullScreen,
+    // fullscreen: winState.isFullScreen,
   });
-
-  if (winState.isMaximized) {
-    win.maximize();
-  }
-
-  trackWindowState(win);
 
   win.once('ready-to-show', () => {
     if (!app.isPackaged) {
@@ -105,6 +105,18 @@ async function createWindow() {
       );
     }
     win.show();
+
+    if (enableWinState) {
+      if (winState?.isFullScreen) {
+        win.setFullScreen(true);
+      } else {
+        if (winState?.isMaximized) {
+          win.maximize();
+        }
+      }
+      trackWindowState(win);
+    }
+
     log.info('ready to show');
     autoUpdaterInit();
 

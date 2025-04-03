@@ -14,6 +14,7 @@ const DEFAULT_WIKI_DIR = path.join(app.getPath('desktop'), 'wiki'); // use app.g
 
 const options = {
   defaults: {
+    winState: true, // 默认开启， 记录上次窗口位置
     // betaChannel: false,
     runningWikis: [],
     username: null,

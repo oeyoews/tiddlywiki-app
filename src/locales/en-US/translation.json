@@ -56,6 +56,7 @@
     "redo": "Redo",
     "selectAll": "Select All",
     "username": "Setup username",
+    "winState": "Remember last window position",
     "about": "About",
     "reportIssue": "Submit Feedback",
     "recentWikis": "Recently Opened Wikis",
