@@ -23,7 +23,7 @@ export const helpMenu = (): MenuItemConstructorOptions => ({
     {
       label: t('menu.checkUpdate'),
       // @see https://www.electronjs.org/zh/docs/latest/api/auto-updater
-      visible: getPlatform() !== 'macOS', // macos update need application sign
+      visible: getPlatform() === 'windows' || !!process.env.APPIMAGE ,// macos update need application sign
       id: 'update',
       enabled: app.isPackaged,
       click: () => checkForUpdates(),
