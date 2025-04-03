@@ -82,5 +82,4 @@ Regarding the blank version, I want users to experience 100% pure TiddlyWiki whe
 
 As for concerns about "blank versions scaring away new users," I won't discuss that much here. While I hope more people learn about TiddlyWiki, I won't actively promote it, as currently, TiddlyWiki's ease of use doesn't offer significant promotional advantages.
 
-<!-- 1. 文件夹首次进行图片压缩.
-2. 单个图片压缩 -->
+<!-- "tiddlywiki": "npm:@oeyoews/tiddlywiki-lite@5.3.6-lite-20250402" -->
