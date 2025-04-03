@@ -7,7 +7,6 @@ import {
   BrowserWindow,
   Menu,
   nativeTheme,
-  globalShortcut,
 } from 'electron';
 import { getAppIcon } from '@/utils/icon';
 let spawn: null;
@@ -97,15 +96,15 @@ async function createWindow() {
     }
     win.show();
     // fix macos paste/copy not work
-    if (getPlatform() === 'macOs') {
-      let contents = win.webContents;
-      globalShortcut.register('CommandOrControl+C', () => {
-        contents.copy();
-      });
-      globalShortcut.register('CommandOrControl+V', () => {
-        contents.paste();
-      });
-    }
+    // if (getPlatform() === 'macOs') {
+    //   let contents = win.webContents;
+    //   globalShortcut.register('CommandOrControl+C', () => {
+    //     contents.copy();
+    //   });
+    //   globalShortcut.register('CommandOrControl+V', () => {
+    //     contents.paste();
+    //   });
+    // }
     log.info('ready to show');
     autoUpdaterInit();
 

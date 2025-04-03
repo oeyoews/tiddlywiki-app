@@ -3,9 +3,13 @@ module.exports = {
     'en-US': '&File',
     'zh-CN': '文件(&F)',
   },
+  edit: {
+    'en-US': '&Edit',
+    'zh-CN': '编辑(&E)',
+  },
   view: {
     'en-US': '&View',
-    'zh-CN': '视图(&V)',
+    'zh-CN': '查看(&V)',
   },
   wikis: {
     'en-US': '&Wikis',
@@ -21,7 +25,7 @@ module.exports = {
   },
   subwiki: {
     'en-US': 'Open subwiki',
-    'zh-CN': '打开子 Wiki',
+    'zh-CN': '打开子Wiki',
   },
   wikiTemplate: {
     'en-US': 'Create Wiki from Template',
@@ -195,9 +199,21 @@ module.exports = {
     'en-US': 'Paste',
     'zh-CN': '粘贴',
   },
+  delete: {
+    'en-US': 'Delete',
+    'zh-CN': '删除',
+  },
   cut: {
     'en-US': 'Cut',
     'zh-CN': '剪切',
+  },
+  undo: {
+    'en-US': 'Undo',
+    'zh-CN': '撤销',
+  },
+  redo: {
+    'en-US': 'Redo',
+    'zh-CN': '恢复',
   },
   selectAll: {
     'en-US': 'Select All',

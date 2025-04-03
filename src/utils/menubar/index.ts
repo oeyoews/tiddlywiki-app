@@ -19,6 +19,8 @@ import { settingsMenu } from '@/utils/menubar/settings';
 import { viewMenu } from './view';
 import { fileMenu } from './file';
 import { t } from 'i18next';
+import { editMenu } from './edit';
+import { getPlatform } from '../getPlatform';
 
 export const createMenubar = (
   config: IConfig,
@@ -112,6 +114,11 @@ export const createMenubar = (
       settingsMenu(),
       helpMenu(),
     ];
+
+    if (getPlatform() === 'macOs') {
+      menubars.splice(1, 0, editMenu());
+    }
+
     return menubars;
   };
 };

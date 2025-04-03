@@ -1,6 +1,7 @@
 {
   "menu": {
     "file": "&File",
+    "edit": "&Edit",
     "view": "&View",
     "wikis": "&Wikis",
     "settings": "&Settings",
@@ -49,7 +50,10 @@
     "toggleFullscreen": "Toggle Full Screen",
     "copy": "Copy",
     "paste": "Paste",
+    "delete": "Delete",
     "cut": "Cut",
+    "undo": "Undo",
+    "redo": "Redo",
     "selectAll": "Select All",
     "about": "About",
     "reportIssue": "Submit Feedback",
