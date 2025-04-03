@@ -1,6 +1,6 @@
 {
   "name": "tiddlywiki-app",
-  "version": "3.6.1",
+  "version": "3.6.2",
   "description": "TiddlyWiki App",
   "main": "./dist/main/index.js",
   "repository": {
@@ -13,7 +13,7 @@
     "dev": "vite",
     "preview": "vite build && electron .",
     "build": "vite build && electron-builder",
-    "release": "vite build && electron-builder"
+    "release": "vite build && node ./scripts/minify-tw.js && electron-builder"
   },
   "keywords": [
     "tiddlywiki"
@@ -34,7 +34,7 @@
     "get-port": "^7.1.0",
     "gray-matter": "^4.0.3",
     "i18next": "^24.2.2",
-    "tiddlywiki": "npm:@oeyoews/tiddlywiki-lite@5.3.6-lite-20250402"
+    "tiddlywiki": "^5.3.6"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
