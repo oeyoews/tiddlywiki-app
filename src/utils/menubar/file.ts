@@ -206,7 +206,7 @@ export const fileMenu = (
       label: t('menu.restart'),
       icon: getMenuIcon('restart'),
       // @see https://github.com/electron-userland/electron-builder/issues/1727
-      visible: getPlatform() === 'linux' ? false : true,
+      visible: !process.env.APPIMAGE,
       accelerator: 'CmdOrCtrl+Shift+Alt+R',
       click: () => {
         app.relaunch();
