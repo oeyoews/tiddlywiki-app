@@ -1,6 +1,6 @@
 # Maintainer: oeyoews <jyao4783@gmail.com>
 pkgname=tiddlywiki-app
-pkgver=2.4.11
+pkgver=3.5.4
 pkgrel=1
 pkgdesc="你的最后一个 TiddlyWiki 桌面应用，提供更加丝滑的TiddlyWiki使用体验"
 arch=('x86_64' 'aarch64')
