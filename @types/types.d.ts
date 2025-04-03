@@ -124,3 +124,12 @@ type IRecentWikisWithTag = {
   path: string;
   running: boolean;
 };
+
+type IWinState = {
+  width: number;
+  height: number;
+  x: number;
+  y: number;
+  isMaximized: boolean;
+  isFullScreen: boolean;
+};

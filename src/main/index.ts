@@ -16,9 +16,9 @@ import { config } from '@/utils/config';
 import { logInit, log } from '@/utils/logger';
 import { server } from '@/utils';
 import { autoUpdaterInit } from '@/utils/checkUpdate';
-import { showInputBox } from '@/modules/showInputBox';
 import path from 'path';
 import { getPlatform } from '@/utils/getPlatform';
+import { trackWindowState } from '@/utils/trackWindowState';
 
 let win: BrowserWindow;
 let wikiPath: string;
@@ -66,13 +66,17 @@ async function createWindow() {
   const primaryDisplay = screen.getPrimaryDisplay();
   const { width, height } = primaryDisplay.workAreaSize;
 
-  // 计算 80% 尺寸，同时保持原始宽高比
   const scaleFactor = 0.9;
-  const newWidth = Math.floor(width * scaleFactor);
-  const newHeight = Math.floor((newWidth / width) * height);
+  const defaultWidth = Math.floor(width * scaleFactor);
+  const defaultHeight = Math.floor((defaultWidth / width) * height);
+  const winState: IWinState = config.get('window');
+
   win = new BrowserWindow({
-    width: newWidth,
-    height: newHeight,
+    // @ts-ignore
+    height: defaultHeight,
+    // @ts-ignore
+    width: defaultWidth,
+    ...winState, // ??
     icon: getAppIcon(),
     skipTaskbar: false,
     show: false,
@@ -83,7 +87,14 @@ async function createWindow() {
       contextIsolation: true,
       webSecurity: false,
     },
+    fullscreen: winState.isFullScreen,
   });
+
+  if (winState.isMaximized) {
+    win.maximize();
+  }
+
+  trackWindowState(win);
 
   win.once('ready-to-show', () => {
     if (!app.isPackaged) {
