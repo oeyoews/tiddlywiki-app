@@ -220,11 +220,11 @@ module.exports = {
     'zh-CN': '全选',
   },
   username: {
-    'en-US': 'Setup username',
+    'en-US': 'Setup Username',
     'zh-CN': '设置用户名',
   },
   winState: {
-    'en-US': 'Remember last window position',
+    'en-US': 'Remember Last Window Position',
     'zh-CN': '记住上次窗口位置',
   },
   about: {
