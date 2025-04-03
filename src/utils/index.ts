@@ -104,7 +104,7 @@ export async function initWiki(
     win = _mainWindow;
     server.win = _mainWindow;
 
-    win.webContents.once('did-finish-load', () => {
+    win.webContents.on('dom-ready', () => {
       // 获取页面标题并设置窗口标题
       const pageTitle = win.webContents.getTitle();
       win.setTitle(`${pageTitle} - ${wikiFolder}`);

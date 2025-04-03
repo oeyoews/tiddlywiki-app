@@ -6,8 +6,8 @@ let inputWin: BrowserWindow | null = null;
 
 export function showInputBox(
   parentWindow: BrowserWindow,
-  message: string = '请输入',
-  type: 'text' | 'password',
+  message: string = 'Please input ...',
+  type: 'text' | 'password' = 'text',
   inputValue?: string
 ): Promise<string> {
   return new Promise((resolve) => {

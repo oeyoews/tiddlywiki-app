@@ -94,16 +94,6 @@ async function createWindow() {
       );
     }
     win.show();
-    // fix macos paste/copy not work
-    // if (getPlatform() === 'macOs') {
-    //   let contents = win.webContents;
-    //   globalShortcut.register('CommandOrControl+C', () => {
-    //     contents.copy();
-    //   });
-    //   globalShortcut.register('CommandOrControl+V', () => {
-    //     contents.paste();
-    //   });
-    // }
     log.info('ready to show');
     autoUpdaterInit();
 
@@ -210,12 +200,6 @@ if (TPlatform === 'windows' || TPlatform === 'macOs') {
     });
   });
 }
-
-// 监听渲染进程请求并调用 `showInputBox`
-ipcMain.handle('show-input-box', async (event) => {
-  const result = await showInputBox(win, '请输入你的名称:');
-  return result;
-});
 
 ipcMain.handle('update-gh-config', async (event: any, githubConfig: any) => {
   config.set('github', githubConfig);
