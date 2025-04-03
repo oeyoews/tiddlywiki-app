@@ -21,6 +21,7 @@ import { fileMenu } from './file';
 import { t } from 'i18next';
 import { editMenu } from './edit';
 import { getPlatform } from '../getPlatform';
+import { wikisMenu } from './wikis';
 
 export const createMenubar = (
   config: IConfig,
@@ -108,9 +109,10 @@ export const createMenubar = (
     });
 
     const menubars: MenuItemConstructorOptions[] = [
-      fileMenu(recentWikisWithTag),
+      fileMenu(),
       viewMenu(),
-      manageWikiMenu,
+      // manageWikiMenu,
+      wikisMenu(recentWikisWithTag),
       settingsMenu(),
       helpMenu(),
     ];

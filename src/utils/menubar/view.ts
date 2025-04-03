@@ -17,47 +17,6 @@ export const viewMenu = (): MenuItemConstructorOptions => ({
   id: 'View',
   submenu: [
     {
-      icon: getMenuIcon('search'),
-      label: t('menu.search'),
-      accelerator: 'CmdOrCtrl+F',
-      click: showFindBar,
-    },
-    {
-      icon: getMenuIcon('minimize'),
-      label: t('menu.minimize'),
-      accelerator: 'CmdOrCtrl+W',
-      // click: server.win.minimize.bind(server.win),
-      click: () => server.win.minimize(),
-    },
-    {
-      role: 'reload',
-      icon: getMenuIcon('reload'),
-      label: t('menu.reload'),
-    },
-    {
-      role: 'forceReload',
-      icon: getMenuIcon('reload'),
-      label: t('menu.forceReload'),
-    },
-    { type: 'separator' },
-    {
-      role: 'resetZoom',
-      icon: getMenuIcon('reset'),
-      label: t('menu.resetZoom'),
-    },
-    {
-      role: 'zoomIn',
-      label: t('menu.zoomIn'),
-      icon: getMenuIcon('zoomIn'),
-      accelerator: 'CmdOrCtrl+=',
-    },
-    {
-      role: 'zoomOut',
-      label: t('menu.zoomOut'),
-      icon: getMenuIcon('zoomOut'),
-    },
-    { type: 'separator' },
-    {
       role: 'togglefullscreen',
       icon: getMenuIcon('screens'),
       label: t('menu.toggleFullscreen'),
@@ -97,6 +56,47 @@ export const viewMenu = (): MenuItemConstructorOptions => ({
       click: () => {
         shell.openPath(path.join(config.get('wikiPath'), 'subwiki'));
       },
+    },
+    { type: 'separator' },
+    {
+      role: 'resetZoom',
+      icon: getMenuIcon('reset'),
+      label: t('menu.resetZoom'),
+    },
+    {
+      role: 'zoomIn',
+      label: t('menu.zoomIn'),
+      icon: getMenuIcon('zoomIn'),
+      accelerator: 'CmdOrCtrl+=',
+    },
+    {
+      role: 'zoomOut',
+      label: t('menu.zoomOut'),
+      icon: getMenuIcon('zoomOut'),
+    },
+    { type: 'separator' },
+    {
+      icon: getMenuIcon('search'),
+      label: t('menu.search'),
+      accelerator: 'CmdOrCtrl+F',
+      click: showFindBar,
+    },
+    {
+      icon: getMenuIcon('minimize'),
+      label: t('menu.minimize'),
+      accelerator: 'CmdOrCtrl+W',
+      // click: server.win.minimize.bind(server.win),
+      click: () => server.win.minimize(),
+    },
+    {
+      role: 'reload',
+      icon: getMenuIcon('reload'),
+      label: t('menu.reload'),
+    },
+    {
+      role: 'forceReload',
+      icon: getMenuIcon('reload'),
+      label: t('menu.forceReload'),
     },
   ],
 });

@@ -160,6 +160,12 @@ async function createWindow() {
   config.set('runningWikis', []);
   await initWiki(wikiPath, isFirstTime, win);
 
+  // 获取页面标题并设置窗口标题
+  win.webContents.on('dom-ready', () => {
+    const pageTitle = win.webContents.getTitle();
+    win.setTitle(`${pageTitle} - ${config.get('wikiPath')}`);
+  });
+
   win.webContents.on('did-finish-load', async () => {
     const { injectScript } = await import('@/utils/injectScript');
     injectScript(win);

@@ -56,6 +56,8 @@
     "redo": "Redo",
     "selectAll": "Select All",
     "username": "Setup Username",
+    "openWiki": "Open Wiki",
+    "moveToTrash": "Move To Trash",
     "winState": "Remember Last Window Position",
     "about": "About",
     "reportIssue": "Submit Feedback",
