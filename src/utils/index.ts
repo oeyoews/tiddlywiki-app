@@ -46,7 +46,7 @@ import { createSymlink } from './subwiki';
 import { t } from 'i18next';
 import { generateRandomPrivatePort } from './generateRandomPort';
 
-let wikiInstances: { [port: number]: string } = {}; // 用于记录 port: wikipath, 便于端口复用
+// let wikiInstances: { [port: number]: string } = {}; // 用于记录 port: wikipath, 便于端口复用
 
 let win: BrowserWindow; // 在 initwiki 初始化时赋值
 const desktopDir = app.getPath('desktop');
@@ -59,6 +59,7 @@ export const server = {
   tray: null as any as Tray,
   win: null as any as BrowserWindow,
   downloadNotify: {} as Notification,
+  wikiInstances: {} as any, // 用于记录 port: wikipath, 便于端口复用
 };
 
 export type IConfig = typeof config;
@@ -98,17 +99,11 @@ export async function initWiki(
   isFirstTime: Boolean = false, // 用于手动新建 wiki
   _mainWindow?: BrowserWindow
 ) {
-  log.info('begin initwiki');
+  log.info('begin initwiki', wikiFolder);
   // TODO: check wikifodler in admin
   if (_mainWindow && !win) {
     win = _mainWindow;
     server.win = _mainWindow;
-
-    win.webContents.on('dom-ready', () => {
-      // 获取页面标题并设置窗口标题
-      const pageTitle = win.webContents.getTitle();
-      win.setTitle(`${pageTitle} - ${wikiFolder}`);
-    });
 
     // 初始化notification
     // importIngNotify = new Notification({
@@ -136,14 +131,14 @@ export async function initWiki(
   }
   try {
     // 检查当前实例的文件夹是否被初始化过
-    const existingPort = Object.entries(wikiInstances).find(
+    const existingPort = Object.entries(server.wikiInstances).find(
       ([_, path]) => path === wikiFolder
     )?.[0];
 
     // 新实例：记录端口和路径
     if (!existingPort) {
       server.currentPort = await getPorts({ port: DEFAULT_PORT });
-      wikiInstances[server.currentPort] = wikiFolder;
+      server.wikiInstances[server.currentPort] = wikiFolder;
     } else {
       server.currentPort = Number(existingPort); // 更新端口
     }
@@ -225,7 +220,7 @@ export async function initWiki(
     };
     server.currentServer = twBoot;
     if (!existingPort) {
-      log.log('starting, please wait a moment...');
+      log.log('starting, please wait a moment...', wikiFolder);
       twBoot.boot();
       startServer(server.currentPort);
       log.info('start new server on', server.currentPort);
@@ -233,7 +228,7 @@ export async function initWiki(
     } else {
       // 直接加载已存在的服务器
       startServer(server.currentPort);
-      log.info('open exist wiki', existingPort);
+      log.info('open exist wiki', existingPort, wikiFolder);
     }
     updateRecentWikis(wikiFolder);
     return { port: server.currentPort };

@@ -223,6 +223,14 @@ module.exports = {
     'en-US': 'Setup Username',
     'zh-CN': '设置用户名',
   },
+  openWiki: {
+    'en-US': 'Open Wiki',
+    'zh-CN': '打开Wiki',
+  },
+  moveToTrash: {
+    'en-US': 'Move To Trash',
+    'zh-CN': '移动到垃圾桶',
+  },
   winState: {
     'en-US': 'Remember Last Window Position',
     'zh-CN': '记住上次窗口位置',

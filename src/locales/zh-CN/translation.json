@@ -56,6 +56,8 @@
     "redo": "恢复",
     "selectAll": "全选",
     "username": "设置用户名",
+    "openWiki": "打开Wiki",
+    "moveToTrash": "移动到垃圾桶",
     "winState": "记住上次窗口位置",
     "about": "关于",
     "reportIssue": "反馈问题",
