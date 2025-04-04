@@ -16,7 +16,7 @@ export const editMenu = (): MenuItemConstructorOptions => ({
       submenu: [{ role: 'startSpeaking' }, { role: 'stopSpeaking' }],
     },
     { type: 'separator' },
-    { role: 'delete' },
+    { role: 'delete', label: t('menu.delete') },
     { role: 'selectAll', label: t('menu.selectAll') },
   ],
 });

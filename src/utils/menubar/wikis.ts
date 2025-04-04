@@ -102,6 +102,7 @@ export const wikisMenu = (recentWikis: IRecentWikisWithTag[]) => ({
                 });
 
                 if (res.response === 0) {
+                  log.info('delete folder', wikiPath);
                   // fs.rmSync(label, { force: true, recursive: true }); // NOTE: 永久删除
                   await shell.trashItem(wikiPath); // 移动到垃圾桶
                   config.set('recentWikis', newRecentWikis);
@@ -112,6 +113,11 @@ export const wikisMenu = (recentWikis: IRecentWikisWithTag[]) => ({
                     item.visible = false;
                     Menu.setApplicationMenu(server.menu);
                   }
+                  dialog.showMessageBoxSync({
+                    title: t('dialog.success'),
+                    icon: getMenuIcon('info', 256),
+                    message: t('dialog.deleteSuccess'),
+                  });
                 }
               },
             },

@@ -117,6 +117,7 @@
     "enterGithubOwner": "Please enter repository owner",
     "enterGithubRepo": "Please enter repository name",
     "enterGithubBranch": "Please enter branch name",
+    "deleteSuccess": "Delete Success",
     "success": "Success",
     "githubConfigSuccess": "GitHub configuration has been updated",
     "selectNewWikiFolder": "Select New Wiki Folder",

@@ -140,6 +140,10 @@ module.exports = {
     'en-US': 'Please enter branch name',
     'zh-CN': '请输入分支名称',
   },
+  deleteSuccess: {
+    'en-US': 'Delete Success',
+    'zh-CN': '删除成功',
+  },
   success: {
     'en-US': 'Success',
     'zh-CN': '成功',
