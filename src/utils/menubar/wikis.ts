@@ -98,7 +98,7 @@ export const wikisMenu = (recentWikis: IRecentWikisWithTag[]) => ({
                 }
 
                 newRecentWikis = (config.get('recentWikis') || []).filter(
-                  (path: string) => wikiPath !== path && wikiPath !== path
+                  (path: string) => wikiPath !== path
                 );
                 const res = await dialog.showMessageBox({
                   title: t('dialog.delete'),
@@ -110,9 +110,8 @@ export const wikisMenu = (recentWikis: IRecentWikisWithTag[]) => ({
                 });
 
                 if (res.response === 0) {
-                  log.info('delete folder', wikiPath);
+                  log.info('begin delete folder', wikiPath);
                   // fs.rmSync(label, { force: true, recursive: true }); // NOTE: 永久删除
-                  await shell.trashItem(wikiPath); // 移动到垃圾桶
                   config.set('recentWikis', newRecentWikis);
                   const item = server.menu.getMenuItemById(
                     generateId(wikiPath)
@@ -121,6 +120,8 @@ export const wikisMenu = (recentWikis: IRecentWikisWithTag[]) => ({
                     item.visible = false;
                     Menu.setApplicationMenu(server.menu);
                   }
+                  // 最后进行回收
+                  await shell.trashItem(wikiPath); // 移动到垃圾桶
                   dialog.showMessageBoxSync({
                     title: t('dialog.success'),
                     icon: getMenuIcon('info', 256),
