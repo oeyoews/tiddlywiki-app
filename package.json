@@ -1,6 +1,6 @@
 {
   "name": "tiddlywiki-app",
-  "version": "3.8.4",
+  "version": "3.8.5",
   "description": "TiddlyWiki App",
   "main": "./dist/main/index.js",
   "repository": {

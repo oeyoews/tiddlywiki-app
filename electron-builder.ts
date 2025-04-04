@@ -52,6 +52,10 @@ const config = {
         target: 'pacman',
         arch: ['arm64', 'x64'],
       },
+      {
+        target: 'rpm',
+        arch: ['arm64', 'x64'],
+      },
     ],
     maintainer: 'oeyoews',
     category: 'Utility',
