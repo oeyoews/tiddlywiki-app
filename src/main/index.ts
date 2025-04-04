@@ -7,7 +7,6 @@ import {
   BrowserWindow,
   Menu,
   nativeTheme,
-  BrowserViewConstructorOptions,
   BrowserWindowConstructorOptions,
 } from 'electron';
 import { getAppIcon } from '@/utils/icon';
@@ -91,8 +90,10 @@ async function createWindow() {
     hasShadow: false,
     resizable: true,
     movable: true,
-    minWidth: Number((defaultWidth * 0.6).toFixed(0)),
-    minHeight: Number((defaultHeight * 0.6).toFixed(0)),
+    minWidth: 800,
+    minHeight: 600,
+    // minWidth: Number((defaultWidth * 0.6).toFixed(0)),
+    // minHeight: Number((defaultHeight * 0.6).toFixed(0)),
     webPreferences: {
       spellcheck: false,
       preload,
