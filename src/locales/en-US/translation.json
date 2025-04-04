@@ -45,6 +45,7 @@
     "buildWikiWithPassWord": "Export as Single File With Password",
     "buildWiki": "Export as Single File",
     "openInBrowser": "Open Wiki in Browser",
+    "stopWiki": "Stop Running Wiki",
     "openFolder": "Open Current Wiki Folder",
     "exit": "Exit",
     "devTools": "Developer Tools",

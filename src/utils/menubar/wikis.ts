@@ -72,7 +72,7 @@ export const wikisMenu = (recentWikis: IRecentWikisWithTag[]) => ({
               },
             },
             {
-              label: 'Stop Wiki',
+              label: t('menu.stopWiki'),
               icon: getMenuIcon('stop'),
               click: () => {
                 closeTwServer(generateId(wikiPath));
