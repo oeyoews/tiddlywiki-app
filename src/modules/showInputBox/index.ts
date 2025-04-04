@@ -11,7 +11,6 @@ export function showInputBox(
   inputValue?: string
 ): Promise<string> {
   return new Promise((resolve) => {
-    console.log(message, type);
     if (inputWin) {
       inputWin.show();
       inputWin?.webContents.send('set-title', message);
@@ -48,9 +47,7 @@ export function showInputBox(
 
     inputWin.webContents.on('did-finish-load', () => {
       inputWin?.webContents.send('set-title', message);
-      if (inputValue) {
-        inputWin?.webContents.send('set-inputvalue', { inputValue, type });
-      }
+      inputWin?.webContents.send('set-inputvalue', { inputValue, type });
     });
 
     ipcMain.on('input-value', (event, value) => {

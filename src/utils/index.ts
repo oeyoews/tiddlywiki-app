@@ -14,7 +14,7 @@ import { i18next } from '@/i18n/index';
 import twinfo from '@/utils/tiddlywiki.json';
 
 const { default: getPorts } = require('get-port');
-const { TiddlyWiki } = require('tiddlywiki');
+// const { TiddlyWiki } = require('tiddlywiki');
 import { config } from '@/utils/config';
 import { isEmptyDirectory } from '@/utils/checkEmptyDir';
 
@@ -45,6 +45,8 @@ import { IWikiTemplate } from './wikiTemplates';
 import { createSymlink } from './subwiki';
 import { t } from 'i18next';
 import { generateRandomPrivatePort } from './generateRandomPort';
+import { type Server } from 'tiddlywiki';
+import { tiddlywiki } from './tiddlywiki';
 
 // let wikiInstances: { [port: number]: string } = {}; // 用于记录 port: wikipath, 便于端口复用
 
@@ -54,7 +56,8 @@ const desktopDir = app.getPath('desktop');
 // NOTE： 这里使用使用对象引用, 便于更新值
 export const server = {
   currentPort: DEFAULT_PORT,
-  currentServer: null,
+  currentServer: null as any as Server,
+  // | null,
   menu: {} as Menu,
   tray: null as any as Tray,
   win: null as any as BrowserWindow,
@@ -64,7 +67,7 @@ export const server = {
 
 export type IConfig = typeof config;
 
-export const createMenuTemplate = createMenubar(config, server);
+export const createMenuTemplate = createMenubar(config);
 
 // 添加更新最近打开的 wiki 列表的函数
 function updateRecentWikis(wikiPath: string) {
@@ -163,15 +166,11 @@ export async function initWiki(
 
     const bootPath = path.join(wikiFolder, WIKIINFOFILE);
 
-    const { boot } = TiddlyWiki();
-
     // 空目录就自动生成(wiki 目录文件被手动删除的情况和手动进行初始化)
     if (isEmptyDirectory(wikiFolder)) {
       // 空目录进行初始化
-      boot.argv = wikiInitArgs(wikiFolder);
-      await boot.boot(() => {
-        log.info(wikiFolder, 'is empty, try init wiki');
-      });
+      tiddlywiki(wikiInitArgs(wikiFolder));
+      log.info(wikiFolder, 'is empty, try init wiki');
     } else if (!isEmptyDirectory(wikiFolder) && !fs.existsSync(bootPath)) {
       // wiki目录存在但是 tiddlywiki.info 文件不存在, 直接写入tiddlywiki.info 文件
       fs.writeFileSync(bootPath, JSON.stringify(twinfo, null, 4), 'utf8');
@@ -189,6 +188,7 @@ export async function initWiki(
     }
 
     if (server.currentServer) {
+      // @ts-ignore
       server.currentServer = null;
     }
 
@@ -201,29 +201,51 @@ export async function initWiki(
       notify: false,
     });
 
-    // 新建tw实例
-    const { boot: twBoot, preloadTiddler } = TiddlyWiki();
-
-    // prevent tiddlywiki ctrl+s
-    preloadTiddler({
-      title: '$:/config/shortcuts/save-wiki',
-      text: '',
-    });
-
-    twBoot.argv = wikiStartupArgs(wikiFolder, server.currentPort);
-
     const startServer = (port: number) => {
       if (!win) {
         log.error('mainwindow not founded on start server');
       }
       win.loadURL(`http://localhost:${port}`);
     };
-    server.currentServer = twBoot;
+
+    // server.currentServer = twBoot;
     if (!existingPort) {
+      // prevent tiddlywiki ctrl+s
+      const saveTiddler = [
+        {
+          title: '$:/config/shortcuts/save-wiki',
+          text: '',
+        },
+      ];
+
+      const createNewTw = () => {
+        log.info('start new server on', server.currentPort);
+        // 新建tw实例
+        const twBoot = tiddlywiki(
+          wikiStartupArgs(wikiFolder, server.currentPort),
+          saveTiddler
+        );
+
+        // @see: https://github.com/TiddlyWiki/TiddlyWiki5/blob/961e74f73d230d0028efb586db07699120eac888/editions/dev/tiddlers/new/Hook__th-server-command-post-start.tid#L4
+        // @see: https://github.com/tiddly-gittly/plugin-dev-cli/blob/main/src/dev.ts#L65
+        // twBoot.hooks.addHook(
+        //   'th-server-command-post-start',
+        //   // eslint-disable-next-line @typescript-eslint/no-loop-func
+        //   (_listenCommand, newTwServer) => {
+        //     // newTwServer.on('listening', () => resolve());
+        //     server.currentServer = newTwServer;
+        //   }
+        // );
+      };
+
       log.log('starting, please wait a moment...', wikiFolder);
-      twBoot.boot();
+      createNewTw();
       startServer(server.currentPort);
-      log.info('start new server on', server.currentPort);
+
+      // if (server.currentServer) {
+      //   server.currentServer.on('close', createNewTw);
+      //   server.currentServer.close();
+      // }
       config.set('runningWikis', [...config.get('runningWikis'), wikiFolder]);
     } else {
       // 直接加载已存在的服务器
@@ -321,17 +343,6 @@ export async function showWikiInfo() {
   });
 }
 
-// async function showWikiInfo2() {
-//   win.webContents.send('show-wiki-info', {
-//     appName: t('app.name'),
-//     version: packageInfo.version,
-//     wikiPath: config.get('wikiPath'),
-//     port: server.currentPort || t('app.notRunning'),
-//     configPath: config.fileName,
-//     closeText: t('dialog.close'),
-//   });
-// }
-
 export async function switchLanguage(lang: string) {
   config.set('language', lang);
   await i18next.changeLanguage(lang);
@@ -351,7 +362,6 @@ export async function importSingleFileWiki(
   html?: string,
   template?: IWikiTemplate
 ) {
-  // const { boot } = TiddlyWiki();
   try {
     let htmlPath = html;
     if (html) {
@@ -398,17 +408,16 @@ export async function importSingleFileWiki(
       await fs2.copy(templateDir, targetPath);
       log.info('copy file done', templateDir);
     } else {
-      // 手动转换
-      const { boot } = TiddlyWiki();
-      boot.argv = [
+      // html2folder 手动转换
+      const loadArgs = [
         '--load',
         htmlPath,
         '--savewikifolder',
         targetPath,
         // '--verbose',
       ];
-      boot.boot();
-      log.log('import file successfully', htmlPath, boot.argv);
+      tiddlywiki(loadArgs);
+      log.log('import file successfully', htmlPath, loadArgs);
       // 尝试创建files软连接
       if (!html) {
         const htmlDir = path.dirname(htmlPath);
@@ -455,87 +464,81 @@ export async function buildWiki({ password }: IBuildOptions) {
   try {
     const wikiPath = config.get('wikiPath');
     checkBuildInfo(wikiPath);
+    log.log(t('log.startBuild'));
     // 设置进度条
     win.setProgressBar(0.1);
 
-    const { boot } = TiddlyWiki();
-    boot.argv = wikiBuildArgs(wikiPath, password);
+    tiddlywiki(wikiBuildArgs(wikiPath, password));
 
-    // 更新进度条
-    win.setProgressBar(0.4);
+    // 构建完成
+    win.setProgressBar(1);
 
-    boot.boot(async () => {
-      // 构建完成
-      win.setProgressBar(1);
-      log.log(t('log.startBuild'));
+    const filesDir = path.join(wikiPath, 'files');
+    const targetFolderFile = path.join(wikiPath, 'output', 'files');
+    // 尝试创建files软连接
+    // 检测是否已经存在files文件夹
+    if (fs.existsSync(filesDir) && !fs.existsSync(targetFolderFile)) {
+      await createSymlink(filesDir, targetFolderFile);
+      log.info('create file symlink(build)', filesDir, targetFolderFile);
+    }
 
-      const filesDir = path.join(wikiPath, 'files');
-      const targetFolderFile = path.join(wikiPath, 'output', 'files');
-      // 尝试创建files软连接
-      // 检测是否已经存在files文件夹
-      if (fs.existsSync(filesDir) && !fs.existsSync(targetFolderFile)) {
-        await createSymlink(filesDir, targetFolderFile);
-        log.info('create file symlink(build)', filesDir, targetFolderFile);
-      }
+    setTimeout(() => win.setProgressBar(-1), 1000); // 1 秒后移除进度条
 
-      setTimeout(() => win.setProgressBar(-1), 1000); // 1 秒后移除进度条
+    const outputPath = path.join(wikiPath, 'output', 'index.html');
+    // 统计当前index.html 文件大小
+    const indexHTMLSize = getFileSizeInMB(outputPath);
 
-      const outputPath = path.join(wikiPath, 'output', 'index.html');
-      // 统计当前index.html 文件大小
-      const indexHTMLSize = getFileSizeInMB(outputPath);
-
-      const result = await dialog.showMessageBox({
-        type: 'info',
-        title: t('dialog.buildComplete'),
-        message: t('dialog.buildCompleteMessage', { size: indexHTMLSize }),
-        icon: getMenuIcon('about', 256),
-        buttons: [
-          t('dialog.preview'),
-          t('dialog.showInFolder'),
-          t('menu.publish'),
-          t('dialog.saveAs'),
-          t('dialog.close'),
-        ],
-        defaultId: 0,
-        cancelId: 4,
-      });
-
-      switch (result.response) {
-        case 0:
-          shell.openExternal(`file://${outputPath}`);
-          break;
-        case 1:
-          shell.showItemInFolder(outputPath);
-          break;
-        case 2:
-          await releaseWiki();
-          break;
-        case 3:
-          const { filePath } = await dialog.showSaveDialog({
-            title: t('dialog.saveAs'),
-            defaultPath: path.join(desktopDir, Date.now() + '-index.html'),
-            filters: [{ name: 'HTML', extensions: ['html'] }],
-          });
-
-          if (filePath) {
-            try {
-              await fs.promises.copyFile(outputPath, filePath);
-              dialog.showMessageBox({
-                type: 'info',
-                title: t('dialog.saveAsSuccess'),
-                message: `${t('dialog.saveAsSuccess')}: ${filePath}`,
-                buttons: [t('dialog.confirm')],
-              });
-            } catch (error: any) {
-              // log.log('保存失败: ' + error.message);
-              // dialog.showErrorBox('保存失败', '无法保存文件: ' + error.message);
-            }
-          }
-          break;
-        default:
-          break;
-      }
+    const result = await dialog.showMessageBox({
+      type: 'info',
+      title: t('dialog.buildComplete'),
+      message: t('dialog.buildCompleteMessage', { size: indexHTMLSize }),
+      icon: getMenuIcon('about', 256),
+      buttons: [
+        t('dialog.preview'),
+        t('dialog.showInFolder'),
+        t('menu.publish'),
+        t('dialog.saveAs'),
+        t('dialog.close'),
+      ],
+      defaultId: 0,
+      cancelId: 4,
     });
+
+    switch (result.response) {
+      case 0:
+        shell.openExternal(`file://${outputPath}`);
+        break;
+      case 1:
+        shell.showItemInFolder(outputPath);
+        break;
+      case 2:
+        await releaseWiki();
+        break;
+      case 3:
+        const { filePath } = await dialog.showSaveDialog({
+          title: t('dialog.saveAs'),
+          defaultPath: path.join(desktopDir, Date.now() + '-index.html'),
+          filters: [{ name: 'HTML', extensions: ['html'] }],
+        });
+
+        if (filePath) {
+          try {
+            await fs.promises.copyFile(outputPath, filePath);
+            dialog.showMessageBox({
+              type: 'info',
+              title: t('dialog.saveAsSuccess'),
+              message: `${t('dialog.saveAsSuccess')}: ${filePath}`,
+              buttons: [t('dialog.confirm')],
+            });
+          } catch (error: any) {
+            // log.log('保存失败: ' + error.message);
+            // dialog.showErrorBox('保存失败', '无法保存文件: ' + error.message);
+          }
+        }
+        break;
+      default:
+        break;
+    }
   } catch (err: any) {
     win.setProgressBar(-1); // 出错时移除进度条
     dialog.showErrorBox(

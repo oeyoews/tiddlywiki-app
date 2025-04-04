@@ -1,0 +1,18 @@
+diff --git a/package.json b/package.json
+index 9d0888b8a2ba9287f15ccc4fa0770c7208b6c032..c3a4a1317db5c32fe9740e8a21f05468a9a5487e 100644
+--- a/package.json
++++ b/package.json
+@@ -23,6 +23,13 @@
+     "url": "git+https://github.com/tiddly-gittly/tw5-typed.git"
+   },
+   "types": "src/index.d.ts",
++  "exports": {
++    ".": {
++      "import": "./src/index.d.ts",
++      "require": "./src/index.d.ts",
++      "types": "./src/index.d.ts"
++    }
++  },
+   "files": [
+     "src/"
+   ],

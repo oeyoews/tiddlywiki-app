@@ -12,8 +12,8 @@ declare global {
   }
   interface Window {
     electronAPI: typeof electronAPI; // 使用 typeof 推断 electronAPI 的类型
-    $tw: any;
+    // $tw: any;
   }
-  export const $tw: ITiddlyWiki;
+  // export const $tw: ITiddlyWiki;
   export const electronAPI: typeof IElectronAPI; // 使用 typeof 推断 electronAPI 的类型
 }
