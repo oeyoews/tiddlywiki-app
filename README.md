@@ -33,6 +33,8 @@ A TiddlyWiki desktop application that provides a smoother desktop experience.
 
 [Download tiddlywiki-app](https://github.com/oeyoews/tiddlywiki-app/releases)
 
+> For arch(or manjaro) user, you can install `pacman -U tiddlywiki-app-*.pacman`, or use PKGBUILD directly
+
 <!-- * Manjaro Series: `pacman -S appimagelauncher and use appimage install, or use pacman package`
 * Windows: Download the exe file
 * macOS: Download the dmg installer (untested) -->
