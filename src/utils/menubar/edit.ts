@@ -10,6 +10,12 @@ export const editMenu = (): MenuItemConstructorOptions => ({
     { role: 'cut', label: t('menu.cut') },
     { role: 'copy', label: t('menu.copy') },
     { role: 'paste', label: t('menu.paste') },
+    { type: 'separator' },
+    {
+      label: 'Speech',
+      submenu: [{ role: 'startSpeaking' }, { role: 'stopSpeaking' }],
+    },
+    { type: 'separator' },
     { role: 'delete' },
     { role: 'selectAll', label: t('menu.selectAll') },
   ],

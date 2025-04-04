@@ -49,6 +49,7 @@ const createFindBar = (win, options, hideFindBar) => {
     movable: false,
     autoHideMenuBar: true,
     frame: false,
+    hasShadow: false,
     show: false,
     webPreferences: {
       nodeIntegration: true,

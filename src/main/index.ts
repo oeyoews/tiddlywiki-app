@@ -7,6 +7,8 @@ import {
   BrowserWindow,
   Menu,
   nativeTheme,
+  BrowserViewConstructorOptions,
+  BrowserWindowConstructorOptions,
 } from 'electron';
 import { getAppIcon } from '@/utils/icon';
 let spawn: null;
@@ -77,7 +79,7 @@ async function createWindow() {
     winState = config.get('window');
   }
 
-  win = new BrowserWindow({
+  const winOptions: BrowserWindowConstructorOptions = {
     // @ts-ignore
     height: defaultHeight,
     // @ts-ignore
@@ -86,6 +88,11 @@ async function createWindow() {
     icon: getAppIcon(),
     skipTaskbar: false,
     show: false,
+    hasShadow: false,
+    resizable: true,
+    movable: true,
+    minWidth: Number((defaultWidth * 0.6).toFixed(0)),
+    minHeight: Number((defaultHeight * 0.6).toFixed(0)),
     webPreferences: {
       spellcheck: false,
       preload,
@@ -94,7 +101,9 @@ async function createWindow() {
       webSecurity: false,
     },
     // fullscreen: winState.isFullScreen,
-  });
+  };
+
+  win = new BrowserWindow(winOptions);
 
   win.once('ready-to-show', () => {
     if (!app.isPackaged) {

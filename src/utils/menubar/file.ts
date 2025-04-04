@@ -15,6 +15,7 @@ import { showInputBox } from '@/modules/showInputBox';
 import { readMarkdownFolder } from '@/modules/markdown-importer';
 import { log } from '../logger';
 import { t } from 'i18next';
+import { getPlatform } from '../getPlatform';
 
 export const fileMenu = (): MenuItemConstructorOptions => ({
   label: t('menu.file'),
@@ -160,7 +161,7 @@ export const fileMenu = (): MenuItemConstructorOptions => ({
       label: t('menu.exit'),
       icon: getMenuIcon('exit'),
       accelerator: 'CmdOrCtrl+Q',
-      role: 'quit',
+      role: getPlatform() === 'macOs' ? 'close' : 'quit',
     },
   ],
 });
