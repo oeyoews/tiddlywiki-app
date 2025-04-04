@@ -22,8 +22,9 @@ const WIKIINFOFILE = 'tiddlywiki.info';
 const DEFAULT_PORT = generateRandomPrivatePort();
 
 interface TwServerInfo {
-  server: Server;
+  server: Server | null;
   path: string;
+  port?: number;
 }
 
 // let importIngNotify: Notification;
@@ -73,7 +74,11 @@ export const server = {
 
 export const closeTwServer = (id: string) => {
   const instance = server.twServers.get(id);
-  if (instance) {
+  if (instance?.server) {
+    instance.server.on(
+      'close',
+      () => server.twServers.delete(id) // 移除
+    );
     instance.server.close();
     log.info('close tiddlywiki server', instance.path);
     // TODO:
