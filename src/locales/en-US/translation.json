@@ -9,7 +9,7 @@
     "subwiki": "Open subwiki",
     "wikiTemplate": "Create Wiki from Template",
     "minimize": "Minimize Window",
-    "openTid": "Open in File Explorer",
+    "openTid": "Open Current Tiddler in File Explorer",
     "searchText": "Search Text \"{{text}}\"",
     "enableBeta": "Enable Beta Releases",
     "search": "Search",

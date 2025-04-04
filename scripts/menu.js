@@ -36,8 +36,8 @@ module.exports = {
     'zh-CN': '最小化窗口',
   },
   openTid: {
-    'en-US': 'Open in File Explorer',
-    'zh-CN': '在资源管理器中显示',
+    'en-US': 'Open Current Tiddler in File Explorer',
+    'zh-CN': '在资源管理器中显示当前条目',
   },
   searchText: {
     'en-US': 'Search Text "{{text}}"',
