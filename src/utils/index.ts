@@ -268,17 +268,7 @@ export async function initWiki(
       };
 
       log.log('starting, please wait a moment...', wikiFolder);
-      // TODO:
-      // 更新菜单（running)
-      // 隐藏open in browser
-      // show delete folder
 
-      // if (server.currentServer) {
-      //   server.currentServer.on('close', createNewTw);
-      //   server.currentServer.close();
-      // } else {
-      //   createNewTw();
-      // }
       createNewTw();
       startServer(server.currentPort);
     } else {

@@ -50,6 +50,7 @@ export const wikisMenu = (recentWikis: IWikiMenu[]) => ({
             {
               label: t('menu.openInBrowser'),
               visible: isRunning,
+              id: 'open-wiki-in-browser' + generateId(wikiPath),
               icon: getMenuIcon('web'),
               click: () => {
                 const currentPort = getPortByPath(wikiPath);
@@ -69,9 +70,22 @@ export const wikisMenu = (recentWikis: IWikiMenu[]) => ({
             {
               label: t('menu.stopWiki'),
               visible: !isCurrentWiki && isRunning,
+              id: 'stop-wiki-' + generateId(wikiPath),
               icon: getMenuIcon('stop'),
-              click: () => {
+              click: (menuItem) => {
                 closeTwServer(generateId(wikiPath));
+
+                const item = server.menu.getMenuItemById(menuItem.id);
+                const openInBrowserItem = server.menu.getMenuItemById(
+                  'open-wiki-in-browser' + generateId(wikiPath)
+                );
+                if (openInBrowserItem?.visible) {
+                  openInBrowserItem.enabled = false;
+                }
+                if (item?.visible) {
+                  item.visible = false;
+                  Menu.setApplicationMenu(server.menu);
+                }
               },
             },
             {
