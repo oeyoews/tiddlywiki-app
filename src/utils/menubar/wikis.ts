@@ -16,7 +16,7 @@ export const wikisMenu = (recentWikis: IRecentWikisWithTag[]) => ({
     ...recentWikis.map(
       ({ path: wikiPath, running, isCurrentWiki }) =>
         ({
-          label: running ? wikiPath + ' (Runing)' : wikiPath,
+          label: running ? wikiPath + t('menu.running') : wikiPath,
           id: generateId(wikiPath),
           icon: getMenuIcon(running ? 'folder-opened' : 'folder'),
           submenu: [

@@ -35,6 +35,10 @@ module.exports = {
     'en-US': 'Minimize Window',
     'zh-CN': '最小化窗口',
   },
+  running: {
+    'en-US': ' (Running)',
+    'zh-CN': ' (运行中)',
+  },
   openTid: {
     'en-US': 'Open Current Tiddler in File Explorer',
     'zh-CN': '在资源管理器中显示当前条目',
