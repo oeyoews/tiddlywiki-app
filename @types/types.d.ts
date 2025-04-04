@@ -125,6 +125,7 @@ interface IBuildOptions {
 type IRecentWikisWithTag = {
   path: string;
   running: boolean;
+  isCurrentWiki: boolean;
 };
 
 type IWinState = {

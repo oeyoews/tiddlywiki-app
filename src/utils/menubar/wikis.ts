@@ -1,10 +1,4 @@
-import {
-  dialog,
-  Menu,
-  shell,
-  type MenuItem,
-  type MenuItemConstructorOptions,
-} from 'electron';
+import { dialog, Menu, shell, type MenuItemConstructorOptions } from 'electron';
 import { initWiki, server } from '@/utils';
 import { getMenuIcon } from '@/utils/icon';
 import fs from 'fs';
@@ -20,7 +14,7 @@ export const wikisMenu = (recentWikis: IRecentWikisWithTag[]) => ({
   id: 'recentWikis',
   submenu: [
     ...recentWikis.map(
-      ({ path: wikiPath, running }) =>
+      ({ path: wikiPath, running, isCurrentWiki }) =>
         ({
           label: running ? wikiPath + ' (Runing)' : wikiPath,
           id: generateId(wikiPath),
@@ -28,6 +22,7 @@ export const wikisMenu = (recentWikis: IRecentWikisWithTag[]) => ({
           submenu: [
             {
               label: t('menu.openWiki'),
+              visible: !isCurrentWiki,
               icon: getMenuIcon('open'),
               click: async () => {
                 if (!fs.existsSync(wikiPath)) {
@@ -70,7 +65,7 @@ export const wikisMenu = (recentWikis: IRecentWikisWithTag[]) => ({
             },
             {
               label: t('menu.moveToTrash'),
-              visible: !running,
+              visible: !running && !isCurrentWiki,
               icon: getMenuIcon('trash'),
               click: async () => {
                 // 检查文件是否存在
