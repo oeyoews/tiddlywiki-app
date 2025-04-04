@@ -51,13 +51,10 @@ export const wikisMenu = (recentWikis: IRecentWikisWithTag[]) => ({
             },
             {
               label: t('menu.openInBrowser'),
-              visible: !!getPortByPath(server.wikiInstances, wikiPath),
+              visible: !!getPortByPath(wikiPath),
               icon: getMenuIcon('web'),
               click: () => {
-                const currentPort = getPortByPath(
-                  server.wikiInstances,
-                  wikiPath
-                );
+                const currentPort = getPortByPath(wikiPath);
                 if (currentPort) {
                   shell.openExternal(`http://localhost:${server.currentPort}`);
                 }
@@ -159,7 +156,7 @@ export const wikisMenu = (recentWikis: IRecentWikisWithTag[]) => ({
   ],
 });
 
-function getPortByPath(obj: any, path: string) {
-  const entry = Object.entries(obj).find(([port, p]) => p === path);
-  return entry ? Number(entry[0]) : null;
+function getPortByPath(path: string) {
+  const wikiServer = server.twServers.get(generateId(path));
+  return wikiServer?.port;
 }

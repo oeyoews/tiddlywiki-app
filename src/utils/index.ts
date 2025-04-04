@@ -22,9 +22,9 @@ const WIKIINFOFILE = 'tiddlywiki.info';
 const DEFAULT_PORT = generateRandomPrivatePort();
 
 interface TwServerInfo {
-  server: Server | null;
+  server?: Server | null;
   path: string;
-  port?: number;
+  port?: number | null;
 }
 
 // let importIngNotify: Notification;
@@ -67,13 +67,13 @@ export const server = {
   tray: null as any as Tray,
   win: null as any as BrowserWindow,
   downloadNotify: {} as Notification,
-  wikiInstances: {} as any, // 用于记录 port: wikipath, 便于端口复用
   // 维护一组tiddlywiki 实例
   twServers: new Map<string, TwServerInfo>(),
 };
 
 export const closeTwServer = (id: string) => {
   const instance = server.twServers.get(id);
+  console.log(id, instance);
   if (instance?.server) {
     instance.server.on('close', () => {
       log.info('close tiddlywiki server', instance.path);
@@ -82,7 +82,10 @@ export const closeTwServer = (id: string) => {
         title: t('dialog.success'),
         message: t('dialog.closeSuccess'),
       });
-      server.twServers.delete(id); // 移除
+      // server.twServers.delete(id); // 移除
+      // NOTE: 需要保存 path
+      instance.port = null;
+      instance.server = null;
     });
     instance.server.close();
   }
@@ -156,17 +159,15 @@ export async function initWiki(
     log.error('_mainWindow not founded');
   }
   try {
-    // 检查当前实例的文件夹是否被初始化过
-    const existingPort = Object.entries(server.wikiInstances).find(
-      ([_, path]) => path === wikiFolder
-    )?.[0];
+    const wikiFolderId = generateId(wikiFolder);
+    const wikiServer = server.twServers.get(wikiFolderId);
 
-    // 新实例：记录端口和路径
-    if (!existingPort) {
-      server.currentPort = await getPorts({ port: DEFAULT_PORT });
-      server.wikiInstances[server.currentPort] = wikiFolder;
+    // 新实例：记录端口
+    if (!wikiServer?.port) {
+      const currentPort = await getPorts({ port: DEFAULT_PORT });
+      server.currentPort = currentPort;
     } else {
-      server.currentPort = Number(existingPort); // 更新端口
+      server.currentPort = wikiServer.port; // 更新端口
     }
 
     if (isFirstTime) {
@@ -227,7 +228,7 @@ export async function initWiki(
     };
 
     // server.currentServer = twBoot;
-    if (!existingPort) {
+    if (!wikiServer?.port) {
       // prevent tiddlywiki ctrl+s
       const saveTiddler = [
         {
@@ -253,10 +254,11 @@ export async function initWiki(
                 server.currentServer = newTwServer;
                 const twId = generateId(wikiFolder);
                 // 更新 twservers
-                if (!server.twServers.has(twId)) {
+                if (!server.twServers.get(twId)?.port) {
                   server.twServers.set(generateId(wikiFolder), {
                     path: wikiFolder,
                     server: newTwServer,
+                    port: server.currentPort,
                   });
                 }
               }
@@ -285,7 +287,7 @@ export async function initWiki(
     } else {
       // 直接加载已存在的服务器
       startServer(server.currentPort);
-      log.info('open exist wiki', existingPort, wikiFolder);
+      log.info('open exist wiki', wikiServer.port, wikiFolder);
     }
     updateRecentWikis(wikiFolder);
     return { port: server.currentPort };
