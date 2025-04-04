@@ -170,7 +170,6 @@ async function createWindow() {
   // });
 
   const isFirstTime = !config.get('wikiPath');
-  config.set('runningWikis', []);
   await initWiki(wikiPath, isFirstTime, win);
 
   // 获取页面标题并设置窗口标题
@@ -371,7 +370,6 @@ app.on('open-url', (event: any, url: string) => {
 app.on('before-quit', () => {
   app.isQuitting = true;
   log.info('tiddlywiki app before quit.');
-  // config.set('runningWikis', []);
 });
 
 // 启动应用

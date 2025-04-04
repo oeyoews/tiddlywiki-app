@@ -1,24 +1,22 @@
 import { dialog, Menu, shell, type MenuItemConstructorOptions } from 'electron';
-import { closeTwServer, initWiki, server } from '@/utils';
-import { getFolderIcon, getMenuIcon, getWikiFolderIcon } from '@/utils/icon';
+import { closeTwServer, initWiki, server, TwServerInfo } from '@/utils';
+import { getFolderIcon, getMenuIcon } from '@/utils/icon';
 import fs from 'fs';
 import { config } from '@/utils/config';
 import { t } from 'i18next';
 import { generateId } from '../generateId';
 import { log } from '../logger';
 
-export const wikisMenu = (recentWikis: IRecentWikisWithTag[]) => ({
-  //   label: t('menu.recentWikis'),
-  //   icon: getMenuIcon('recent'),
+export const wikisMenu = (recentWikis: IWikiMenu[]) => ({
   label: t('menu.wikis'),
   id: 'recentWikis',
   submenu: [
     ...recentWikis.map(
-      ({ path: wikiPath, running, isCurrentWiki }) =>
+      ({ path: wikiPath, port, isRunning, isCurrentWiki }) =>
         ({
-          label: running ? wikiPath + t('menu.running') : wikiPath,
+          label: isRunning ? wikiPath + `(${port})` : wikiPath,
           id: generateId(wikiPath),
-          icon: getMenuIcon(running ? 'folder-opened' : 'folder'),
+          icon: getMenuIcon(isRunning ? 'folder-opened' : 'folder'),
           submenu: [
             {
               label: t('menu.openWiki'),
@@ -51,12 +49,12 @@ export const wikisMenu = (recentWikis: IRecentWikisWithTag[]) => ({
             },
             {
               label: t('menu.openInBrowser'),
-              visible: !!getPortByPath(wikiPath),
+              visible: isRunning,
               icon: getMenuIcon('web'),
               click: () => {
                 const currentPort = getPortByPath(wikiPath);
                 if (currentPort) {
-                  shell.openExternal(`http://localhost:${server.currentPort}`);
+                  shell.openExternal(`http://localhost:${currentPort}`);
                 }
               },
             },
@@ -70,7 +68,7 @@ export const wikisMenu = (recentWikis: IRecentWikisWithTag[]) => ({
             },
             {
               label: t('menu.stopWiki'),
-              visible: !isCurrentWiki && running,
+              visible: !isCurrentWiki && isRunning,
               icon: getMenuIcon('stop'),
               click: () => {
                 closeTwServer(generateId(wikiPath));
@@ -78,7 +76,7 @@ export const wikisMenu = (recentWikis: IRecentWikisWithTag[]) => ({
             },
             {
               label: t('menu.moveToTrash'),
-              visible: !running && !isCurrentWiki,
+              visible: !isRunning && !isCurrentWiki,
               icon: getMenuIcon('trash'),
               click: async () => {
                 // 检查文件是否存在

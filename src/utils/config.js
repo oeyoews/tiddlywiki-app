@@ -16,7 +16,6 @@ const options = {
   defaults: {
     winState: true, // 默认开启， 记录上次窗口位置
     // betaChannel: false,
-    runningWikis: [],
     username: null,
     icon: false,
     wikiPath: DEFAULT_WIKI_DIR,

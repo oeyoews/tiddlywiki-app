@@ -4,7 +4,7 @@ import {
   // Tray,
   // BrowserWindow,
 } from 'electron';
-import { type IConfig } from '@/utils';
+import { server, type IConfig } from '@/utils';
 import { helpMenu } from '@/utils/menubar/help';
 import { settingsMenu } from '@/utils/menubar/settings';
 import { viewMenu } from './view';
@@ -12,44 +12,27 @@ import { fileMenu } from './file';
 import { editMenu } from './edit';
 import { getPlatform } from '../getPlatform';
 import { wikisMenu } from './wikis';
+import { generateId } from '../generateId';
 
-export const createMenubar = (
-  config: IConfig
-  // server: {
-  //   currentPort: number;
-  //   menu: Menu;
-  //   tray: Tray;
-  //   currentServer: null;
-  //   win: BrowserWindow;
-  // }
-) => {
+export const createMenubar = (config: IConfig) => {
   return function () {
-    // const recentWikis = (config.get('recentWikis') || []).filter(
-    //   (path: string) => path !== config.get('wikiPath')
-    // );
     const recentWikis = config.get('recentWikis') || [];
     const currentWiki = config.get('wikiPath');
-    const runningWikis = config.get('runningWikis') || [];
-
-    // const manageWikiMenu: MenuItemConstructorOptions = {
-    //   label: t('menu.wikis'),
-    //   submenu: [
-    //     // C:\\Users\\Lenovo\\Desktop\\chat-app\\wiki-test 长度过长， 少一位刚刚好???
-    //     ...mwikis,
-    //   ],
-    // };
 
     const recentWikisWithTag = recentWikis.map((item) => {
       const wiki = {
+        port: null as any,
         path: item,
-        running: false,
         isCurrentWiki: false,
+        isRunning: false,
       };
-      if (runningWikis.includes(item)) {
-        wiki.running = true;
-        if (item === currentWiki) {
-          wiki.isCurrentWiki = true;
-        }
+      if (currentWiki === item) {
+        wiki.isCurrentWiki = true;
+      }
+      const wikiServer = server.twServers.get(generateId(item));
+      if (wikiServer?.port) {
+        wiki.port = wikiServer.port;
+        wiki.isRunning = true;
       }
       return wiki;
     });
@@ -57,7 +40,6 @@ export const createMenubar = (
     const menubars: MenuItemConstructorOptions[] = [
       fileMenu(),
       viewMenu(),
-      // manageWikiMenu,
       wikisMenu(recentWikisWithTag),
       settingsMenu(),
       helpMenu(),

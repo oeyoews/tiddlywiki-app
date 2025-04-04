@@ -21,7 +21,7 @@ import { isEmptyDirectory } from '@/utils/checkEmptyDir';
 const WIKIINFOFILE = 'tiddlywiki.info';
 const DEFAULT_PORT = generateRandomPrivatePort();
 
-interface TwServerInfo {
+export interface TwServerInfo {
   server?: Server | null;
   path: string;
   port?: number | null;
@@ -73,7 +73,6 @@ export const server = {
 
 export const closeTwServer = (id: string) => {
   const instance = server.twServers.get(id);
-  console.log(id, instance);
   if (instance?.server) {
     instance.server.on('close', () => {
       log.info('close tiddlywiki server', instance.path);
@@ -282,8 +281,6 @@ export async function initWiki(
       // }
       createNewTw();
       startServer(server.currentPort);
-
-      config.set('runningWikis', [...config.get('runningWikis'), wikiFolder]);
     } else {
       // 直接加载已存在的服务器
       startServer(server.currentPort);
