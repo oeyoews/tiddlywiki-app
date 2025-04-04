@@ -1,13 +1,12 @@
-// @see https://www.electron.build/configuration/configuration
-{
-  $schema: 'https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json',
+const config = {
+  // $schema: 'https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json',
   protocols: [
     {
       name: 'TiddlyWiki Protocol',
       schemes: ['tiddlywiki'],
     },
   ],
-  appId: 'tiddlywiki.app',
+  // appId: 'tiddlywiki.app',
   asar: true,
   directories: {
     output: 'release/${version}',
@@ -71,4 +70,6 @@
     owner: 'oeyoews',
     repo: 'tiddlywiki-app',
   },
-}
+};
+
+export default config;
