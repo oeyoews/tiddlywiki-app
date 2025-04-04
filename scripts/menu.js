@@ -172,8 +172,8 @@ module.exports = {
     'zh-CN': '导出HTML文件',
   },
   openInBrowser: {
-    'en-US': 'Open in Browser',
-    'zh-CN': '在浏览器中打开',
+    'en-US': 'Open Wiki in Browser',
+    'zh-CN': '在浏览器中打开Wiki',
   },
   openFolder: {
     'en-US': 'Open Current Wiki Folder',

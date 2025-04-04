@@ -43,7 +43,7 @@
     "importMarkdown": "导入 Markdown 文件",
     "buildWikiWithPassWord": "导出加密HTML文件",
     "buildWiki": "导出HTML文件",
-    "openInBrowser": "在浏览器中打开",
+    "openInBrowser": "在浏览器中打开Wiki",
     "openFolder": "打开当前 Wiki 文件夹",
     "exit": "退出",
     "devTools": "开发者工具",

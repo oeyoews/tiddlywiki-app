@@ -7,6 +7,7 @@ import {
 import { getFolderIcon, getMenuIcon } from '@/utils/icon';
 import { t } from 'i18next';
 import { TPlatform } from '@/main';
+import { server } from '.';
 
 /**
  * 注册右键菜单
@@ -74,6 +75,19 @@ export const registerContextMenu = (
       accelerator: 'F11',
       role: 'togglefullscreen',
     },
+
+    { type: 'separator' },
+    {
+      label: t('menu.openInBrowser'),
+      icon: getMenuIcon('web'),
+      accelerator: 'CmdOrCtrl+Shift+O',
+      click: () => {
+        if (server.currentPort) {
+          shell.openExternal(`http://localhost:${server.currentPort}`);
+        }
+      },
+    },
+    { type: 'separator' },
     {
       label: t('menu.reload'),
       icon: getMenuIcon('reload'),
