@@ -1,8 +1,8 @@
 # Maintainer: oeyoews <jyao4783@gmail.com>
 pkgname=tiddlywiki-app
-pkgver=3.5.4
+pkgver=3.9.4
 pkgrel=1
-pkgdesc="你的最后一个 TiddlyWiki 桌面应用，提供更加丝滑的TiddlyWiki使用体验"
+pkgdesc="你的最后一个 TiddlyWiki 桌面应用, 提供更加丝滑的TiddlyWiki使用体验"
 arch=('x86_64' 'aarch64')
 license=('MIT')
 url="https://oeyoews.github.io/tiddlywiki-app/"
