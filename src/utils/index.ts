@@ -45,7 +45,7 @@ import { IWikiTemplate } from './wikiTemplates';
 import { createSymlink } from './subwiki';
 import { t } from 'i18next';
 import { generateRandomPrivatePort } from './generateRandomPort';
-import { type Server } from 'tiddlywiki';
+import { ITiddlyWiki, type Server } from 'tiddlywiki';
 import { tiddlywiki } from './tiddlywiki';
 
 // let wikiInstances: { [port: number]: string } = {}; // 用于记录 port: wikipath, 便于端口复用
@@ -187,11 +187,6 @@ export async function initWiki(
       checkThemes(bootPath);
     }
 
-    if (server.currentServer) {
-      // @ts-ignore
-      server.currentServer = null;
-    }
-
     // 启动实例前的检查
     toggleMarkdown(!!config.get('markdown'), {
       notify: false,
@@ -218,34 +213,41 @@ export async function initWiki(
         },
       ];
 
+      // @see: https://github.com/TiddlyWiki/TiddlyWiki5/blob/961e74f73d230d0028efb586db07699120eac888/editions/dev/tiddlers/new/Hook__th-server-command-post-start.tid#L4
+      // @see: https://github.com/tiddly-gittly/plugin-dev-cli/blob/main/src/dev.ts#L65
       const createNewTw = () => {
         log.info('start new server on', server.currentPort);
         // 新建tw实例
         const twBoot = tiddlywiki(
           wikiStartupArgs(wikiFolder, server.currentPort),
-          saveTiddler
+          saveTiddler,
+          ($tw: ITiddlyWiki) => {
+            // if (!firstRun) return;
+            $tw.hooks.addHook(
+              'th-server-command-post-start',
+              (_listenCommand, newTwServer) => {
+                // newTwServer.on('listening', () =>{});
+                server.currentServer = newTwServer;
+                console.log('add hooks');
+              }
+            );
+          }
         );
-
-        // @see: https://github.com/TiddlyWiki/TiddlyWiki5/blob/961e74f73d230d0028efb586db07699120eac888/editions/dev/tiddlers/new/Hook__th-server-command-post-start.tid#L4
-        // @see: https://github.com/tiddly-gittly/plugin-dev-cli/blob/main/src/dev.ts#L65
-        // twBoot.hooks.addHook(
-        //   'th-server-command-post-start',
-        //   // eslint-disable-next-line @typescript-eslint/no-loop-func
-        //   (_listenCommand, newTwServer) => {
-        //     // newTwServer.on('listening', () => resolve());
-        //     server.currentServer = newTwServer;
-        //   }
-        // );
+        // return twBoot;
       };
 
       log.log('starting, please wait a moment...', wikiFolder);
-      createNewTw();
+
+      if (server.currentServer) {
+        console.log('close old wiki');
+        server.currentServer.on('close', createNewTw);
+        server.currentServer.close();
+      } else {
+        console.log('create new wiki');
+        createNewTw();
+      }
       startServer(server.currentPort);
 
-      // if (server.currentServer) {
-      //   server.currentServer.on('close', createNewTw);
-      //   server.currentServer.close();
-      // }
       config.set('runningWikis', [...config.get('runningWikis'), wikiFolder]);
     } else {
       // 直接加载已存在的服务器
