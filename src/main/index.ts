@@ -115,6 +115,7 @@ async function createWindow() {
       );
     }
     win.show();
+    win.focus();
     // log.info('ARCH is', TPlatform);
     log.info('Platform is', process.platform);
 

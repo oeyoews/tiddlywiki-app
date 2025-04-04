@@ -21,6 +21,11 @@ import { isEmptyDirectory } from '@/utils/checkEmptyDir';
 const WIKIINFOFILE = 'tiddlywiki.info';
 const DEFAULT_PORT = generateRandomPrivatePort();
 
+interface TwServerInfo {
+  server: Server;
+  path: string;
+}
+
 // let importIngNotify: Notification;
 // let successImportNotify: Notification;
 
@@ -47,8 +52,7 @@ import { t } from 'i18next';
 import { generateRandomPrivatePort } from './generateRandomPort';
 import { ITiddlyWiki, type Server } from 'tiddlywiki';
 import { tiddlywiki } from './tiddlywiki';
-
-// let wikiInstances: { [port: number]: string } = {}; // 用于记录 port: wikipath, 便于端口复用
+import { generateId } from './generateId';
 
 let win: BrowserWindow; // 在 initwiki 初始化时赋值
 const desktopDir = app.getPath('desktop');
@@ -63,6 +67,16 @@ export const server = {
   win: null as any as BrowserWindow,
   downloadNotify: {} as Notification,
   wikiInstances: {} as any, // 用于记录 port: wikipath, 便于端口复用
+  // 维护一组tiddlywiki 实例
+  twServers: new Map<string, TwServerInfo>(),
+};
+
+export const closeTwServer = (id: string) => {
+  const instance = server.twServers.get(id);
+  if (instance) {
+    instance.server.close();
+    log.info('close tiddlywiki server', instance.path);
+  }
 };
 
 export type IConfig = typeof config;
@@ -218,7 +232,7 @@ export async function initWiki(
       const createNewTw = () => {
         log.info('start new server on', server.currentPort);
         // 新建tw实例
-        const twBoot = tiddlywiki(
+        tiddlywiki(
           wikiStartupArgs(wikiFolder, server.currentPort),
           saveTiddler,
           ($tw: ITiddlyWiki) => {
@@ -228,7 +242,14 @@ export async function initWiki(
               (_listenCommand, newTwServer) => {
                 // newTwServer.on('listening', () =>{});
                 server.currentServer = newTwServer;
-                console.log('add hooks');
+                const twId = generateId(wikiFolder);
+                // 更新 twservers
+                if (!server.twServers.has(twId)) {
+                  server.twServers.set(generateId(wikiFolder), {
+                    path: wikiFolder,
+                    server: newTwServer,
+                  });
+                }
               }
             );
           }
@@ -237,15 +258,19 @@ export async function initWiki(
       };
 
       log.log('starting, please wait a moment...', wikiFolder);
+      // TODO:
+      // 当前实例不可关闭
+      // 更新菜单（running)
+      // 隐藏open in browser
+      // show delete folder
 
-      if (server.currentServer) {
-        console.log('close old wiki');
-        server.currentServer.on('close', createNewTw);
-        server.currentServer.close();
-      } else {
-        console.log('create new wiki');
-        createNewTw();
-      }
+      // if (server.currentServer) {
+      //   server.currentServer.on('close', createNewTw);
+      //   server.currentServer.close();
+      // } else {
+      //   createNewTw();
+      // }
+      createNewTw();
       startServer(server.currentPort);
 
       config.set('runningWikis', [...config.get('runningWikis'), wikiFolder]);
