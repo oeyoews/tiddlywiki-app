@@ -21,7 +21,9 @@ type IMenuIconFile =
   | 'warning'
   | 'config'
   | 'export'
+  | 'success'
   | 'username'
+  | 'stop'
   | 'winState'
   | 'open'
   | 'gear'
@@ -122,12 +124,6 @@ interface IBuildOptions {
   // outputPath?: string
 }
 
-type IRecentWikisWithTag = {
-  path: string;
-  running: boolean;
-  isCurrentWiki: boolean;
-};
-
 type IWinState = {
   width: number;
   height: number;
@@ -136,3 +132,10 @@ type IWinState = {
   isMaximized: boolean;
   isFullScreen: boolean;
 };
+
+interface IWikiMenu {
+  port: null | number;
+  path: string;
+  isCurrentWiki: boolean;
+  isRunning: boolean;
+}

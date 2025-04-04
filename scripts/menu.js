@@ -179,6 +179,10 @@ module.exports = {
     'en-US': 'Open Wiki in Browser',
     'zh-CN': '在浏览器中打开Wiki',
   },
+  stopWiki: {
+    'en-US': 'Stop Running Wiki',
+    'zh-CN': '停止Wiki',
+  },
   openFolder: {
     'en-US': 'Open Current Wiki Folder',
     'zh-CN': '打开当前Wiki文件夹',

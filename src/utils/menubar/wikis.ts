@@ -1,5 +1,5 @@
 import { dialog, Menu, shell, type MenuItemConstructorOptions } from 'electron';
-import { initWiki, server } from '@/utils';
+import { closeTwServer, initWiki, server, TwServerInfo } from '@/utils';
 import { getFolderIcon, getMenuIcon } from '@/utils/icon';
 import fs from 'fs';
 import { config } from '@/utils/config';
@@ -7,18 +7,16 @@ import { t } from 'i18next';
 import { generateId } from '../generateId';
 import { log } from '../logger';
 
-export const wikisMenu = (recentWikis: IRecentWikisWithTag[]) => ({
-  //   label: t('menu.recentWikis'),
-  //   icon: getMenuIcon('recent'),
+export const wikisMenu = (recentWikis: IWikiMenu[]) => ({
   label: t('menu.wikis'),
   id: 'recentWikis',
   submenu: [
     ...recentWikis.map(
-      ({ path: wikiPath, running, isCurrentWiki }) =>
+      ({ path: wikiPath, port, isRunning, isCurrentWiki }) =>
         ({
-          label: running ? wikiPath + t('menu.running') : wikiPath,
+          label: isRunning ? wikiPath + `(${port})` : wikiPath,
           id: generateId(wikiPath),
-          icon: getMenuIcon(running ? 'folder-opened' : 'folder'),
+          icon: getMenuIcon(isRunning ? 'folder-opened' : 'folder'),
           submenu: [
             {
               label: t('menu.openWiki'),
@@ -51,15 +49,13 @@ export const wikisMenu = (recentWikis: IRecentWikisWithTag[]) => ({
             },
             {
               label: t('menu.openInBrowser'),
-              visible: !!getPortByPath(server.wikiInstances, wikiPath),
+              visible: isRunning,
+              id: 'open-wiki-in-browser' + generateId(wikiPath),
               icon: getMenuIcon('web'),
               click: () => {
-                const currentPort = getPortByPath(
-                  server.wikiInstances,
-                  wikiPath
-                );
+                const currentPort = getPortByPath(wikiPath);
                 if (currentPort) {
-                  shell.openExternal(`http://localhost:${server.currentPort}`);
+                  shell.openExternal(`http://localhost:${currentPort}`);
                 }
               },
             },
@@ -72,8 +68,29 @@ export const wikisMenu = (recentWikis: IRecentWikisWithTag[]) => ({
               },
             },
             {
+              label: t('menu.stopWiki'),
+              visible: !isCurrentWiki && isRunning,
+              id: 'stop-wiki-' + generateId(wikiPath),
+              icon: getMenuIcon('stop'),
+              click: (menuItem) => {
+                closeTwServer(generateId(wikiPath));
+
+                const item = server.menu.getMenuItemById(menuItem.id);
+                const openInBrowserItem = server.menu.getMenuItemById(
+                  'open-wiki-in-browser' + generateId(wikiPath)
+                );
+                if (openInBrowserItem?.visible) {
+                  openInBrowserItem.enabled = false;
+                }
+                if (item?.visible) {
+                  item.visible = false;
+                  Menu.setApplicationMenu(server.menu);
+                }
+              },
+            },
+            {
               label: t('menu.moveToTrash'),
-              visible: !running && !isCurrentWiki,
+              visible: !isRunning && !isCurrentWiki,
               icon: getMenuIcon('trash'),
               click: async () => {
                 // 检查文件是否存在
@@ -151,7 +168,7 @@ export const wikisMenu = (recentWikis: IRecentWikisWithTag[]) => ({
   ],
 });
 
-function getPortByPath(obj: any, path: string) {
-  const entry = Object.entries(obj).find(([port, p]) => p === path);
-  return entry ? Number(entry[0]) : null;
+function getPortByPath(path: string) {
+  const wikiServer = server.twServers.get(generateId(path));
+  return wikiServer?.port;
 }

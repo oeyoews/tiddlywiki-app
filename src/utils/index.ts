@@ -21,6 +21,12 @@ import { isEmptyDirectory } from '@/utils/checkEmptyDir';
 const WIKIINFOFILE = 'tiddlywiki.info';
 const DEFAULT_PORT = generateRandomPrivatePort();
 
+export interface TwServerInfo {
+  server?: Server | null;
+  path: string;
+  port?: number | null;
+}
+
 // let importIngNotify: Notification;
 // let successImportNotify: Notification;
 
@@ -45,10 +51,9 @@ import { IWikiTemplate } from './wikiTemplates';
 import { createSymlink } from './subwiki';
 import { t } from 'i18next';
 import { generateRandomPrivatePort } from './generateRandomPort';
-import { type Server } from 'tiddlywiki';
+import { ITiddlyWiki, type Server } from 'tiddlywiki';
 import { tiddlywiki } from './tiddlywiki';
-
-// let wikiInstances: { [port: number]: string } = {}; // 用于记录 port: wikipath, 便于端口复用
+import { generateId } from './generateId';
 
 let win: BrowserWindow; // 在 initwiki 初始化时赋值
 const desktopDir = app.getPath('desktop');
@@ -62,7 +67,27 @@ export const server = {
   tray: null as any as Tray,
   win: null as any as BrowserWindow,
   downloadNotify: {} as Notification,
-  wikiInstances: {} as any, // 用于记录 port: wikipath, 便于端口复用
+  // 维护一组tiddlywiki 实例
+  twServers: new Map<string, TwServerInfo>(),
+};
+
+export const closeTwServer = (id: string) => {
+  const instance = server.twServers.get(id);
+  if (instance?.server) {
+    instance.server.on('close', () => {
+      log.info('close tiddlywiki server', instance.path);
+      dialog.showMessageBox({
+        icon: getMenuIcon('success', 256),
+        title: t('dialog.success'),
+        message: t('dialog.closeSuccess'),
+      });
+      // server.twServers.delete(id); // 移除
+      // NOTE: 需要保存 path
+      instance.port = null;
+      instance.server = null;
+    });
+    instance.server.close();
+  }
 };
 
 export type IConfig = typeof config;
@@ -133,17 +158,15 @@ export async function initWiki(
     log.error('_mainWindow not founded');
   }
   try {
-    // 检查当前实例的文件夹是否被初始化过
-    const existingPort = Object.entries(server.wikiInstances).find(
-      ([_, path]) => path === wikiFolder
-    )?.[0];
+    const wikiFolderId = generateId(wikiFolder);
+    const wikiServer = server.twServers.get(wikiFolderId);
 
-    // 新实例：记录端口和路径
-    if (!existingPort) {
-      server.currentPort = await getPorts({ port: DEFAULT_PORT });
-      server.wikiInstances[server.currentPort] = wikiFolder;
+    // 新实例：记录端口
+    if (!wikiServer?.port) {
+      const currentPort = await getPorts({ port: DEFAULT_PORT });
+      server.currentPort = currentPort;
     } else {
-      server.currentPort = Number(existingPort); // 更新端口
+      server.currentPort = wikiServer.port; // 更新端口
     }
 
     if (isFirstTime) {
@@ -187,11 +210,6 @@ export async function initWiki(
       checkThemes(bootPath);
     }
 
-    if (server.currentServer) {
-      // @ts-ignore
-      server.currentServer = null;
-    }
-
     // 启动实例前的检查
     toggleMarkdown(!!config.get('markdown'), {
       notify: false,
@@ -209,7 +227,7 @@ export async function initWiki(
     };
 
     // server.currentServer = twBoot;
-    if (!existingPort) {
+    if (!wikiServer?.port) {
       // prevent tiddlywiki ctrl+s
       const saveTiddler = [
         {
@@ -218,39 +236,45 @@ export async function initWiki(
         },
       ];
 
+      // @see: https://github.com/TiddlyWiki/TiddlyWiki5/blob/961e74f73d230d0028efb586db07699120eac888/editions/dev/tiddlers/new/Hook__th-server-command-post-start.tid#L4
+      // @see: https://github.com/tiddly-gittly/plugin-dev-cli/blob/main/src/dev.ts#L65
       const createNewTw = () => {
         log.info('start new server on', server.currentPort);
         // 新建tw实例
-        const twBoot = tiddlywiki(
+        tiddlywiki(
           wikiStartupArgs(wikiFolder, server.currentPort),
-          saveTiddler
+          saveTiddler,
+          ($tw: ITiddlyWiki) => {
+            // if (!firstRun) return;
+            $tw.hooks.addHook(
+              'th-server-command-post-start',
+              (_listenCommand, newTwServer) => {
+                // newTwServer.on('listening', () =>{});
+                server.currentServer = newTwServer;
+                const twId = generateId(wikiFolder);
+                // 更新 twservers
+                if (!server.twServers.get(twId)?.port) {
+                  server.twServers.set(generateId(wikiFolder), {
+                    path: wikiFolder,
+                    server: newTwServer,
+                    port: server.currentPort,
+                  });
+                }
+              }
+            );
+          }
         );
-
-        // @see: https://github.com/TiddlyWiki/TiddlyWiki5/blob/961e74f73d230d0028efb586db07699120eac888/editions/dev/tiddlers/new/Hook__th-server-command-post-start.tid#L4
-        // @see: https://github.com/tiddly-gittly/plugin-dev-cli/blob/main/src/dev.ts#L65
-        // twBoot.hooks.addHook(
-        //   'th-server-command-post-start',
-        //   // eslint-disable-next-line @typescript-eslint/no-loop-func
-        //   (_listenCommand, newTwServer) => {
-        //     // newTwServer.on('listening', () => resolve());
-        //     server.currentServer = newTwServer;
-        //   }
-        // );
+        // return twBoot;
       };
 
       log.log('starting, please wait a moment...', wikiFolder);
+
       createNewTw();
       startServer(server.currentPort);
-
-      // if (server.currentServer) {
-      //   server.currentServer.on('close', createNewTw);
-      //   server.currentServer.close();
-      // }
-      config.set('runningWikis', [...config.get('runningWikis'), wikiFolder]);
     } else {
       // 直接加载已存在的服务器
       startServer(server.currentPort);
-      log.info('open exist wiki', existingPort, wikiFolder);
+      log.info('open exist wiki', wikiServer.port, wikiFolder);
     }
     updateRecentWikis(wikiFolder);
     return { port: server.currentPort };
