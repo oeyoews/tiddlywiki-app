@@ -75,18 +75,16 @@ export const server = {
 export const closeTwServer = (id: string) => {
   const instance = server.twServers.get(id);
   if (instance?.server) {
-    instance.server.on(
-      'close',
-      () => server.twServers.delete(id) // 移除
-    );
-    instance.server.close();
-    log.info('close tiddlywiki server', instance.path);
-    // TODO:
-    dialog.showMessageBox({
-      icon: getMenuIcon('success', 256),
-      title: t('dialog.success'),
-      message: t('dialog.closeSuccess'),
+    instance.server.on('close', () => {
+      log.info('close tiddlywiki server', instance.path);
+      dialog.showMessageBox({
+        icon: getMenuIcon('success', 256),
+        title: t('dialog.success'),
+        message: t('dialog.closeSuccess'),
+      });
+      server.twServers.delete(id); // 移除
     });
+    instance.server.close();
   }
 };
 
