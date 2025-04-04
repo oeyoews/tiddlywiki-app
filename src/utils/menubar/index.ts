@@ -1,37 +1,27 @@
 import {
   type MenuItemConstructorOptions,
-  Menu,
-  shell,
-  MenuItem,
-  Tray,
-  dialog,
-  BrowserWindow,
+  // Menu,
+  // Tray,
+  // BrowserWindow,
 } from 'electron';
-import fs from 'fs';
-
-import { log } from '@/utils/logger';
-
-import { getMenuIcon } from '@/utils/icon';
 import { type IConfig } from '@/utils';
-import { generateId } from '../generateId';
 import { helpMenu } from '@/utils/menubar/help';
 import { settingsMenu } from '@/utils/menubar/settings';
 import { viewMenu } from './view';
 import { fileMenu } from './file';
-import { t } from 'i18next';
 import { editMenu } from './edit';
 import { getPlatform } from '../getPlatform';
 import { wikisMenu } from './wikis';
 
 export const createMenubar = (
-  config: IConfig,
-  server: {
-    currentPort: number;
-    menu: Menu;
-    tray: Tray;
-    currentServer: null;
-    win: BrowserWindow;
-  }
+  config: IConfig
+  // server: {
+  //   currentPort: number;
+  //   menu: Menu;
+  //   tray: Tray;
+  //   currentServer: null;
+  //   win: BrowserWindow;
+  // }
 ) => {
   return function () {
     // const recentWikis = (config.get('recentWikis') || []).filter(

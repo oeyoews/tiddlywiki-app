@@ -114,6 +114,8 @@ async function createWindow() {
       );
     }
     win.show();
+    log.info('ARCH is', TPlatform);
+    log.info('Platform is', process.platform);
 
     if (enableWinState) {
       if (winState?.isFullScreen) {
