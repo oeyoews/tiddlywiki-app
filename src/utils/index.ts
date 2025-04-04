@@ -76,6 +76,12 @@ export const closeTwServer = (id: string) => {
   if (instance) {
     instance.server.close();
     log.info('close tiddlywiki server', instance.path);
+    // TODO:
+    dialog.showMessageBox({
+      icon: getMenuIcon('success', 256),
+      title: t('dialog.success'),
+      message: t('dialog.closeSuccess'),
+    });
   }
 };
 
@@ -259,7 +265,6 @@ export async function initWiki(
 
       log.log('starting, please wait a moment...', wikiFolder);
       // TODO:
-      // 当前实例不可关闭
       // 更新菜单（running)
       // 隐藏open in browser
       // show delete folder

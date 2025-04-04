@@ -21,6 +21,7 @@ type IMenuIconFile =
   | 'warning'
   | 'config'
   | 'export'
+  | 'success'
   | 'username'
   | 'stop'
   | 'winState'

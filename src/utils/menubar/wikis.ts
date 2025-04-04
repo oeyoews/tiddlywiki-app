@@ -1,6 +1,6 @@
 import { dialog, Menu, shell, type MenuItemConstructorOptions } from 'electron';
 import { closeTwServer, initWiki, server } from '@/utils';
-import { getFolderIcon, getMenuIcon } from '@/utils/icon';
+import { getFolderIcon, getMenuIcon, getWikiFolderIcon } from '@/utils/icon';
 import fs from 'fs';
 import { config } from '@/utils/config';
 import { t } from 'i18next';
@@ -73,6 +73,7 @@ export const wikisMenu = (recentWikis: IRecentWikisWithTag[]) => ({
             },
             {
               label: t('menu.stopWiki'),
+              visible: !isCurrentWiki && running,
               icon: getMenuIcon('stop'),
               click: () => {
                 closeTwServer(generateId(wikiPath));

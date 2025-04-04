@@ -144,6 +144,10 @@ module.exports = {
     'en-US': 'Delete Success',
     'zh-CN': '删除成功',
   },
+  closeSuccess: {
+    'en-US': 'Close Wiki Success',
+    'zh-CN': '关闭成功',
+  },
   success: {
     'en-US': 'Success',
     'zh-CN': '成功',

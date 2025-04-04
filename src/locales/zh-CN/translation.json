@@ -119,6 +119,7 @@
     "enterGithubRepo": "请输入仓库名称",
     "enterGithubBranch": "请输入分支名称",
     "deleteSuccess": "删除成功",
+    "closeSuccess": "关闭成功",
     "success": "成功",
     "githubConfigSuccess": "GitHub 配置已更新",
     "selectNewWikiFolder": "选择新建 Wiki 的文件夹",
