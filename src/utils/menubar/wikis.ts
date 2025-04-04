@@ -1,6 +1,6 @@
 import { dialog, Menu, shell, type MenuItemConstructorOptions } from 'electron';
 import { initWiki, server } from '@/utils';
-import { getMenuIcon } from '@/utils/icon';
+import { getFolderIcon, getMenuIcon } from '@/utils/icon';
 import fs from 'fs';
 import { config } from '@/utils/config';
 import { t } from 'i18next';
@@ -61,6 +61,14 @@ export const wikisMenu = (recentWikis: IRecentWikisWithTag[]) => ({
                 if (currentPort) {
                   shell.openExternal(`http://localhost:${server.currentPort}`);
                 }
+              },
+            },
+
+            {
+              label: t('menu.openFolder'),
+              icon: getFolderIcon(),
+              click: () => {
+                shell.openPath(wikiPath);
               },
             },
             {

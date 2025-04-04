@@ -181,7 +181,7 @@ module.exports = {
   },
   openFolder: {
     'en-US': 'Open Current Wiki Folder',
-    'zh-CN': '打开当前 Wiki 文件夹',
+    'zh-CN': '打开当前Wiki文件夹',
   },
   exit: {
     'en-US': 'Exit',
