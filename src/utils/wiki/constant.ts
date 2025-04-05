@@ -2,10 +2,11 @@ import { config } from '../config';
 
 export const wikiInitArgs = (path: string) => [path, '--init', 'server'];
 const host = 'host=0.0.0.0';
+
 export const wikiStartupArgs = (
   path: string,
-  port: number,
-  lan: boolean = true
+  port: number
+  // lan: boolean = true
 ) => [
   path,
   '--listen',

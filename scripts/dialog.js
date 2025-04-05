@@ -144,6 +144,10 @@ module.exports = {
     'en-US': 'Delete Success',
     'zh-CN': '删除成功',
   },
+  scalQRCode: {
+    'en-US': 'Use your mobile phone to scan the QR code below.',
+    'zh-CN': '使用手机扫描下面的二维码',
+  },
   closeSuccess: {
     'en-US': 'Close Wiki Success',
     'zh-CN': '关闭成功',

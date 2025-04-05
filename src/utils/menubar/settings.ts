@@ -79,12 +79,12 @@ export const settingsMenu = (): MenuItemConstructorOptions => ({
       },
     },
     {
-      label: t('menu.shareWiki'), // TODO: 监控网络环境变化
+      label: t('menu.shareWiki'),
       icon: getMenuIcon('host'),
       type: 'checkbox',
-      checked: !!config.get('winState'),
+      checked: !!config.get('lan'),
       click: (menuItem) => {
-        config.set('winState', menuItem.checked);
+        config.set('lan', menuItem.checked);
         restartDialog();
       },
     },

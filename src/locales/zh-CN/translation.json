@@ -121,6 +121,7 @@
     "enterGithubRepo": "请输入仓库名称",
     "enterGithubBranch": "请输入分支名称",
     "deleteSuccess": "删除成功",
+    "scalQRCode": "使用手机扫描下面的二维码",
     "closeSuccess": "关闭成功",
     "success": "成功",
     "githubConfigSuccess": "GitHub 配置已更新",

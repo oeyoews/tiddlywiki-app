@@ -121,6 +121,7 @@
     "enterGithubRepo": "Please enter repository name",
     "enterGithubBranch": "Please enter branch name",
     "deleteSuccess": "Delete Success",
+    "scalQRCode": "Use your mobile phone to scan the QR code below.",
     "closeSuccess": "Close Wiki Success",
     "success": "Success",
     "githubConfigSuccess": "GitHub configuration has been updated",

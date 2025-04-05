@@ -6,7 +6,7 @@ import { config } from '@/utils/config';
 import { t } from 'i18next';
 import { generateId } from '../generateId';
 import { log } from '../logger';
-import { getLocalIPAddress } from '../getHost';
+import { getAllLocalIPv4Addresses } from '../getHost';
 
 export const wikisMenu = (recentWikis: IWikiMenu[]) => ({
   label: t('menu.wikis'),
@@ -66,14 +66,11 @@ export const wikisMenu = (recentWikis: IWikiMenu[]) => ({
               // id: 'open-wiki-in-browser' + generateId(wikiPath),
               icon: getMenuIcon('qrcode'),
               click: () => {
-                // 获取局域网地址
-                const host = getLocalIPAddress();
-                config.set('host', host);
-                // qr/ip
-                dialog.showMessageBox({
-                  icon: getMenuIcon('qrcode', 256),
-                  title: '局域网',
-                  message: host!,
+                const host = getAllLocalIPv4Addresses(); // 获取局域网地址
+                server.win.webContents.send('show-qrcode', {
+                  host: host.pop(),
+                  port,
+                  message: t('dialog.scalQRCode'),
                 });
               },
             },

@@ -42,6 +42,27 @@ if (window.$tw) {
     importMarkdown(content);
   });
 
+  async function generateQrCode(text, options) {
+    return (
+      'data:image/svg+xml,' +
+      encodeURIComponent(
+        await QRCode.toString(text, {
+          type: 'svg',
+          ...options,
+        })
+      )
+    );
+  }
+  electronAPI.onShowQRCode(async (event: Event, { host, port, message }) => {
+    const url = `http://${host}:${port}`;
+    const res = await generateQrCode(url);
+    const qrcodeTiddler = '$:/temp/host/qrcode';
+    const qrImg = `<center>${message}: <br/> <img src="${res}" width=256/> <br /> ${url} </center>`;
+    $tw.wiki.setText(qrcodeTiddler, 'text', null, qrImg);
+    $tw.wiki.setText(qrcodeTiddler, 'subtitle', null, 'Wiki QRCode');
+    $tw.modal.display(qrcodeTiddler);
+  });
+
   // imported successfully
   electronAPI.onConfetti(() => {
     pride();
