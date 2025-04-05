@@ -179,6 +179,10 @@ module.exports = {
     'en-US': 'Open Wiki in Browser',
     'zh-CN': '在浏览器中打开Wiki',
   },
+  openVSCode: {
+    'en-US': 'Open With VSCode',
+    'zh-CN': '在VSCode中打开',
+  },
   showQRCode: {
     'en-US': 'Create QRCode for this page',
     'zh-CN': '为当前页面创建二维码',

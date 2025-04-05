@@ -16,7 +16,10 @@ export const electronAPI = {
   // 双向
   onTidInfo: (callback) =>
     ipcRenderer.on('update-tid', (_event, value) => callback(value)),
+  onTidInfoVscode: (callback) =>
+    ipcRenderer.on('update-tid-vscode', (_event, value) => callback(value)),
   sendTidInfo: (value) => ipcRenderer.send('tid-info', value),
+  sendTidInfoVscode: (value) => ipcRenderer.send('tid-info-vscode', value),
 
   // 接收图片坐标
   onTitleFetched: (callback) =>

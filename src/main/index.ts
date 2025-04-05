@@ -20,6 +20,7 @@ import { autoUpdaterInit } from '@/utils/checkUpdate';
 import path from 'path';
 import { getPlatform } from '@/utils/getPlatform';
 import { trackWindowState } from '@/utils/trackWindowState';
+import { convertPathToVSCodeUri } from '@/utils/convertPathToVSCodeUri';
 
 let win: BrowserWindow;
 let wikiPath: string;
@@ -247,6 +248,34 @@ if (TPlatform === 'windows' || TPlatform === 'macOs') {
 
 ipcMain.handle('update-gh-config', async (event: any, githubConfig: any) => {
   config.set('github', githubConfig);
+});
+
+ipcMain.on('tid-info-vscode', (_event, data) => {
+  const tiddlerFolder = path.join(config.get('wikiPath'), 'tiddlers');
+  log.info(data, 'received tid-info(vscode)');
+  if (!data?.title) {
+    return;
+  }
+  const tidPath = path.join(tiddlerFolder, data.title);
+  let maybeTidPath = null;
+  if (data?.maybeTitle) {
+    maybeTidPath = path.join(
+      config.get('wikiPath'),
+      'tiddlers',
+      data?.maybeTitle
+    );
+  }
+  if (fs.existsSync(tidPath)) {
+    shell.openExternal(convertPathToVSCodeUri(tidPath));
+  } else if (maybeTidPath && fs.existsSync(maybeTidPath)) {
+    shell.openExternal(convertPathToVSCodeUri(maybeTidPath));
+  } else {
+    const subwikiTid = path.join(tiddlerFolder, 'subwiki', data.title);
+    // 尝试读取 subwiki
+    if (fs.existsSync(subwikiTid)) {
+      shell.openExternal(convertPathToVSCodeUri(subwikiTid));
+    }
+  }
 });
 
 ipcMain.on('tid-info', (_event, data) => {
