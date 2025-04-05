@@ -9,6 +9,7 @@ import { t } from 'i18next';
 import { TPlatform } from '@/main';
 import { server } from '.';
 import { getAllLocalIPv4Addresses } from './getHost';
+import { config } from './config';
 
 /**
  * 注册右键菜单
@@ -83,7 +84,7 @@ export const registerContextMenu = (
     {
       label: t('menu.showQRCode'),
       icon: getMenuIcon('qrcode'),
-      visible: !params.isEditable,
+      visible: !params.isEditable && !!config.get('lan'),
       click: () => {
         const host = getAllLocalIPv4Addresses(); // 获取局域网地址
         server.win.webContents.send('show-qrcode', {

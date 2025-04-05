@@ -62,7 +62,7 @@ export const wikisMenu = (recentWikis: IWikiMenu[]) => ({
             },
             {
               label: t('menu.showQRCode'),
-              visible: isRunning,
+              visible: isRunning && config.get('lan'),
               id: 'show-qrcode-' + generateId(wikiPath),
               icon: getMenuIcon('qrcode'),
               click: () => {

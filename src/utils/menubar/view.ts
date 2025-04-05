@@ -62,6 +62,7 @@ export const viewMenu = (): MenuItemConstructorOptions => ({
     {
       label: t('menu.showQRCode'),
       icon: getMenuIcon('qrcode'),
+      visible: config.get('lan'),
       click: () => {
         const host = getAllLocalIPv4Addresses(); // 获取局域网地址
         server.win.webContents.send('show-qrcode', {
