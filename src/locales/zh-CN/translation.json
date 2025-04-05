@@ -45,7 +45,7 @@
     "buildWikiWithPassWord": "导出加密HTML文件",
     "buildWiki": "导出HTML文件",
     "openInBrowser": "在浏览器中打开Wiki",
-    "showQRCode": "显示局域网二维码",
+    "showQRCode": "为当前页面创建二维码",
     "shareWiki": "局域网共享Wiki",
     "stopWiki": "停止Wiki",
     "openFolder": "打开当前Wiki文件夹",

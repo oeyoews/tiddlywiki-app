@@ -8,6 +8,7 @@ import { getFolderIcon, getMenuIcon } from '@/utils/icon';
 import { t } from 'i18next';
 import { TPlatform } from '@/main';
 import { server } from '.';
+import { getAllLocalIPv4Addresses } from './getHost';
 
 /**
  * 注册右键菜单
@@ -68,18 +69,34 @@ export const registerContextMenu = (
       icon: getMenuIcon('cut'),
       visible: params.editFlags.canCut,
     },
-    { type: 'separator' },
+    {
+      type: 'separator',
+      visible: !params.isEditable,
+    },
     {
       label: t('menu.toggleFullscreen'),
       icon: getMenuIcon('screens'),
       accelerator: 'F11',
       role: 'togglefullscreen',
+      visible: !params.isEditable,
     },
-
-    { type: 'separator' },
+    {
+      label: t('menu.showQRCode'),
+      icon: getMenuIcon('qrcode'),
+      visible: !params.isEditable,
+      click: () => {
+        const host = getAllLocalIPv4Addresses(); // 获取局域网地址
+        server.win.webContents.send('show-qrcode', {
+          host: host.pop(),
+          port: server.currentPort,
+          message: t('dialog.scalQRCode'),
+        });
+      },
+    },
     {
       label: t('menu.openInBrowser'),
       icon: getMenuIcon('web'),
+      visible: !params.isEditable,
       accelerator: 'CmdOrCtrl+Shift+O',
       click: () => {
         if (server.currentPort) {
@@ -87,7 +104,6 @@ export const registerContextMenu = (
         }
       },
     },
-    { type: 'separator' },
     {
       label: t('menu.reload'),
       icon: getMenuIcon('reload'),

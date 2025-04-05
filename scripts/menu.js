@@ -180,8 +180,8 @@ module.exports = {
     'zh-CN': '在浏览器中打开Wiki',
   },
   showQRCode: {
-    'en-US': 'Show Wiki QRCode',
-    'zh-CN': '显示局域网二维码',
+    'en-US': 'Create QRCode for this page',
+    'zh-CN': '为当前页面创建二维码',
   },
   shareWiki: {
     'en-US': 'LAN shared Wiki',
