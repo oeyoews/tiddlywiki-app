@@ -53,6 +53,7 @@ import { generateRandomPrivatePort } from './generateRandomPort';
 import { ITiddlyWiki, type Server } from 'tiddlywiki';
 import { tiddlywiki } from './tiddlywiki';
 import { generateId } from './generateId';
+import { showInputBox } from '@/modules/showInputBox';
 
 let win: BrowserWindow; // 在 initwiki 初始化时赋值
 const desktopDir = app.getPath('desktop');
@@ -108,22 +109,26 @@ function updateRecentWikis(wikiPath: string) {
   Menu.setApplicationMenu(server.menu);
 }
 
-export async function releaseWiki() {
-  const wikiFolder = config.get('wikiPath');
-  const { repo, owner, token, branch } = config.get('github');
-  await saveToGitHub({
-    wikiFolder,
-    owner,
-    repo,
-    GITHUB_TOKEN: token,
-    branch,
-    win,
-  });
+export async function publishWiki() {
+  // check has token
+  const token = config.get('github')?.token;
+  if (!token) {
+    const res = await showInputBox(win, 'GitHub Token', 'password');
+    if (res && typeof res === 'string') {
+      config.set('github', {
+        token: res,
+      });
+      win.webContents.send('get-gh-config');
+    }
+    // update tw-github-password localstorage
+  } else {
+    win.webContents.send('get-gh-config');
+  }
 }
 
 export async function initWiki(
   wikiFolder: string,
-  isFirstTime: Boolean = false, // 用于手动新建 wiki
+  // isFirstTime: boolean = false, // 用于手动新建 wiki
   _mainWindow?: BrowserWindow
 ) {
   log.info('begin initwiki', wikiFolder);
@@ -168,23 +173,23 @@ export async function initWiki(
       server.currentPort = wikiServer.port; // 更新端口
     }
 
-    if (isFirstTime) {
-      const result = await dialog.showOpenDialog({
-        title: t('dialog.selectWikiFolder'),
-        properties: ['openDirectory'],
-        message: t('dialog.selectWikiFolderMessage'),
-      });
+    // if (isFirstTime) {
+    //   const result = await dialog.showOpenDialog({
+    //     title: t('dialog.selectWikiFolder'),
+    //     properties: ['openDirectory'],
+    //     message: t('dialog.selectWikiFolderMessage'),
+    //   });
 
-      if (!result.canceled && result.filePaths.length > 0) {
-        const selectedPath = result.filePaths[0];
-        if (path.basename(selectedPath) === 'tiddlers') {
-          dialog.showErrorBox(t('dialog.error'), t('dialog.invalidFolderName'));
-          return await initWiki(wikiFolder, true);
-        }
-        wikiFolder = selectedPath;
-        config.set('wikiPath', selectedPath);
-      }
-    }
+    //   if (!result.canceled && result.filePaths.length > 0) {
+    //     const selectedPath = result.filePaths[0];
+    //     if (path.basename(selectedPath) === 'tiddlers') {
+    //       dialog.showErrorBox(t('dialog.error'), t('dialog.invalidFolderName'));
+    //       return await initWiki(wikiFolder, true);
+    //     }
+    //     wikiFolder = selectedPath;
+    //     config.set('wikiPath', selectedPath);
+    //   }
+    // }
 
     const bootPath = path.join(wikiFolder, WIKIINFOFILE);
 
@@ -536,7 +541,7 @@ export async function buildWiki({ password }: IBuildOptions) {
         shell.showItemInFolder(outputPath);
         break;
       case 2:
-        await releaseWiki();
+        await publishWiki();
         break;
       case 3:
         const { filePath } = await dialog.showSaveDialog({
@@ -569,27 +574,6 @@ export async function buildWiki({ password }: IBuildOptions) {
       t('dialog.error'),
       t('dialog.buildError', { message: err.message })
     );
-  }
-}
-
-export async function configureGitHub() {
-  const currentConfig = config.get('github');
-  const result = await dialog.showMessageBox({
-    icon: getMenuIcon('gitHub', 256),
-    type: 'question',
-    title: t('dialog.githubConfig'),
-    message: t('dialog.githubConfigMessage'),
-    detail:
-      `Token: ${currentConfig.token ? '******' : t('dialog.notSet')}\n` +
-      `Owner: ${currentConfig.owner || t('dialog.notSet')}\n` +
-      `Repo: ${currentConfig.repo || t('dialog.notSet')}\n` +
-      `Branch: ${currentConfig.branch}`,
-    buttons: [t('dialog.modify'), t('dialog.close')],
-    defaultId: 1,
-    cancelId: 1,
-  });
-  if (result.response === 0) {
-    win.webContents.send('config-github');
   }
 }
 

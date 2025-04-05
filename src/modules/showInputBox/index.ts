@@ -8,14 +8,14 @@ export function showInputBox(
   parentWindow: BrowserWindow,
   message: string = 'Please input ...',
   type: 'text' | 'password' = 'text',
-  inputValue?: string
+  inputValue: string = ''
 ): Promise<string> {
   return new Promise((resolve) => {
     if (inputWin) {
       inputWin.show();
       inputWin?.webContents.send('set-title', message);
       inputWin?.webContents.send('set-inputvalue', {
-        inputValue: inputValue ?? '',
+        inputValue,
         type,
       });
       inputWin.focus();

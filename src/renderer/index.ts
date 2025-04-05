@@ -148,21 +148,26 @@ if (window.$tw) {
       window.electronAPI.sendTidInfoVscode(res);
     }
   });
+  const githubPasswordKey = 'tw5-password-github';
 
-  const githubConfig = {
-    repo: getText('$:/GitHub/Repo')?.split('/').pop(),
-    owner: getText('$:/GitHub/Username'),
-    token: localStorage.getItem('tw5-password-github'),
-    branch: getText('$:/GitHub/Branch') || 'main',
-  };
-
-  // 如果有 token 再存储配置
-  if (githubConfig.token) {
-    window.electronAPI.sendGHConfig(githubConfig);
-  }
+  // 主进程通知渲染进程， 渲染进程将当前wiki的gh config 发送给主进程
+  electronAPI.onGetGHConfig(() => {
+    const githubConfig = {
+      repo: getText('$:/GitHub/Repo')?.split('/').pop(),
+      owner: getText('$:/GitHub/Username'),
+      token: localStorage.getItem(githubPasswordKey),
+      branch: getText('$:/GitHub/Branch') || 'main',
+    };
+    electronAPI.sendGHConfig(githubConfig);
+  });
 
   // 监听 github 配置跳转
-  window.electronAPI.onConfigGithub(gotoGithubConfig);
+  window.electronAPI.onConfigGithub((data) => {
+    if (data) {
+      localStorage.setItem(githubPasswordKey, data);
+    }
+    gotoGithubConfig();
+  });
 
   // enable official plugin library
   const pluginLibraryUrl = `https://tiddlywiki.com/library/v${$tw.version}/index.html`;

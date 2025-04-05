@@ -7,12 +7,17 @@ export const electronAPI = {
     ipcRenderer.sendSync('custom-dialog', { type: 'alert', message }),
   confirm: (message) =>
     ipcRenderer.sendSync('custom-dialog', { type: 'confirm', message }),
-  onConfigGithub: (callback) => ipcRenderer.on('config-github', callback),
   onShowQRCode: (callback) => ipcRenderer.on('show-qrcode', callback),
   // markdown importer
   onImportMarkdown: (callback) => ipcRenderer.on('import-markdown', callback),
-  // onShowWikiInfo: (callback) => ipcRenderer.on('show-wiki-info', callback),
-  sendGHConfig: (data) => ipcRenderer.invoke('update-gh-config', data),
+
+  // github
+  onConfigGithub: (callback) =>
+    ipcRenderer.on('config-github', (_event, data) => callback(data)),
+
+  onGetGHConfig: (cbl) => ipcRenderer.on('get-gh-config', cbl),
+  sendGHConfig: (data) => ipcRenderer.send('update-gh-config', data),
+
   // 双向
   onTidInfo: (callback) =>
     ipcRenderer.on('update-tid', (_event, value) => callback(value)),

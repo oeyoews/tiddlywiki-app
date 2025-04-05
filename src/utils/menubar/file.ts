@@ -1,7 +1,7 @@
 import { app, dialog, shell, type MenuItemConstructorOptions } from 'electron';
 import {
   buildWiki,
-  releaseWiki,
+  publishWiki,
   createNewWiki,
   importSingleFileWiki,
   openWiki,
@@ -119,7 +119,7 @@ export const fileMenu = (): MenuItemConstructorOptions => ({
     {
       label: t('menu.publish'),
       icon: getMenuIcon('release'),
-      click: () => releaseWiki(),
+      click: () => publishWiki(),
     },
     // { type: 'separator' },
     {
