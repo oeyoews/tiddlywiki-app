@@ -112,8 +112,6 @@ export const registerContextMenu = (
     },
   ];
 
-  // TODO: qrcode like chrome contextmenu
-
   // 如果右键点击的是图片，添加复制图片选项
   if (params.mediaType === 'image') {
     if (['windows', 'macOs'].includes(TPlatform)) {
