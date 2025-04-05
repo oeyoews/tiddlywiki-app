@@ -38,6 +38,13 @@ export const registerContextMenu = (
       },
     },
     {
+      label: t('menu.openVSCode'),
+      icon: getMenuIcon('vscode'),
+      click: () => {
+        win.webContents.send('update-tid-vscode', { x: params.x, y: params.y });
+      },
+    },
+    {
       label: t('menu.searchText', { text: params.selectionText.slice(0, 35) }),
       icon: getMenuIcon('searchGoogle'),
       click: () => {

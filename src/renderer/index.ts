@@ -69,7 +69,6 @@ if (window.$tw) {
     pride();
   });
 
-  // TODO: 判断 windows  注册
   // 尺寸变化写入 description
   electronAPI.onTitleFetched(async (data: any) => {
     const { text, title } = getImage(data);
@@ -105,7 +104,7 @@ if (window.$tw) {
     const attr = 'data-tiddler-title';
     const titleEl = el?.closest(`[${attr}]`);
     let title = titleEl?.getAttribute(attr) || null; // 获取属性值，若不存在则返回 null
-    let newTitle = title;
+    let newTitle = title.replace(/[/\\]/g, '_'); // 正反斜杠转换成_
     if ($tw.wiki.tiddlerExists(title)) {
       const { type } = $tw.wiki.getTiddler(title).fields;
       if (title.startsWith('$')) {
@@ -140,6 +139,13 @@ if (window.$tw) {
       window.electronAPI.sendTidInfo(res);
     } else {
       window.electronAPI.sendTidInfo();
+    }
+  });
+
+  window.electronAPI.onTidInfoVscode((data) => {
+    const res = getTiddlerTitle(data);
+    if (res) {
+      window.electronAPI.sendTidInfoVscode(res);
     }
   });
 

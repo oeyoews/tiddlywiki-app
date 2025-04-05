@@ -27,6 +27,7 @@ type IMenuIconFile =
   | 'winState'
   | 'qrcode'
   | 'host'
+  | 'vscode'
   | 'open'
   | 'gear'
   | 'plus'
