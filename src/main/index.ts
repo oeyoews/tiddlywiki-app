@@ -20,6 +20,7 @@ import { autoUpdaterInit } from '@/utils/checkUpdate';
 import path from 'path';
 import { getPlatform } from '@/utils/getPlatform';
 import { trackWindowState } from '@/utils/trackWindowState';
+import { getLocalIPAddress } from '@/utils/getHost';
 
 let win: BrowserWindow;
 let wikiPath: string;

@@ -45,6 +45,8 @@
     "buildWikiWithPassWord": "Export as Single File With Password",
     "buildWiki": "Export as Single File",
     "openInBrowser": "Open Wiki in Browser",
+    "showQRCode": "Show Wiki QRCode",
+    "shareWiki": "LAN shared Wiki",
     "stopWiki": "Stop Running Wiki",
     "openFolder": "Open Current Wiki Folder",
     "exit": "Exit",

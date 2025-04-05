@@ -79,6 +79,16 @@ export const settingsMenu = (): MenuItemConstructorOptions => ({
       },
     },
     {
+      label: t('menu.shareWiki'), // TODO: 监控网络环境变化
+      icon: getMenuIcon('host'),
+      type: 'checkbox',
+      checked: !!config.get('winState'),
+      click: (menuItem) => {
+        config.set('winState', menuItem.checked);
+        restartDialog();
+      },
+    },
+    {
       label: t('menu.winState'),
       icon: getMenuIcon('winState'),
       type: 'checkbox',
