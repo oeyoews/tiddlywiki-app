@@ -6,6 +6,7 @@ import { config } from '@/utils/config';
 import { t } from 'i18next';
 import { generateId } from '../generateId';
 import { log } from '../logger';
+import { getAllLocalIPv4Addresses } from '../getHost';
 
 export const wikisMenu = (recentWikis: IWikiMenu[]) => ({
   label: t('menu.wikis'),
@@ -59,7 +60,20 @@ export const wikisMenu = (recentWikis: IWikiMenu[]) => ({
                 }
               },
             },
-
+            {
+              label: t('menu.showQRCode'),
+              visible: isRunning,
+              id: 'show-qrcode-' + generateId(wikiPath),
+              icon: getMenuIcon('qrcode'),
+              click: () => {
+                const host = getAllLocalIPv4Addresses(); // 获取局域网地址
+                server.win.webContents.send('show-qrcode', {
+                  host: host.pop(),
+                  port,
+                  message: t('dialog.scalQRCode'),
+                });
+              },
+            },
             {
               label: t('menu.openFolder'),
               icon: getFolderIcon(),
@@ -77,8 +91,14 @@ export const wikisMenu = (recentWikis: IWikiMenu[]) => ({
 
                 const item = server.menu.getMenuItemById(menuItem.id);
                 const openInBrowserItem = server.menu.getMenuItemById(
-                  'open-wiki-in-browser' + generateId(wikiPath)
+                  'open-wiki-in-browser-' + generateId(wikiPath)
                 );
+                const showQRCodeItem = server.menu.getMenuItemById(
+                  'show-qrcode-' + generateId(wikiPath)
+                );
+                if (showQRCodeItem?.visible) {
+                  showQRCodeItem.enabled = false;
+                }
                 if (openInBrowserItem?.visible) {
                   openInBrowserItem.enabled = false;
                 }

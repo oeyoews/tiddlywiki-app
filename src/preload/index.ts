@@ -8,6 +8,7 @@ export const electronAPI = {
   confirm: (message) =>
     ipcRenderer.sendSync('custom-dialog', { type: 'confirm', message }),
   onConfigGithub: (callback) => ipcRenderer.on('config-github', callback),
+  onShowQRCode: (callback) => ipcRenderer.on('show-qrcode', callback),
   // markdown importer
   onImportMarkdown: (callback) => ipcRenderer.on('import-markdown', callback),
   // onShowWikiInfo: (callback) => ipcRenderer.on('show-wiki-info', callback),

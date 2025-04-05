@@ -5,6 +5,7 @@ import { getFolderIcon, getMenuIcon } from '@/utils/icon';
 import { server } from '@/utils';
 import { config } from '../config';
 import { t } from 'i18next';
+import { getAllLocalIPv4Addresses } from '../getHost';
 let showFindBar: any;
 
 app.on('browser-window-created', async (_: any, win: any) => {
@@ -55,6 +56,19 @@ export const viewMenu = (): MenuItemConstructorOptions => ({
       icon: getMenuIcon('subwiki'),
       click: () => {
         shell.openPath(path.join(config.get('wikiPath'), 'subwiki'));
+      },
+    },
+    { type: 'separator' },
+    {
+      label: t('menu.showQRCode'),
+      icon: getMenuIcon('qrcode'),
+      click: () => {
+        const host = getAllLocalIPv4Addresses(); // 获取局域网地址
+        server.win.webContents.send('show-qrcode', {
+          host: host.pop(),
+          port: server.currentPort,
+          message: t('dialog.scalQRCode'),
+        });
       },
     },
     { type: 'separator' },

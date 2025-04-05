@@ -25,6 +25,8 @@ type IMenuIconFile =
   | 'username'
   | 'stop'
   | 'winState'
+  | 'qrcode'
+  | 'host'
   | 'open'
   | 'gear'
   | 'plus'

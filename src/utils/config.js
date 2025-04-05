@@ -17,6 +17,7 @@ const options = {
     winState: true, // 默认开启， 记录上次窗口位置
     // betaChannel: false,
     username: null,
+    lan: true,
     icon: false,
     wikiPath: DEFAULT_WIKI_DIR,
     language: null,

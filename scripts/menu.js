@@ -179,6 +179,14 @@ module.exports = {
     'en-US': 'Open Wiki in Browser',
     'zh-CN': '在浏览器中打开Wiki',
   },
+  showQRCode: {
+    'en-US': 'Create QRCode for this page',
+    'zh-CN': '为当前页面创建二维码',
+  },
+  shareWiki: {
+    'en-US': 'LAN shared Wiki',
+    'zh-CN': '局域网共享Wiki',
+  },
   stopWiki: {
     'en-US': 'Stop Running Wiki',
     'zh-CN': '停止Wiki',

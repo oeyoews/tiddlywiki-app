@@ -79,6 +79,16 @@ export const settingsMenu = (): MenuItemConstructorOptions => ({
       },
     },
     {
+      label: t('menu.shareWiki'),
+      icon: getMenuIcon('host'),
+      type: 'checkbox',
+      checked: !!config.get('lan'),
+      click: (menuItem) => {
+        config.set('lan', menuItem.checked);
+        restartDialog();
+      },
+    },
+    {
       label: t('menu.winState'),
       icon: getMenuIcon('winState'),
       type: 'checkbox',
