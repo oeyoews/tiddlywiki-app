@@ -63,7 +63,7 @@ export const wikisMenu = (recentWikis: IWikiMenu[]) => ({
             {
               label: t('menu.showQRCode'),
               visible: isRunning,
-              // id: 'open-wiki-in-browser' + generateId(wikiPath),
+              id: 'show-qrcode-' + generateId(wikiPath),
               icon: getMenuIcon('qrcode'),
               click: () => {
                 const host = getAllLocalIPv4Addresses(); // 获取局域网地址
@@ -91,8 +91,14 @@ export const wikisMenu = (recentWikis: IWikiMenu[]) => ({
 
                 const item = server.menu.getMenuItemById(menuItem.id);
                 const openInBrowserItem = server.menu.getMenuItemById(
-                  'open-wiki-in-browser' + generateId(wikiPath)
+                  'open-wiki-in-browser-' + generateId(wikiPath)
                 );
+                const showQRCodeItem = server.menu.getMenuItemById(
+                  'show-qrcode-' + generateId(wikiPath)
+                );
+                if (showQRCodeItem?.visible) {
+                  showQRCodeItem.enabled = false;
+                }
                 if (openInBrowserItem?.visible) {
                   openInBrowserItem.enabled = false;
                 }
