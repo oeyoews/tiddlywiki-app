@@ -161,7 +161,7 @@ export const wikisMenu = (recentWikis: IWikiMenu[]) => ({
                   await shell.trashItem(wikiPath); // 移动到垃圾桶
                   dialog.showMessageBoxSync({
                     title: t('dialog.success'),
-                    icon: getMenuIcon('info', 256),
+                    icon: getMenuIcon('success', 256),
                     message: t('dialog.deleteSuccess'),
                   });
                 }

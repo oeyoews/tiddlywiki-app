@@ -163,10 +163,11 @@ async function createWindow() {
     return true;
   });
 
-  win.on('closed', () => {
-    // @ts-ignore
-    win = null; // 释放引用
-  });
+  // win.on('closed', () => {
+  //   // log.info('destory win');
+  //   // @ts-ignore
+  //   win = null; // 释放引用
+  // });
 
   // 捕获控制台日志
   // win.webContents.on('console-message', (event, level, message) => {
