@@ -157,17 +157,23 @@ async function createWindow() {
   win.on('close', (event: any) => {
     if (!app.isQuitting) {
       event.preventDefault();
-      win.hide();
+      if (process.platform === 'darwin') {
+        // MacOS 下使用 hide() 而不是直接关闭窗口
+        app.hide();
+      } else {
+        win.hide();
+      }
       return false;
     }
     return true;
   });
 
-  // win.on('closed', () => {
-  //   // log.info('destory win');
-  //   // @ts-ignore
-  //   win = null; // 释放引用
-  // });
+  // 添加 MacOS 下的 activate 事件处理
+  app.on('activate', () => {
+    if (process.platform === 'darwin') {
+      win.show();
+    }
+  });
 
   // 捕获控制台日志
   // win.webContents.on('console-message', (event, level, message) => {
@@ -387,6 +393,8 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.isQuitting = true;
     app.quit();
+  } else {
+    win.hide();
   }
 });
 
