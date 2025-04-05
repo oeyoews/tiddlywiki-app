@@ -20,7 +20,6 @@ import { autoUpdaterInit } from '@/utils/checkUpdate';
 import path from 'path';
 import { getPlatform } from '@/utils/getPlatform';
 import { trackWindowState } from '@/utils/trackWindowState';
-import { getLocalIPAddress } from '@/utils/getHost';
 
 let win: BrowserWindow;
 let wikiPath: string;
@@ -108,6 +107,9 @@ async function createWindow() {
   win = new BrowserWindow(winOptions);
 
   win.once('ready-to-show', () => {
+    win.show();
+    win.focus();
+    log.info('Ready to show');
     if (!app.isPackaged) {
       console.log(
         `Electron Main Process Startup Time(to show): ${(
@@ -115,10 +117,11 @@ async function createWindow() {
         ).toFixed(2)} ms`
       );
     }
-    win.show();
-    win.focus();
     // log.info('ARCH is', TPlatform);
     log.info('Platform is', process.platform);
+    import('../../package.json').then(({ version, name }) => {
+      log.info(name, 'version:', version);
+    });
 
     if (enableWinState) {
       if (winState?.isFullScreen) {
@@ -131,7 +134,6 @@ async function createWindow() {
       trackWindowState(win);
     }
 
-    log.info('ready to show');
     autoUpdaterInit();
 
     // 设置外部链接在默认浏览器中打开
@@ -370,7 +372,7 @@ app.on('open-url', (event: any, url: string) => {
 
 app.on('before-quit', () => {
   app.isQuitting = true;
-  log.info('tiddlywiki app before quit.');
+  log.info('App Quit.');
 });
 
 // 启动应用

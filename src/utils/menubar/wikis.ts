@@ -1,5 +1,5 @@
 import { dialog, Menu, shell, type MenuItemConstructorOptions } from 'electron';
-import { closeTwServer, initWiki, server, TwServerInfo } from '@/utils';
+import { closeTwServer, initWiki, server } from '@/utils';
 import { getFolderIcon, getMenuIcon } from '@/utils/icon';
 import fs from 'fs';
 import { config } from '@/utils/config';

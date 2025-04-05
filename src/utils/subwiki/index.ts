@@ -20,7 +20,7 @@ export async function createSymlink(
 
     // 检查软链接是否已存在
     if (await fs.pathExists(symlinkPath)) {
-      log.info(`softlink ${symlinkPath} has exist, skip`);
+      log.info(`Softlink ${symlinkPath} has exist, skip`);
       return;
     }
 

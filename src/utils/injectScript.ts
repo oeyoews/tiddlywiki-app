@@ -15,7 +15,7 @@ export const injectScript = (win: BrowserWindow) => {
     'lib/autocorrect.min.js'
   );
 
-  log.info('begin inject script');
+  log.info('Begin inject script');
   const scripts = [render, confetti, qrcode];
 
   if (config.get('autocorrect')) {

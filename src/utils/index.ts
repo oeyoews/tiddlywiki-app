@@ -30,7 +30,6 @@ export interface TwServerInfo {
 // let importIngNotify: Notification;
 // let successImportNotify: Notification;
 
-import packageInfo from '../../package.json';
 import saveToGitHub from '@/utils/github-saver';
 import {
   wikiBuildArgs,
@@ -349,12 +348,13 @@ export async function openWiki() {
 }
 
 export async function showWikiInfo() {
+  const { version, name } = await import('../../package.json');
   dialog.showMessageBox({
     type: 'none',
     title: t('app.about'),
     message: t('app.name'),
     icon: getMenuIcon('about', 256),
-    detail: `${t('app.version')}: ${packageInfo.version}\n${t(
+    detail: `${t('app.version')}: ${version}\n${t(
       'app.currentWikiPath'
     )}：${config.get('wikiPath')}\n${t('app.runningPort')}：${
       server.currentPort || t('app.notRunning')
