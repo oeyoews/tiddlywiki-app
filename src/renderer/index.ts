@@ -149,17 +149,18 @@ if (window.$tw) {
     }
   });
 
-  const githubConfig = {
-    repo: getText('$:/GitHub/Repo')?.split('/').pop(),
-    owner: getText('$:/GitHub/Username'),
-    token: localStorage.getItem('tw5-password-github'),
-    branch: getText('$:/GitHub/Branch') || 'main',
-  };
+  // 主进程通知渲染进程， 渲染进程将当前wiki的gh config 发送给主进程
+  electronAPI.onGetGHConfig(() => {
+    const githubConfig = {
+      repo: getText('$:/GitHub/Repo')?.split('/').pop(),
+      owner: getText('$:/GitHub/Username'),
+      token: localStorage.getItem('tw5-password-github'),
+      branch: getText('$:/GitHub/Branch') || 'main',
+    };
+    console.log(githubConfig);
 
-  // 如果有 token 再存储配置
-  if (githubConfig.token) {
-    window.electronAPI.sendGHConfig(githubConfig);
-  }
+    electronAPI.sendGHConfig(githubConfig);
+  });
 
   // 监听 github 配置跳转
   window.electronAPI.onConfigGithub(gotoGithubConfig);

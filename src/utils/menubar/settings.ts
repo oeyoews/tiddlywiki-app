@@ -13,7 +13,6 @@ import {
   toggleIcon,
   toggleAutocorrect,
   toggleMarkdown,
-  configureGitHub,
   toggleChineseLang,
   server,
   restartDialog,
@@ -101,7 +100,9 @@ export const settingsMenu = (): MenuItemConstructorOptions => ({
     {
       label: t('menu.githubConfig'),
       icon: getMenuIcon('gear'),
-      click: configureGitHub,
+      click: () => {
+        server.win.webContents.send('config-github');
+      },
     },
     {
       label: t('menu.username'),

@@ -1,8 +1,6 @@
-import fs from 'fs';
 import {
   screen,
   shell,
-  ipcMain,
   app,
   BrowserWindow,
   Menu,
@@ -10,23 +8,21 @@ import {
   BrowserWindowConstructorOptions,
 } from 'electron';
 import { getAppIcon } from '@/utils/icon';
-let spawn: null;
 
 import { createMenuTemplate, showWikiInfo, initWiki } from '@/utils/index';
-import { config } from '@/utils/config';
+import { config, DEFAULT_WIKI_DIR } from '@/utils/config';
 import { logInit, log } from '@/utils/logger';
 import { server } from '@/utils';
 import { autoUpdaterInit } from '@/utils/checkUpdate';
 import path from 'path';
 import { getPlatform } from '@/utils/getPlatform';
 import { trackWindowState } from '@/utils/trackWindowState';
-import { convertPathToVSCodeUri } from '@/utils/convertPathToVSCodeUri';
+import { registerIpcEvent } from './ipc';
 
 let win: BrowserWindow;
 let wikiPath: string;
 
 const startTime = performance.now(); // 记录启动时间
-const tempDir = app.getPath('temp');
 
 // 环境变量配置
 const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL;
@@ -42,21 +38,7 @@ export const processEnv = {
   VITE_DIST: process.env.DIST,
 };
 
-let pngquantDir = path.join(
-  app.isPackaged
-    ? process.resourcesPath
-    : path.join(__dirname, '..', 'resources'),
-  'pngquant'
-);
-// let pngquant: any;
-let pngquantWindows = path.join(
-  pngquantDir,
-  // processEnv.VITE_PUBLIC,
-  'pngquant-windows.exe'
-);
-let pngquantMacos = path.join(pngquantDir, 'pngquant', 'pngquant-macOs');
 export const TPlatform = getPlatform();
-let pngquant: any;
 
 const preload = path.join(process.env.DIST, 'preload/index.js');
 
@@ -180,8 +162,15 @@ async function createWindow() {
   //   log.info(`[Renderer Console] ${message}`);
   // });
 
-  const isFirstTime = !config.get('wikiPath');
-  await initWiki(wikiPath, isFirstTime, win);
+  wikiPath = config.get('wikiPath');
+
+  // 考虑到用户手动清空该配置
+  if (!wikiPath) {
+    config.set('wikiPath', DEFAULT_WIKI_DIR);
+    wikiPath = DEFAULT_WIKI_DIR;
+  }
+  log.info('WikiPath is', wikiPath);
+  await initWiki(wikiPath, win);
 
   // 获取页面标题并设置窗口标题
   win.webContents.on('dom-ready', () => {
@@ -197,131 +186,6 @@ async function createWindow() {
   const menu = Menu.buildFromTemplate(createMenuTemplate());
   Menu.setApplicationMenu(menu);
 }
-
-// 目前仅开始针对windows 进行支持
-if (TPlatform === 'windows' || TPlatform === 'macOs') {
-  // 主进程
-  ipcMain.handle('get-data', async (_event, data) => {
-    const imagePath = path.join(tempDir, 'pngquant.png');
-    const minifiedImagePath = path.join(tempDir, 'pngquant-minified.png');
-    const buffer = Buffer.from(data, 'base64');
-    fs.writeFileSync(imagePath, buffer); // 图片写入
-    if (fs.existsSync(minifiedImagePath)) {
-      fs.rmSync(minifiedImagePath); // 清空就图片
-    }
-
-    // TODO: 兼容性待测试, postinstall 下载exe 会失败了??
-    // if (!pngquant) {
-    //   // @ts-ignore
-    //   pngquant = (await import('pngquant-bin')).default;
-    // }
-
-    if (!spawn) {
-      // @ts-ignore
-      const crossSpawn = await import('cross-spawn');
-      spawn = crossSpawn.default;
-    }
-    if (!pngquant) {
-      if (TPlatform === 'windows') {
-        pngquant = `"${pngquantWindows}"`;
-      } else if (TPlatform === 'macOs') {
-        pngquant = `"${pngquantMacos}"`;
-      }
-    }
-    // @ts-ignore
-    const child = spawn(
-      pngquant,
-      ['--quality=65-80', '--output', minifiedImagePath, imagePath],
-      { stdio: 'inherit', shell: true } // shell muse be true
-    );
-    return new Promise((resolve, reject) => {
-      child.on('error', (error: any) => {
-        log.error('Error(pngquant):', error);
-      });
-      // fs.writeFileSync(minifiedImagePath, buffer); // 图片写入
-      child.on('close', () => {
-        if (!fs.existsSync(minifiedImagePath)) {
-          return reject(
-            new Error('Minified image not found, maybe this image has minifed')
-          );
-        }
-        const buffer = fs.readFileSync(minifiedImagePath);
-        const newData = buffer.toString('base64');
-        resolve(newData);
-      });
-    });
-  });
-}
-
-ipcMain.handle('update-gh-config', async (event: any, githubConfig: any) => {
-  config.set('github', githubConfig);
-});
-
-ipcMain.on('tid-info-vscode', (_event, data) => {
-  const tiddlerFolder = path.join(config.get('wikiPath'), 'tiddlers');
-  log.info(data, 'received tid-info(vscode)');
-  if (!data?.title) {
-    return;
-  }
-  const tidPath = path.join(tiddlerFolder, data.title);
-  let maybeTidPath = null;
-  if (data?.maybeTitle) {
-    maybeTidPath = path.join(
-      config.get('wikiPath'),
-      'tiddlers',
-      data?.maybeTitle
-    );
-  }
-  if (fs.existsSync(tidPath)) {
-    shell.openExternal(convertPathToVSCodeUri(tidPath));
-  } else if (maybeTidPath && fs.existsSync(maybeTidPath)) {
-    shell.openExternal(convertPathToVSCodeUri(maybeTidPath));
-  } else {
-    const subwikiTid = path.join(tiddlerFolder, 'subwiki', data.title);
-    // 尝试读取 subwiki
-    if (fs.existsSync(subwikiTid)) {
-      shell.openExternal(convertPathToVSCodeUri(subwikiTid));
-    }
-  }
-});
-
-ipcMain.on('tid-info', (_event, data) => {
-  const tiddlerFolder = path.join(config.get('wikiPath'), 'tiddlers');
-  log.info(data, 'received tid-info');
-  if (!data?.title) {
-    // dialog.showErrorBox(t('dialog.openfileNotSupported'), '');
-    log.info('open  default fodler');
-    shell.openPath(tiddlerFolder);
-    return;
-  }
-  const tidPath = path.join(tiddlerFolder, data.title);
-  let maybeTidPath = null;
-  if (data?.maybeTitle) {
-    maybeTidPath = path.join(
-      config.get('wikiPath'),
-      'tiddlers',
-      data?.maybeTitle
-    );
-  }
-  if (fs.existsSync(tidPath)) {
-    log.info('open file', tidPath);
-    shell.showItemInFolder(tidPath);
-  } else if (maybeTidPath && fs.existsSync(maybeTidPath)) {
-    shell.showItemInFolder(maybeTidPath);
-    log.info('open file form maybeTitle');
-  } else {
-    const subwikiTid = path.join(tiddlerFolder, 'subwiki', data.title);
-    // 尝试读取 subwiki
-    if (fs.existsSync(subwikiTid)) {
-      shell.showItemInFolder(subwikiTid);
-    } else {
-      // 默认打开 文件夹
-      shell.openPath(tiddlerFolder);
-    }
-    // TODO: 递归查询相应后缀的文件是否存在
-    log.error(tidPath, 'not exit');
-  }
-});
 
 // 初始化应用
 const initApp = async () => {
@@ -354,9 +218,6 @@ const initApp = async () => {
     app.setAsDefaultProtocolClient('tiddlywiki');
   }
 
-  wikiPath = config.get('wikiPath');
-  log.info('WikiPath is', wikiPath);
-
   app.on('ready', async () => {
     if (!app.isPackaged) {
       console.log(
@@ -373,6 +234,7 @@ const initApp = async () => {
       log.info('app language is', lang);
     }
     createWindow();
+    registerIpcEvent(win);
 
     const { initI18n } = await import('@/i18n');
     const { twDialog } = await import('@/utils/tw-dialog');

@@ -25,7 +25,7 @@ async function saveToGitHub({
   branch = 'main',
   wikiFolder,
   GITHUB_TOKEN,
-  COMMIT_MESSAGE = 'Saved by TiddlyWiki App ',
+  COMMIT_MESSAGE = 'Saved by TiddlyWiki App',
   win,
 }: ISaver & { win: BrowserWindow }) {
   log.info('begin to save tiddlywiki html to github pages...');
@@ -43,9 +43,7 @@ async function saveToGitHub({
   }
 
   if (!owner || !repo || !GITHUB_TOKEN) {
-    log.info('GitHub config is not correct');
-    // 跳转 config tiddler
-    win.webContents.send('config-github');
+    log.info('GitHub config is not correct(github-saver)');
     return;
   }
 
