@@ -60,6 +60,7 @@ if (window.$tw) {
     const qrImg = `<center>${message}: <br/> <img src="${res}" width=256/> <br /> ${url} </center>`;
     $tw.wiki.setText(qrcodeTiddler, 'text', null, qrImg);
     $tw.wiki.setText(qrcodeTiddler, 'subtitle', null, 'Wiki QRCode');
+    $tw.wiki.setText(qrcodeTiddler, 'mask-closable', null, 'yes');
     $tw.modal.display(qrcodeTiddler);
   });
 
