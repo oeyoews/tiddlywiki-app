@@ -158,8 +158,6 @@ if (window.$tw) {
       token: localStorage.getItem(githubPasswordKey),
       branch: getText('$:/GitHub/Branch') || 'main',
     };
-    console.log(githubConfig);
-
     electronAPI.sendGHConfig(githubConfig);
   });
 
