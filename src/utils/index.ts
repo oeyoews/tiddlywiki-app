@@ -118,10 +118,12 @@ export async function publishWiki() {
       config.set('github', {
         token: res,
       });
+      win.webContents.send('get-gh-config');
     }
     // update tw-github-password localstorage
+  } else {
+    win.webContents.send('get-gh-config');
   }
-  win.webContents.send('get-gh-config');
 }
 
 export async function initWiki(
