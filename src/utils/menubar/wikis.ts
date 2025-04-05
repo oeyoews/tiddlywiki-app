@@ -51,7 +51,7 @@ export const wikisMenu = (recentWikis: IWikiMenu[]) => ({
             {
               label: t('menu.openInBrowser'),
               visible: isRunning,
-              id: 'open-wiki-in-browser' + generateId(wikiPath),
+              id: 'open-wiki-in-browser-' + generateId(wikiPath),
               icon: getMenuIcon('web'),
               click: () => {
                 const currentPort = getPortByPath(wikiPath);
