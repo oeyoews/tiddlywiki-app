@@ -101,7 +101,8 @@ export const settingsMenu = (): MenuItemConstructorOptions => ({
       label: t('menu.githubConfig'),
       icon: getMenuIcon('gear'),
       click: () => {
-        server.win.webContents.send('config-github');
+        const token = config.get('github')?.token;
+        server.win.webContents.send('config-github', token);
       },
     },
     {

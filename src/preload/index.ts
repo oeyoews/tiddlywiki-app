@@ -12,7 +12,9 @@ export const electronAPI = {
   onImportMarkdown: (callback) => ipcRenderer.on('import-markdown', callback),
 
   // github
-  onConfigGithub: (callback) => ipcRenderer.on('config-github', callback),
+  onConfigGithub: (callback) =>
+    ipcRenderer.on('config-github', (_event, data) => callback(data)),
+
   onGetGHConfig: (cbl) => ipcRenderer.on('get-gh-config', cbl),
   sendGHConfig: (data) => ipcRenderer.send('update-gh-config', data),
 

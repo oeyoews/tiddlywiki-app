@@ -28,10 +28,14 @@ export function registerIpcEvent(win: BrowserWindow) {
   // ghconfig
   ipcMain.on(
     'update-gh-config',
-    async (_event, { owner, repo, token, branch }) => {
-      console.log(owner, repo, token, branch);
+    async (_event, { owner, repo, branch, token }: any) => {
       const wikiFolder = config.get('wikiPath');
-      if (!owner || !repo || !token) {
+      let _token = config.get('github').token;
+      if (token) {
+        config.set('github', { token }); // 更新配置文件的 github token
+      }
+
+      if (!owner || !repo || !branch) {
         log.info('GitHub config is not correct');
         win.webContents.send('config-github');
         return;
@@ -41,7 +45,7 @@ export function registerIpcEvent(win: BrowserWindow) {
         wikiFolder,
         owner,
         repo,
-        GITHUB_TOKEN: token,
+        GITHUB_TOKEN: token || _token,
         branch,
         win,
       });

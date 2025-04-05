@@ -53,6 +53,7 @@ import { generateRandomPrivatePort } from './generateRandomPort';
 import { ITiddlyWiki, type Server } from 'tiddlywiki';
 import { tiddlywiki } from './tiddlywiki';
 import { generateId } from './generateId';
+import { showInputBox } from '@/modules/showInputBox';
 
 let win: BrowserWindow; // 在 initwiki 初始化时赋值
 const desktopDir = app.getPath('desktop');
@@ -109,6 +110,17 @@ function updateRecentWikis(wikiPath: string) {
 }
 
 export async function publishWiki() {
+  // check has token
+  const token = config.get('github')?.token;
+  if (!token) {
+    const res = await showInputBox(win, 'GitHub Token', 'password');
+    if (res && typeof res === 'string') {
+      config.set('github', {
+        token: res,
+      });
+    }
+    // update tw-github-password localstorage
+  }
   win.webContents.send('get-gh-config');
 }
 
