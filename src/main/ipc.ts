@@ -163,7 +163,7 @@ export function registerIpcEvent(win: BrowserWindow) {
           if (!fs.existsSync(minifiedImagePath)) {
             return reject(
               new Error(
-                'Minified image not found, maybe this image has minifed'
+                'Minified image not found, maybe this image has minified'
               )
             );
           }
