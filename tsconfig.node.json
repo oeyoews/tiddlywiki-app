@@ -5,7 +5,7 @@
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
-    "types": ["tw5-typed"]
+    "types": ["tw5-typed", "node"]
   },
   "include": ["vite.config.ts", "package.json", "electron"]
 }
