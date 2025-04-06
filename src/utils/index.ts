@@ -131,7 +131,7 @@ export async function initWiki(
   // isFirstTime: boolean = false, // 用于手动新建 wiki
   _mainWindow?: BrowserWindow
 ) {
-  log.info('begin initwiki', wikiFolder);
+  log.info('Begin initwiki', wikiFolder);
   // TODO: check wikifodler in admin
   if (_mainWindow && !win) {
     win = _mainWindow;
@@ -433,7 +433,7 @@ export async function importSingleFileWiki(
     // 复制文件夹
     if (template) {
       const templateDir = path.join(app.getPath('temp'), template as any);
-      log.info('begin copy file to', templateDir);
+      log.info('Begin copy file to', templateDir);
       await fs2.copy(templateDir, targetPath);
       log.info('copy file done', templateDir);
     } else {

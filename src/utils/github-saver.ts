@@ -28,7 +28,7 @@ async function saveToGitHub({
   COMMIT_MESSAGE = 'Saved by TiddlyWiki App',
   win,
 }: ISaver & { win: BrowserWindow }) {
-  log.info('begin to save tiddlywiki html to github pages...');
+  log.info('Begin to save tiddlywiki html to github pages...');
   const pageSite = `https://${owner}.github.io/${repo}`;
   const FILE_PATH = wikiFolder + '/output/index.html';
 
@@ -51,7 +51,7 @@ async function saveToGitHub({
   const url = `${baseURL}/${owner}/${repo}/contents/index.html`;
 
   async function getFileSha() {
-    log.info('begin getfilesha ...', url);
+    log.info('Begin getfilesha ...', url);
     try {
       const response = await net.fetch(url, {
         method: 'GET',

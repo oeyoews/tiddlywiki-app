@@ -147,7 +147,7 @@ export const wikisMenu = (recentWikis: IWikiMenu[]) => ({
                 });
 
                 if (res.response === 0) {
-                  log.info('begin delete folder', wikiPath);
+                  log.info('Begin delete folder', wikiPath);
                   // fs.rmSync(label, { force: true, recursive: true }); // NOTE: 永久删除
                   config.set('recentWikis', newRecentWikis);
                   const item = server.menu.getMenuItemById(
