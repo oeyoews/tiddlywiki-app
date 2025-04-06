@@ -1,6 +1,7 @@
 import fs from 'fs';
 import fs2 from 'fs-extra';
 import path from 'path';
+
 import {
   app,
   shell,

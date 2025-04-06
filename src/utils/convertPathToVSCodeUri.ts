@@ -1,12 +1,14 @@
 import { log } from '@/utils/logger';
+import { pathToFileURL } from 'url';
 
 /**
+ * deprecated use pathtourl
  * 将文件路径转换为 VS Code 的 vscode://file/ URI，兼容所有系统。
  *
  * @param filePath 文件路径，例如 "C:\\Users\\YourName\\Documents\\myFile.txt" (Windows) 或 "/Users/yourname/Documents/myFile.txt" (macOS/Linux)。
  * @returns 转换后的 vscode://file/ URI，例如 "vscode://file/C:/Users/YourName/Documents/myFile.txt" 或 "vscode://file//Users/yourname/Documents/myFile.txt"。
  */
-export function convertPathToVSCodeUri(filePath: string): string {
+export function _convertPathToVSCodeUri(filePath: string): string {
   if (!filePath) {
     return '';
   }
@@ -26,4 +28,13 @@ export function convertPathToVSCodeUri(filePath: string): string {
   log.info('open file(vscode)', `vscode://file/${vscodePath}`);
 
   return `vscode://file/${vscodePath}`;
+}
+
+export function convertPathToVSCodeUri(filePath: string) {
+  if (!filePath) {
+    return '';
+  }
+  const uri = 'vscode://' + pathToFileURL(filePath).href;
+  log.info('open file(vscode)', uri);
+  return uri;
 }
