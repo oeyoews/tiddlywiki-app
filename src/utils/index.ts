@@ -10,6 +10,7 @@ import {
   Tray,
   BrowserWindow,
   Notification,
+  clipboard,
 } from 'electron';
 import { i18next } from '@/i18n/index';
 import twinfo from '@/utils/tiddlywiki.json';
@@ -354,22 +355,27 @@ export async function openWiki() {
 
 export async function showWikiInfo() {
   const { version, name } = await import('../../package.json');
-  dialog.showMessageBox({
+  const detail = `${t('app.version')}: ${version}\n${t(
+      'app.currentWikiPath'
+    )}：${config.get('wikiPath')}\n${t('app.runningPort')}：${
+      server.currentPort || t('app.notRunning')
+    }\n${t('app.configPath')}：${config.fileName}`
+  const res = await dialog.showMessageBox({
     type: 'none',
     title: t('app.about'),
     message: t('app.name'),
     icon: getMenuIcon('about', 256),
-    detail: `${t('app.version')}: ${version}\n${t(
-      'app.currentWikiPath'
-    )}：${config.get('wikiPath')}\n${t('app.runningPort')}：${
-      server.currentPort || t('app.notRunning')
-    }\n${t('app.configPath')}：${config.fileName}`,
+    detail,
     // width: 400,
     // height: 300,
-    buttons: [t('dialog.close')],
+    buttons: [t('dialog.copy'), t('dialog.close')],
     defaultId: 0,
-    noLink: true,
+    cancelId: 1,
+    // noLink: true,
   });
+  if (res.response === 0) {
+    clipboard.writeText(detail)
+  }
 }
 
 export async function switchLanguage(lang: string) {

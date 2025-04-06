@@ -135,6 +135,7 @@
     "selectWikiFolderMessage": "请选择一个文件夹作为 Wiki 的存储位置",
     "selectHtmlFile": "选择 TiddlyWiki HTML 文件",
     "htmlFilter": "TiddlyWiki HTML",
+    "copy": "复制",
     "templateDownloading": "模板下载中",
     "import": "导入",
     "inputUsername": "请输入用户名",

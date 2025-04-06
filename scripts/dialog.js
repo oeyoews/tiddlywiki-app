@@ -199,6 +199,10 @@ module.exports = {
     'en-US': 'TiddlyWiki HTML',
     'zh-CN': 'TiddlyWiki HTML',
   },
+  copy: {
+    'en-US': 'Copy',
+    'zh-CN': '复制',
+  },
   templateDownloading: {
     'en-US': 'template downloading',
     'zh-CN': '模板下载中',

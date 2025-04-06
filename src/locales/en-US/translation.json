@@ -135,6 +135,7 @@
     "selectWikiFolderMessage": "Please select a folder for Wiki storage",
     "selectHtmlFile": "Select TiddlyWiki HTML File",
     "htmlFilter": "TiddlyWiki HTML",
+    "copy": "Copy",
     "templateDownloading": "template downloading",
     "import": "Import",
     "inputUsername": "Please input your username",
