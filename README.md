@@ -1,6 +1,6 @@
 # TiddlyWiki App 🌟
 
-[简体中文](./README.zh-CN.md)
+[简体中文](./README.zh-CN.md) | English
 
 ![img](./banner04.png)
 ![img](./banner03.png)
