@@ -10,6 +10,7 @@ import { TPlatform } from '@/main';
 import { server } from '.';
 import { getAllLocalIPv4Addresses } from './getHost';
 import { config } from './config';
+import { getPlatform } from './getPlatform';
 
 /**
  * 注册右键菜单
@@ -24,24 +25,11 @@ export const registerContextMenu = (
     {
       accelerator: 'Alt+M',
       label: t('menu.toggleMenuBar'),
+      visible: !params.isEditable && getPlatform() != 'macOs',
       icon: getMenuIcon('gear'),
       click: () => {
         const isVisible = win.isMenuBarVisible();
         win.setMenuBarVisibility(!isVisible);
-      },
-    },
-    {
-      label: t('menu.openTid'),
-      icon: getFolderIcon(),
-      click: () => {
-        win.webContents.send('update-tid', { x: params.x, y: params.y });
-      },
-    },
-    {
-      label: t('menu.openVSCode'),
-      icon: getMenuIcon('vscode'),
-      click: () => {
-        win.webContents.send('update-tid-vscode', { x: params.x, y: params.y });
       },
     },
     {
@@ -78,10 +66,6 @@ export const registerContextMenu = (
       visible: params.editFlags.canCut,
     },
     {
-      type: 'separator',
-      visible: !params.isEditable,
-    },
-    {
       label: t('menu.toggleFullscreen'),
       icon: getMenuIcon('screens'),
       accelerator: 'F11',
@@ -89,9 +73,30 @@ export const registerContextMenu = (
       visible: !params.isEditable,
     },
     {
+      label: t('menu.reload'),
+      icon: getMenuIcon('reload'),
+      role: 'reload',
+      visible: !params.isEditable,
+      accelerator: 'CmdOrCtrl+R',
+    },
+  ];
+
+  const openMenu: MenuItemConstructorOptions[] = [
+    { type: 'separator' },
+    {
+      label: t('menu.openInBrowser'),
+      icon: getMenuIcon('web'),
+      accelerator: 'CmdOrCtrl+Shift+O',
+      click: () => {
+        if (server.currentPort) {
+          shell.openExternal(`http://localhost:${server.currentPort}`);
+        }
+      },
+    },
+    {
       label: t('menu.showQRCode'),
       icon: getMenuIcon('qrcode'),
-      visible: !params.isEditable && !!config.get('lan'),
+      visible: !!config.get('lan'),
       click: () => {
         const host = getAllLocalIPv4Addresses(); // 获取局域网地址
         server.win.webContents.send('show-qrcode', {
@@ -102,37 +107,42 @@ export const registerContextMenu = (
       },
     },
     {
-      label: t('menu.openInBrowser'),
-      icon: getMenuIcon('web'),
-      visible: !params.isEditable,
-      accelerator: 'CmdOrCtrl+Shift+O',
+      label: t('menu.openTid'),
+      icon: getFolderIcon(),
       click: () => {
-        if (server.currentPort) {
-          shell.openExternal(`http://localhost:${server.currentPort}`);
-        }
+        win.webContents.send('update-tid', { x: params.x, y: params.y });
       },
     },
     {
-      label: t('menu.reload'),
-      icon: getMenuIcon('reload'),
-      role: 'reload',
-      accelerator: 'CmdOrCtrl+R',
+      label: t('menu.openVSCode'),
+      icon: getMenuIcon('vscode'),
+      click: () => {
+        win.webContents.send('update-tid-vscode', { x: params.x, y: params.y });
+      },
     },
   ];
+  if (!params.isEditable) {
+    menus.push(...openMenu);
+  }
 
   // 如果右键点击的是图片，添加复制图片选项
   if (params.mediaType === 'image') {
     if (['windows', 'macOs'].includes(TPlatform)) {
-      menus.push({
-        label: t('menu.minifyImage'),
-        icon: getMenuIcon('panda'),
-        click: () => {
-          win.webContents.send('title-fetched', {
-            x: params.x,
-            y: params.y,
-          });
+      menus.push(
+        {
+          type: 'separator',
         },
-      });
+        {
+          label: t('menu.minifyImage'),
+          icon: getMenuIcon('panda'),
+          click: () => {
+            win.webContents.send('title-fetched', {
+              x: params.x,
+              y: params.y,
+            });
+          },
+        }
+      );
     }
     menus.push({
       label: t('menu.copyImage'),
