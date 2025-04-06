@@ -30,7 +30,6 @@ export interface TwServerInfo {
 // let importIngNotify: Notification;
 // let successImportNotify: Notification;
 
-import saveToGitHub from '@/utils/github-saver';
 import {
   wikiBuildArgs,
   wikiInitArgs,

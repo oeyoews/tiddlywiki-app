@@ -233,13 +233,13 @@ const initApp = async () => {
     } else {
       log.info('app language is', lang);
     }
-    createWindow();
+    const { initI18n } = await import('@/i18n');
+    await initI18n(config);
+    await createWindow();
     registerIpcEvent(win);
 
-    const { initI18n } = await import('@/i18n');
     const { twDialog } = await import('@/utils/tw-dialog');
 
-    initI18n(config);
     twDialog(win);
 
     // 监听主题变化
