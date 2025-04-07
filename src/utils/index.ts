@@ -244,7 +244,7 @@ export async function initWiki(
       // @see: https://github.com/TiddlyWiki/TiddlyWiki5/blob/961e74f73d230d0028efb586db07699120eac888/editions/dev/tiddlers/new/Hook__th-server-command-post-start.tid#L4
       // @see: https://github.com/tiddly-gittly/plugin-dev-cli/blob/main/src/dev.ts#L65
       const createNewTw = () => {
-        log.info('start new server on', server.currentPort);
+        log.info('Start new server on port:', server.currentPort);
         // 新建tw实例
         tiddlywiki(
           wikiStartupArgs(wikiFolder, server.currentPort),
@@ -356,10 +356,10 @@ export async function openWiki() {
 export async function showWikiInfo() {
   const { version, name } = await import('../../package.json');
   const detail = `${t('app.version')}: ${version}\n${t(
-      'app.currentWikiPath'
-    )}：${config.get('wikiPath')}\n${t('app.runningPort')}：${
-      server.currentPort || t('app.notRunning')
-    }\n${t('app.configPath')}：${config.fileName}`
+    'app.currentWikiPath'
+  )}：${config.get('wikiPath')}\n${t('app.runningPort')}：${
+    server.currentPort || t('app.notRunning')
+  }\n${t('app.configPath')}：${config.fileName}`;
   const res = await dialog.showMessageBox({
     type: 'none',
     title: t('app.about'),
@@ -374,7 +374,7 @@ export async function showWikiInfo() {
     // noLink: true,
   });
   if (res.response === 0) {
-    clipboard.writeText(detail)
+    clipboard.writeText(detail);
   }
 }
 

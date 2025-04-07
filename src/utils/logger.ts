@@ -7,7 +7,7 @@ export const log = require('electron-log/main');
 const logDate = new Date().toISOString().split('T').shift()!.replace('-', '/'); // 替换第一个-
 export const logPath = path.join(app.getPath('logs'), logDate, `main.log`);
 
-async function cleanupOldLogs() {
+export async function cleanupOldLogs() {
   const logsRoot = app.getPath('logs');
   const now = new Date();
 
@@ -46,6 +46,4 @@ async function cleanupOldLogs() {
 
 export function logInit() {
   log.transports.file.resolvePathFn = () => logPath;
-  // 异步不等待
-  cleanupOldLogs().then(() => {});
 }

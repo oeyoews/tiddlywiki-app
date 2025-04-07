@@ -11,7 +11,7 @@ import { getAppIcon } from '@/utils/icon';
 
 import { createMenuTemplate, showWikiInfo, initWiki } from '@/utils/index';
 import { config, DEFAULT_WIKI_DIR } from '@/utils/config';
-import { logInit, log } from '@/utils/logger';
+import { logInit, log, cleanupOldLogs } from '@/utils/logger';
 import { server } from '@/utils';
 import { autoUpdaterInit } from '@/utils/checkUpdate';
 import path from 'path';
@@ -118,6 +118,7 @@ async function createWindow() {
     }
 
     autoUpdaterInit();
+    cleanupOldLogs();
 
     // 设置外部链接在默认浏览器中打开
     win.webContents.setWindowOpenHandler(({ url }: { url: string }) => {
