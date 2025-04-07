@@ -81,6 +81,7 @@ async function createWindow() {
       spellcheck: false,
       preload,
       nodeIntegration: false,
+      // webgl: true,
       contextIsolation: true,
       webSecurity: false,
     },
