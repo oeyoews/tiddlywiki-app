@@ -13,30 +13,32 @@ async function cleanupOldLogs() {
 
   try {
     const yearDirs = await fs.readdir(logsRoot);
-    for (const year of yearDirs) {
-      const yearPath = path.join(logsRoot, year);
-      const stat = await fs.stat(yearPath);
-      if (!stat.isDirectory()) continue;
+    await Promise.all(
+      yearDirs.map(async (year) => {
+        const yearPath = path.join(logsRoot, year);
+        const stat = await fs.stat(yearPath);
+        if (!stat.isDirectory()) return;
 
-      const dayDirs = await fs.readdir(yearPath);
-      for (const dayDir of dayDirs) {
-        const fullDirPath = path.join(yearPath, dayDir);
-        const stat = await fs.stat(fullDirPath);
-        if (!stat.isDirectory()) continue;
+        const dayDirs = await fs.readdir(yearPath);
+        await Promise.all(
+          dayDirs.map(async (dayDir) => {
+            const fullDirPath = path.join(yearPath, dayDir);
+            const stat = await fs.stat(fullDirPath);
+            if (!stat.isDirectory()) return;
 
-        // dayDir 格式为 '04-01'
-        const [month, day] = dayDir.split('-');
-        const dirDate = new Date(`${year}-${month}-${day}`);
+            const [month, day] = dayDir.split('-');
+            const dirDate = new Date(`${year}-${month}-${day}`);
+            const diffTime = now.getTime() - dirDate.getTime();
+            const diffDays = diffTime / (1000 * 60 * 60 * 24);
 
-        const diffTime = now.getTime() - dirDate.getTime();
-        const diffDays = diffTime / (1000 * 60 * 60 * 24);
-
-        if (diffDays > 7) {
-          await fs.rm(fullDirPath, { recursive: true, force: true });
-          console.log(`[Logs Cleaned]: ${fullDirPath}`);
-        }
-      }
-    }
+            if (diffDays > 7) {
+              await fs.rm(fullDirPath, { recursive: true, force: true });
+              console.log(`[Logs Cleaned]: ${fullDirPath}`);
+            }
+          })
+        );
+      })
+    );
   } catch (err) {
     console.error('Clean Logs Error:', err);
   }
