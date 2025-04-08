@@ -11,9 +11,10 @@ function gotoGithubConfig() {
 }
 
 if (window.$tw) {
-  electronAPI.onImportMDFromWeb((data) => {
+  electronAPI.onImportMDFromWeb(async (data) => {
     // console.log('data', 'import tiddler from web', data);
-    importTiddlerFromBrowser(data);
+    const text = await navigator.clipboard.readText();
+    importTiddlerFromBrowser({ ...data, text });
   });
 
   const pride = () => {

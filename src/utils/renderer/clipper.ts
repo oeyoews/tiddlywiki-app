@@ -10,6 +10,7 @@ export function importTiddlerFromBrowser(tiddler: ITiddlerFields) {
     const importedTitle = '$:/webImported';
     $tw.wiki.addTiddler({
       title: importedTitle,
+      ['popup-' + title]: 'yes', // 默认展开
       'plugin-type': 'import',
       type: 'application/json',
       text: JSON.stringify(tiddlers),
