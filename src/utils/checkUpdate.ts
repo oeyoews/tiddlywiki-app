@@ -49,6 +49,11 @@ export function autoUpdaterInit() {
     // checkMenu.enabled = false;
     // Menu.setApplicationMenu(menu);
 
+    if (!server.win.isVisible() || server.win.isMinimized()) {
+      server.win.show();
+      server.win.restore();
+    }
+
     const result = await dialog.showMessageBox({
       type: 'info',
       title: t('dialog.updateAvailable'),
@@ -76,6 +81,11 @@ export function autoUpdaterInit() {
     updateMenuVisibility('updateMenu');
 
     server.win.setProgressBar(-1);
+
+    if (!server.win.isVisible() || server.win.isMinimized()) {
+      server.win.show();
+      server.win.restore();
+    }
     dialog.showMessageBox({
       icon: getMenuIcon('about', 256),
       type: 'info',
