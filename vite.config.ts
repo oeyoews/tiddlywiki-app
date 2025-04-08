@@ -12,33 +12,38 @@ export default defineConfig(({ command }) => {
       },
     },
     plugins: [
-      electron({
-        entry: {
-          'main/index': 'src/main/index.ts',
-          'preload/index': 'src/preload/index.ts',
-          'renderer/index': 'src/renderer/index.ts',
-        },
-        vite: {
-          resolve: {
-            alias: {
-              '@': path.resolve(__dirname, 'src'),
+      electron([
+        {
+          entry: {
+            'main/index': 'src/main/index.ts',
+            'preload/index': 'src/preload/index.ts',
+            'renderer/index': 'src/renderer/index.ts',
+          },
+          vite: {
+            resolve: {
+              alias: {
+                '@': path.resolve(__dirname, 'src'),
+              },
+            },
+            build: {
+              emptyOutDir: !isBuild,
+              minify: isBuild,
+              outDir: 'dist',
+              rollupOptions: {
+                output: {
+                  // manualChunks(id) {
+                  //   return undefined;
+                  // },
+                  // inlineDynamicImports: true, // 将动态导入合并
+                },
+                external: Object.keys(
+                  'dependencies' in pkg ? pkg.dependencies : {}
+                ),
+              },
             },
           },
-          build: {
-            emptyOutDir: !isBuild, // build 时会把public 删除
-            minify: isBuild,
-            outDir: 'dist',
-            rollupOptions: {
-              // output: {
-              //   manualChunks: undefined,
-              // },
-              external: Object.keys(
-                'dependencies' in pkg ? pkg.dependencies : {}
-              ),
-            },
-          },
         },
-      }),
+      ]),
     ],
     // build: {
     //   // watch: {},

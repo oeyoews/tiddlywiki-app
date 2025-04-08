@@ -6,10 +6,11 @@ import {
   Menu,
   nativeTheme,
   BrowserWindowConstructorOptions,
+  dialog,
 } from 'electron';
 import { getAppIcon } from '@/utils/icon';
 
-import { createMenuTemplate, showWikiInfo, initWiki } from '@/utils/index';
+import { createMenuTemplate, initWiki } from '@/utils/index';
 import { config, DEFAULT_WIKI_DIR } from '@/utils/config';
 import { logInit, log, cleanupOldLogs } from '@/utils/logger';
 import { server } from '@/utils';
@@ -18,9 +19,11 @@ import path from 'path';
 import { getPlatform } from '@/utils/getPlatform';
 import { trackWindowState } from '@/utils/trackWindowState';
 import { registerIpcEvent } from './ipc';
+import { importWeb } from '@/utils/importWeb';
 
 let win: BrowserWindow;
 let wikiPath: string;
+export const TWProtocol = 'tiddlywiki';
 
 const startTime = performance.now(); // 记录启动时间
 
@@ -201,25 +204,6 @@ const initApp = async () => {
   // 设置应用菜单为空
   Menu.setApplicationMenu(null);
 
-  app.on('second-instance', () => {
-    if (win) {
-      if (win.isMinimized()) win.restore();
-      if (!win.isVisible()) win.show();
-      win.focus();
-    }
-  });
-
-  // 注册自定义协议
-  if (process.defaultApp) {
-    if (process.argv.length >= 2) {
-      app.setAsDefaultProtocolClient('tiddlywiki', process.execPath, [
-        path.resolve(process.argv[1]),
-      ]);
-    }
-  } else {
-    app.setAsDefaultProtocolClient('tiddlywiki');
-  }
-
   app.on('ready', async () => {
     if (!app.isPackaged) {
       console.log(
@@ -228,6 +212,11 @@ const initApp = async () => {
         ).toFixed(2)} ms`
       );
     }
+    const args = process.argv;
+    const protocolUrl = args.find((arg) => arg.startsWith(TWProtocol));
+    if (protocolUrl) {
+    }
+
     const lang = app.getSystemLocale();
     // 首次启动使用用户系统语言作为默认语言
     if (!config.get('language')) {
@@ -250,6 +239,26 @@ const initApp = async () => {
       server.tray.setImage(getAppIcon()!); // 更新托盘icon
     });
   });
+
+  app.on('second-instance', (event: any, argv: any) => {
+    importWeb(argv, win);
+    if (win) {
+      if (win.isMinimized()) win.restore();
+      if (!win.isVisible()) win.show();
+      win.focus();
+    }
+  });
+
+  // 注册自定义协议
+  if (process.defaultApp) {
+    if (process.argv.length >= 2) {
+      app.setAsDefaultProtocolClient(TWProtocol, process.execPath, [
+        path.resolve(process.argv[1]),
+      ]);
+    }
+  } else {
+    app.setAsDefaultProtocolClient(TWProtocol);
+  }
 };
 
 // 应用事件监听
@@ -262,15 +271,20 @@ app.on('window-all-closed', () => {
   }
 });
 
-app.on('open-url', (event: any, url: string) => {
-  event.preventDefault();
-  showWikiInfo();
-  const win = BrowserWindow.getAllWindows()[0];
-  if (win) {
-    win.webContents.send('url-opened', url);
-  }
-  log.info('Received URL:', url);
-});
+// app.on('will-finish-launching', () => {
+//   app.on('open-url', (event: any, url: string) => {
+//     dialog.showErrorBox('HHHHHHH', 'demo');
+//     log.info('open-url');
+//     event.preventDefault();
+//     // @ts-ignore
+//     // importWeb(null, win, url);
+//     // const win = BrowserWindow.getAllWindows()[0];
+//     // if (win) {
+//     //   win.webContents.send('url-opened', url);
+//     // }
+//     // log.info('Received URL:', url);
+//   });
+// });
 
 app.on('before-quit', () => {
   app.isQuitting = true;

@@ -10,6 +10,8 @@ export const electronAPI = {
   onShowQRCode: (callback) => ipcRenderer.on('show-qrcode', callback),
   // markdown importer
   onImportMarkdown: (callback) => ipcRenderer.on('import-markdown', callback),
+  onImportMDFromWeb: (callback) =>
+    ipcRenderer.on('open-url', (e, data) => callback(data)),
 
   // github
   onConfigGithub: (callback) =>
