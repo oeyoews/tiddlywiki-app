@@ -12,6 +12,7 @@
     "test": "playwright test",
     "dev": "vite",
     "preview": "vite build && electron .",
+    "test:importweb": "vite build && electron . \"tiddlywiki://?_source=web&title=hello&text=测试导入\"",
     "build": "vite build && electron-builder",
     "release": "vite build && node ./scripts/minify-tw.js && electron-builder"
   },
