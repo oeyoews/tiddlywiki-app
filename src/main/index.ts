@@ -19,6 +19,7 @@ import { getPlatform } from '@/utils/getPlatform';
 import { trackWindowState } from '@/utils/trackWindowState';
 import { registerIpcEvent } from './ipc';
 import { importWeb } from '@/utils/importWeb';
+import { injectRenderScript } from '@/utils/injectScript';
 
 let win: BrowserWindow;
 let wikiPath: string;
@@ -177,15 +178,16 @@ async function createWindow() {
   await initWiki(wikiPath, win);
 
   // 获取页面标题并设置窗口标题
-  win.webContents.on('dom-ready', () => {
+  win.webContents.on('dom-ready', async () => {
     const pageTitle = win.webContents.getTitle();
     win.setTitle(`${pageTitle} - ${config.get('wikiPath')}`);
   });
 
   win.webContents.on('did-finish-load', async () => {
+    const { injectRenderScript } = await import('@/utils/injectScript');
+    injectRenderScript(win, () => importWeb(win, process.argv));
     const { injectScript } = await import('@/utils/injectScript');
     injectScript(win);
-    importWeb(win, process.argv);
   });
 
   const menu = Menu.buildFromTemplate(createMenuTemplate());

@@ -23,11 +23,13 @@ export function importWeb(win: BrowserWindow, argv: string[], _url?: string) {
     const { _source, ...tiddler } = Object.fromEntries(
       info.searchParams.entries()
     );
-    log.info('Begin import tiddler from', source);
     // 校验来源
     if (source === 'web') {
       log.info('Begin import tiddler from', source);
-      win.webContents.send('open-url', tiddler);
+      // 注意， 这里需要等待render.js 执行完毕
+      setTimeout(() => {
+        win.webContents.send('open-url', tiddler);
+      }, 100);
     }
   } else {
     log.info('no get valid url', url, _url);

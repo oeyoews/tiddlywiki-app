@@ -11,6 +11,11 @@ function gotoGithubConfig() {
 }
 
 if (window.$tw) {
+  electronAPI.onImportMDFromWeb((data) => {
+    // console.log('data', 'import tiddler from web', data);
+    importTiddlerFromBrowser(data);
+  });
+
   const pride = () => {
     var duration = 0.5 * 1000;
     var end = Date.now() + duration;
@@ -22,11 +27,6 @@ if (window.$tw) {
       }
     })();
   };
-
-  electronAPI.onImportMDFromWeb((data) => {
-    // console.log('data', 'import tiddler from web', data);
-    importTiddlerFromBrowser(data);
-  });
 
   // 暂不支持其他类型带有meta 的类型
   // 同名文件_xxx 暂时不考虑
