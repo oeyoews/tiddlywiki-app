@@ -6,7 +6,6 @@ import {
   Menu,
   nativeTheme,
   BrowserWindowConstructorOptions,
-  dialog,
 } from 'electron';
 import { getAppIcon } from '@/utils/icon';
 
@@ -186,6 +185,7 @@ async function createWindow() {
   win.webContents.on('did-finish-load', async () => {
     const { injectScript } = await import('@/utils/injectScript');
     injectScript(win);
+    importWeb(win, process.argv);
   });
 
   const menu = Menu.buildFromTemplate(createMenuTemplate());
@@ -212,10 +212,6 @@ const initApp = async () => {
         ).toFixed(2)} ms`
       );
     }
-    const args = process.argv;
-    const protocolUrl = args.find((arg) => arg.startsWith(TWProtocol));
-    if (protocolUrl) {
-    }
 
     const lang = app.getSystemLocale();
     // 首次启动使用用户系统语言作为默认语言
@@ -241,7 +237,7 @@ const initApp = async () => {
   });
 
   app.on('second-instance', (event: any, argv: any) => {
-    importWeb(argv, win);
+    importWeb(win, argv);
     if (win) {
       if (win.isMinimized()) win.restore();
       if (!win.isVisible()) win.show();
@@ -271,20 +267,16 @@ app.on('window-all-closed', () => {
   }
 });
 
-// app.on('will-finish-launching', () => {
-//   app.on('open-url', (event: any, url: string) => {
-//     dialog.showErrorBox('HHHHHHH', 'demo');
-//     log.info('open-url');
-//     event.preventDefault();
-//     // @ts-ignore
-//     // importWeb(null, win, url);
-//     // const win = BrowserWindow.getAllWindows()[0];
-//     // if (win) {
-//     //   win.webContents.send('url-opened', url);
-//     // }
-//     // log.info('Received URL:', url);
-//   });
-// });
+app.on('will-finish-launching', () => {
+  app.on('open-url', (event: any, url: string) => {
+    event.preventDefault();
+    const win = BrowserWindow.getAllWindows()[0];
+    if (win) {
+      // @ts-ignore
+      importWeb(win, null, url);
+    }
+  });
+});
 
 app.on('before-quit', () => {
   app.isQuitting = true;

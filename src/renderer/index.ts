@@ -24,6 +24,7 @@ if (window.$tw) {
   };
 
   electronAPI.onImportMDFromWeb((data) => {
+    // console.log('data', 'import tiddler from web', data);
     importTiddlerFromBrowser(data);
   });
 
