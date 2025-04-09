@@ -93,6 +93,7 @@ async function createWindow() {
   win = new BrowserWindow(winOptions);
 
   win.once('ready-to-show', () => {
+    nativeTheme.themeSource = 'dark';
     win.show();
     win.focus();
     log.info('Ready to show');
