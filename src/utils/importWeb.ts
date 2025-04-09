@@ -20,15 +20,19 @@ export function importWeb(win: BrowserWindow, argv: string[], _url?: string) {
   if (url) {
     const info = new URL(url);
     const source = info.searchParams.get('_source');
-    const { _source, ...tiddler } = Object.fromEntries(
-      info.searchParams.entries()
-    );
+    const tags = info.searchParams.getAll('tags');
+    const {
+      _source,
+      tags: _tags,
+      ...tiddler
+    } = Object.fromEntries(info.searchParams.entries());
+
     // 校验来源
     if (source === 'web') {
       log.info('Begin import tiddler from', source);
       // 注意， 这里需要等待render.js 执行完毕
       setTimeout(() => {
-        win.webContents.send('open-url', tiddler);
+        win.webContents.send('open-url', { ...tiddler, tags });
       }, 100);
     }
   } else {
