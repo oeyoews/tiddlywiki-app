@@ -5,7 +5,7 @@ const host = 'host=0.0.0.0';
 
 export const wikiStartupArgs = (
   path: string,
-  port: number
+  port: number | string
   // lan: boolean = true
 ) => [
   path,

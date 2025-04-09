@@ -16,6 +16,7 @@ const options = {
   defaults: {
     winState: true, // 默认开启， 记录上次窗口位置
     // betaChannel: false,
+    defaultPort: 9090,
     username: null,
     lan: false,
     icon: false,
