@@ -93,7 +93,7 @@ async function createWindow() {
   win = new BrowserWindow(winOptions);
 
   win.once('ready-to-show', () => {
-    nativeTheme.themeSource = 'dark';
+    // nativeTheme.themeSource = 'dark';
     win.show();
     win.focus();
     log.info('Ready to show');
@@ -233,6 +233,7 @@ const initApp = async () => {
 
     // 监听主题变化
     nativeTheme.on('updated', () => {
+      log.info('Update theme');
       win.setIcon(getAppIcon()!); // 更新任务栏图标
       server.tray.setImage(getAppIcon()!); // 更新托盘icon
     });
