@@ -58,7 +58,6 @@ export const viewMenu = (): MenuItemConstructorOptions => ({
         shell.openPath(path.join(config.get('wikiPath'), 'subwiki'));
       },
     },
-    { type: 'separator' },
     {
       label: t('menu.showQRCode'),
       icon: getMenuIcon('qrcode'),
