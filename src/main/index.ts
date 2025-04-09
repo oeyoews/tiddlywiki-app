@@ -19,7 +19,6 @@ import { getPlatform } from '@/utils/getPlatform';
 import { trackWindowState } from '@/utils/trackWindowState';
 import { registerIpcEvent } from './ipc';
 import { importWeb } from '@/utils/importWeb';
-import { injectRenderScript } from '@/utils/injectScript';
 
 let win: BrowserWindow;
 let wikiPath: string;
