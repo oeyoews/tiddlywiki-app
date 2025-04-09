@@ -179,6 +179,10 @@ module.exports = {
     'en-US': 'Open Wiki in Browser',
     'zh-CN': '在浏览器中打开Wiki',
   },
+  defaultPort: {
+    'en-US': 'Setup default port',
+    'zh-CN': '配置默认端口号',
+  },
   openVSCode: {
     'en-US': 'Open With VSCode',
     'zh-CN': '在VSCode中打开',

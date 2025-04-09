@@ -21,7 +21,8 @@ import { config } from '@/utils/config';
 import { isEmptyDirectory } from '@/utils/checkEmptyDir';
 
 const WIKIINFOFILE = 'tiddlywiki.info';
-const DEFAULT_PORT = generateRandomPrivatePort();
+// const DEFAULT_PORT = generateRandomPrivatePort();
+const DEFAULT_PORT = config.get('defaultPort') || '8099';
 
 export interface TwServerInfo {
   server?: Server | null;
@@ -168,7 +169,9 @@ export async function initWiki(
 
     // 新实例：记录端口
     if (!wikiServer?.port) {
-      const currentPort = await getPorts({ port: DEFAULT_PORT });
+      const currentPort = await getPorts({
+        port: [DEFAULT_PORT, 8081, 8082, 8083],
+      });
       server.currentPort = currentPort;
     } else {
       server.currentPort = wikiServer.port; // 更新端口
@@ -224,7 +227,7 @@ export async function initWiki(
       notify: false,
     });
 
-    const startServer = (port: number) => {
+    const startServer = (port: number | string) => {
       if (!win) {
         log.error('mainwindow not founded on start server');
       }
@@ -262,6 +265,7 @@ export async function initWiki(
                   server.twServers.set(generateId(wikiFolder), {
                     path: wikiFolder,
                     server: newTwServer,
+                    // @ts-ignore
                     port: server.currentPort,
                   });
                 }

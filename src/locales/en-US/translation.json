@@ -45,6 +45,7 @@
     "buildWikiWithPassWord": "Export as Single File With Password",
     "buildWiki": "Export as Single File",
     "openInBrowser": "Open Wiki in Browser",
+    "defaultPort": "Setup default port",
     "openVSCode": "Open With VSCode",
     "showQRCode": "Create QRCode for this page",
     "shareWiki": "LAN shared Wiki",

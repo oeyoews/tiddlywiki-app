@@ -2,6 +2,7 @@ import { i18next } from '@/i18n/index';
 import {
   type MenuItemConstructorOptions,
   app,
+  dialog,
   MenuItem,
   shell,
 } from 'electron';
@@ -95,6 +96,28 @@ export const settingsMenu = (): MenuItemConstructorOptions => ({
       click: (menuItem) => {
         config.set('winState', menuItem.checked);
         restartDialog();
+      },
+    },
+    {
+      label: t('menu.defaultPort'),
+      icon: getMenuIcon('gear'),
+      click: async () => {
+        const res = await showInputBox(
+          server.win,
+          t('menu.defaultPort'),
+          'text',
+          config.get('defaultPort').toString()
+        );
+        if (
+          res &&
+          res.length >= 2 &&
+          !isNaN(Number(res)) &&
+          Number(res) < 65535
+        ) {
+          config.set('defaultPort', Number(res));
+        } else if (res?.length > 0) {
+          dialog.showErrorBox('Error', 'new port value is not valid');
+        }
       },
     },
     {
