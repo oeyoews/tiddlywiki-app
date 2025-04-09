@@ -105,6 +105,11 @@ export function autoUpdaterInit() {
     updateMenuVisibility('restartMenu');
 
     server.win.setProgressBar(-1);
+
+    if (!server.win.isVisible() || server.win.isMinimized()) {
+      server.win.show();
+      server.win.restore();
+    }
     const result = await dialog.showMessageBox({
       icon: getMenuIcon('restart', 256),
       type: 'info',
