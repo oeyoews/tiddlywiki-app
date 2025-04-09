@@ -71,7 +71,7 @@ flowchart TD
     subgraph 主进程[主进程 Main Process]
         A[应用程序入口] --> B[应用初始化]
         B --> C[创建主窗口]
-        
+
         subgraph 窗口管理[Window Management]
             C --> D[窗口状态管理]
             C --> E[窗口事件监听]
@@ -98,7 +98,7 @@ flowchart TD
 
     subgraph 渲染进程[Renderer Process]
         J[前端页面] --> K[用户界面]
-        
+
         subgraph 渲染进程通信[IPC Renderer]
             L[IPC通信] --> L1[发送消息到主进程]
             L --> L2[接收主进程消息]
@@ -149,3 +149,7 @@ As for concerns about "blank versions scaring away new users," I won't discuss t
 
 <!-- patch -->
 <!-- pnpm patch tw5-typed -->
+
+## 📚 Related Projects
+
+* [UseWiki2](https://github.com/oeyoews/usewiki2)
