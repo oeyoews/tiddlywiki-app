@@ -21,6 +21,7 @@ export const registerContextMenu = (
   params: Electron.ContextMenuParams,
   win: BrowserWindow
 ) => {
+  console.log(params);
   const menus: MenuItemConstructorOptions[] = [
     {
       accelerator: 'Alt+M',
@@ -33,14 +34,20 @@ export const registerContextMenu = (
       },
     },
     {
-      label: t('menu.searchText', { text: params.selectionText.slice(0, 35) }),
+      label: t('menu.searchText', {
+        text: params.selectionText.slice(0, 35).replace(/\n/, ''),
+      }),
       icon: getMenuIcon('searchGoogle'),
       click: () => {
         shell.openExternal(
-          `https://google.com/search?q=${params.selectionText}`
+          `https://google.com/search?q=${params.selectionText.replace(
+            /\n/,
+            ''
+          )}`
         );
       },
-      visible: params.editFlags.canCopy,
+      visible:
+        params?.selectionText !== '\n' && params?.selectionText.length > 1,
     },
     // TODO: add delete/edit btn
     {
