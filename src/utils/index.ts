@@ -51,7 +51,6 @@ import { getFileSizeInMB } from './getFileSize';
 import { IWikiTemplate } from './wikiTemplates';
 import { createSymlink } from './subwiki';
 import { t } from 'i18next';
-import { generateRandomPrivatePort } from './generateRandomPort';
 import { ITiddlyWiki, type Server } from 'tiddlywiki';
 import { tiddlywiki } from './tiddlywiki';
 import { generateId } from './generateId';
@@ -63,7 +62,7 @@ const desktopDir = app.getPath('desktop');
 // NOTE： 这里使用使用对象引用, 便于更新值
 export const server = {
   currentPort: DEFAULT_PORT,
-  currentServer: null as any as Server,
+  // currentServer: null as any as Server,
   // | null,
   menu: {} as Menu,
   tray: null as any as Tray,
@@ -76,19 +75,18 @@ export const server = {
 export const closeTwServer = (id: string) => {
   const instance = server.twServers.get(id);
   if (instance?.server) {
-    instance.server.on('close', () => {
+    instance.server.close(() => {
+      // server.twServers.delete(id); // 移除
+      // NOTE: 需要保存 path
+      instance.port = null;
+      instance.server = null;
       log.info('close tiddlywiki server', instance.path);
       dialog.showMessageBox({
         icon: getMenuIcon('success', 256),
         title: t('dialog.success'),
         message: t('dialog.closeSuccess'),
       });
-      // server.twServers.delete(id); // 移除
-      // NOTE: 需要保存 path
-      instance.port = null;
-      instance.server = null;
     });
-    instance.server.close();
   }
 };
 
@@ -257,12 +255,11 @@ export async function initWiki(
             $tw.hooks.addHook(
               'th-server-command-post-start',
               (_listenCommand, newTwServer) => {
-                // newTwServer.on('listening', () =>{});
-                server.currentServer = newTwServer;
+                // server.currentServer = newTwServer
                 const twId = generateId(wikiFolder);
                 // 更新 twservers
                 if (!server.twServers.get(twId)?.port) {
-                  server.twServers.set(generateId(wikiFolder), {
+                  server.twServers.set(twId, {
                     path: wikiFolder,
                     server: newTwServer,
                     // @ts-ignore

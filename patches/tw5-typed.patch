@@ -16,3 +16,16 @@ index 9d0888b8a2ba9287f15ccc4fa0770c7208b6c032..c3a4a1317db5c32fe9740e8a21f05468
    "files": [
      "src/"
    ],
+diff --git a/src/modules/server/index.d.ts b/src/modules/server/index.d.ts
+index 44e6a0cf64f8aba5436dd15488fdc0fb5d55ca2f..a93b01f0c3e5ba241bcfc9a7be0aa7408d39cac4 100644
+--- a/src/modules/server/index.d.ts
++++ b/src/modules/server/index.d.ts
+@@ -98,7 +98,7 @@ declare module 'tiddlywiki' {
+       authorizationType: 'readers' | 'writers',
+       username?: string | undefined,
+     ): boolean;
+-    close(): void;
++    close(callback): http.Server<typeof http.IncomingMessage, typeof http.ServerResponse>;
+   }
+ 
+   export interface ServerEndpointContext {

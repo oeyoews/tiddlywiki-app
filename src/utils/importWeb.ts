@@ -39,7 +39,7 @@ export function importWeb(win: BrowserWindow, argv: string[], _url?: string) {
       win.webContents.send('open-url', { ...tiddler, tags });
     }, 100);
   } else {
-    log.info('no get valid url', url, _url);
+    // log.info('no get valid url', url, _url);
   }
   // }
 }

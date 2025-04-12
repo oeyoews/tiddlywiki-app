@@ -6,7 +6,7 @@ settings:
 
 patchedDependencies:
   tw5-typed:
-    hash: a001a8aa1a115d081555282fb83373bc24c015b3dd99429898063fe9d739cfc5
+    hash: 6af7c25568eb51effdfeff3f7b0045de0db15bfcdcfe82db9364730c1cc04440
     path: patches/tw5-typed.patch
 
 importers:
@@ -67,7 +67,7 @@ importers:
         version: 3.3.2
       tw5-typed:
         specifier: ^0.5.14
-        version: 0.5.14(patch_hash=a001a8aa1a115d081555282fb83373bc24c015b3dd99429898063fe9d739cfc5)
+        version: 0.5.14(patch_hash=6af7c25568eb51effdfeff3f7b0045de0db15bfcdcfe82db9364730c1cc04440)
       vite:
         specifier: ^6.2.2
         version: 6.2.2(@types/node@22.14.0)
@@ -4278,7 +4278,7 @@ snapshots:
   tslib@2.8.1:
     optional: true
 
-  tw5-typed@0.5.14(patch_hash=a001a8aa1a115d081555282fb83373bc24c015b3dd99429898063fe9d739cfc5):
+  tw5-typed@0.5.14(patch_hash=6af7c25568eb51effdfeff3f7b0045de0db15bfcdcfe82db9364730c1cc04440):
     dependencies:
       '@types/codemirror': 5.60.15
       '@types/echarts': 4.9.22
