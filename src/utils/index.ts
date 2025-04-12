@@ -72,23 +72,32 @@ export const server = {
   twServers: new Map<string, TwServerInfo>(),
 };
 
-export const closeTwServer = (id: string) => {
-  const instance = server.twServers.get(id);
-  if (instance?.server) {
-    log.info('Begin close server', instance.path);
-    instance.server.close(() => {
-      // server.twServers.delete(id); // 移除
-      // NOTE: 需要保存 path
-      instance.port = null;
-      instance.server = null;
-      log.info('close tiddlywiki server', instance.path);
-      dialog.showMessageBox({
-        icon: getMenuIcon('success', 256),
-        title: t('dialog.success'),
-        message: t('dialog.closeSuccess', { path: instance.path }),
+export const closeTwServer = (id: string): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const instance = server.twServers.get(id);
+    if (instance?.server) {
+      log.info('Begin close server', instance.path);
+      instance.server.close((err: any) => {
+        if (err) {
+          log.error('Error closing server:', err);
+          return reject(err);
+        }
+        // server.twServers.delete(id); // 移除
+        // NOTE: 需要保存 path
+        instance.port = null;
+        instance.server = null;
+        log.info('close tiddlywiki server', instance.path);
+        dialog.showMessageBox({
+          icon: getMenuIcon('success', 256),
+          title: t('dialog.success'),
+          message: t('dialog.closeSuccess', { path: instance.path }),
+        });
+        resolve();
       });
-    });
-  }
+    } else {
+      reject(new Error('Server instance not found or already closed.'));
+    }
+  });
 };
 
 export type IConfig = typeof config;

@@ -86,8 +86,8 @@ export const wikisMenu = (recentWikis: IWikiMenu[]) => ({
               visible: !isCurrentWiki && isRunning,
               id: 'stop-wiki-' + generateId(wikiPath),
               icon: getMenuIcon('stop'),
-              click: (menuItem) => {
-                closeTwServer(generateId(wikiPath));
+              click: async (menuItem) => {
+                await closeTwServer(generateId(wikiPath));
 
                 const item = server.menu.getMenuItemById(menuItem.id);
                 const openInBrowserItem = server.menu.getMenuItemById(
