@@ -20,6 +20,7 @@ type IMenuIconFile =
   | 'File'
   | 'warning'
   | 'config'
+  | 'logo'
   | 'export'
   | 'success'
   | 'username'

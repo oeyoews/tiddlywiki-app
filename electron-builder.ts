@@ -71,7 +71,7 @@ const config = {
     allowToChangeInstallationDirectory: true,
     deleteAppDataOnUninstall: false,
     displayLanguageSelector: false,
-    shortcutName: 'TiddlyWiki5',
+    shortcutName: 'TiddlyWiki5 App',
   },
   publish: {
     provider: 'github',
