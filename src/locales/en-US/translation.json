@@ -124,7 +124,7 @@
     "enterGithubBranch": "Please enter branch name",
     "deleteSuccess": "Delete Success",
     "scalQRCode": "Use your mobile phone to scan the QR code below.",
-    "closeSuccess": "Close Wiki Success",
+    "closeSuccess": "Close Wiki Success({{path}})",
     "success": "Success",
     "githubConfigSuccess": "GitHub configuration has been updated",
     "selectNewWikiFolder": "Select New Wiki Folder",

@@ -149,8 +149,8 @@ module.exports = {
     'zh-CN': '使用手机扫描下面的二维码',
   },
   closeSuccess: {
-    'en-US': 'Close Wiki Success',
-    'zh-CN': '关闭成功',
+    'en-US': 'Close Wiki Success({{path}})',
+    'zh-CN': '关闭成功({{path}})',
   },
   success: {
     'en-US': 'Success',

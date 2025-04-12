@@ -75,6 +75,7 @@ export const server = {
 export const closeTwServer = (id: string) => {
   const instance = server.twServers.get(id);
   if (instance?.server) {
+    log.info('Begin close server', instance.path);
     instance.server.close(() => {
       // server.twServers.delete(id); // 移除
       // NOTE: 需要保存 path
@@ -84,7 +85,7 @@ export const closeTwServer = (id: string) => {
       dialog.showMessageBox({
         icon: getMenuIcon('success', 256),
         title: t('dialog.success'),
-        message: t('dialog.closeSuccess'),
+        message: t('dialog.closeSuccess', { path: instance.path }),
       });
     });
   }
