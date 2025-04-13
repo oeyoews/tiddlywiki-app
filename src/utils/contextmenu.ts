@@ -21,7 +21,6 @@ export const registerContextMenu = (
   params: Electron.ContextMenuParams,
   win: BrowserWindow
 ) => {
-  console.log(params);
   const menus: MenuItemConstructorOptions[] = [
     {
       accelerator: 'Alt+M',

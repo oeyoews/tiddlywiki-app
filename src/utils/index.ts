@@ -265,7 +265,6 @@ export async function initWiki(
             $tw.hooks.addHook(
               'th-server-command-post-start',
               (_listenCommand, newTwServer) => {
-                // server.currentServer = newTwServer
                 const twId = generateId(wikiFolder);
                 // 更新 twservers
                 if (!server.twServers.get(twId)?.port) {
