@@ -184,10 +184,24 @@ async function createWindow() {
   });
 
   win.webContents.on('did-finish-load', async () => {
-    const { injectRenderScript } = await import('@/utils/injectScript');
-    injectRenderScript(win, () => importWeb(win, process.argv));
-    const { injectScript } = await import('@/utils/injectScript');
-    injectScript(win);
+    const hasInjected = await win.webContents.executeJavaScript(
+      'window.__TW_SCRIPT_INJECTED__'
+    );
+
+    // window.addEventListener('beforeunload', () => {
+    //   window.__TW_SCRIPT_INJECTED__ = false;
+    // });
+    if (!hasInjected) {
+      await win.webContents.executeJavaScript(
+        ` window.__TW_SCRIPT_INJECTED__ = true;`
+      );
+      const { injectRenderScript } = await import('@/utils/injectScript');
+      injectRenderScript(win, () => importWeb(win, process.argv));
+      const { injectScript } = await import('@/utils/injectScript');
+      injectScript(win);
+    } else {
+      log.info('Scripts already injected, skipping...');
+    }
   });
 
   const menu = Menu.buildFromTemplate(createMenuTemplate());

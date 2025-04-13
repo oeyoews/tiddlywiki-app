@@ -1,5 +1,3 @@
-const goto = new $tw.Story();
-
 export function importMarkdown(content: IMarkdownTiddler[]) {
   const importedTitle = '$:/markdownImported';
   let tiddlers = {
@@ -42,5 +40,5 @@ export function importMarkdown(content: IMarkdownTiddler[]) {
     text: JSON.stringify(tiddlers),
     status: 'pending',
   });
-  goto.navigateTiddler(importedTitle);
+  new $tw.Story().navigateTiddler(importedTitle);
 }

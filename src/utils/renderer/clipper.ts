@@ -16,8 +16,7 @@ export function importTiddlerFromBrowser(tiddler: ITiddlerFields) {
       text: JSON.stringify(tiddlers),
       status: 'pending',
     });
-    const goto = new $tw.Story();
-    goto.navigateTiddler(importedTitle);
+    new $tw.Story().navigateTiddler(importedTitle);
   } else {
     console.warn('no title');
   }

@@ -265,6 +265,12 @@ export async function initWiki(
             $tw.hooks.addHook(
               'th-server-command-post-start',
               (_listenCommand, newTwServer) => {
+                // setTimeout(() => {
+                //   console.log('begin close', new Date());
+                //   newTwServer.close(() => {
+                //     console.log('close successfully');
+                //   });
+                // }, 8000);
                 const twId = generateId(wikiFolder);
                 // 更新 twservers
                 if (!server.twServers.get(twId)?.port) {

@@ -5,12 +5,11 @@ import { setFavicon } from '@/utils/renderer/setFavicon';
 import { setOfficialLib } from '@/utils/renderer/setOfficialLib';
 import { setSubwiki } from '@/utils/renderer/setSubwiki';
 
-function gotoGithubConfig() {
-  const goto = new $tw.Story();
-  goto.navigateTiddler('$:/core/ui/ControlPanel/Saving/GitHub');
-}
+if (window.$tw && !window.__TW_SCRIPT_INJECTED__) {
+  function gotoGithubConfig() {
+    new $tw.Story().navigateTiddler('$:/core/ui/ControlPanel/Saving/GitHub');
+  }
 
-if (window.$tw) {
   electronAPI.onImportMDFromWeb(async (data) => {
     // console.log('data', 'import tiddler from web', data);
     const text = await navigator.clipboard.readText();

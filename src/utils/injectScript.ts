@@ -9,9 +9,11 @@ export const injectRenderScript = (win: BrowserWindow, cbl: Function) => {
   const render = path.join(processEnv.VITE_DIST, 'renderer/index.js');
 
   win.webContents.executeJavaScript(`
+    (() => {
         const script = document.createElement('script');
         script.src = 'file://${render.replace(/\\/g, '/')}';
         document.body.appendChild(script);
+  })()
     `);
   log.info('injected renderjs');
   if (typeof cbl === 'function') {
