@@ -5,7 +5,7 @@ import { setFavicon } from '@/utils/renderer/setFavicon';
 import { setOfficialLib } from '@/utils/renderer/setOfficialLib';
 import { setSubwiki } from '@/utils/renderer/setSubwiki';
 
-if (window.$tw && !window.__TW_SCRIPT_INJECTED__) {
+if (window.$tw) {
   function gotoGithubConfig() {
     new $tw.Story().navigateTiddler('$:/core/ui/ControlPanel/Saving/GitHub');
   }
