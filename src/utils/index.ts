@@ -72,6 +72,7 @@ export const server = {
   twServers: new Map<string, TwServerInfo>(),
 };
 
+// TODO: cbl 等待一分钟 空白wiki？？？
 export const closeTwServer = (id: string): Promise<void> => {
   return new Promise((resolve, reject) => {
     const instance = server.twServers.get(id);
@@ -86,12 +87,12 @@ export const closeTwServer = (id: string): Promise<void> => {
         // NOTE: 需要保存 path
         instance.port = null;
         instance.server = null;
-        log.info('close tiddlywiki server', instance.path);
-        dialog.showMessageBox({
-          icon: getMenuIcon('success', 256),
-          title: t('dialog.success'),
-          message: t('dialog.closeSuccess', { path: instance.path }),
-        });
+        log.info('Close tiddlywiki server', instance.path);
+        // dialog.showMessageBox({
+        //   icon: getMenuIcon('success', 256),
+        //   title: t('dialog.success'),
+        //   message: t('dialog.closeSuccess', { path: instance.path }),
+        // });
         resolve();
       });
     } else {
