@@ -49,10 +49,11 @@ export function autoUpdaterInit() {
     // checkMenu.enabled = false;
     // Menu.setApplicationMenu(menu);
 
-    if (!server.win.isVisible() || server.win.isMinimized()) {
-      server.win.show();
-      server.win.restore();
-    }
+    server.win.show();
+    // if (!server.win.isVisible() || server.win.isMinimized()) {
+    //   server.win.show();
+    //   server.win.restore();
+    // }
 
     const result = await dialog.showMessageBox({
       type: 'info',
@@ -82,10 +83,11 @@ export function autoUpdaterInit() {
 
     server.win.setProgressBar(-1);
 
-    if (!server.win.isVisible() || server.win.isMinimized()) {
-      server.win.show();
-      server.win.restore();
-    }
+    server.win.show();
+    // if (!server.win.isVisible() || server.win.isMinimized()) {
+    //   server.win.show();
+    //   server.win.restore();
+    // }
     dialog.showMessageBox({
       icon: getMenuIcon('about', 256),
       type: 'info',
@@ -106,10 +108,11 @@ export function autoUpdaterInit() {
 
     server.win.setProgressBar(-1);
 
-    if (!server.win.isVisible() || server.win.isMinimized()) {
-      server.win.show();
-      server.win.restore();
-    }
+    server.win.show();
+    // if (!server.win.isVisible() || server.win.isMinimized()) {
+    //   server.win.show();
+    //   server.win.restore();
+    // }
     const result = await dialog.showMessageBox({
       icon: getMenuIcon('restart', 256),
       type: 'info',
