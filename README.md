@@ -1,6 +1,6 @@
 # TiddlyWiki App 🌟
 
-[简体中文](./README.zh-CN.md) | English
+[简体中文](https://github.com/oeyoews/tiddlywiki-app/blob/main/README.zh-CN.md) | English
 
 ![img](https://github.com/oeyoews/tiddlywiki-app/raw/main/banner04.png)
 ![img](https://github.com/oeyoews/tiddlywiki-app/raw/main/banner03.png)

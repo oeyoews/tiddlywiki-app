@@ -1,9 +1,9 @@
 # TiddlyWiki App 🌟
 
-[English](./README.md) | 简体中文
+[English](https://github.com/oeyoews/tiddlywiki-app/blob/main/README.md) | 简体中文
 
-![img](./banner04.png)
-![img](./banner03.png)
+![img](https://github.com/oeyoews/tiddlywiki-app/raw/main/banner04.png)
+![img](https://github.com/oeyoews/tiddlywiki-app/raw/main/banner03.png)
 
 一个 TiddlyWiki 桌面应用，提供更加丝滑的桌面端使用体验。
 
