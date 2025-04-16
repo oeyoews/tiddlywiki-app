@@ -1,0 +1,24 @@
+name: Deploy TiddlyWiki to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  pages: write
+  id-token: write
+  contents: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  release-and-page:
+    runs-on: ubuntu-latest
+    name: Publish
+    steps:
+      - uses: oeyoews/tiddlywiki-publish@main
+        with:
+          version: master

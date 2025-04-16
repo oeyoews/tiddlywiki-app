@@ -2,8 +2,8 @@
 
 [简体中文](./README.zh-CN.md) | English
 
-![img](./banner04.png)
-![img](./banner03.png)
+![img](https://github.com/oeyoews/tiddlywiki-app/raw/main/banner04.png)
+![img](https://github.com/oeyoews/tiddlywiki-app/raw/main/banner03.png)
 
 A TiddlyWiki desktop application that provides a smoother desktop experience.
 
@@ -65,67 +65,6 @@ A TiddlyWiki desktop application that provides a smoother desktop experience.
 - 📦 git
 
 ### 🚀 Local Development
-
-```mermaid
-flowchart TD
-    subgraph 主进程[主进程 Main Process]
-        A[应用程序入口] --> B[应用初始化]
-        B --> C[创建主窗口]
-
-        subgraph 窗口管理[Window Management]
-            C --> D[窗口状态管理]
-            C --> E[窗口事件监听]
-            D --> D1[全屏控制]
-            D --> D2[窗口位置记忆]
-            E --> E1[窗口关闭事件]
-            E --> E2[窗口最小化事件]
-        end
-
-        subgraph 系统服务[System Services]
-            F[系统托盘] --> F1[托盘菜单]
-            F --> F2[托盘事件]
-            G[自动更新] --> G1[检查更新]
-            G --> G2[下载更新]
-            H[系统API] --> H1[文件系统]
-            H --> H2[Shell操作]
-        end
-
-        subgraph IPC主进程[IPC Main]
-            I[IPC通信管理] --> I1[接收渲染进程消息]
-            I --> I2[发送消息到渲染进程]
-        end
-    end
-
-    subgraph 渲染进程[Renderer Process]
-        J[前端页面] --> K[用户界面]
-
-        subgraph 渲染进程通信[IPC Renderer]
-            L[IPC通信] --> L1[发送消息到主进程]
-            L --> L2[接收主进程消息]
-        end
-
-        subgraph 预加载脚本[Preload Scripts]
-            M[上下文隔离] --> M1[API暴露]
-            M --> M2[安全控制]
-        end
-
-        K --> N[页面路由]
-        K --> O[状态管理]
-        K --> P[UI组件]
-    end
-
-    subgraph 外部服务[External Services]
-        Q[文件管理]
-        R[外部链接处理]
-        S[系统托盘服务]
-    end
-
-    I1 <--> L1
-    I2 <--> L2
-    F --> S
-    H1 --> Q
-    H2 --> R
-```
 
 ```bash
 # Install dependencies

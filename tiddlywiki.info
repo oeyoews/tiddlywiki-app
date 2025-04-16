@@ -1,0 +1,29 @@
+{
+    "description": "Basic client-server edition",
+    "plugins": [
+        "tiddlywiki/tiddlyweb",
+        "tiddlywiki/filesystem",
+        "tiddlywiki/highlight",
+        "tiddlywiki/markdown"
+    ],
+    "themes": [
+        "tiddlywiki/vanilla"
+    ],
+    "build": {
+        "index": [
+            "--render",
+            "$:/plugins/tiddlywiki/tiddlyweb/save/offline",
+            "index.html",
+            "text/plain",
+            "",
+            "publishFilter",
+            "-[tag[private]] -[is[draft]]"
+        ]
+    },
+    "languages": [
+        "zh-Hans"
+    ],
+    "config": {
+        "retain-original-tiddler-path": true
+    }
+}
