@@ -1,6 +1,6 @@
 {
   "name": "tiddlywiki-app",
-  "version": "4.7.5",
+  "version": "4.7.6",
   "description": "TiddlyWiki App",
   "main": "./dist/main/index.js",
   "repository": {
@@ -12,6 +12,7 @@
     "test": "playwright test",
     "dev": "vite",
     "preview": "vite build && electron .",
+    "docs:dev": "tiddlywiki --listen",
     "test:importweb": "vite build && electron . \"tiddlywiki://?_source=web&title=hello&text=测试导入\"",
     "build": "vite build && electron-builder",
     "release": "vite build && node ./scripts/minify-tw.js && electron-builder"
@@ -50,7 +51,7 @@
     "@playwright/test": "^1.51.1",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.14.0",
-    "electron": "^35.1.4",
+    "electron": "35.2.0",
     "electron-builder": "^26.0.12",
     "playwright": "^1.51.1",
     "sharp": "^0.33.5",
