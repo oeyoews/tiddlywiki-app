@@ -7,3 +7,5 @@ builder*.yaml
 /dist/
 test-results/
 /.VSCodeCounter
+pnpm-lock.yaml
+/.DS_Store
