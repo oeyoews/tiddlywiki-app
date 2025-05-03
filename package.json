@@ -1,6 +1,6 @@
 {
   "name": "tiddlywiki-app",
-  "version": "4.7.6",
+  "version": "4.7.7",
   "description": "TiddlyWiki App",
   "main": "./dist/main/index.js",
   "repository": {
@@ -51,7 +51,7 @@
     "@playwright/test": "^1.51.1",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.14.0",
-    "electron": "35.2.0",
+    "electron": "^36.1.0",
     "electron-builder": "^26.0.12",
     "playwright": "^1.51.1",
     "sharp": "^0.33.5",
