@@ -1,6 +1,6 @@
 {
   "name": "tiddlywiki-app",
-  "version": "4.7.7",
+  "version": "4.8.0",
   "description": "TiddlyWiki App",
   "main": "./dist/main/index.js",
   "repository": {
@@ -41,7 +41,8 @@
   "pnpm": {
     "onlyBuiltDependencies": [
       "electron",
-      "esbuild"
+      "esbuild",
+      "sharp"
     ],
     "patchedDependencies": {
       "tw5-typed": "patches/tw5-typed.patch"
