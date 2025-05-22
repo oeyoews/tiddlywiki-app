@@ -2,7 +2,7 @@ import { config } from '@/utils/config';
 import { convertPathToVSCodeUri } from '@/utils/convertPathToVSCodeUri';
 import saveToGitHub from '@/utils/github-saver';
 import { log } from '@/utils/logger';
-import { app, BrowserWindow, ipcMain, shell } from 'electron';
+import { app, BrowserWindow, ipcMain, net, shell } from 'electron';
 import path from 'path';
 import fs from 'fs';
 import { TPlatform } from '.';
@@ -116,6 +116,15 @@ export function registerIpcEvent(win: BrowserWindow) {
       // TODO: 递归查询相应后缀的文件是否存在
       log.error(tidPath, 'not exit');
     }
+  });
+
+  ipcMain.handle('fetchRss', async (_event, data) => {
+    const { url } = data;
+    const res = await net.fetch(url, {
+      method: 'GET',
+    });
+    const rssData = await res.text();
+    return rssData;
   });
 
   // 目前仅开始针对windows 进行支持

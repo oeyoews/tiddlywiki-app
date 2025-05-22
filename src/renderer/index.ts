@@ -6,6 +6,11 @@ import { setOfficialLib } from '@/utils/renderer/setOfficialLib';
 import { setSubwiki } from '@/utils/renderer/setSubwiki';
 
 if (window.$tw) {
+  window._fetch = async (url: string) => {
+    const data = await electronAPI.startFetchRSSData({ url });
+    return data;
+  };
+
   function gotoGithubConfig() {
     new $tw.Story().navigateTiddler('$:/core/ui/ControlPanel/Saving/GitHub');
   }

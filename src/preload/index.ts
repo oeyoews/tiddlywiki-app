@@ -32,7 +32,9 @@ export const electronAPI = {
   onTitleFetched: (callback) =>
     ipcRenderer.on('title-fetched', (_event, value) => callback(value)),
 
+  // 渲染进程向主进程发起的双向通信
   startFetchData: async (data) => ipcRenderer.invoke('get-data', data),
+  startFetchRSSData: async (data) => ipcRenderer.invoke('fetchRss', data),
 
   onConfetti: (callback) => ipcRenderer.on('wiki-imported', callback),
 
