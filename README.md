@@ -93,3 +93,8 @@ As for concerns about "blank versions scaring away new users," I won't discuss t
 ## 📚 Related Projects
 
 * [UseWiki2](https://github.com/oeyoews/usewiki2)
+
+<!-- --no-optional -->
+<!-- --ignore-scripts -->
+<!-- volta install node
+volta install pnpm -->
