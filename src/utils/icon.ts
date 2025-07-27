@@ -8,8 +8,10 @@ import { processEnv } from '@/main';
 const iconCache = new Map<string, Electron.NativeImage>();
 const enableIcon = config.get('icon');
 
-export const getMenuIcon = (name: IMenuIcon, size: number = 16) => {
-  if (!enableIcon) return;
+export const getMenuIcon = (name: IMenuIcon, size: number = 16,
+  force = false
+) => {
+  if (!enableIcon && !force) return;
 
   const cacheKey = `${name}-${size}`;
   if (iconCache.has(cacheKey)) {
@@ -34,14 +36,14 @@ export const twImage = (size: number = 16) => getMenuIcon('tw-light', size); // 
 
 export const getAppIcon = (
   size: number = 512,
-  darkmode: 'auto' | 'tw-dark' | 'tw-light' = 'auto'
+  darkmode: 'auto' | 'tw-dark' | 'tw-light' = 'auto',
 ) => {
   if (darkmode !== 'auto') {
     return getMenuIcon(darkmode, size);
   } else {
     return nativeTheme.shouldUseDarkColors
-      ? getMenuIcon('tw-dark', size)
-      : getMenuIcon('tw-light', size);
+      ? getMenuIcon('tw-dark', size, true)
+      : getMenuIcon('tw-light', size, true);
   }
 };
 
