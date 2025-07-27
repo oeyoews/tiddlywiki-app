@@ -1,7 +1,7 @@
 // @ts-nocheck
 export function setOfficialLib() {
   // enable official plugin library
-  console.log($tw.version);
+  // console.log($tw.version);
   const pluginLibraryUrl = `https://tiddlywiki.com/library/v${$tw.version}/index.html`;
   const officialLibraryTiddler = '$:/config/OfficialPluginLibrary';
   if ($tw.wiki.getTiddler(officialLibraryTiddler)?.fields?.enabled === 'no') {
