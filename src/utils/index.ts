@@ -16,7 +16,6 @@ import { i18next } from '@/i18n/index';
 import twinfo from '@/utils/tiddlywiki.json';
 
 const { default: getPorts } = require('get-port');
-// const { TiddlyWiki } = require('tiddlywiki');
 import { config } from '@/utils/config';
 import { isEmptyDirectory } from '@/utils/checkEmptyDir';
 
@@ -51,7 +50,7 @@ import { getFileSizeInMB } from './getFileSize';
 import { IWikiTemplate } from './wikiTemplates';
 import { createSymlink } from './subwiki';
 import { t } from 'i18next';
-import { ITiddlyWiki, type Server } from 'tiddlywiki';
+import { ITiddlyWiki, type Server } from 'tw5-typed';
 import { tiddlywiki } from './tiddlywiki';
 import { generateId } from './generateId';
 import { showInputBox } from '@/modules/showInputBox';
@@ -374,9 +373,8 @@ export async function showWikiInfo() {
   const { version, name } = await import('../../package.json');
   const detail = `${t('app.version')}: ${version}\n${t(
     'app.currentWikiPath'
-  )}：${config.get('wikiPath')}\n${t('app.runningPort')}：${
-    server.currentPort || t('app.notRunning')
-  }\n${t('app.configPath')}：${config.fileName}`;
+  )}：${config.get('wikiPath')}\n${t('app.runningPort')}：${server.currentPort || t('app.notRunning')
+    }\n${t('app.configPath')}：${config.fileName}`;
   const res = await dialog.showMessageBox({
     type: 'none',
     title: t('app.about'),
@@ -670,7 +668,7 @@ export async function toggleMarkdown(
       return;
     }
     restartDialog();
-  } catch (err) {}
+  } catch (err) { }
 }
 
 export async function toggleAutocorrect(menuItem: any) {
@@ -732,5 +730,5 @@ export async function toggleChineseLang(
       return;
     }
     restartDialog();
-  } catch (err) {}
+  } catch (err) { }
 }

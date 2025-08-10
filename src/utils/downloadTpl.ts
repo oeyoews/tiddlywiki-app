@@ -2,13 +2,13 @@
 import { Notification, app, net } from 'electron';
 import path from 'path';
 import fs from 'fs';
-const { TiddlyWiki } = require('tiddlywiki');
-
+// const { TiddlyWiki } = require('tiddlywiki');
 const tempDir = app.getPath('temp'); // 获取系统的临时目录
 const tempHTMLFolder = (template: string) => path.join(tempDir, template);
 
 import { log } from '@/utils/logger';
 import { shell } from 'electron';
+import { dynamicWiki } from './tiddlywiki';
 const cacheDuration = 7 * 24 * 60 * 60 * 1000; // 24小时
 
 export const downloadTpl = async (
@@ -95,7 +95,7 @@ async function convertHTML2Folder(
   cbl?: Function
 ) {
   // 转换文件夹
-  const { boot } = TiddlyWiki();
+  const { boot } = dynamicWiki.TiddlyWiki();
   const labelHTMLDir = tempHTMLFolder(label);
   if (fs.existsSync(labelHTMLDir)) {
     await shell.trashItem(labelHTMLDir);

@@ -6,6 +6,7 @@
     "wikis": "知识库(&W)",
     "settings": "设置(&S)",
     "help": "帮助(&H)",
+    "tvm": "太微版本管理",
     "subwiki": "打开子Wiki",
     "wikiTemplate": "从模板创建维基",
     "minimize": "最小化窗口",

@@ -1,4 +1,4 @@
-import { type ITiddlerFields } from 'tiddlywiki';
+import { type ITiddlerFields } from 'tw5-typed';
 
 export function importTiddlerFromBrowser(tiddler: ITiddlerFields) {
   const { title, ...fields } = tiddler;

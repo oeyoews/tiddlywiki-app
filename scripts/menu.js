@@ -23,6 +23,10 @@ module.exports = {
     'en-US': '&Help',
     'zh-CN': '帮助(&H)',
   },
+  tvm: {
+    'en-US': 'TiddlyWiki Manage',
+    'zh-CN': '太微版本管理',
+  },
   subwiki: {
     'en-US': 'Open subwiki',
     'zh-CN': '打开子Wiki',

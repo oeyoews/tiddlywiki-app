@@ -7,7 +7,7 @@ import {
   shell,
 } from 'electron';
 import { log } from '@/utils/logger';
-import { getMenuIcon } from '../icon';
+import { getAppIcon, getMenuIcon } from '../icon';
 import { config } from '../config';
 import {
   switchLanguage,
@@ -20,6 +20,8 @@ import {
 } from '@/utils';
 import { t } from 'i18next';
 import { showInputBox } from '@/modules/showInputBox';
+import { tiddlywikiExtensionDir } from '../tiddlywiki';
+import fs from 'fs'
 
 export const settingsMenu = (): MenuItemConstructorOptions => ({
   label: t('menu.settings'),
@@ -96,6 +98,16 @@ export const settingsMenu = (): MenuItemConstructorOptions => ({
       click: (menuItem) => {
         config.set('winState', menuItem.checked);
         restartDialog();
+      },
+    },
+    {
+      label: t('menu.tvm'),
+      icon: getAppIcon(16),
+      click: () => {
+        if (!fs.existsSync(tiddlywikiExtensionDir)) {
+          fs.mkdirSync(tiddlywikiExtensionDir, { recursive: true })
+        }
+        shell.openPath(tiddlywikiExtensionDir);
       },
     },
     {
