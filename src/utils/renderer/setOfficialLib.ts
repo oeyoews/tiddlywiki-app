@@ -18,7 +18,7 @@ export function setOfficialLib() {
 
 // @ts-nocheck
 export function setCustomPluginLib() {
-  const CM6LibraryTiddler = '$:/config/oeyoews/CM6PluginLibrary';
+  const CM6LibraryTiddler = '$:/Library/Codemirror6';
   const fields = $tw.wiki.getTiddler(CM6LibraryTiddler)
   if (fields?.enabled !== 'yes' || fields.version !== '1.0.0') {
     const pluginLibraryUrl = `https://oeyoews.github.io/tiddlywiki-codemirror6/library/index.html`;
