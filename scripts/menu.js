@@ -27,6 +27,10 @@ module.exports = {
     'en-US': 'TiddlyWiki Manage',
     'zh-CN': '太微版本管理',
   },
+  more: {
+    "en-US": 'More',
+    'zh-CN': "更多"
+  },
   subwiki: {
     'en-US': 'Open subwiki',
     'zh-CN': '打开子Wiki',

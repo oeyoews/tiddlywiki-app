@@ -35,72 +35,6 @@ export const settingsMenu = (): MenuItemConstructorOptions => ({
     //     deps.toggleEnableBeta(menuItem.checked),
     // },
     {
-      label: t('menu.markdown'),
-      type: 'checkbox',
-      icon: getMenuIcon('markdown'),
-      checked: config.get('markdown'),
-      click: (menuItem: MenuItem) => toggleMarkdown(menuItem.checked),
-    },
-    {
-      label: t('menu.autocorrect'),
-      type: 'checkbox',
-      icon: getMenuIcon('format'),
-      checked: config.get('autocorrect'),
-      click: async (menuItem: MenuItem) => await toggleAutocorrect(menuItem),
-    },
-    {
-      label: t('menu.autoStart'),
-      visible: process.platform === 'win32' || process.platform === 'darwin',
-      icon: getMenuIcon('power'),
-      type: 'checkbox',
-      checked: app.getLoginItemSettings().openAtLogin,
-      click: () => {
-        if (!app.isPackaged) {
-          app.setLoginItemSettings({
-            openAtLogin: !app.getLoginItemSettings().openAtLogin,
-            path: process.execPath, // or use app.getPath('exe'),
-          });
-          log.info(
-            'dev: test autoStart',
-            app.getLoginItemSettings().openAtLogin
-          );
-        } else {
-          log.info(
-            'before toggle autoStart',
-            app.getLoginItemSettings().openAtLogin
-          );
-          app.setLoginItemSettings({
-            openAtLogin: !app.getLoginItemSettings().openAtLogin,
-            path: process.execPath, // or use app.getPath('exe'),
-          });
-          log.info(
-            app.getLoginItemSettings().openAtLogin,
-            'after: autoStart toggled'
-          );
-        }
-      },
-    },
-    {
-      label: t('menu.shareWiki'),
-      icon: getMenuIcon('host'),
-      type: 'checkbox',
-      checked: !!config.get('lan'),
-      click: (menuItem) => {
-        config.set('lan', menuItem.checked);
-        restartDialog();
-      },
-    },
-    {
-      label: t('menu.winState'),
-      icon: getMenuIcon('winState'),
-      type: 'checkbox',
-      checked: !!config.get('winState'),
-      click: (menuItem) => {
-        config.set('winState', menuItem.checked);
-        restartDialog();
-      },
-    },
-    {
       label: t('menu.tvm'),
       icon: getAppIcon(16),
       click: () => {
@@ -112,7 +46,7 @@ export const settingsMenu = (): MenuItemConstructorOptions => ({
     },
     {
       label: t('menu.defaultPort'),
-      icon: getMenuIcon('gear'),
+      icon: getMenuIcon('module'),
       click: async () => {
         const res = await showInputBox(
           server.win,
@@ -157,6 +91,13 @@ export const settingsMenu = (): MenuItemConstructorOptions => ({
       },
     },
     {
+      label: t('menu.openSettings'),
+      icon: getMenuIcon('conf'),
+      click: () => {
+        shell.openPath(config.fileName);
+      },
+    },
+    {
       label: t('menu.language'),
       icon: getMenuIcon('i18n'),
       submenu: [
@@ -176,23 +117,90 @@ export const settingsMenu = (): MenuItemConstructorOptions => ({
       ],
     },
     {
-      label: t('menu.openSettings'),
-      icon: getMenuIcon('config'),
-      click: () => {
-        shell.openPath(config.fileName);
-      },
-    },
-    {
-      label: t('menu.enableIcon'),
-      type: 'checkbox',
-      checked: config.get('icon'),
-      click: async (menuItem: MenuItem) => await toggleIcon(menuItem.checked),
-    },
-    {
-      label: t('menu.langCN'),
-      type: 'checkbox',
-      checked: config.get('lang-CN'),
-      click: (menuItem: MenuItem) => toggleChineseLang(menuItem.checked),
+      label: t('menu.more'),
+      icon: getMenuIcon('settings'),
+      submenu: [
+        {
+          label: t('menu.markdown'),
+          type: 'checkbox',
+          icon: getMenuIcon('markdown'),
+          checked: config.get('markdown'),
+          click: (menuItem: MenuItem) => toggleMarkdown(menuItem.checked),
+        },
+        {
+          label: t('menu.langCN'),
+          icon: getMenuIcon('i18n2'),
+          type: 'checkbox',
+          checked: config.get('lang-CN'),
+          click: (menuItem: MenuItem) => toggleChineseLang(menuItem.checked),
+        },
+        {
+          label: t('menu.enableIcon'),
+          type: 'checkbox',
+          icon: getMenuIcon('star'),
+          checked: config.get('icon'),
+          click: async (menuItem: MenuItem) => await toggleIcon(menuItem.checked),
+        },
+        {
+          label: t('menu.autocorrect'),
+          type: 'checkbox',
+          icon: getMenuIcon('format'),
+          checked: config.get('autocorrect'),
+          click: async (menuItem: MenuItem) => await toggleAutocorrect(menuItem),
+        },
+        {
+          label: t('menu.autoStart'),
+          visible: process.platform === 'win32' || process.platform === 'darwin',
+          icon: getMenuIcon('power'),
+          type: 'checkbox',
+          checked: app.getLoginItemSettings().openAtLogin,
+          click: () => {
+            if (!app.isPackaged) {
+              app.setLoginItemSettings({
+                openAtLogin: !app.getLoginItemSettings().openAtLogin,
+                path: process.execPath, // or use app.getPath('exe'),
+              });
+              log.info(
+                'dev: test autoStart',
+                app.getLoginItemSettings().openAtLogin
+              );
+            } else {
+              log.info(
+                'before toggle autoStart',
+                app.getLoginItemSettings().openAtLogin
+              );
+              app.setLoginItemSettings({
+                openAtLogin: !app.getLoginItemSettings().openAtLogin,
+                path: process.execPath, // or use app.getPath('exe'),
+              });
+              log.info(
+                app.getLoginItemSettings().openAtLogin,
+                'after: autoStart toggled'
+              );
+            }
+          },
+        },
+        {
+          label: t('menu.shareWiki'),
+          icon: getMenuIcon('host'),
+          type: 'checkbox',
+          checked: !!config.get('lan'),
+          click: (menuItem) => {
+            config.set('lan', menuItem.checked);
+            restartDialog();
+          },
+        },
+        {
+          label: t('menu.winState'),
+          icon: getMenuIcon('winState'),
+          type: 'checkbox',
+          checked: !!config.get('winState'),
+          click: (menuItem) => {
+            config.set('winState', menuItem.checked);
+            restartDialog();
+          },
+        },
+      ]
     },
   ],
 });

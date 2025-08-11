@@ -53,7 +53,7 @@ export const viewMenu = (): MenuItemConstructorOptions => ({
     {
       label: t('menu.subwiki'),
       accelerator: 'CmdOrCtrl+Shift+E',
-      icon: getMenuIcon('subwiki'),
+      icon: getMenuIcon('folder'),
       click: () => {
         shell.openPath(path.join(config.get('wikiPath'), 'subwiki'));
       },

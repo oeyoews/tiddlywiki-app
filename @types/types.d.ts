@@ -99,6 +99,10 @@ type IMenuHelpIcon =
   | 'console'
   | 'link'
   | 'link2'
+  | 'i18n2'
+  | 'star'
+  | 'conf'
+  | 'module'
   | 'i18n';
 
 type IPlatform = 'macOS' | 'windows' | 'linux';
