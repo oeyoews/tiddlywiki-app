@@ -8,7 +8,9 @@ import { processEnv } from '@/main';
 const iconCache = new Map<string, Electron.NativeImage>();
 const enableIcon = config.get('icon');
 
-export const getMenuIcon = (name: IMenuIcon, size: number = 16,
+export const getMenuIcon = (
+  name: IMenuIcon,
+  size: number = 16,
   force = false
 ) => {
   if (!enableIcon && !force) return;
@@ -36,7 +38,7 @@ export const twImage = (size: number = 16) => getMenuIcon('tw-light', size); // 
 
 export const getAppIcon = (
   size: number = 512,
-  darkmode: 'auto' | 'tw-dark' | 'tw-light' = 'auto',
+  darkmode: 'auto' | 'tw-dark' | 'tw-light' = 'auto'
 ) => {
   if (darkmode !== 'auto') {
     return getMenuIcon(darkmode, size);
@@ -44,6 +46,19 @@ export const getAppIcon = (
     return nativeTheme.shouldUseDarkColors
       ? getMenuIcon('tw-dark', size, true)
       : getMenuIcon('tw-light', size, true);
+  }
+};
+
+export const getAppIcon2 = (
+  size: number = 512,
+  darkmode: 'auto' | 'tw-dark' | 'tw-light' = 'auto'
+) => {
+  if (darkmode !== 'auto') {
+    return getMenuIcon(darkmode, size);
+  } else {
+    return nativeTheme.shouldUseDarkColors
+      ? getMenuIcon('tw-dark', size)
+      : getMenuIcon('tw-light', size);
   }
 };
 

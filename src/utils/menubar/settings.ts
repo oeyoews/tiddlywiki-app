@@ -7,7 +7,7 @@ import {
   shell,
 } from 'electron';
 import { log } from '@/utils/logger';
-import { getAppIcon, getMenuIcon } from '../icon';
+import { getAppIcon2, getMenuIcon } from '../icon';
 import { config } from '../config';
 import {
   switchLanguage,
@@ -21,7 +21,7 @@ import {
 import { t } from 'i18next';
 import { showInputBox } from '@/modules/showInputBox';
 import { tiddlywikiExtensionDir } from '../tiddlywiki';
-import fs from 'fs'
+import fs from 'fs';
 
 export const settingsMenu = (): MenuItemConstructorOptions => ({
   label: t('menu.settings'),
@@ -36,10 +36,10 @@ export const settingsMenu = (): MenuItemConstructorOptions => ({
     // },
     {
       label: t('menu.tvm'),
-      icon: getAppIcon(16),
+      icon: getAppIcon2(16, 'auto'),
       click: () => {
         if (!fs.existsSync(tiddlywikiExtensionDir)) {
-          fs.mkdirSync(tiddlywikiExtensionDir, { recursive: true })
+          fs.mkdirSync(tiddlywikiExtensionDir, { recursive: true });
         }
         shell.openPath(tiddlywikiExtensionDir);
       },
@@ -139,18 +139,21 @@ export const settingsMenu = (): MenuItemConstructorOptions => ({
           type: 'checkbox',
           icon: getMenuIcon('star'),
           checked: config.get('icon'),
-          click: async (menuItem: MenuItem) => await toggleIcon(menuItem.checked),
+          click: async (menuItem: MenuItem) =>
+            await toggleIcon(menuItem.checked),
         },
         {
           label: t('menu.autocorrect'),
           type: 'checkbox',
           icon: getMenuIcon('format'),
           checked: config.get('autocorrect'),
-          click: async (menuItem: MenuItem) => await toggleAutocorrect(menuItem),
+          click: async (menuItem: MenuItem) =>
+            await toggleAutocorrect(menuItem),
         },
         {
           label: t('menu.autoStart'),
-          visible: process.platform === 'win32' || process.platform === 'darwin',
+          visible:
+            process.platform === 'win32' || process.platform === 'darwin',
           icon: getMenuIcon('power'),
           type: 'checkbox',
           checked: app.getLoginItemSettings().openAtLogin,
@@ -200,7 +203,7 @@ export const settingsMenu = (): MenuItemConstructorOptions => ({
             restartDialog();
           },
         },
-      ]
+      ],
     },
   ],
 });
