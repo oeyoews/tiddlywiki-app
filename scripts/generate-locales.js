@@ -4,12 +4,12 @@ const path = require('path');
 const LOCALES_DIR = path.join(__dirname, '../src/locales');
 const SUPPORTED_LOCALES = ['en-US', 'zh-CN'];
 
-const menu = require('./menu');
-const app = require('./app');
-const tray = require('./tray');
-const dialog = require('./dialog');
-const log = require('./log');
-const settings = require('./settings');
+const menu = require('./locales/menu');
+const app = require('./locales/app');
+const tray = require('./locales/tray');
+const dialog = require('./locales/dialog');
+const log = require('./locales/log');
+const settings = require('./locales/settings');
 
 // 统一的翻译对象
 const translations = {
