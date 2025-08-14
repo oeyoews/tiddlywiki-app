@@ -6,7 +6,8 @@ import { log } from './logger';
 // tiddlywiki://?_source=web&title=999
 export function importWeb(win: BrowserWindow, argv: string[], _url?: string) {
   if (!win) {
-    dialog.showErrorBox('no win', 'no win');
+    // dialog.showErrorBox('no win', 'no win');
+    log.info('Not Ready')
     return;
   }
   let url;
