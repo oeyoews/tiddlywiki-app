@@ -23,7 +23,7 @@ export const helpMenu = (): MenuItemConstructorOptions => ({
     {
       label: t('menu.checkUpdate'),
       // @see https://www.electronjs.org/zh/docs/latest/api/auto-updater
-      visible: getPlatform() === 'windows' || !!process.env.APPIMAGE ,// macos update need application sign
+      visible: getPlatform() === 'windows' || !!process.env.APPIMAGE,// macos update need application sign
       id: 'update',
       enabled: app.isPackaged,
       click: () => checkForUpdates(),
@@ -62,6 +62,13 @@ export const helpMenu = (): MenuItemConstructorOptions => ({
       icon: getMenuIcon('bug'),
       click: () =>
         shell.openExternal('https://github.com/oeyoews/tiddlywiki-app/issues'),
+    },
+    {
+      label: t('menu.chromeExt'),
+      icon: getMenuIcon('chrome-web-store'),
+      click: () => {
+        shell.openExternal('https://github.com/oeyoews/usewiki2');
+      },
     },
     {
       label: t('menu.twdocs'),

@@ -103,6 +103,7 @@ type IMenuHelpIcon =
   | 'star'
   | 'conf'
   | 'module'
+  | 'chrome-web-store'
   | 'i18n';
 
 type IPlatform = 'macOS' | 'windows' | 'linux';
