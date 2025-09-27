@@ -1,3 +1,9 @@
 {
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "i18n-ally.localesPaths": [
+    "scripts/locales",
+    "src/i18n",
+    "src/locales",
+    "release/4.9.4/win-unpacked/locales"
+  ]
 }
