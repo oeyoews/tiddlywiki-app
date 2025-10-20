@@ -23,6 +23,10 @@ module.exports = {
     'en-US': '&Help',
     'zh-CN': '帮助(&H)',
   },
+  chromeExt: {
+    'en-US': 'Chrome Extension',
+    'zh-CN': '谷歌浏览器扩展',
+  },
   tvm: {
     'en-US': 'TiddlyWiki Manage',
     'zh-CN': '太微版本管理',
