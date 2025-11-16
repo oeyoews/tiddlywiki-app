@@ -34,7 +34,6 @@ export function createTray(
     });
   }
   server.tray.setToolTip(t('tray.tooltip'));
-  server.tray.setTitle(t('tray.tooltip'));
   const contextMenu = Menu.buildFromTemplate([
     {
       label: t('tray.showWindow'),
