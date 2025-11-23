@@ -27,7 +27,7 @@ export const getMenuIcon = (
   );
   const image = nativeImage
     .createFromPath(iconPath)
-    .resize({ width: size, height: size });
+    .resize({ width: size, height: size, quality: 'best' });
 
   // **缓存结果**
   iconCache.set(cacheKey, image);

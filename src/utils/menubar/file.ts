@@ -161,7 +161,8 @@ export const fileMenu = (): MenuItemConstructorOptions => ({
       label: t('menu.exit'),
       icon: getMenuIcon('exit'),
       accelerator: 'CmdOrCtrl+Q',
-      role: getPlatform() === 'macOs' ? 'close' : 'quit',
+      // role: getPlatform() === 'macOs' ? 'close' : 'quit',
+      role: "quit"
     },
   ],
 });

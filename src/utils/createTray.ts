@@ -5,14 +5,25 @@ import { log } from '@/utils/logger';
 import { t } from 'i18next';
 
 // 修改 createTray 函数中的菜单项
+enum TrayIconSize {
+  windows = 24,
+  macOs = 22,
+  linux = 32,
+}
+
 export function createTray(
   win: BrowserWindow,
   server: {
     tray: Tray;
   }
 ) {
+  const platform = getPlatform();
+
   if (!server.tray) {
-    server.tray = new Tray(getAppIcon()!);
+    const trayIconSize =
+      TrayIconSize[platform as keyof typeof TrayIconSize] ?? TrayIconSize.windows;
+
+    server.tray = new Tray(getAppIcon(trayIconSize)!);
     server.tray.on('click', () => {
       if (!win.isVisible() || win.isMinimized()) {
         win.show();
@@ -23,8 +34,6 @@ export function createTray(
     });
   }
   server.tray.setToolTip(t('tray.tooltip'));
-  server.tray.setTitle(t('tray.tooltip'));
-  const platform = getPlatform();
   const contextMenu = Menu.buildFromTemplate([
     {
       label: t('tray.showWindow'),
