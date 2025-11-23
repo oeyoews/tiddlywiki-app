@@ -130,6 +130,22 @@ async function createWindow() {
       return { action: 'deny' };
     });
 
+    win.webContents.on('will-navigate', (event, navigationUrl) => {
+      try {
+        const parsedUrl = new URL(navigationUrl);
+
+        // 如果是外部链接（http/https 协议），阻止导航并在浏览器中打开
+        if (parsedUrl.protocol === 'http:' || parsedUrl.protocol === 'https:') {
+          event.preventDefault();
+          shell.openExternal(navigationUrl);
+          return;
+        }
+
+      } catch (error) {
+        log.info('will-navigate: URL parse error, allowing navigation', navigationUrl);
+      }
+    });
+
     // createTray(win, server); // 创建任务栏图标
     import('@/utils/createTray').then(({ createTray }) =>
       createTray(win, server)
