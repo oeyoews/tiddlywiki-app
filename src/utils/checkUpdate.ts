@@ -70,6 +70,14 @@ export function autoUpdaterInit() {
       autoUpdater.downloadUpdate();
       server.win.setProgressBar(-1); // 取消进度条
       updateMenuVisibility('downloadingApp');
+      // 初始化下载进度显示
+      if (!downloadingApp) {
+        downloadingApp = server.menu.getMenuItemById('downloadingApp')!;
+      }
+      if (downloadingApp) {
+        downloadingApp.label = `${t('dialog.downloading')} 0%`;
+        Menu.setApplicationMenu(server.menu);
+      }
       log.info('updating now');
     } else {
       server.win.setProgressBar(-1); // 取消进度条
@@ -99,6 +107,16 @@ export function autoUpdaterInit() {
   autoUpdater.on('download-progress', (progressObj: any) => {
     log.info(progressObj.percent.toFixed(2) + '%', 'Updating');
     server.win.setProgressBar(progressObj.percent / 100);
+
+    // 更新菜单项显示下载进度
+    if (!downloadingApp) {
+      downloadingApp = server.menu.getMenuItemById('downloadingApp')!;
+    }
+    if (downloadingApp) {
+      const percent = progressObj.percent.toFixed(0);
+      downloadingApp.label = `${t('dialog.downloading')} ${percent}%`;
+      Menu.setApplicationMenu(server.menu);
+    }
   });
 
   autoUpdater.on('update-downloaded', async (info: any) => {
