@@ -4,13 +4,6 @@ import { getPlatform } from './getPlatform';
 import { log } from '@/utils/logger';
 import { t } from 'i18next';
 
-// 修改 createTray 函数中的菜单项
-enum TrayIconSize {
-  windows = 24,
-  macOs = 22,
-  linux = 32,
-}
-
 export function createTray(
   win: BrowserWindow,
   server: {
@@ -20,10 +13,8 @@ export function createTray(
   const platform = getPlatform();
 
   if (!server.tray) {
-    const trayIconSize =
-      TrayIconSize[platform as keyof typeof TrayIconSize] ?? TrayIconSize.windows;
 
-    server.tray = new Tray(getAppIcon(trayIconSize)!);
+    server.tray = new Tray(getAppIcon()!);
     server.tray.on('click', () => {
       if (!win.isVisible() || win.isMinimized()) {
         win.show();

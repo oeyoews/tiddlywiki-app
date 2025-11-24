@@ -36,8 +36,9 @@ export const getMenuIcon = (
 
 export const twImage = (size: number = 16) => getMenuIcon('tw-light', size); // 使用缓存
 
+// 强制显示图标
 export const getAppIcon = (
-  size: number = 512,
+  size: number = 22,
   darkmode: 'auto' | 'tw-dark' | 'tw-light' = 'auto'
 ) => {
   if (darkmode !== 'auto') {
@@ -50,7 +51,7 @@ export const getAppIcon = (
 };
 
 export const getAppIcon2 = (
-  size: number = 512,
+  size: number = 22,
   darkmode: 'auto' | 'tw-dark' | 'tw-light' = 'auto'
 ) => {
   if (darkmode !== 'auto') {
