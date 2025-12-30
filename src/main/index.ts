@@ -265,7 +265,9 @@ const initApp = async () => {
     nativeTheme.on('updated', () => {
       log.info('Update theme');
       win.setIcon(getAppIcon()!); // 更新任务栏图标
-      server.tray.setImage(getAppIcon()!); // 更新托盘icon
+      if (server?.tray) {
+        server.tray.setImage(getAppIcon()!); // 更新托盘icon
+      }
     });
   });
 
