@@ -2,7 +2,7 @@
 import { importTiddlerFromBrowser } from '@/utils/renderer/clipper';
 import { importMarkdown } from '@/utils/renderer/markdown';
 import { setFavicon } from '@/utils/renderer/setFavicon';
-import { setCustomPluginLib, setOfficialLib } from '@/utils/renderer/setOfficialLib';
+import { setCustomPluginLib, setOfficialLib, setNPL } from '@/utils/renderer/setOfficialLib';
 import { setSubwiki } from '@/utils/renderer/setSubwiki';
 
 if (window.$tw) {
@@ -188,6 +188,7 @@ if (window.$tw) {
 
   setOfficialLib();
   setCustomPluginLib();
+  setNPL();
 
   // change tiddlywiki default sidebar layout
   const sidebarLayout = 'fluid-fixed';

@@ -133,6 +133,10 @@ async function createWindow() {
     win.webContents.on('will-navigate', (event, navigationUrl) => {
       try {
         const parsedUrl = new URL(navigationUrl);
+        // NOTE: location.reload 会触发此事件
+        if (parsedUrl.port == String(config.get('defaultPort')) && parsedUrl.protocol === 'http:') {
+          return;
+        }
 
         // 如果是外部链接（http/https 协议），阻止导航并在浏览器中打开
         if (parsedUrl.protocol === 'http:' || parsedUrl.protocol === 'https:') {

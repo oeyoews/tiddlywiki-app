@@ -32,3 +32,19 @@ export function setCustomPluginLib() {
     })
   }
 }
+
+export function setNPL() {
+  const NPLTiddler = '$:/Library/NPL';
+  const fields = $tw.wiki.getTiddler(NPLTiddler)
+  if (fields?.enabled !== 'yes' || fields.version !== '1.0.0') {
+    const pluginLibraryUrl = `https://oeyoews.github.io/tiddlywiki-starter-kit/library/index.html`;
+    $tw.wiki.addTiddler({
+      title: NPLTiddler,
+      tags: libtag,
+      enabled: 'yes',
+      caption: "NPL",
+      url: pluginLibraryUrl,
+      version: '1.0.0'
+    })
+  }
+}
