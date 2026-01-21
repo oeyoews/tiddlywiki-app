@@ -8,6 +8,7 @@ const config = {
   ],
   // appId: 'tiddlywiki.app',
   asar: true,
+  identity: false,
   directories: {
     output: 'release/${version}',
   },
@@ -26,6 +27,7 @@ const config = {
   files: ['dist', 'LICENSE'],
   mac: {
     artifactName: '${productName}-${version}-${arch}.${ext}',
+    identity: false,
     target: [
       {
         target: 'dmg',
