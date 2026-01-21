@@ -8,7 +8,7 @@ const config = {
   ],
   // appId: 'tiddlywiki.app',
   asar: true,
-  identity: false,
+  // identity: false,
   directories: {
     output: 'release/${version}',
   },
