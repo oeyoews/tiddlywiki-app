@@ -15,6 +15,7 @@ import { logInit, log, cleanupOldLogs } from '@/utils/logger';
 import { server } from '@/utils';
 import { autoUpdaterInit } from '@/utils/checkUpdate';
 import path from 'path';
+import fs from 'fs';
 import { getPlatform } from '@/utils/getPlatform';
 import { trackWindowState } from '@/utils/trackWindowState';
 import { registerIpcEvent } from './ipc';
@@ -43,6 +44,34 @@ export const processEnv = {
 export const TPlatform = getPlatform();
 
 const preload = path.join(process.env.DIST, 'preload/index.js');
+
+let imageServerProcess: import('child_process').ChildProcess | null = null;
+
+const startImageServer = async () => {
+  try {
+    const binaryName =
+      process.platform === 'win32' ? 'go-image-server.exe' : 'go-image-server';
+    const baseDir = processEnv.VITE_PUBLIC || process.env.VITE_PUBLIC || '';
+    const binaryPath = path.join(baseDir, 'bin', binaryName);
+
+    if (!baseDir || !fs.existsSync(binaryPath)) {
+      log.info('go-image-server binary not found:', binaryPath);
+      return;
+    }
+
+    const { spawn } = await import('child_process');
+    imageServerProcess = spawn(binaryPath, [], {
+      stdio: 'ignore',
+      windowsHide: true,
+    });
+
+    imageServerProcess.on('exit', (code, signal) => {
+      log.info('go-image-server process exited', code, signal);
+    });
+  } catch (error) {
+    log.error('Failed to start go-image-server:', error);
+  }
+};
 
 // 初始化日志
 logInit();
@@ -258,6 +287,10 @@ const initApp = async () => {
     }
     const { initI18n } = await import('@/i18n');
     await initI18n(config);
+
+    // 启动 go-image-server
+    startImageServer();
+
     await createWindow();
     registerIpcEvent(win);
 
@@ -320,6 +353,13 @@ app.on('will-finish-launching', () => {
 app.on('before-quit', () => {
   app.isQuitting = true;
   log.info('App Quit.');
+  if (imageServerProcess && !imageServerProcess.killed) {
+    try {
+      imageServerProcess.kill();
+    } catch (error) {
+      log.error('Failed to kill go-image-server process:', error);
+    }
+  }
 });
 
 // 启动应用
